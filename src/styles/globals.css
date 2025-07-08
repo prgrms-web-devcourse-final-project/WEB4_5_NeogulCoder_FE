@@ -1,1 +1,113 @@
 @import 'tailwindcss';
+@import './font.css';
+
+@theme {
+  /* Gray Scale */
+  --color-black: #000000;
+  --color-gray1: #444444;
+  --color-gray2: #333333;
+  --color-gray3: #b7b7b7;
+  --color-gray4: #f5f5f5;
+  --color-white: #ffffff;
+
+  /* Logo Colors */
+  --color-logo1: #90cff1;
+  --color-logo2: #fbae8f;
+  --color-logo3: #353435;
+
+  /* Border Colors */
+  --color-border1: #e7e7e7;
+  --color-border2: #cfcfcf;
+  --color-border3: #b8b8b8;
+
+  /* Colors */
+  --color-red: #ff5955;
+  --color-green: #00c471;
+  --color-blue: #2d90ff;
+
+  /* Text Color */
+  --color-text1: #111111;
+
+  /* Button Colors */
+  --color-main: #111111;
+}
+
+button {
+  cursor: pointer;
+}
+
+html,
+body {
+  @apply bg-white transition-colors duration-300;
+}
+
+@layer utilities {
+  /* 버튼 */
+  .button-modal1 {
+    @apply bg-main h-12 w-full rounded-md text-center text-sm leading-4 text-white md:text-base;
+  }
+
+  .button-type1 {
+    @apply bg-main h-[50px] w-[390px] rounded-[10px] text-center text-sm text-white md:text-base;
+  }
+
+  .button-type2 {
+    @apply bg-main h-12 min-w-[118px] rounded-[10px] px-4 text-center text-sm leading-5 text-white md:text-base;
+  }
+
+  .button-type3 {
+    @apply bg-main h-12 min-w-[235px] rounded-[10px] px-4 text-center text-sm text-white md:text-base;
+  }
+
+  .button-type4 {
+    @apply bg-main h-11 w-[118px] rounded-[10px] text-center text-sm text-white md:text-[15px];
+  }
+
+  .button-type5 {
+    @apply bg-main h-11 w-[100px] rounded-md text-center text-xs text-white md:text-sm;
+  }
+  .button-type6 {
+    @apply border-main text-main h-11 w-[100px] rounded-md border bg-white text-center text-xs md:text-sm;
+  }
+
+  .button-sm-type1 {
+    @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
+  }
+
+  /* 태그 */
+  .tag-type1 {
+    @apply text-blue inline-flex h-[22px] min-w-[42px] items-center justify-center rounded-3xl bg-[#efefef] px-3 py-1 text-center text-[11px] md:text-[13px];
+  }
+  .tag-type2 {
+    @apply bg-gray1 inline-flex h-5 min-w-[72px] items-center justify-center rounded-3xl text-center text-xs text-white;
+  }
+  .tag-type2.green {
+    @apply bg-green;
+  }
+  .tag-type3 {
+    @apply bg-gray2 inline-flex h-[22px] min-w-[57px] items-center justify-center rounded-3xl text-xs text-white md:text-sm;
+  }
+  .tag-type3.red {
+    @apply bg-red;
+  }
+  .tag-type4 {
+    @apply bg-gray3 inline-flex h-5 min-w-[72px] items-center justify-center rounded-3xl text-[11px] text-white md:text-[13px];
+  }
+  .tag-type4.red {
+    @apply bg-red;
+  }
+  .tag-type4.blue {
+    @apply bg-blue;
+  }
+  .tag-type5 {
+    @apply border-text1 text-text1 inline-flex h-5 min-w-[96px] items-center justify-center rounded-3xl border bg-white text-[10px] md:text-xs;
+  }
+
+  /* input */
+  .input-type1 {
+    @apply border-border1 text-text1 h-[45px] rounded-[10px] border px-5 text-xs md:text-sm;
+  }
+  .input-type2 {
+    @apply border-border1 text-text1 h-10 rounded-md border px-4 text-xs md:text-sm;
+  }
+}
