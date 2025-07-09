@@ -44,39 +44,67 @@ body {
 @layer utilities {
   /* 버튼 */
   .button-modal1 {
-    @apply bg-main h-12 w-full rounded-md text-center text-sm leading-4 text-white md:text-base;
+    @apply bg-main inline-flex h-12 w-full items-center justify-center rounded-md text-center text-sm leading-4 text-white md:text-base;
+  }
+  .button-modal1 span {
+    @apply inline-block h-3.5;
   }
 
   .button-type1 {
-    @apply bg-main h-[50px] w-[390px] rounded-[10px] text-center text-sm text-white md:text-base;
+    @apply bg-main inline-flex h-[50px] w-[390px] items-center justify-center rounded-[10px] text-center text-sm text-white md:text-base;
+  }
+  .button-type1 span {
+    @apply inline-block h-5;
   }
 
   .button-type2 {
-    @apply bg-main h-12 min-w-[118px] rounded-[10px] px-4 text-center text-sm leading-5 text-white md:text-base;
+    @apply bg-main inline-flex h-12 min-w-[118px] items-center justify-center rounded-[10px] px-4 text-center text-sm leading-5 text-white md:text-base;
+  }
+  .button-type2 span {
+    @apply inline-block h-4;
   }
 
   .button-type3 {
-    @apply bg-main h-12 min-w-[235px] rounded-[10px] px-4 text-center text-sm text-white md:text-base;
+    @apply bg-main inline-flex h-12 min-w-[235px] items-center justify-center rounded-[10px] px-4 text-center text-sm text-white md:text-base;
+  }
+  .button-type3 span {
+    @apply inline-block h-5;
   }
 
   .button-type4 {
-    @apply bg-main h-11 w-[118px] rounded-[10px] text-center text-sm text-white md:text-[15px];
+    @apply bg-main inline-flex h-11 w-[118px] items-center justify-center rounded-[10px] text-center text-sm text-white md:text-[15px];
+  }
+  .button-type4 span {
+    @apply inline-block h-4.5;
   }
 
   .button-type5 {
-    @apply bg-main h-11 w-[100px] rounded-md text-center text-xs text-white md:text-sm;
+    @apply bg-main inline-flex h-11 w-[100px] items-center justify-center rounded-md text-center text-xs text-white md:text-sm;
   }
+  .button-type5 span {
+    @apply inline-block h-4.5;
+  }
+
   .button-type6 {
-    @apply border-main text-main h-11 w-[100px] rounded-md border bg-white text-center text-xs md:text-sm;
+    @apply border-main text-main inline-flex h-11 w-[100px] items-center justify-center rounded-md border bg-white text-center text-xs md:text-sm;
+  }
+  .button-type6 span {
+    @apply inline-block h-4.5;
   }
 
   .button-sm-type1 {
     @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
   }
+  .button-sm-type1 span {
+    @apply inline-block h-4;
+  }
 
   /* 태그 */
   .tag-type1 {
     @apply text-blue inline-flex h-[22px] min-w-[42px] items-center justify-center rounded-3xl bg-[#efefef] px-3 py-1 text-center text-[11px] md:text-[13px];
+  }
+  .tag-type1 span {
+    @apply inline-block h-4;
   }
   .tag-type2 {
     @apply bg-gray1 inline-flex h-5 min-w-[72px] items-center justify-center rounded-3xl text-center text-xs text-white;
@@ -84,11 +112,17 @@ body {
   .tag-type2.green {
     @apply bg-green;
   }
+  .tag-type2 span {
+    @apply inline-block h-[12px];
+  }
   .tag-type3 {
     @apply bg-gray2 inline-flex h-[22px] min-w-[57px] items-center justify-center rounded-3xl text-xs text-white md:text-sm;
   }
   .tag-type3.red {
     @apply bg-red;
+  }
+  .tag-type3 span {
+    @apply inline-block h-[17px];
   }
   .tag-type4 {
     @apply bg-gray3 inline-flex h-5 min-w-[72px] items-center justify-center rounded-3xl text-[11px] text-white md:text-[13px];
@@ -99,8 +133,14 @@ body {
   .tag-type4.blue {
     @apply bg-blue;
   }
+  .tag-type4 span {
+    @apply inline-block h-4;
+  }
   .tag-type5 {
     @apply border-text1 text-text1 inline-flex h-5 min-w-[96px] items-center justify-center rounded-3xl border bg-white text-[10px] md:text-xs;
+  }
+  .tag-type5 span {
+    @apply inline-block h-3.5;
   }
 
   /* input */
