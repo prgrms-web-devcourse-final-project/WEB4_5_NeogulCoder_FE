@@ -78,10 +78,10 @@ jobs:
       - name: Log created issue
         run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
 
-      - name: Checkout main code
+      - name: Checkout dev code
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: dev
 
       - name: Convert label-selection to Capitalized TYPE
         run: |
@@ -130,10 +130,10 @@ jobs:
           ISSUE_KEY="${{ steps.create.outputs.issue }}"  # GIT-8
           RAW_TITLE="${{ steps.issue-parser.outputs.issueparser_branch }}"  # login
           TYPE=$(echo "${{ env.TYPE }}" | tr '[:upper:]' '[:lower:]')  # feature
-          
+
           # 기능명을 소문자로 변환 + 공백/특수문자 제거
           SANITIZED_TITLE=$(echo "$RAW_TITLE" | tr '[:upper:]' '[:lower:]' | sed 's/ /-/g' | sed 's/[^a-z0-9_-]//g')
-          
+
           BRANCH_NAME="${TYPE}/${ISSUE_KEY}-${SANITIZED_TITLE}"  # feature/GIT-8-login
           echo "📌 Branch to be created: $BRANCH_NAME"
           git checkout -b "${BRANCH_NAME}"
@@ -154,4 +154,3 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           assignees: ${{ steps.issue-parser.outputs.issueparser_assignee }}
-
