@@ -14,7 +14,9 @@ export default function SideBar() {
                 <Image src={musicBunny} alt="예시 기본 프사" />
               </div>
               <div>
-                <p className="text-[20px] font-medium">{userName}</p>
+                <p className="text-[20px] font-medium cursor-default">
+                  {userName}
+                </p>
                 <button
                   type="button"
                   className="text-[14px] text-text1/50 font-medium"
@@ -45,6 +47,10 @@ export default function SideBar() {
             </div>
             <div className="flex justify-between items-center">
               <button type="button">업적 리워드</button>
+              <ChevronRight className="w-[22px] h-[22px] opacity-30" />
+            </div>
+            <div className="flex justify-between items-center">
+              <button type="button">회원 탈퇴</button>
               <ChevronRight className="w-[22px] h-[22px] opacity-30" />
             </div>
           </div>
