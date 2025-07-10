@@ -6,7 +6,7 @@ export default function SideBar() {
   const userName = '박스영';
   return (
     <div className="w-full flex justify-center mt-[68px] text-text1">
-      <div className="w-[1248px] flex flex-col pl-5 pr-[10px]">
+      <div className="w-[1248px] flex flex-col">
         <div className="w-[300px]">
           <div className="w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center">
             <div className="flex items-center gap-[28px] pl-8">
@@ -29,15 +29,9 @@ export default function SideBar() {
           <div className="flex gap-5 mt-4">
             <button
               type="button"
-              className="w-[140px] h-[40px] bg-gray4 rounded-[10px] font-medium"
+              className="w-[300px] h-[40px] bg-gray4 rounded-[10px] font-medium"
             >
               개인 일정
-            </button>
-            <button
-              type="button"
-              className="w-[140px] h-[40px] bg-gray4 rounded-[10px] font-medium"
-            >
-              내 정보 관리
             </button>
           </div>
           <div className="flex flex-col gap-[30px] font-medium mt-[35px]">

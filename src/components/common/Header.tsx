@@ -7,7 +7,7 @@ import { Bell } from 'lucide-react';
 export default function Header() {
   return (
     <div className="w-full flex justify-center pt-6 text-text1">
-      <div className="w-[1248px] flex items-center justify-between pl-5 pr-[10px]">
+      <div className="w-[1248px] flex items-center justify-between">
         <Image src={logoWibby} alt="로고" className="h-9" />
 
         <div className="flex items-center gap-6">
