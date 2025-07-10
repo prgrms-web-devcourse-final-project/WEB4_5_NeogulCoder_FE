@@ -110,4 +110,7 @@ body {
   .input-type2 {
     @apply border-border1 text-text1 h-10 rounded-md border px-4 text-xs md:text-sm;
   }
+  .input-type3 {
+    @apply border-border3 text-text1 h-[45px] rounded-[10px] border px-5 text-xs md:text-sm;
+  }
 }
