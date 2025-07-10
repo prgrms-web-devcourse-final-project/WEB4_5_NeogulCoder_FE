@@ -47,6 +47,10 @@ body {
     font-family: 'GmarketSans', sans-serif;
     @apply text-[10px] font-bold md:text-[12px];
   }
+  .tb7 {
+    font-family: 'GmarketSans', sans-serif;
+    @apply text-[8px] font-bold md:text-[10px];
+  }
 
   /* text-medium(normal) */
   .t1 {
@@ -69,6 +73,10 @@ body {
     font-family: 'GmarketSans', sans-serif;
     @apply text-[10px] font-medium md:text-[12px];
   }
+  .t6 {
+    font-family: 'GmarketSans', sans-serif;
+    @apply text-[8px] font-medium md:text-[10px];
+  }
 
   /* text-light */
   .tl1 {
@@ -90,5 +98,9 @@ body {
   .tl5 {
     font-family: 'GmarketSans', sans-serif;
     @apply text-[10px] font-light md:text-[12px];
+  }
+  .tl6 {
+    font-family: 'GmarketSans', sans-serif;
+    @apply text-[8px] font-light md:text-[10px];
   }
 }
