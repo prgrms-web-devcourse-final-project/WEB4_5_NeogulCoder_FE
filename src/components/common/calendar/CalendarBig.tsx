@@ -5,16 +5,17 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { useRef } from 'react';
 import '../../../styles/calendar/calendar.css';
 
-export default function CalendarBig() {
+export default function CalendarBig({ openHandler }: { openHandler: () => void }) {
   const calendarRef = useRef(null);
 
   const handleDateClick = (arg: any) => {
     // 날짜 클릭 시 동작
     alert('date click! ' + arg.dateStr);
+    openHandler();
   };
   return (
     <>
-      <div className='border-border1 border rounded-[10px] py-6 px-7'>
+      <div className='big-calendar border-border1 border rounded-[10px] py-6 px-7'>
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}
@@ -45,6 +46,7 @@ export default function CalendarBig() {
               titleFormat: { year: 'numeric', month: 'long' }, // Separates year and month
             },
           }}
+          expandRows={true}
           height='auto'
           contentHeight='auto'
           dayMaxEventRows={4}

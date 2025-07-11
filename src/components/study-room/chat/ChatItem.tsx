@@ -20,9 +20,9 @@ export default function ChatItem({
           <Image src={image} alt={`${name}의 프로필 사진`} width={48} height={0} />
         </div>
         <div className='pt-1.5'>
-          <div className='flex items-end gap-3 mb-0.5'>
-            <div className='t2 leading-none'>{name}</div>
-            <div className='tl6 leading-tight text-gray3'>{time}</div>
+          <div className='flex items-end gap-2 mb-0.5'>
+            <div className='tm2 leading-none'>{name}</div>
+            <div className='tl6 leading-tight text-gray5'>{time}</div>
           </div>
           <div className='t4'>{content}</div>
         </div>

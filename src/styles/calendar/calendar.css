@@ -1,71 +1,76 @@
-.fc .fc-toolbar.fc-header-toolbar {
+.big-calendar .fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: 30px;
 }
-.fc .fc-toolbar-title {
+.big-calendar .fc .fc-toolbar-title {
   font-weight: medium;
   font-size: 36px;
 }
-.fc .fc-button-primary {
+.big-calendar .fc .fc-button-primary {
   color: #000;
   background-color: #fff;
   border: 0;
 }
 
-.fc-today-button {
+.big-calendar .fc-today-button {
   font-size: 20px;
   line-height: 1;
   color: #000;
   background-color: #fff;
 }
-.fc .fc-button-primary:disabled {
+.big-calendar .fc .fc-button-primary:disabled {
   background-color: #fff;
   color: #000;
   opacity: 1;
 }
 
-.fc-col-header {
+.big-calendar .fc-col-header {
   margin-bottom: 16px;
 }
-.fc-col-header-cell-cushion {
+.big-calendar .fc-col-header-cell-cushion {
   font-size: 14px;
-  font-weight: normal;
-  color: #808080;
+  font-weight: medium;
+  color: #9a9a9a;
   height: 20px;
 }
 
-.fc .fc-daygrid-day-top {
+.big-calendar .fc .fc-daygrid-day-top {
   justify-content: center;
   font-size: 14px;
   font-weight: 300;
 }
 
-.fc-event-title-container {
+.big-calendar .fc-event-title-container {
   font-size: 12px;
   color: #000;
   font-weight: 300;
 }
 
-.fc-theme-standard td,
-.fc-theme-standard th {
+.big-calendar .fc-theme-standard td,
+.big-calendar .fc-theme-standard th {
   border: 0;
 }
-.fc-theme-standard .fc-scrollgrid {
+.big-calendar .fc-theme-standard .fc-scrollgrid {
   border: 0;
 }
 
-.fc .fc-daygrid-day.fc-day-today {
+.big-calendar .fc .fc-daygrid-day.fc-day-today {
   background-color: transparent;
 }
 
-.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+.big-calendar .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
   color: #fff;
   background-color: #000;
   border-radius: 50%;
-  height: 25px;
-  width: 25px;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  padding-right: 1px;
 }
 
-.fc-daygrid-more-link.fc-more-link {
+.big-calendar .fc-daygrid-more-link.fc-more-link {
   display: block;
   font-size: 12px;
   font-weight: 300;

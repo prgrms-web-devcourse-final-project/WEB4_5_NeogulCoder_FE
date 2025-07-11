@@ -12,7 +12,7 @@ export default async function MemberList() {
   return (
     <>
       <div className='flex justify-between mb-10'>
-        <h3 className='t1'>스터디원 목록</h3>
+        <h3 className='tm1'>스터디원 목록</h3>
       </div>
       <div className='grid grid-cols-2 gap-5'>
         {members.map((member, i) => (
