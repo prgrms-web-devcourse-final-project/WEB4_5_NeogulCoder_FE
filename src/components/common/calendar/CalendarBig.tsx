@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useRef } from 'react';
-import '../../../styles/calendar/calendar.css';
+import '@/styles/calendar/calendar.css';
 
 export default function CalendarBig({ openHandler }: { openHandler: () => void }) {
   const calendarRef = useRef(null);
@@ -15,7 +15,7 @@ export default function CalendarBig({ openHandler }: { openHandler: () => void }
   };
   return (
     <>
-      <div className='big-calendar border-border1 border rounded-[10px] py-6 px-7'>
+      <div className='big-calendar border-border1 border rounded-[10px] py-6 px-7 relative'>
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}

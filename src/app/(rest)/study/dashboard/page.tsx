@@ -1,6 +1,5 @@
 import CalendarSmall from '@/components/common/calendar/CalendarSmall';
 import CalendarSmallDetail from '@/components/common/calendar/CalendarSmallDetail';
-import PostItem from '@/components/study-room/dashboard/StudyPostItem';
 import StudyAttendance from '@/components/study-room/dashboard/StudyAttendance';
 import StudyInfoCard from '@/components/study-room/dashboard/StudyInfoCard';
 import { ChevronRight } from 'lucide-react';
@@ -17,6 +16,9 @@ export default function DashBoard() {
   return (
     <>
       <div className='flex gap-6 mb-9'>
+        <div>
+          <StudyAttendance />
+        </div>
         <div className='w-full'>
           <h3 className='tm2 mb-[18px]'>스터디 세부정보</h3>
           <div className='flex flex-col gap-3'>
@@ -24,9 +26,6 @@ export default function DashBoard() {
               <StudyInfoCard key={i} title={info.title} data={info.data} type={info.type} subData={info.subData} />
             ))}
           </div>
-        </div>
-        <div>
-          <StudyAttendance />
         </div>
       </div>
       <div className='mb-9'>
@@ -66,8 +65,8 @@ export default function DashBoard() {
           <StudyPostItem type='new' />
         </div>
       </div>
-      <SmallModal />
-      <SmallModal2 />
+      {/* <SmallModal />
+      <SmallModal2 /> */}
     </>
   );
 }

@@ -1,4 +1,6 @@
-export default async function StudyRoomInfoCard({ title, content }: { title: string; content: string }) {
+'use client';
+
+export default function StudyRoomInfoCard({ title, content }: { title: string; content: string }) {
   return (
     <>
       <div className='w-full border-border1 border rounded-[10px] p-6 pb-5'>

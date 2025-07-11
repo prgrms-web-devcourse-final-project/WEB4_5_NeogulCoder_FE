@@ -1,8 +1,19 @@
+'use client';
+
 import Image from 'next/image';
 import StudyRoomInfoCard from './StudyRoomInfoCard';
 import { PenLine } from 'lucide-react';
+import StudyRoomInfoWrite from './StudyRoomInfoWrite';
+import { useState } from 'react';
 
-export default async function StudyRoomInfo() {
+export default function StudyRoomInfo() {
+  const [infoModal, setInfoModal] = useState(false);
+  const infoModalOpen = () => {
+    setInfoModal(true);
+  };
+  const infoModalClose = () => {
+    setInfoModal(false);
+  };
   const infos = [
     {
       title: '이름',
@@ -33,7 +44,7 @@ export default async function StudyRoomInfo() {
     <>
       <div className='flex justify-between mb-10'>
         <h3 className='tm1 leading-none'>스터디 정보</h3>
-        <button>
+        <button onClick={infoModalOpen}>
           <PenLine className='w-5 h-5' />
         </button>
       </div>
@@ -50,6 +61,7 @@ export default async function StudyRoomInfo() {
           <StudyRoomInfoCard key={`info${i}`} title={info.title} content={info.conent} />
         ))}
       </div>
+      {infoModal && <StudyRoomInfoWrite closeFn={infoModalClose} />}
     </>
   );
 }

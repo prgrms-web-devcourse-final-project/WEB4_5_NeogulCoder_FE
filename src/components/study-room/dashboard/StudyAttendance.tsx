@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
 import { useRef } from 'react';
+import '@/styles/attendance/attendance.css';
 
 export default function StudyAttendance() {
   const calendarRef = useRef(null);
@@ -14,17 +15,18 @@ export default function StudyAttendance() {
         <button className='button-sm-type1'>출석</button>
       </div>
       <div className='border border-border1 rounded-[10px] p-6'>
-        <div className='mb-17'>
+        <div className='mb-14'>
           <h3 className='tm2 mb-[18px]'>주간 출석</h3>
-          <div className='w-[500px]'>
+          <div className='w-[500px] attendance'>
             <FullCalendar
               ref={calendarRef}
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView='dayGridWeek'
               locale={koLocale}
               events={[
-                { title: 'Meeting', date: '2025-07-11', color: '#FEE6C9' },
-                { title: 'Meeting', date: '2025-07-22', color: '#FEE6C9' },
+                { title: '출석', date: '2025-07-11' },
+                { title: '출석', date: '2025-07-10' },
+                { title: '출석', date: '2025-07-02' },
               ]}
               headerToolbar={{
                 left: 'prev',

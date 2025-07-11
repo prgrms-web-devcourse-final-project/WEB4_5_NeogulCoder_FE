@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { CalendarDays, Clock, X } from 'lucide-react';
 
 export default function CalendarWrite({ writeCloseHandler }: { writeCloseHandler: () => void }) {
   return (
@@ -15,13 +15,13 @@ export default function CalendarWrite({ writeCloseHandler }: { writeCloseHandler
             <form>
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 <div className='shrink-0'>
-                  <p className='tm2 mb-3'>
+                  <p className='t2 mb-3'>
                     제목 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <input type='text' className='w-full input-type2' />
                 </div>
                 <div className='shrink-0'>
-                  <p className='tm2'>
+                  <p className='t2'>
                     기간 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='mb-3 justify-end flex'>
@@ -39,17 +39,35 @@ export default function CalendarWrite({ writeCloseHandler }: { writeCloseHandler
                   </div>
                   <div className='flex items-center gap-3 mb-3'>
                     <p className='tl3 shrink-0'>시작</p>
-                    <input type='date' className='w-full input-type2 tm3' />
-                    <input type='time' className='input-type2 tm3' />
+                    <label className='w-full relative'>
+                      <input type='date' className='date-custom w-full input-type2 tm3 pr-9!' />
+                      <CalendarDays
+                        strokeWidth={1}
+                        className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2'
+                      />
+                    </label>
+                    <label className='relative'>
+                      <input type='time' className='date-custom w-full input-type2 tm3 pr-11!' />
+                      <Clock strokeWidth={1} className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2' />
+                    </label>
                   </div>
                   <div className='flex items-center gap-3 mb-3'>
                     <p className='tl3  shrink-0'>종료</p>
-                    <input type='date' className='w-full input-type2 tm3' />
-                    <input type='time' className='input-type2 tm3' />
+                    <label className='w-full relative'>
+                      <input type='date' className='date-custom w-full input-type2 tm3 pr-9!' />
+                      <CalendarDays
+                        strokeWidth={1}
+                        className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2'
+                      />
+                    </label>
+                    <label className='relative'>
+                      <input type='time' className='date-custom w-full input-type2 tm3 pr-11!' />
+                      <Clock strokeWidth={1} className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2' />
+                    </label>
                   </div>
                 </div>
                 <div className='shrink-0'>
-                  <p className='tm2 mb-3'>내용</p>
+                  <p className='t2 mb-3'>내용</p>
                   <textarea className='input-type2 resize-none w-full h-[90px]!' />
                 </div>
               </div>
