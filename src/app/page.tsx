@@ -1,6 +1,6 @@
-import ApplyingStudyCard from '@/components/common/ApplyingStudyCard';
-import RecruitmentCard from '@/components/common/RecruitmentCard';
-import StudyCard from '@/components/common/StudyCard';
+import ApplyingStudyCard from '@/components/my/ApplyingStudyCard';
+import RecruitmentCard from '@/components/my/RecruitmentCard';
+import StudyCard from '@/components/my/StudyCard';
 
 export default function page() {
   const studyType = {
@@ -23,6 +23,7 @@ export default function page() {
     category: 'IT',
     studyWay: '온라인',
     status: '모집 중',
+    type: 'my',
   };
 
   return (

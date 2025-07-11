@@ -11,7 +11,8 @@ export default function Header() {
         <Image src={logoWibby} alt="로고" className="h-9" />
 
         <div className="flex items-center gap-6">
-          <div className="w-[100px] h-[38px] rounded-[5px] bg-gray4 flex items-center justify-center pl-[10px] pr-[10px] gap-3">
+          {/* w-[100px] */}
+          <div className="h-[38px] rounded-[5px] bg-gray4 flex items-center justify-center pl-[10px] pr-[10px] gap-3">
             <p className="font-medium">내 정보</p>
             <button type="button">
               <ChevronDown className="w-5 h-5" />
