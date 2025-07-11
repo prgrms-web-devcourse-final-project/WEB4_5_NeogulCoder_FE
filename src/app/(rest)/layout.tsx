@@ -8,9 +8,11 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <Header />
         <SubHeader />
       </div>
+
       <div className='max-w-[1248px] m-auto mt-[144px] pt-[48px] pb-16'>
         {children}
       </div>
+
     </>
   );
 }
