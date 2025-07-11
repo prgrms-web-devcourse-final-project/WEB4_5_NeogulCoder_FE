@@ -1,10 +1,12 @@
 import { EllipsisVertical } from "lucide-react";
 
-export default async function comment() {
+export default function Comment() {
   return (
     <>
-      <div className='flex w-[1098px] my-3 items-start '>
-        <div className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'></div>
+      <div className='flex w-full my-3 items-start '>
+        <div>
+          <button className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'></button>
+        </div>
         <div className='flex flex-col flex-1'>
           <div className='flex justify-between items-start'>
             <div className='flex'>
@@ -12,13 +14,15 @@ export default async function comment() {
                 닉네임
               </div>
               <div
-                className='tm4 ml-[6px] mt-[6px] opacity-50'
+                className='tm4 ml-[6px] mt-[4px] opacity-50'
                 style={{ color: "var(--color-text1)" }}
               >
                 3분 전
               </div>
             </div>
-            <EllipsisVertical />
+            <button>
+              <EllipsisVertical />
+            </button>
           </div>
 
           <div className='tm2' style={{ color: "var(--color-text1)" }}>

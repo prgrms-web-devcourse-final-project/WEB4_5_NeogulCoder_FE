@@ -25,7 +25,7 @@ export default function MyEditor() {
       <Editor
         ref={editorRef}
         previewStyle='vertical'
-        height='400px'
+        height='600px'
         initialEditType='wysiwyg'
         useCommandShortcut={true}
         hideModeSwitch={true}
