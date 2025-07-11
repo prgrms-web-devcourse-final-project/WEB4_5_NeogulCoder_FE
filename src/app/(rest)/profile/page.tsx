@@ -1,7 +1,9 @@
+import Pr from './pr/page';
+
 export default function page() {
   return (
     <>
-      <h1>Login page Component</h1>
+      <Pr />
     </>
   );
 }
