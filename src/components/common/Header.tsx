@@ -37,7 +37,7 @@ export default function Header() {
 
             {isOpen && (
               <div className="absolute right-0 top-[40px]">
-                <ProfileInfoModal onClose={() => setIsOpen(false)} />
+                <ProfileInfoModal />
               </div>
             )}
           </div>
