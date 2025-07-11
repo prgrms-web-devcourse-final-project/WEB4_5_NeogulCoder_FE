@@ -31,6 +31,7 @@ export default function Header() {
             onClick={() => setIsOpen((prev) => !prev)}
           >
             <span className="tm5 cursor-pointer">내 정보</span>
+
             <button type="button">
               <ChevronDown className="w-[18px] h-[18px]" />
             </button>
