@@ -30,34 +30,30 @@ export default function SignUp() {
         <Image src={logoWibby} alt="로고" className="mb-[96px] w-30" />
         <div className="z-10">
           <div className="mb-8">
-            <p className="pb-3">이메일</p>
+            <p className="pb-2 tm4">이메일</p>
             <input
               type="text"
-              placeholder="입력해주세요"
               className="input-type3 w-[390px] focus:outline-2 focus:outline-main"
             />
           </div>
           <div className="mb-8">
-            <p className="pb-3">닉네임</p>
+            <p className="pb-2 tm4">닉네임</p>
             <input
               type="text"
-              placeholder="입력해주세요"
               className="input-type3 w-[390px] focus:outline-2 focus:outline-main"
             />
           </div>
           <div className="mb-[35px]">
-            <p className="pb-3">비밀번호</p>
+            <p className="pb-2 tm4">비밀번호</p>
             <input
               type="password"
-              placeholder="입력해주세요"
               className="input-type3 w-[390px] focus:outline-2 focus:outline-main"
             />
           </div>
           <div className="mb-[35px]">
-            <p className="pb-3">비밀번호 확인</p>
+            <p className="pb-2 tm4">비밀번호 확인</p>
             <input
               type="password"
-              placeholder="입력해주세요"
               className="input-type3 w-[390px] focus:outline-2 focus:outline-main"
             />
           </div>
