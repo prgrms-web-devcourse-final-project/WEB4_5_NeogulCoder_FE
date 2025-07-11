@@ -57,7 +57,10 @@
   background-color: transparent;
   padding: 4px;
 }
-.attendance .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+.attendance
+  .fc
+  .fc-daygrid-day.fc-day-today
+  .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
   background-color: #fff;
   border: 1px solid #b7b7b7;
 }
