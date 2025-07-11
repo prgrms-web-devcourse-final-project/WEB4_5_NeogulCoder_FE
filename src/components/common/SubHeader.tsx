@@ -1,22 +1,33 @@
+'use client';
+import Image from 'next/image';
+import musicBunny from '@/assets/images/music-bunny.svg';
+import { useRouter } from 'next/navigation';
+
 export default function SubHeader() {
+  const router = useRouter();
+
+  const handleHome = () => {
+    router.push('/main');
+  };
   return (
     <>
       <div className="w-full flex justify-center text-text1">
-        <div className="w-[1248px] flex items-center justify-between mt-[35px]">
-          <div className="flex gap-[50px] text-lg font-semibold">
-            <button type="button">홈</button>
+        <div className="w-full max-w-[1248px] flex items-center justify-between mt-[35px]">
+          <div className="flex gap-[50px] tm3">
+            <button type="button" onClick={handleHome}>
+              홈
+            </button>
             <button type="button">모집</button>
           </div>
 
           <div className="flex gap-6">
-            <button
-              type="button"
-              className="w-9 h-9 rounded-full bg-gray-300"
-            ></button>
-            <button
-              type="button"
-              className="w-9 h-9 rounded-full bg-gray-300"
-            ></button>
+            <button type="button" className="w-10 h-10 rounded-full bg-gray3">
+              <Image src={musicBunny} alt="예시 기본 프사" />
+            </button>
+
+            <button type="button" className="w-10 h-10 rounded-full bg-gray3">
+              <Image src={musicBunny} alt="예시 기본 프사" />
+            </button>
           </div>
         </div>
       </div>
