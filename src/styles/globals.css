@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import './font.css';
+@import "tailwindcss";
+@import "./font.css";
 
 @theme {
   /* Gray Scale */
@@ -25,6 +25,8 @@
   --color-red: #ff5955;
   --color-green: #00c471;
   --color-blue: #2d90ff;
+  --color-orange: #ff7a21;
+  --color-yellow: #fdb900;
 
   /* Text Color */
   --color-text1: #111111;
@@ -89,7 +91,7 @@ body {
   }
 
   .tag-type3 {
-    @apply bg-gray2 inline-flex h-[22px] min-w-[57px] items-center justify-center rounded-3xl text-xs text-white md:text-sm;
+    @apply bg-gray2 inline-flex h-[22px] min-w-[57px] items-center justify-center rounded-3xl text-xs text-white md:text-sm font-bold;
   }
   .tag-type3.red {
     @apply bg-red;
@@ -115,5 +117,23 @@ body {
   }
   .input-type2 {
     @apply border-border1 text-text1 h-10 rounded-md border px-4 text-xs md:text-sm;
+  }
+
+  /* input date */
+  input[type='date'].date-custom::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  input[type='time'].date-custom::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
   }
 }
