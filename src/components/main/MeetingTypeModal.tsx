@@ -8,7 +8,7 @@ export default function MeetingTypeModal({
       <div className="flex flex-col">
         <button
           type="button"
-          className="flex items-center justify-center h-[40px] w-full rounded-[10px] hover:bg-gray-100"
+          className="flex items-center justify-center h-10 w-full rounded-[10px] hover:bg-gray4"
           onClick={() => onSelect('온라인')}
         >
           온라인
@@ -16,7 +16,7 @@ export default function MeetingTypeModal({
 
         <button
           type="button"
-          className="flex items-center justify-center h-[40px] w-full rounded-[10px] hover:bg-gray-100 mt-1"
+          className="flex items-center justify-center h-[40px] w-full rounded-[10px] hover:bg-gray4 mt-1"
           onClick={() => onSelect('오프라인')}
         >
           오프라인

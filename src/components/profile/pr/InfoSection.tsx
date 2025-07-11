@@ -10,7 +10,7 @@ export default function InfoSection() {
   };
   return (
     <>
-      <div className="w-1/2 h-45 border border-main/10 rounded-[10px] p-5 flex flex-col">
+      <div className="w-1/2 h-[180px] border border-main/10 rounded-[10px] p-5 flex flex-col">
         <p className="tm3 mb-6">정보</p>
 
         <div className="flex items-center gap-10 mb-[18px]">

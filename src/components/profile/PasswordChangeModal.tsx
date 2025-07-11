@@ -6,7 +6,7 @@ export default function PasswordChangeModal({
   onClose: () => void;
 }) {
   return (
-    <div className="flex flex-col bg-white w-110 h-130 rounded-[10px] items-center justify-center shadow-lg gap-[35px] px-6 py-6">
+    <div className="flex flex-col bg-white w-[440px] h-[520px] rounded-[10px] items-center justify-center shadow-lg gap-[35px] px-6 py-6">
       <div className="flex justify-between items-center w-full">
         <h2 className="tm2">비밀번호 변경하기</h2>
         <X className="w-6 h-6 opacity-50 cursor-pointer" onClick={onClose} />

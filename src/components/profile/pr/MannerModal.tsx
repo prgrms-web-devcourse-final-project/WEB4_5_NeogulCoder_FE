@@ -84,7 +84,7 @@ export default function MannerModal({ onClose }: { onClose: () => void }) {
       {reviewSummary.map((review) => (
         <div
           key={review.category}
-          className="w-160 h-170 border border-main/10 rounded-[6px] flex gap-6 px-6 py-5 bg-white"
+          className="w-[640px] h-[680px] border border-main/10 rounded-[6px] flex gap-6 px-6 py-5 bg-white"
         >
           <div className="flex flex-col items-center justify-start">
             <Image src={review.icon} alt="리뷰 아이콘" />

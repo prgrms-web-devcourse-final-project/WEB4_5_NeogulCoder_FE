@@ -23,7 +23,7 @@ export default function CategoryModal({
         {category.map((category) => (
           <button
             key={category}
-            className="px-4 py-2 text-tm3 hover:bg-gray-100 rounded-[10px]"
+            className="px-4 py-2 text-tm3 hover:bg-gray4 rounded-[10px]"
             onClick={() => onSelect(category)}
           >
             {category}

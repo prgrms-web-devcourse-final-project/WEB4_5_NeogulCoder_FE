@@ -9,8 +9,8 @@ export default function FeedbackSection() {
 
   return (
     <>
-      <div className="w-1/2 h-65 border border-main/10 rounded-[10px] p-5">
-        <div className="flex justify-between items-center mb-[40px]">
+      <div className="w-1/2 h-[260px] border border-main/10 rounded-[10px] p-5">
+        <div className="flex justify-between items-center mb-10">
           <p className="tm3">피드백</p>
           <button
             type="button"

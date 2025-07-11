@@ -36,13 +36,13 @@ export default function Header() {
             </button>
 
             {isOpen && (
-              <div className="absolute right-0 top-[40px]">
+              <div className="absolute right-0 top-10">
                 <ProfileInfoModal />
               </div>
             )}
           </div>
           <button type="button">
-            <Bell className="w-[22px] h-[24px]" />
+            <Bell className="w-[22px] h-6" />
           </button>
           <button type="button">
             <Image
