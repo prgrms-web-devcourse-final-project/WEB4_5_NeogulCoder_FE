@@ -16,40 +16,40 @@ export default function Header() {
     router.push('/main');
   };
   return (
-    <div className="w-full flex justify-center pt-6 text-text1">
-      <div className="w-full max-w-[1248px] flex items-center justify-between">
+    <div className='w-full flex justify-center pt-2.5 text-text1'>
+      <div className='w-full max-w-[1280px] px-4 flex items-center justify-between'>
         <Image
           src={logoWibby}
-          alt="로고"
-          className="w-[80px] h-9 cursor-pointer"
+          alt='로고'
+          className='w-[80px] h-9 cursor-pointer'
           onClick={handleHome}
         />
 
-        <div className="flex items-center gap-[18px]">
+        <div className='flex items-center gap-[18px]'>
           <div
-            className="w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 relative"
+            className='w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 relative'
             onClick={() => setIsOpen((prev) => !prev)}
           >
-            <span className="tm5 cursor-pointer">내 정보</span>
+            <span className='tm5 cursor-pointer'>내 정보</span>
 
-            <button type="button">
-              <ChevronDown className="w-[18px] h-[18px]" />
+            <button type='button'>
+              <ChevronDown className='w-[18px] h-[18px]' />
             </button>
 
             {isOpen && (
-              <div className="absolute right-0 top-10">
+              <div className='absolute right-0 top-10'>
                 <ProfileInfoModal />
               </div>
             )}
           </div>
-          <button type="button">
-            <Bell className="w-[22px] h-6" />
+          <button type='button'>
+            <Bell className='w-[22px] h-6' />
           </button>
-          <button type="button">
+          <button type='button'>
             <Image
               src={darkMode}
-              className="w-[26px] h-[26px]"
-              alt="다크모드"
+              className='w-[26px] h-[26px]'
+              alt='다크모드'
             />
           </button>
         </div>
