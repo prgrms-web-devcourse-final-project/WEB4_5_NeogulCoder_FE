@@ -6,10 +6,11 @@ import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
 
 export default function EditProfile() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState('박스영');
 
   return (
     <>
-      <div className="tm1">프로필 수정</div>
+      <div className="tb2">프로필 수정</div>
       <div className="mt-[60px] flex flex-col items-center justify-center">
         <div className="w-[140px] h-[140px] rounded-full bg-gray4 relative">
           <button className="absolute right-[5px] bottom-[5px]">
@@ -17,19 +18,26 @@ export default function EditProfile() {
           </button>
         </div>
         <div>
-          <p className="pb-2 mt-[60px] tm4">닉네임</p>
+          <p className="pb-2 mt-[60px] t4">
+            닉네임 <span className="text-red">(필수)</span>
+          </p>
           <input
             type="text"
-            className="input-type3 w-[390px] focus:outline-2 focus:outline-main"
+            value={userName}
+            className="input-type3 w-[390px] focus:outline-1 focus:outline-main mb-[5px]"
+            onChange={(e) => setUserName(e.target.value)}
           />
         </div>
         <div className="flex flex-col items-start mt-8">
-          <button type="button" className="button-type1 mb-4">
+          <button
+            type="button"
+            className="button-type1 mb-4 hover:bg-[#292929]"
+          >
             저장
           </button>
           <button
             type="button"
-            className="t4 self-end"
+            className="t4 self-end opacity-50 hover:opacity-100"
             onClick={() => setIsOpen(true)}
           >
             비밀번호 변경
