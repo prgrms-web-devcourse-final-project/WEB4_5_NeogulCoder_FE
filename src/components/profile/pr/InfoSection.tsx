@@ -24,10 +24,10 @@ export default function InfoSection() {
             {userInfo.url.map((item: any, id: number) => (
               <div key={id} className="flex items-center gap-[10px]">
                 {item.icon === 'naver' && (
-                  <Link className="w-4 h-4 text-main" />
+                  <Link className="w-4 h-4 text-text1" />
                 )}
                 {item.icon === 'github' && (
-                  <Link className="w-4 h-4 text-main" />
+                  <Link className="w-4 h-4 text-text1" />
                 )}
 
                 <a

@@ -12,11 +12,15 @@ export default function Pr() {
   const handleEditPr = () => {
     router.push('/profile/pr/edit-pr');
   };
+
   return (
     <>
-      <div className="tm1">PR</div>
+      <div className="tb2">PR</div>
       <div className="flex items-center justify-end" onClick={handleEditPr}>
-        <button type="button" className="button-sm-type1 mt-[26px]">
+        <button
+          type="button"
+          className="button-sm-type1 mt-[26px] hover:bg-[#292929]"
+        >
           PR 작성 및 수정
         </button>
       </div>

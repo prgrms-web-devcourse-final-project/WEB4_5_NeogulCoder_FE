@@ -8,7 +8,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <Header />
         <SubHeader />
       </div>
-      <div className="max-w-[1248px] m-auto mt-[144px] pt-[48px] pb-16">
+      <div className="max-w-[1280px] m-auto mt-[113px] pt-[48px] pb-16 px-4">
         {children}
       </div>
     </>

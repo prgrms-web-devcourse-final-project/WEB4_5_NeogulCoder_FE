@@ -4,6 +4,9 @@ import '../styles/globals.css';
 export const metadata: Metadata = {
   title: 'Wibby',
   description: 'Wibby',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -12,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko'>
+    <html lang="ko">
       <body>{children}</body>
     </html>
   );
