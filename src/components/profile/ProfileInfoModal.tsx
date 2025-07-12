@@ -32,7 +32,7 @@ export default function UserInfoModal() {
         onClick={handleLogin}
       >
         <LogOut className="w-4 h-4 text-gray5" />
-        로그인
+        로그아웃
       </button>
     </div>
   );

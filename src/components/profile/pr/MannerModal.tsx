@@ -78,7 +78,10 @@ export default function MannerModal({ onClose }: { onClose: () => void }) {
     <div className="flex flex-col bg-white w-175 h-175 rounded-[10px] items-center shadow-sm gap-[30px] px-6 py-6">
       <div className="flex justify-between items-center w-full">
         <h2 className="tm2">매너 평가</h2>
-        <X className="w-6 h-6 opacity-50 cursor-pointer" onClick={onClose} />
+        <X
+          className="w-6 h-6 opacity-50 cursor-pointer text-text1/40 hover:text-text1/60"
+          onClick={onClose}
+        />
       </div>
 
       {reviewSummary.map((review) => (

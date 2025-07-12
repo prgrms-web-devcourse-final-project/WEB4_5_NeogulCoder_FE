@@ -5,7 +5,7 @@ import { useState } from 'react';
 import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
 
 export default function EditProfile() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [userName, setUserName] = useState('박스영');
 
   return (
@@ -37,18 +37,18 @@ export default function EditProfile() {
           </button>
           <button
             type="button"
-            className="t4 self-end opacity-50 hover:opacity-100"
-            onClick={() => setIsOpen(true)}
+            className="t4 self-end text-text1/50 hover:text-text1"
+            onClick={() => setIsModalOpen(true)}
           >
             비밀번호 변경
           </button>
 
-          {isOpen && (
+          {isModalOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center">
               <div className="absolute inset-0 bg-main opacity-80" />
 
               <div className="relative z-10">
-                <PasswordChangeModal onClose={() => setIsOpen(false)} />
+                <PasswordChangeModal onClose={() => setIsModalOpen(false)} />
               </div>
             </div>
           )}

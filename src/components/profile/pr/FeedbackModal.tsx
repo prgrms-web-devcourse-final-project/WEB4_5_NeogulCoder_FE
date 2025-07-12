@@ -40,7 +40,10 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
     <div className="flex flex-col bg-white w-[520px] h-[620px] overflow-auto rounded-[10px] items-center shadow-sm gap-[35px] px-6 py-6">
       <div className="flex justify-between items-center w-full">
         <h2 className="tm2">피드백</h2>
-        <X className="w-6 h-6 opacity-50 cursor-pointer" onClick={onClose} />
+        <X
+          className="w-6 h-6 opacity-50 cursor-pointer text-text1/40 hover:text-text1/60"
+          onClick={onClose}
+        />
       </div>
 
       {feedbackList.map((feedback, index) => (
