@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 "use client";
 import Modal from "@/components/common/Modal";
 import { ChevronDown, Camera } from "lucide-react";
 import { useState } from "react";
+=======
+'use client';
+import Modal from '@/components/common/Modal';
+import CreateStudyModal from '@/components/study/CreateStudyModal';
+import { useState } from 'react';
+>>>>>>> dev
 
 export default function Page() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +22,7 @@ export default function Page() {
         스터디 생성
       </button>
 
+<<<<<<< HEAD
       <div className='w-[920px]  mx-auto'>
         {isOpen && (
           <Modal
@@ -194,6 +202,17 @@ export default function Page() {
           </Modal>
         )}
       </div>
+=======
+      {isOpen && (
+        <Modal
+          onClose={() => setIsOpen(false)}
+          className='w-[680px] h-[700px]'
+          title='스터디 생성'
+        >
+          <CreateStudyModal />
+        </Modal>
+      )}
+>>>>>>> dev
     </>
   );
 }

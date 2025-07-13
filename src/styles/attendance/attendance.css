@@ -1,5 +1,5 @@
 .attendance .fc .fc-toolbar-title {
-  font-size: 20px;
+  font-size: 18px;
 }
 .attendance .fc .fc-button-primary {
   background-color: #fff;
@@ -36,8 +36,8 @@
 }
 
 .attendance .fc-day.fc-daygrid-day {
-  width: 70px;
-  height: 70px;
+  width: 64px;
+  height: 64px;
   padding: 10px;
 }
 .attendance .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {

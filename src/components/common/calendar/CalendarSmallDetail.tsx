@@ -1,4 +1,4 @@
-import { CalendarDays, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import CalendarSmallDetailItem from './CalendarSmallDetailItem';
 
 export default function CalendarSmallDetail() {
@@ -7,7 +7,7 @@ export default function CalendarSmallDetail() {
       <div className='w-full grid grid-rows-[auto_1fr] h-full px-9 border-l border-border1'>
         <div className='flex justify-between items-center mb-6'>
           <h3 className='tb2'>9월</h3>
-          <button className='flex items-center tm5'>
+          <button className='flex items-center tm4'>
             전체보기
             <ChevronRight className='w-5 h-5' />
           </button>

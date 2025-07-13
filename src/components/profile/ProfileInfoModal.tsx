@@ -9,8 +9,12 @@ export default function UserInfoModal() {
   const handleEditProfile = () => {
     router.push('/profile/edit-profile');
   };
+
+  const handleLogin = () => {
+    router.push('/auth/login');
+  };
   return (
-    <div className="w-[160px] border border-main/10 bg-white rounded-md shadow-lg overflow-hidden tm4">
+    <div className="w-[160px] border border-main/10 bg-white rounded-md shadow-sm overflow-hidden tm5">
       <button
         type="button"
         className="flex items-center gap-3 px-4 py-3 w-full hover:bg-gray4"
@@ -25,6 +29,7 @@ export default function UserInfoModal() {
       <button
         type="button"
         className="flex items-center gap-3 px-4 py-3 w-full hover:bg-gray4"
+        onClick={handleLogin}
       >
         <LogOut className="w-4 h-4 text-gray5" />
         로그아웃

@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { X } from 'lucide-react';
 
 type ModalProps = {
   onClose: () => void;
@@ -23,7 +23,7 @@ export default function Modal({
           onClick={(e) => e.stopPropagation()}
         >
           <div className='flex justify-between w-full mb-4'>
-            <span className='tm0'>{title}</span>
+            <span className='tb2'>{title}</span>
             <button onClick={onClose}>
               <X />
             </button>

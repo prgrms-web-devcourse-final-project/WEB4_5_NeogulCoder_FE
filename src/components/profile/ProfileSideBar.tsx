@@ -25,7 +25,7 @@ export default function SideBar() {
       <div className="w-full max-w-[1248px] flex flex-col">
         <div className="w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center">
           <div className="flex items-center gap-[28px] pl-8">
-            <div className="w-20 h-20 bg-gray3 rounded-full">
+            <div className="w-[70px] h-[70px] bg-gray3 rounded-full">
               <Image src={musicBunny} alt="예시 기본 프사" />
             </div>
             <div className="flex flex-col justify-center">
