@@ -1,5 +1,6 @@
-import ListMenu from '@/components/my/ListMenu';
+import Pagination from '@/components/common/Pagination';
 import RecruitmentCard from '@/components/my/RecruitmentCard';
+import ListMenuStudy from '@/components/study/ListMenuStudy';
 import NoticeItem from '@/components/study/NoticeItem';
 
 export default function StudyCommunity() {
@@ -19,23 +20,22 @@ export default function StudyCommunity() {
   };
 
   return (
-    // py-15
-    <div className="w-full px-6">
-      <div className="tb1 text-[20px] text-text1">커뮤니티</div>
+    <div className="w-full">
+      <div className="tb2 text-text1">커뮤니티</div>
       <div className="mt-6">
-        <ListMenu />
+        <ListMenuStudy />
       </div>
       <div className="flex flex-col gap-4 p-6 bg-[#fafafa] rounded-[8px] mt-[30px]">
         <NoticeItem {...noticeType} />
         <NoticeItem {...noticeType} />
       </div>
-      {/* flex justify-between */}
       <div className="flex flex-col gap-[30px] mt-[30px]">
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
+        {[...Array(10)].map((_, i) => (
+          <RecruitmentCard key={i} {...recruitmentType} />
+        ))}
+      </div>
+      <div className="mt-[30px]">
+        <Pagination />
       </div>
     </div>
   );

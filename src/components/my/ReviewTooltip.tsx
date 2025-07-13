@@ -4,15 +4,13 @@ import { BadgeAlert } from 'lucide-react';
 
 export default function ReviewTooltip() {
   return (
-    <div className="w-[433px] px-[42px] py-[43px] bg-white border border-border1 rounded-[10px]">
-      <div className="tb2 text-[22px] text-text1">
-        피어리뷰 작성 시 유의사항
-      </div>
-      <div className="mt-5 t3 text-text1 ">
+    <div className="w-[433px] px-[42px] py-[38px] bg-white border border-border1 rounded-[10px]">
+      <div className="tb3 text-text1">피어리뷰 작성 시 유의사항</div>
+      <div className="mt-5 tm4 text-text1 ">
         피어리뷰는 더 나은 협업을 위한 따뜻한 피드백 시간이에요. 평가보단 서로를
         발견하고 개선하여 성장을 위한 개선안으로 사용되길 바랍니다.
       </div>
-      <div className="flex flex-col justify-between w-[335px] h-[178px] t3 text-text1 mt-[30px] px-[18px] py-[11px] border border-border1 rounded-[6px]">
+      <div className="flex flex-col justify-between w-[335px] h-[168px] tm4 text-text1 mt-[26px] px-[18px] py-[18px] border border-border1 rounded-[6px]">
         <div>
           함께한 팀원이 성장할 수 있도록, 따뜻하고 솔직한 마음을 담아
           작성해주세요.
@@ -32,7 +30,7 @@ export default function ReviewTooltip() {
           </div>
         </div>
       </div>
-      <div className="flex items-center mt-[30px]">
+      <div className="flex items-center mt-[26px] tm3">
         <div>서로의 진심이</div>
         <Image
           src={studyDefault}

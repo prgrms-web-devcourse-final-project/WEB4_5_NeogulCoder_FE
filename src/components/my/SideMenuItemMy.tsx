@@ -1,9 +1,10 @@
 'use client';
+
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function SideMenuItem({
+export default function SideMenuItemMy({
   name,
   to,
 }: {
@@ -17,12 +18,12 @@ export default function SideMenuItem({
     <>
       <Link
         href={to}
-        className={`flex justify-between ${
+        className={`flex justify-between items-center ${
           isActive ? 'opacity-100' : 'opacity-30'
         }`}
       >
-        <span className='tm3'>{name}</span>
-        <ChevronRight className='w-[22px] h-[22px]' />
+        <span className="tm3">{name}</span>
+        <ChevronRight className="w-[22px] h-[22px]" />
       </Link>
     </>
   );

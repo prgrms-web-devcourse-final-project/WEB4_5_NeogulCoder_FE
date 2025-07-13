@@ -1,3 +1,4 @@
+import Pagination from '@/components/common/Pagination';
 import StudyCard from '@/components/my/StudyCard';
 import SubMenuItem from '@/components/my/SubMenuItem';
 
@@ -14,21 +15,19 @@ export default function StudyList() {
   };
 
   return (
-    // py-15
-    <div className="w-full px-6">
-      <div className="tb1 text-[20px]">전체 스터디</div>
+    <div className="w-full">
+      <div className="tb2">전체 스터디</div>
       <div className="mt-6">
         <SubMenuItem isActive={true}>진행 중</SubMenuItem>
         <SubMenuItem isActive={false}>종료</SubMenuItem>
       </div>
-      {/* flex justify-between */}
       <div className="grid grid-cols-3 gap-[26px] mt-[30px]">
-        <StudyCard {...studyType} />
-        <StudyCard {...studyType} />
-        <StudyCard {...studyType} />
-        <StudyCard {...studyType} />
-        <StudyCard {...studyType} />
-        <StudyCard {...studyType} />
+        {[...Array(12)].map((_, i) => (
+          <StudyCard key={i} {...studyType} />
+        ))}
+      </div>
+      <div className="mt-[30px]">
+        <Pagination />
       </div>
     </div>
   );

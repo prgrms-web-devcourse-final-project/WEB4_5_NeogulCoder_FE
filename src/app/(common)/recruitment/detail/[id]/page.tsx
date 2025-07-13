@@ -1,3 +1,24 @@
+<<<<<<< HEAD
+"use client";
+
+import { ChevronLeft, EllipsisVertical, Tally1 } from "lucide-react";
+import Comment from "@/components/common/Comment";
+import WriteComment from "@/components/common/WriteComment";
+import Modal from "@/components/common/Modal";
+import { useState } from "react";
+
+export default function Page() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [appIsOpen, setAppIsOpen] = useState(false);
+
+  return (
+    <>
+      <div className='w-[852px] mx-auto'>
+        <div className='fixed flex flex-col right-[15%] space-y-2.5'>
+          <button
+            onClick={() => setIsOpen(true)}
+            className='w-[118px] h-[44px] bg-[#00C471] text-white tm1 rounded-[10px]'
+=======
 'use client';
 
 import { EllipsisVertical, Tally1 } from 'lucide-react';
@@ -37,17 +58,32 @@ export default function Page() {
           <button
             onClick={() => setIsOpen(true)}
             className='w-[118px] h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm1 rounded-[10px]'
+>>>>>>> dev
           >
             모집 중
           </button>
           <button
             onClick={() => setAppIsOpen(true)}
+<<<<<<< HEAD
+            className='w-[118px] h-[44px] border-[1px] bg-white tm1 rounded-[10px]'
+            style={{ borderColor: "var(--color-gray2)" }}
+=======
             className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm1 rounded-[10px]'
             style={{ borderColor: 'var(--color-gray2)' }}
+>>>>>>> dev
           >
             신청 내역
           </button>
         </div>
+<<<<<<< HEAD
+        <div className='flex justify-between'>
+          <button>
+            <ChevronLeft />
+          </button>
+          <button>
+            <EllipsisVertical />
+          </button>
+=======
 
         <div className='flex justify-end'>
           <div className='relative' ref={menuRef}>
@@ -61,6 +97,7 @@ export default function Page() {
             </button>
             {menuIsOpen && <ClickVerticalMenu title='내 게시물' />}
           </div>
+>>>>>>> dev
         </div>
         <div className='mt-10'>
           <span className='text-[28px] font-bold'>
@@ -68,6 +105,16 @@ export default function Page() {
             있습니다!
           </span>
         </div>
+<<<<<<< HEAD
+        <div className='flex space-x-6 items-center my-10'>
+          <div className='w-15 h-15 rounded-full bg-gray-300 mr-5'></div>
+          <div className='tm2'>닉네임</div>
+          <div className='text-[#111111] opacity-20'>
+            <Tally1 />
+          </div>
+          <div>
+            <span className='text-[#111111] opacity-50'>2025-07-02</span>
+=======
         <div className='flex space-x-6 items-center my-10 justify-between'>
           <div className='flex justify-center items-center'>
             <button
@@ -81,11 +128,16 @@ export default function Page() {
 
           <div>
             <span className='text-[#111111] opacity-50 mr-3'>2025-07-02</span>
+>>>>>>> dev
           </div>
         </div>
         <hr
           className='h-0.5 my-10'
+<<<<<<< HEAD
+          style={{ borderColor: "var(--color-border2)" }}
+=======
           style={{ borderColor: 'var(--color-border2)' }}
+>>>>>>> dev
         />
         <div className='space-y-10'>
           <div className='flex space-x-12'>
@@ -123,6 +175,13 @@ export default function Page() {
             <span className='tm1'>2025-08-06</span>
           </div>
         </div>
+<<<<<<< HEAD
+        <hr
+          className='h-0.5 my-10'
+          style={{ borderColor: "var(--color-border2)" }}
+        />
+        <div className='w-full h-[600px] mb-10'>내용</div>
+=======
         <div
           className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5'
           style={{ borderColor: 'var(--color-border3)' }}
@@ -145,24 +204,38 @@ export default function Page() {
             신청 내역
           </button>
         </div>
+>>>>>>> dev
         <div className='w-[852px]'>
           <WriteComment />
         </div>
         <div className='w-[852px]'>
           <Comment />
+<<<<<<< HEAD
+=======
           <Comment />
           <Comment />
           <Comment />
+>>>>>>> dev
         </div>
         {isOpen && (
           <Modal
             title=''
+<<<<<<< HEAD
+            className='w-[1020px] h-[800px]'
+=======
             className='w-[1020px] h-auto'
+>>>>>>> dev
             onClose={() => setIsOpen(false)}
           >
             <div className='rounded-[10px] px-10 w-full'>
               <div className='flex justify-between w-full'>
                 <div className='flex space-x-6 items-center mb-10'>
+<<<<<<< HEAD
+                  <div className='w-15 h-15 rounded-full bg-gray-300 mr-5'></div>
+                  <div className='tm2'>닉네임</div>
+                  <div>토끼</div>
+                  <div className='text-[#111111] opacity-50'>60%</div>
+=======
                   <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
                   <div className='tm2 cursor-pointer'>닉네임</div>
                   <div className='flex justify-center items-center'>
@@ -174,6 +247,7 @@ export default function Page() {
                     <div className='text-[#111111] opacity-50'>60%</div>
                   </div>
 
+>>>>>>> dev
                   <div className='text-[#111111] opacity-20'>
                     <Tally1 />
                   </div>
@@ -186,11 +260,31 @@ export default function Page() {
               </div>
               <div
                 className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
+<<<<<<< HEAD
+                style={{ borderColor: "var(--color-border3)" }}
+=======
                 style={{ borderColor: 'var(--color-border3)' }}
+>>>>>>> dev
               >
                 지원 동기는 어쩌구 저쩌구입니다.
               </div>
               <div className='flex space-x-[15px] justify-end'>
+<<<<<<< HEAD
+                <button className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2]'>
+                  거절
+                </button>
+                <button
+                  className='w-[100px] h-11 rounded-md text-white tm3'
+                  style={{ background: "var(--color-blue)" }}
+                >
+                  승인
+                </button>
+              </div>
+              <hr
+                className='h-0.5 my-10'
+                style={{ borderColor: "var(--color-border2)" }}
+              />
+=======
                 <button className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'>
                   거절
                 </button>
@@ -202,26 +296,40 @@ export default function Page() {
                 className='h-0.5 my-10'
                 style={{ borderColor: 'var(--color-border2)' }}
               /> */}
+>>>>>>> dev
             </div>
           </Modal>
         )}
         {appIsOpen && (
           <Modal
             title='모집 신청하기'
+<<<<<<< HEAD
+            className='w-[1020px] h-[700px]'
+=======
             className='w-[1020px] h-auto'
+>>>>>>> dev
             onClose={() => setAppIsOpen(false)}
           >
             <div
               className='w-full h-[440px] border-[1px] p-5  my-10 rounded-[6px]'
+<<<<<<< HEAD
+              style={{ borderColor: "var(--color-border3)" }}
+=======
               style={{ borderColor: 'var(--color-border3)' }}
+>>>>>>> dev
             >
               <span>지원 동기를 입력해주세요</span>
             </div>
             <div className='flex justify-end '>
+<<<<<<< HEAD
+              <button className='button-type6 mr-[15px]'>취소</button>
+              <button className='button-type5'>확인</button>
+=======
               <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
                 취소
               </button>
               <button className='button-type5 hover:bg-[#292929]'>확인</button>
+>>>>>>> dev
             </div>
           </Modal>
         )}

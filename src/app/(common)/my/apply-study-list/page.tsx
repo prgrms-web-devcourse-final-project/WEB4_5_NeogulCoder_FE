@@ -1,3 +1,4 @@
+import Pagination from '@/components/common/Pagination';
 import ApplyingStudyCard from '@/components/my/ApplyingStudyCard';
 import ListMenu from '@/components/my/ListMenu';
 
@@ -14,20 +15,39 @@ export default function ApplyStudyList() {
   };
 
   return (
-    // py-15
-    <div className="w-full px-6">
-      <div className="tb1 text-[20px]">내가 신청한 스터디</div>
+    <div className="w-full">
+      <div className="tb2">내가 신청한 스터디</div>
       <div className="mt-6">
         <ListMenu />
       </div>
-      {/* flex justify-between */}
       <div className="grid grid-cols-3 gap-[26px] mt-[30px]">
-        <ApplyingStudyCard {...studyType} isShown={false} status="미완료" />
-        <ApplyingStudyCard {...studyType} isShown={true} status="미완료" />
-        <ApplyingStudyCard {...studyType} isShown={true} status="승인" />
-        <ApplyingStudyCard {...studyType} isShown={true} status="승인" />
-        <ApplyingStudyCard {...studyType} isShown={true} status="거절" />
-        <ApplyingStudyCard {...studyType} isShown={true} status="거절" />
+        {[...Array(4)].map((_, i) => (
+          <ApplyingStudyCard
+            key={i}
+            {...studyType}
+            isShown={false}
+            status="미완료"
+          />
+        ))}
+        {[...Array(4)].map((_, i) => (
+          <ApplyingStudyCard
+            key={i}
+            {...studyType}
+            isShown={true}
+            status="승인"
+          />
+        ))}
+        {[...Array(4)].map((_, i) => (
+          <ApplyingStudyCard
+            key={i}
+            {...studyType}
+            isShown={true}
+            status="거절"
+          />
+        ))}
+      </div>
+      <div className="mt-[30px]">
+        <Pagination />
       </div>
     </div>
   );

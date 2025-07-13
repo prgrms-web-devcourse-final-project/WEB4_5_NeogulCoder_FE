@@ -28,23 +28,23 @@ export default function StudyCard(props: {
   } = props;
 
   return (
-    <div className="flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-2 hover:shadow-xl">
-      <div className="tb3 text-text1 truncate">{studyName}</div>
-      <div className="flex justify-between mt-7">
+    <div className="flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md">
+      <div className="tb4 text-text1 truncate">{studyName}</div>
+      <div className="flex justify-between mt-5">
         <div className="flex flex-col gap-[10px]">
           <div className="flex gap-[10px]">
             <Crown className="w-5 h-5 text-[#FBE175]" />
-            <span className="t3 text-text1">{studyLeader}</span>
+            <span className="t4 text-text1">{studyLeader}</span>
           </div>
           <div className="flex gap-[10px]">
             <UsersRound className="w-5 h-5 text-[#FBE175]" />
-            <span className="t3 text-text1">
+            <span className="t4 text-text1">
               {currentMemberCount}/{totalMemberCount}
             </span>
           </div>
           <div className="flex gap-[10px]">
             <Calendar className="w-5 h-5 text-[#FBE175]" />
-            <span className="t3 text-text1">{startDate}</span>
+            <span className="t4 text-text1">{startDate}</span>
           </div>
         </div>
         <div className="flex justify-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%]">
@@ -61,16 +61,9 @@ export default function StudyCard(props: {
         </span>
       </div>
       <div className="flex gap-2 mt-6">
-        {/* <div className="flex justify-center items-center px-[13px] py-[3px] rounded-[50px] bg-[#EFEFEF]">
-          <span className="tb5 text-[var(--color-blue)]">{category}</span>
-        </div> */}
         <div className="tag-type1">
           <span className="tb5">{category}</span>
         </div>
-
-        {/* <div className="flex justify-center items-center px-[13px] py-[3px] rounded-[50px] bg-[#EFEFEF]">
-          <span className="tb5 text-[var(--color-blue)]">{studyWay}</span>
-        </div> */}
         <div className="tag-type1">
           <span className="tb5">{studyWay}</span>
         </div>

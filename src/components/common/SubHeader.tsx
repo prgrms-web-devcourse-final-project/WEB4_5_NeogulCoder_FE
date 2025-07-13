@@ -9,7 +9,7 @@ export default function SubHeader() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const handleHome = () => {
-    router.push('/main');
+    router.push('/');
   };
   return (
     <>
@@ -24,7 +24,6 @@ export default function SubHeader() {
               스터디 생성
             </button>
           </div>
-
           <div className='flex gap-6 cursor-pointer'>
             <button
               type='button'
