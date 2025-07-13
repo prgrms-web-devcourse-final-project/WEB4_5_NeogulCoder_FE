@@ -5,12 +5,8 @@ import SideMenuItemMy from './SideMenuItemMy';
 import { useRouter } from 'next/navigation';
 
 export default function SideMenuMy() {
-  const userName = '한유빙';
   const router = useRouter();
-
-  const handleGoToEditProfile = () => {
-    router.push('/profile/edit-profile');
-  };
+  const userName = '한유빙';
 
   const menuItems = [
     { name: '캘린더', to: '/my/calendar' },
@@ -34,7 +30,7 @@ export default function SideMenuMy() {
                 <button
                   type='button'
                   className='t5 text-text1/50'
-                  onClick={handleGoToEditProfile}
+                  onClick={() => router.push('/profile/edit-profile')}
                 >
                   프로필 수정
                 </button>
