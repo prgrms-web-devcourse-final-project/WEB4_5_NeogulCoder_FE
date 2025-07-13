@@ -41,7 +41,7 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
       <div className="flex justify-between items-center w-full">
         <h2 className="tm2">피드백</h2>
         <X
-          className="w-6 h-6 opacity-50 cursor-pointer text-text1/40 hover:text-text1/60"
+          className="w-6 h-6 cursor-pointer text-text1/40 hover:text-text1/60"
           onClick={onClose}
         />
       </div>

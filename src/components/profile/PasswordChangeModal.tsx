@@ -10,7 +10,7 @@ export default function PasswordChangeModal({
       <div className="flex justify-between items-center w-full">
         <h2 className="tm2">비밀번호 변경하기</h2>
         <X
-          className="w-6 h-6 opacity-50 cursor-pointer text-text1/40 hover:text-text1/60"
+          className="w-6 h-6 cursor-pointer text-text1/40 hover:text-text1/60"
           onClick={onClose}
         />
       </div>
