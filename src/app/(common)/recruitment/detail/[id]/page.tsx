@@ -33,16 +33,16 @@ export default function Page() {
   return (
     <>
       <div className='w-[852px] mx-auto'>
-        <div className='hidden 2xl:flex flex-col fixed right-[20%] space-y-2.5'>
+        <div className='hidden 2xl:flex flex-col fixed right-[15%] space-y-2.5'>
           <button
             onClick={() => setIsOpen(true)}
-            className='w-[118px] h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm1 rounded-[10px]'
+            className='w-[118px] h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
           >
             모집 중
           </button>
           <button
             onClick={() => setAppIsOpen(true)}
-            className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm1 rounded-[10px]'
+            className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
             style={{ borderColor: 'var(--color-gray2)' }}
           >
             신청 내역
@@ -62,25 +62,25 @@ export default function Page() {
             {menuIsOpen && <ClickVerticalMenu title='내 게시물' />}
           </div>
         </div>
-        <div className='mt-10'>
-          <span className='text-[28px] font-bold'>
+        <div className='mt-6'>
+          <span className='tb2'>
             너굴코더에서 프로젝트 같이 진행하실 웹 백엔드와 디자이너를 모집 중에
             있습니다!
           </span>
         </div>
-        <div className='flex space-x-6 items-center my-10 justify-between'>
+        <div className='flex space-x-6 items-center my-6 justify-between'>
           <div className='flex justify-center items-center'>
             <button
-              className='w-15 h-15 rounded-full bg-gray-300 mr-5'
+              className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'
               onClick={handleGoToPr}
             ></button>
-            <button className='tm2' onClick={handleGoToPr}>
+            <button className='tm3' onClick={handleGoToPr}>
               닉네임
             </button>
           </div>
 
           <div>
-            <span className='text-[#111111] opacity-50 mr-3'>2025-07-02</span>
+            <span className='tm4 opacity-50 mr-3'>2025-07-02</span>
           </div>
         </div>
         <hr
@@ -90,37 +90,37 @@ export default function Page() {
         <div className='space-y-10'>
           <div className='flex space-x-12'>
             <div className='flex w-[400px]'>
-              <span className='mr-8 tm1 opacity-50'>시작 날짜</span>
-              <span className='tm1'>2025-07-05</span>
+              <span className='mr-8 tm3 opacity-50'>시작 날짜</span>
+              <span className='tm3'>2025-07-05</span>
             </div>
             <div className='flex w-[400px]'>
-              <span className=' mr-8 tm1 opacity-50'>종료 날짜</span>
-              <span className='tm1'>2025-08-06</span>
-            </div>
-          </div>
-          <div className='flex space-x-12'>
-            <div className='flex w-[400px]'>
-              <span className='mr-8 tm1 opacity-50 '>모집 인원</span>
-              <span className='tm1'>9명</span>
-            </div>
-            <div className='flex w-[400px]'>
-              <span className=' mr-8 tm1 opacity-50'>카테고리</span>
-              <span className='tm1'>IT</span>
+              <span className=' mr-8 tm3 opacity-50'>종료 날짜</span>
+              <span className='tm3'>2025-08-06</span>
             </div>
           </div>
           <div className='flex space-x-12'>
             <div className='flex w-[400px]'>
-              <span className='mr-8 tm1 opacity-50'>진행 방식</span>
-              <span className='tm1'>온/오프라인</span>
+              <span className='mr-8 tm3 opacity-50 '>모집 인원</span>
+              <span className='tm3'>9명</span>
             </div>
             <div className='flex w-[400px]'>
-              <span className=' mr-8 tm1 opacity-50'>지역</span>
-              <span className='tm1'>서울</span>
+              <span className=' mr-8 tm3 opacity-50'>카테고리</span>
+              <span className='tm3'>IT</span>
+            </div>
+          </div>
+          <div className='flex space-x-12'>
+            <div className='flex w-[400px]'>
+              <span className='mr-8 tm3 opacity-50'>진행 방식</span>
+              <span className='tm3'>온/오프라인</span>
+            </div>
+            <div className='flex w-[400px]'>
+              <span className=' mr-8 tm3 opacity-50'>지역</span>
+              <span className='tm3'>서울</span>
             </div>
           </div>
           <div className='flex w-[400px]'>
-            <span className='mr-8 tm1 opacity-50'>모집 마감일</span>
-            <span className='tm1'>2025-08-06</span>
+            <span className='mr-8 tm3 opacity-50'>모집 마감일</span>
+            <span className='tm3'>2025-08-06</span>
           </div>
         </div>
         <div
@@ -133,13 +133,13 @@ export default function Page() {
         <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10'>
           <button
             onClick={() => setIsOpen(true)}
-            className='w-full h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm1 rounded-[10px]'
+            className='w-full h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
           >
             모집 중
           </button>
           <button
             onClick={() => setAppIsOpen(true)}
-            className='w-full h-[44px] border bg-white hover:bg-gray-100 tm1 rounded-[10px]'
+            className='w-full h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
             style={{ borderColor: 'var(--color-gray2)' }}
           >
             신청 내역
@@ -164,7 +164,7 @@ export default function Page() {
               <div className='flex justify-between w-full'>
                 <div className='flex space-x-6 items-center mb-10'>
                   <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
-                  <div className='tm2 cursor-pointer'>닉네임</div>
+                  <div className='tm3 cursor-pointer'>닉네임</div>
                   <div className='flex justify-center items-center'>
                     <Image
                       src={buddyEnergy}
