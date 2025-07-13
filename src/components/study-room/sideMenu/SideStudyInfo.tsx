@@ -11,7 +11,7 @@ export default function SideStudyInfo({ name }: { name: string }) {
             <Image width={70} src={musicBunny} alt='예시 기본 프사' />
           </div>
           <div>
-            <p className='tb2 cursor-default'>{name}</p>
+            <p className='tb3 cursor-default'>{name}</p>
             <p className='t4'>파이널 프로젝트 팀!</p>
           </div>
         </div>

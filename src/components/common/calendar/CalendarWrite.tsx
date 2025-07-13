@@ -10,7 +10,7 @@ export default function CalendarWrite({
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
         <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
           <div className='flex justify-between mb-8 px-9 '>
-            <h3 className='tb2'>일정 등록</h3>
+            <h3 className='tm2'>일정 등록</h3>
             <button onClick={writeCloseHandler}>
               <X className='w-8 y-8' />
             </button>

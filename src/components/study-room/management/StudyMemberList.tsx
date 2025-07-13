@@ -44,7 +44,7 @@ export default function MemberList() {
   return (
     <>
       <div className='flex justify-between mb-10'>
-        <h3 className='tb2'>스터디원 목록</h3>
+        <h3 className='tb3'>스터디원 목록</h3>
       </div>
       <div className='grid grid-cols-2 gap-5'>
         {members.map((member, i) => (

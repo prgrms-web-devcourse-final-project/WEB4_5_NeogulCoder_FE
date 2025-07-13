@@ -25,21 +25,21 @@ export default function Calendar() {
   return (
     <>
       <div>
-        <h1 className="tb2 mb-8">캘린더</h1>
+        <h1 className='tb3 mb-8'>캘린더</h1>
       </div>
-      <div className="flex justify-between items-end mb-3">
-        <div className="flex items-center t1">
-          <div className="w-2 h-8 rounded-full bg-logo2"></div>
-          <div className="w-full relative z-1">
-            <select className="w-full h-10 appearance-none pl-3 pr-9!">
+      <div className='flex justify-between items-end mb-3'>
+        <div className='flex items-center t1'>
+          <div className='w-2 h-8 rounded-full bg-logo2'></div>
+          <div className='w-full relative z-1'>
+            <select className='w-full h-10 appearance-none pl-3 pr-9!'>
               <option>내 일정</option>
               <option>스터디 A일정</option>
               <option>스터디 B일정</option>
             </select>
-            <ChevronDown className="absolute w-6 h-6 right-3 top-1/2 -translate-y-1/2 -z-1" />
+            <ChevronDown className='absolute w-6 h-6 right-3 top-1/2 -translate-y-1/2 -z-1' />
           </div>
         </div>
-        <button onClick={writeOpenHandler} className="button-sm-type1">
+        <button onClick={writeOpenHandler} className='button-sm-type1'>
           일정등록
         </button>
       </div>

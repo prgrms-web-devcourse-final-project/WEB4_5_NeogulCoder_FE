@@ -4,8 +4,8 @@ import StudyAttendance from '@/components/study-room/dashboard/StudyAttendance';
 import StudyInfoCard from '@/components/study-room/dashboard/StudyInfoCard';
 import { ChevronRight } from 'lucide-react';
 import StudyPostItem from '@/components/study-room/dashboard/StudyPostItem';
-import SmallModal from '@/components/study-room/dashboard/smallModal';
-import SmallModal2 from '@/components/study-room/dashboard/SmallModal2';
+
+import StudyExtendCheckModal from '@/components/study-room/dashboard/StudyExtendCheckModal';
 
 export default function DashBoard() {
   const studyInfos = [
@@ -15,12 +15,12 @@ export default function DashBoard() {
   ];
   return (
     <>
-      <div className='flex gap-6 mb-9'>
+      <div className='flex gap-6 mb-12'>
         <div>
           <StudyAttendance />
         </div>
         <div className='w-full'>
-          <h3 className='tb2 mb-[18px]'>스터디 세부정보</h3>
+          <h3 className='tb3 mb-[18px]'>스터디 세부정보</h3>
           <div className='flex flex-col gap-3'>
             {studyInfos.map((info, i) => (
               <StudyInfoCard
@@ -34,8 +34,8 @@ export default function DashBoard() {
           </div>
         </div>
       </div>
-      <div className='mb-9'>
-        <h3 className='tb2 mb-[18px]'>스터디 일정</h3>
+      <div className='mb-12'>
+        <h3 className='tb3 mb-[18px]'>스터디 일정</h3>
         <div className='grid h-[400px] grid-cols-2 border border-border1 rounded-[10px] py-6'>
           <div>
             <CalendarSmall />
@@ -45,12 +45,12 @@ export default function DashBoard() {
           </div>
         </div>
       </div>
-      <div className='mb-9'>
+      <div className='mb-12'>
         <div className='flex justify-between mb-[18px]'>
-          <h3 className='tb2'>스터디 공지사항</h3>
+          <h3 className='tb3'>스터디 공지사항</h3>
 
-          <button className='flex items-center tm4'>
-            더보기 <ChevronRight className='w-5 h-5' />
+          <button className='flex items-center t5'>
+            더보기 <ChevronRight className='w-4 h-4' />
           </button>
         </div>
         <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
@@ -58,11 +58,11 @@ export default function DashBoard() {
           <StudyPostItem type='공지' />
         </div>
       </div>
-      <div className='mb-9'>
+      <div className='mb-12'>
         <div className='flex justify-between  mb-[18px]'>
-          <h3 className='tb2'>스터디 최신글</h3>
-          <button className='flex items-center tm4'>
-            더보기 <ChevronRight className='w-5 h-5' />
+          <h3 className='tb3'>스터디 최신글</h3>
+          <button className='flex items-center t5'>
+            더보기 <ChevronRight className='w-4 h-4' />
           </button>
         </div>
         <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
@@ -71,8 +71,8 @@ export default function DashBoard() {
           <StudyPostItem type='new' />
         </div>
       </div>
-      {/* <SmallModal />
-      <SmallModal2 /> */}
+      {/* 스터디 연장 여부 모달 */}
+      {/* <StudyExtendCheckModal /> */}
     </>
   );
 }

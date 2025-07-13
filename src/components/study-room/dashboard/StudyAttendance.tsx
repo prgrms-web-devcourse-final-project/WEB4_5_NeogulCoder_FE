@@ -11,11 +11,11 @@ export default function StudyAttendance() {
   return (
     <>
       <div className='flex justify-between mb-3'>
-        <h3 className='tb2'>나의 스터디 출석정보</h3>
+        <h3 className='tb3'>나의 스터디 출석정보</h3>
         <button className='button-sm-type1'>출석</button>
       </div>
       <div className='border border-border1 rounded-[10px] p-6'>
-        <div className='mb-14'>
+        <div className='mb-12'>
           <h3 className='tm3 mb-[18px]'>주간 출석</h3>
           <div className='w-[450px] attendance'>
             <FullCalendar
@@ -45,7 +45,7 @@ export default function StudyAttendance() {
         <div>
           <h3 className='tm3'>전체 출석률</h3>
           <div>
-            <div className='text-right tb5 mb-1.5'>60%</div>
+            <div className='text-right tm4 mb-1.5'>60%</div>
             <div className='w-full h-[16px] rounded-2xl bg-gray3/50 overflow-hidden'>
               <div className='w-60/100 h-full bg-orange'></div>
             </div>
