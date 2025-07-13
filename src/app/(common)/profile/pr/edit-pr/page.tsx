@@ -17,8 +17,8 @@ export default function EditPr() {
   };
   return (
     <>
-      <div className="tb2 mb-[30px]">PR 작성 및 수정</div>
-      <div className="flex items-center gap-5 mb-[35px]">
+      <div className='tb2 mb-[30px]'>PR 작성 및 수정</div>
+      <div className='flex items-center gap-5 mb-[35px]'>
         <button
           onClick={() => setActiveTab('정보')}
           className={`tm4 w-[60px] h-[36px] rounded-full flex items-center justify-center ${
@@ -43,11 +43,11 @@ export default function EditPr() {
       </div>
 
       {activeTab === '정보' && (
-        <div className="flex flex-col gap-[35px] relative">
+        <div className='flex flex-col gap-[35px] relative'>
           <div>
-            <p className="pb-2 t4">지역</p>
+            <p className='pb-2 t4'>지역</p>
             <button
-              type="button"
+              type='button'
               className={`w-[200px] h-[45px] rounded-[10px] flex items-center justify-between p-5 border t4 ${
                 isSelectedRegion
                   ? 'text-text1 tm3 border-main'
@@ -56,11 +56,11 @@ export default function EditPr() {
               onClick={() => setIsOpenModal((prev) => !prev)}
             >
               <p>{selectedRegion}</p>
-              <ChevronDown className="w-4 h-4" />
+              <ChevronDown className='w-4 h-4' />
             </button>
           </div>
           {isOpenModal && (
-            <div className="absolute top-20 z-10">
+            <div className='absolute top-20 z-10'>
               <RegionModal
                 onSelect={(region: string) => {
                   setSelectedRegion(region);
@@ -71,29 +71,29 @@ export default function EditPr() {
           )}
 
           <div>
-            <p className="pb-2 t4">URL</p>
-            <div className="flex">
+            <p className='pb-2 t4'>URL</p>
+            <div className='flex'>
               <input
-                type="text"
-                placeholder="이름 1"
-                className="input-type1 w-[200px] focus:outline-1 focus:outline-main"
+                type='text'
+                placeholder='이름 1'
+                className='input-type1 w-[200px] focus:outline-1 focus:outline-main'
               />
               <input
-                type="text"
-                placeholder="URL 1"
-                className="input-type1 w-full focus:outline-1 focus:outline-main ml-3"
+                type='text'
+                placeholder='URL 1'
+                className='input-type1 w-full focus:outline-1 focus:outline-main ml-3'
               />
             </div>
-            <div className="mt-4 flex">
+            <div className='mt-4 flex'>
               <input
-                type="text"
-                placeholder="이름 2"
-                className="input-type1 w-[200px] focus:outline-1 focus:outline-main"
+                type='text'
+                placeholder='이름 2'
+                className='input-type1 w-[200px] focus:outline-1 focus:outline-main'
               />
               <input
-                type="text"
-                placeholder="URL 2"
-                className="input-type1 w-full focus:outline-1 focus:outline-main ml-3"
+                type='text'
+                placeholder='URL 2'
+                className='input-type1 w-full focus:outline-1 focus:outline-main ml-3'
               />
             </div>
           </div>
@@ -101,15 +101,15 @@ export default function EditPr() {
       )}
       {activeTab === '소개글' && <MyEditor />}
 
-      <div className="flex gap-5 mt-5 justify-end">
+      <div className='flex gap-5 mt-5 justify-end'>
         <button
-          type="button"
-          className="border border-main h-[44px] w-[100px] rounded-md hover:bg-[#f5f5f5]"
+          type='button'
+          className='border border-main h-[44px] w-[100px] rounded-md hover:bg-[#f5f5f5]'
           onClick={handleGoToPr}
         >
           취소
         </button>
-        <button type="button" className="button-type5 hover:bg-[#292929]">
+        <button type='button' className='button-type5 hover:bg-[#292929]'>
           저장
         </button>
       </div>

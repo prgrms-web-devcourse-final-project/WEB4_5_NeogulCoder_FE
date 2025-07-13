@@ -37,13 +37,14 @@ export default function StudyRoomInfo() {
     },
     {
       title: '한줄소개',
-      conent: ' 안녕하세요. 너굴코더 스터디입니다.안녕하세요. 너굴코더 스터디입니다.안녕하세요. 너굴코더 스터디입니다.',
+      conent:
+        ' 안녕하세요. 너굴코더 스터디입니다.안녕하세요. 너굴코더 스터디입니다.안녕하세요. 너굴코더 스터디입니다.',
     },
   ];
   return (
     <>
       <div className='flex justify-between mb-10'>
-        <h3 className='tm1 leading-none'>스터디 정보</h3>
+        <h3 className='tb2 leading-none'>스터디 정보</h3>
         <button onClick={infoModalOpen}>
           <PenLine className='w-5 h-5' />
         </button>
@@ -58,7 +59,11 @@ export default function StudyRoomInfo() {
       </div>
       <div className='w-full grid grid-cols-2 gap-5'>
         {infos.map((info, i) => (
-          <StudyRoomInfoCard key={`info${i}`} title={info.title} content={info.conent} />
+          <StudyRoomInfoCard
+            key={`info${i}`}
+            title={info.title}
+            content={info.conent}
+          />
         ))}
       </div>
       {infoModal && <StudyRoomInfoWrite closeFn={infoModalClose} />}
