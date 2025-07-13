@@ -3,8 +3,7 @@
   margin-bottom: 30px;
 }
 .big-calendar .fc .fc-toolbar-title {
-  font-weight: medium;
-  font-size: 36px;
+  font-weight: 500;
 }
 .big-calendar .fc .fc-button-primary {
   color: #000;
@@ -29,7 +28,7 @@
 }
 .big-calendar .fc-col-header-cell-cushion {
   font-size: 14px;
-  font-weight: medium;
+  font-weight: bold;
   color: #9a9a9a;
   height: 20px;
 }
