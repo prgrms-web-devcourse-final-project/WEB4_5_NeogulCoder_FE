@@ -75,31 +75,28 @@ export default function MannerModal({ onClose }: { onClose: () => void }) {
     },
   ];
   return (
-    <div className="flex flex-col bg-white w-175 h-175 rounded-[10px] items-center shadow-sm gap-[30px] px-6 py-6">
-      <div className="flex justify-between items-center w-full">
-        <h2 className="tm2">매너 평가</h2>
-        <X
-          className="w-6 h-6 cursor-pointer text-text1/40 hover:text-text1/60"
-          onClick={onClose}
-        />
+    <div className='flex flex-col bg-white w-175 h-175 rounded-[10px] items-center shadow-sm gap-[30px] px-6 py-6'>
+      <div className='flex justify-between items-center w-full'>
+        <h2 className='tm2'>매너 평가</h2>
+        <X className='w-6 h-6 cursor-pointer' onClick={onClose} />
       </div>
 
       {reviewSummary.map((review) => (
         <div
           key={review.category}
-          className="w-[640px] h-[690px] border border-main/10 rounded-[6px] flex gap-6 px-6 py-5 bg-white"
+          className='w-[640px] h-[690px] border border-main/10 rounded-[6px] flex gap-6 px-6 py-5 bg-white'
         >
-          <div className="flex flex-col items-center justify-start">
-            <Image src={review.icon} alt="리뷰 아이콘" />
+          <div className='flex flex-col items-center justify-start'>
+            <Image src={review.icon} alt='리뷰 아이콘' />
           </div>
 
-          <div className="flex flex-col gap-3 w-full">
+          <div className='flex flex-col gap-3 w-full'>
             {review.items.map((item, index) => (
-              <div key={index} className="flex justify-between">
-                <p className="t4">{item.content}</p>
+              <div key={index} className='flex justify-between'>
+                <p className='t4'>{item.content}</p>
                 <p>
-                  <span className="tm3">{item.count}</span>{' '}
-                  <span className="t4">명</span>
+                  <span className='tm3'>{item.count}</span>{' '}
+                  <span className='t4'>명</span>
                 </p>
               </div>
             ))}

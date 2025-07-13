@@ -15,27 +15,27 @@ export default function Pr() {
 
   return (
     <>
-      <div className="tb2">PR</div>
-      <div className="flex items-center justify-end" onClick={handleEditPr}>
+      <div className='tb3'>PR</div>
+      <div className='flex items-center justify-end' onClick={handleEditPr}>
         <button
-          type="button"
-          className="button-sm-type1 mt-[26px] hover:bg-[#292929]"
+          type='button'
+          className='button-sm-type1 mt-[26px] hover:bg-[#292929]'
         >
           PR 작성 및 수정
         </button>
       </div>
 
-      <div className="flex items-center justify-between gap-3 mt-[14px]">
+      <div className='flex items-center justify-between gap-3 mt-[14px]'>
         <InfoSection />
         <BuddyEnergySection />
       </div>
 
-      <div className="flex items-center justify-between gap-3 mt-[14px]">
+      <div className='flex items-center justify-between gap-3 mt-[14px]'>
         <MannerSection />
         <FeedbackSection />
       </div>
 
-      <div className="flex items-center justify-between mt-[14px]">
+      <div className='flex items-center justify-between mt-[14px]'>
         <IntroSection />
       </div>
     </>

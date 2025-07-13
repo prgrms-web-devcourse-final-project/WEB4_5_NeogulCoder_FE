@@ -4,7 +4,7 @@ import MyEditor from '@/components/common/Editor';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import RegionModal from '@/components/profile/pr/RegionModal';
+import RegionModal from '@/components/common/RegionModal';
 
 export default function EditPr() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function EditPr() {
   };
   return (
     <>
-      <div className='tb2 mb-[30px]'>PR 작성 및 수정</div>
+      <div className='tb3 mb-[30px]'>PR 작성 및 수정</div>
       <div className='flex items-center gap-5 mb-[35px]'>
         <button
           onClick={() => setActiveTab('정보')}

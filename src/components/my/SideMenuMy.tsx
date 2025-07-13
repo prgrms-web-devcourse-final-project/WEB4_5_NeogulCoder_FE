@@ -1,9 +1,16 @@
+'use client';
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SideMenuItemMy from './SideMenuItemMy';
+import { useRouter } from 'next/navigation';
 
 export default function SideMenuMy() {
   const userName = '한유빙';
+  const router = useRouter();
+
+  const handleGoToEditProfile = () => {
+    router.push('/profile/edit-profile');
+  };
 
   const menuItems = [
     { name: '캘린더', to: '/my/calendar' },
@@ -24,7 +31,11 @@ export default function SideMenuMy() {
               </div>
               <div>
                 <p className='tm2 cursor-default'>{userName}</p>
-                <button type='button' className='t5 text-text1/50'>
+                <button
+                  type='button'
+                  className='t5 text-text1/50'
+                  onClick={handleGoToEditProfile}
+                >
                   프로필 수정
                 </button>
               </div>
