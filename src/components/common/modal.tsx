@@ -1,4 +1,5 @@
 import { X } from 'lucide-react';
+import { useEffect } from 'react';
 
 type ModalProps = {
   onClose: () => void;
@@ -13,6 +14,13 @@ export default function Modal({
   title,
   children,
 }: ModalProps) {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
   return (
     <div className='fixed inset-0 z-50'>
       <div className='absolute inset-0 bg-black opacity-50' onClick={onClose} />
