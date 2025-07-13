@@ -22,8 +22,8 @@ export default function SideMenuItemMy({
           isActive ? 'opacity-100' : 'opacity-30'
         }`}
       >
-        <span className="tm3">{name}</span>
-        <ChevronRight className="w-[22px] h-[22px]" />
+        <span className='tm4'>{name}</span>
+        <ChevronRight className='w-[22px] h-[22px]' />
       </Link>
     </>
   );
