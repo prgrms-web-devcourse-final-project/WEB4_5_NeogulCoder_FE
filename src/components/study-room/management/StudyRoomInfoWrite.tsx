@@ -1,12 +1,16 @@
 import { Camera, ChevronDown, X } from 'lucide-react';
 
-export default function StudyRoomInfoWrite({ closeFn }: { closeFn: () => void }) {
+export default function StudyRoomInfoWrite({
+  closeFn,
+}: {
+  closeFn: () => void;
+}) {
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
         <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
           <div className='flex justify-between mb-8 px-9 '>
-            <h3 className='tm1'>스터디 정보 수정</h3>
+            <h3 className='tb2'>스터디 정보 수정</h3>
             <button onClick={closeFn}>
               <X className='w-8 y-8' />
             </button>
@@ -21,13 +25,13 @@ export default function StudyRoomInfoWrite({ closeFn }: { closeFn: () => void })
                   </button>
                 </div>
                 <div className=' shrink-0'>
-                  <p className='t2 mb-3'>
+                  <p className='t3 mb-3'>
                     이름 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <input type='text' className='w-full input-type2' />
                 </div>
                 <div className=' shrink-0'>
-                  <p className='t2 mb-3'>
+                  <p className='t3 mb-3'>
                     카테고리 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='w-full relative'>
@@ -38,7 +42,7 @@ export default function StudyRoomInfoWrite({ closeFn }: { closeFn: () => void })
                   </div>
                 </div>
                 <div className=' shrink-0'>
-                  <p className='t2 mb-3'>
+                  <p className='t3 mb-3'>
                     인원 수 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='flex w-full gap-3 items-end'>
@@ -47,7 +51,7 @@ export default function StudyRoomInfoWrite({ closeFn }: { closeFn: () => void })
                   </div>
                 </div>
                 <div className=' shrink-0'>
-                  <p className='t2 mb-3'>
+                  <p className='t3 mb-3'>
                     진행방식 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='flex gap-3'>
@@ -72,7 +76,7 @@ export default function StudyRoomInfoWrite({ closeFn }: { closeFn: () => void })
                   </div>
                 </div>
                 <div className=' shrink-0'>
-                  <p className='t2 mb-3'>스터디 한 줄 소개</p>
+                  <p className='t3 mb-3'>스터디 한 줄 소개</p>
                   <textarea className='input-type2 resize-none w-full h-[90px]!' />
                 </div>
               </div>

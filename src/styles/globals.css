@@ -49,29 +49,68 @@ body {
   .button-modal1 {
     @apply bg-main inline-flex h-12 w-full items-center justify-center rounded-md text-center text-sm leading-4 text-white md:text-base;
   }
+  .button-modal1:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-modal1:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
+  }
 
   .button-type1 {
     @apply bg-main inline-flex h-[50px] w-[390px] items-center justify-center rounded-[10px] text-center text-sm text-white md:text-base;
+  }
+  .button-type1:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-type1:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
   }
 
   .button-type2 {
     @apply bg-main inline-flex h-12 min-w-[118px] items-center justify-center rounded-[10px] px-4 text-center text-sm leading-5 text-white md:text-base;
   }
+  .button-type2:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-type2:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
+  }
 
   .button-type3 {
     @apply bg-main inline-flex h-12 min-w-[235px] items-center justify-center rounded-[10px] px-4 text-center text-sm text-white md:text-base;
+  }
+  .button-type3:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-type3:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
   }
 
   .button-type4 {
     @apply bg-main inline-flex h-11 w-[118px] items-center justify-center rounded-[10px] text-center text-sm text-white md:text-[15px];
   }
+  .button-type4:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-type4:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
+  }
 
   .button-type5 {
     @apply bg-main inline-flex h-11 w-[100px] items-center justify-center rounded-md text-center text-xs text-white md:text-sm;
   }
+  .button-type5:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-type5:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
+  }
 
   .button-type6 {
-    @apply border-main text-main inline-flex h-11 w-[100px] items-center justify-center rounded-md border bg-white text-center text-xs md:text-sm;
+    @apply border-main bg-white text-main inline-flex h-11 w-[100px] items-center justify-center rounded-md border text-center text-xs md:text-sm;
+  }
+  .button-type6:hover {
+    @apply bg-[#f5f5f5] transition-colors duration-300;
   }
 
   .button-type7 {
@@ -80,6 +119,12 @@ body {
 
   .button-sm-type1 {
     @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
+  }
+  .button-sm-type1:hover {
+    @apply bg-[#292929] transition-colors duration-300;
+  }
+  .button-sm-type1:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
   }
 
   /* 태그 */

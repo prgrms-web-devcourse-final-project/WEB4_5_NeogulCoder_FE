@@ -7,8 +7,8 @@ export default function SideStudyInfo({ name }: { name: string }) {
     <>
       <div className='px-8 py-5 bg-gray4 rounded-[10px] mb-3'>
         <div className='flex gap-3 mb-3 items-center'>
-          <div className='w-[80px] h-[80px] bg-white rounded-full'>
-            <Image width={80} src={musicBunny} alt='예시 기본 프사' />
+          <div className='w-[70px] h-[70px] bg-white rounded-full'>
+            <Image width={70} src={musicBunny} alt='예시 기본 프사' />
           </div>
           <div>
             <p className='tb2 cursor-default'>{name}</p>
