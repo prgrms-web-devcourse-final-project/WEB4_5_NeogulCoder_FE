@@ -6,6 +6,16 @@ import SideStudyInfo from './SideStudyInfo';
 
 export default function SideMenu() {
   const router = useRouter();
+
+  const menuItems = [
+    { name: '스터디 대시보드', to: '/study/dashboard' },
+    { name: '팀 캘린더', to: '/study/calendar' },
+    { name: '모임 일정 조율', to: '/study/study-schedule' },
+    { name: '스터디 커뮤니티', to: '/study/study-community' },
+    { name: '팀 채팅', to: '/study/chat' },
+    { name: '스터디 관리', to: '/study/management' },
+  ];
+
   return (
     <>
       <div>
@@ -18,28 +28,9 @@ export default function SideMenu() {
           스터디의 My 정보
         </button>
         <div className='flex flex-col gap-[30px] mt-[35px]'>
-          <SideMenuItem
-            name='스터디 대시보드'
-            url='/study/dashboard'
-            active={false}
-          />
-          <SideMenuItem name='팀 캘린더' url='/study/calendar' active={false} />
-          <SideMenuItem
-            name='모임 시간 조율'
-            url='/study/study-schedule'
-            active={false}
-          />
-          <SideMenuItem
-            name='스터디 커뮤니티'
-            url='/study/study-community'
-            active={false}
-          />
-          <SideMenuItem name='팀 채팅' url='/study/chat' active={true} />
-          <SideMenuItem
-            name='스터디 관리'
-            url='/study/management'
-            active={false}
-          />
+          {menuItems.map((item) => (
+            <SideMenuItem key={item.to} name={item.name} to={item.to} />
+          ))}
         </div>
       </div>
     </>
