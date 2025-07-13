@@ -8,7 +8,7 @@ export default function CreateStudyModal() {
       <div className='relative w-fit mx-auto my-10'>
         <button>
           <div className='w-25 h-25 rounded-full bg-gray-300'></div>
-          <div className='w-[30px] h-[30px] rounded-full bg-[#111111] absolute bottom-0 right-0 flex justify-center items-center'>
+          <div className='w-[30px] h-[30px] rounded-full bg-[#111111] absolute bottom-0 right-0 flex justify-center items-center '>
             <Camera color='#FFFFFF' size={18} />
           </div>
         </button>
@@ -183,7 +183,7 @@ export default function CreateStudyModal() {
         />
       </div>
 
-      <button className='button-modal1'>등록</button>
+      <button className='button-modal1 hover:bg-[#292929]'>등록</button>
     </>
   );
 }
