@@ -62,13 +62,13 @@ export default function Page() {
             {menuIsOpen && <ClickVerticalMenu title='내 게시물' />}
           </div>
         </div>
-        <div className='mt-10'>
+        <div className='mt-6'>
           <span className='tb2'>
             너굴코더에서 프로젝트 같이 진행하실 웹 백엔드와 디자이너를 모집 중에
             있습니다!
           </span>
         </div>
-        <div className='flex space-x-6 items-center my-10 justify-between'>
+        <div className='flex space-x-6 items-center my-6 justify-between'>
           <div className='flex justify-center items-center'>
             <button
               className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'
