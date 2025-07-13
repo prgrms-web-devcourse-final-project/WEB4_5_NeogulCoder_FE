@@ -37,7 +37,7 @@ export default function Page() {
           </div>
           <div className='relative' ref={menuRef}>
             <button
-              className={`flex w-10 h-10 rounded-full justify-center items-center ${
+              className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
                 isOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
               }`}
               onClick={() => menuSetIsOpen((prev) => !prev)}

@@ -31,7 +31,7 @@ export default function Modal({
           onClick={(e) => e.stopPropagation()}
         >
           <div className='flex justify-between w-full mb-4'>
-            <span className='tb2'>{title}</span>
+            <span className='tm2'>{title}</span>
             <button onClick={onClose}>
               <X />
             </button>
