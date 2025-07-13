@@ -28,7 +28,7 @@ export default function WriteComment() {
               ></button>
             </div>
             <input
-              className='w-full h-[50px]  rounded-xl border-[1px] p-5 ml-5 border-[#B8B8B8]'
+              className='w-full h-[50px]  rounded-xl border-[1px] p-5 ml-5 border-[#B8B8B8] tb-4'
               placeholder='댓글을 입력해주세요'
               style={{
                 color: 'var(--color-text1)',

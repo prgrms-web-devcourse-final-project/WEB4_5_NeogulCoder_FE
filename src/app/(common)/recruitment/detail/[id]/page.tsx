@@ -49,10 +49,15 @@ export default function Page() {
           </button>
         </div>
 
-        <div className='flex justify-end'>
+        <div className='flex justify-between'>
+          <div className='flex'>
+            <span className='text-[25px] text-[#111111] font-bold'>
+              너굴코더에서 프로젝트 같이 진행하실 웹 백엔드와 디자이너를 모집!
+            </span>
+          </div>
           <div className='relative' ref={menuRef}>
             <button
-              className={`flex w-10 h-10 rounded-full justify-center items-center ${
+              className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
                 isOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
               }`}
               onClick={() => menuSetIsOpen((prev) => !prev)}
@@ -62,12 +67,7 @@ export default function Page() {
             {menuIsOpen && <ClickVerticalMenu title='내 게시물' />}
           </div>
         </div>
-        <div className='mt-6'>
-          <span className='tb2'>
-            너굴코더에서 프로젝트 같이 진행하실 웹 백엔드와 디자이너를 모집 중에
-            있습니다!
-          </span>
-        </div>
+
         <div className='flex space-x-6 items-center my-6 justify-between'>
           <div className='flex justify-center items-center'>
             <button
@@ -105,7 +105,7 @@ export default function Page() {
             </div>
             <div className='flex w-[400px]'>
               <span className=' mr-8 tm3 opacity-50'>카테고리</span>
-              <span className='tm3'>IT</span>
+              <div className='tag-type1 tb5'>IT</div>
             </div>
           </div>
           <div className='flex space-x-12'>
@@ -164,23 +164,27 @@ export default function Page() {
               <div className='flex justify-between w-full'>
                 <div className='flex space-x-6 items-center mb-10'>
                   <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
-                  <div className='tm3 cursor-pointer'>닉네임</div>
-                  <div className='flex justify-center items-center'>
-                    <Image
-                      src={buddyEnergy}
-                      alt='버디 에너지'
-                      className='w-[70px] h-auto'
-                    />
-                    <div className='text-[#111111] opacity-50'>60%</div>
-                  </div>
+                  <div className='flex flex-col'>
+                    <div className='tm3 cursor-pointer ml-3'>닉네임</div>
+                    <div className='flex justify-center items-center'>
+                      <div className='flex justify-center items-center'>
+                        <Image
+                          src={buddyEnergy}
+                          alt='버디 에너지'
+                          className='w-[40px] h-[40px]'
+                        />
+                        <div className='tm4 opacity-50 justify-center items-center'>
+                          60%
+                        </div>
+                      </div>
 
-                  <div className='text-[#111111] opacity-20'>
-                    <Tally1 />
-                  </div>
-                  <div>
-                    <span className='text-[#111111] opacity-50'>
-                      2025-07-02
-                    </span>
+                      <div className='tm4 opacity-20 ml-5'>
+                        <Tally1 />
+                      </div>
+                      <div>
+                        <span className='tm4 opacity-50'>2025-07-02</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -212,7 +216,7 @@ export default function Page() {
             onClose={() => setAppIsOpen(false)}
           >
             <div
-              className='w-full h-[440px] border-[1px] p-5  my-10 rounded-[6px]'
+              className='w-full h-[440px] border-[1px] p-5  my-6 rounded-[6px]'
               style={{ borderColor: 'var(--color-border3)' }}
             >
               <span>지원 동기를 입력해주세요</span>
