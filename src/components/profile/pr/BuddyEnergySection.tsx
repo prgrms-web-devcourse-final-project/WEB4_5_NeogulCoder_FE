@@ -18,7 +18,6 @@ export default function BuddyEnergySection() {
               style={{ width: `${safePercent}%` }}
             />
 
-            {/* 토끼 */}
             <div
               className="absolute -top-6"
               style={{
@@ -35,7 +34,7 @@ export default function BuddyEnergySection() {
             </div>
           </div>
 
-          <p className="text-right mt-4 t4 text-text1 w-full max-w-[500px]">
+          <p className="text-right mt-4 tm4 text-text1 w-full max-w-[500px]">
             {safePercent}%
           </p>
         </div>
