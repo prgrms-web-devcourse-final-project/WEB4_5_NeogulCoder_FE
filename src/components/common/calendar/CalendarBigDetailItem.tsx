@@ -11,7 +11,7 @@ export default function CalendarBigDetailItem() {
       <div className='border border-border1 rounded-[10px] px-5 py-4'>
         <div className='flex justify-between mb-3'>
           <div className='w-full'>
-            <p className='tm2 mb-2'>Meeting</p>
+            <p className='tm3 mb-2'>Meeting</p>
             <div className='flex justify-between items-center'>
               <div>
                 <p className='tl4 flex gap-2 mb-1'>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import CreateStudyModal from '../study/CreateStudyModal';
 import Modal from './Modal';
+import Link from 'next/link';
 export default function SubHeader() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +26,8 @@ export default function SubHeader() {
             </button>
           </div>
           <div className='flex gap-6 cursor-pointer'>
-            <button
+            <Link
+              href={'/study/1/dashboard'}
               type='button'
               className='w-8 h-8 rounded-[12px] bg-gray3 flex items-center justify-center 
              shadow-[0_1px_4px_rgba(0,0,0,0.12)] hover:drop-shadow'
@@ -35,8 +37,9 @@ export default function SubHeader() {
                 alt='임시 기본 프사'
                 className='w-[38px] h-[38px]'
               />
-            </button>
-            <button
+            </Link>
+            <Link
+              href={'/study/2/dashboard'}
               type='button'
               className='w-8 h-8 rounded-[12px] bg-gray3 flex items-center justify-center 
              shadow-[0_1px_4px_rgba(0,0,0,0.12)] hover:drop-shadow'
@@ -46,7 +49,7 @@ export default function SubHeader() {
                 alt='임시 기본 프사'
                 className='w-[38px] h-[38px]'
               />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
