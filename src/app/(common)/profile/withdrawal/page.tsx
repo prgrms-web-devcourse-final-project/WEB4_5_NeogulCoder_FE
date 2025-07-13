@@ -18,7 +18,7 @@ export default function page() {
   }, [isModalOpen]);
   return (
     <>
-      <div className='tb2'>회원 탈퇴</div>
+      <div className='tb3'>회원 탈퇴</div>
       <div className='mt-[60px] flex flex-col items-center justify-center gap-10'>
         <div className='flex items-center gap-6 cursor-default'>
           <p className='w-[120px] text-left t4'>이메일(로그인 ID)</p>

@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 export default function UserInfoModal() {
   const router = useRouter();
 
-  const handleEditProfile = () => {
-    router.push('/profile/edit-profile');
+  const handleGoToPr = () => {
+    router.push('/profile/pr');
   };
 
   const handleMyPage = () => {
@@ -22,7 +22,7 @@ export default function UserInfoModal() {
       <button
         type='button'
         className='flex items-center gap-3 px-4 py-3 w-full hover:bg-gray4'
-        onClick={handleEditProfile}
+        onClick={handleGoToPr}
       >
         <User className='w-4 h-4 text-gray5' />
         프로필 설정

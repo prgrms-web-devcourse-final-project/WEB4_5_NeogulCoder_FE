@@ -45,25 +45,27 @@ export default function Main() {
   return (
     <>
       <div>
-        <Image src={banner} alt="banner" className="w-full rounded-[10px]" />
+        <Image src={banner} alt='banner' className='w-full rounded-[10px]' />
 
-        <div className="mt-[110px]">
-          <p className="text-[22px] font-bold">내 스터디</p>
-          <div className="flex items-center justify-end gap-2 mt-[18px]">
-            <button
-              type="button"
-              className="w-[30px] h-[30px] border border-border1 rounded-full flex justify-center items-center"
-            >
-              <ChevronLeft className="opacity-20 w-5 h-5" />
-            </button>
-            <button
-              type="button"
-              className="w-[30px] h-[30px] border border-border1 rounded-full flex justify-center items-center"
-            >
-              <ChevronRight className="opacity-20 w-5 h-5" />
-            </button>
+        <div className='mt-[110px]'>
+          <div className='flex items-center justify-between mt-[6px]'>
+            <p className='text-[22px] font-bold'>내 스터디</p>
+            <div className='flex gap-2'>
+              <button
+                type='button'
+                className='w-[30px] h-[30px] border border-border1 rounded-full flex justify-center items-center'
+              >
+                <ChevronLeft className='opacity-20 w-5 h-5' />
+              </button>
+              <button
+                type='button'
+                className='w-[30px] h-[30px] border border-border1 rounded-full flex justify-center items-center'
+              >
+                <ChevronRight className='opacity-20 w-5 h-5' />
+              </button>
+            </div>
           </div>
-          <div className="mt-[30px] flex gap-[52px]">
+          <div className='mt-[30px] flex gap-[52px]'>
             {studyList.map((study, index) => (
               <StudyCard
                 key={index}
@@ -79,14 +81,14 @@ export default function Main() {
           </div>
         </div>
 
-        <div className="mt-[110px]">
-          <p className="text-[22px] font-bold">모집 중인 스터디</p>
+        <div className='mt-[110px]'>
+          <p className='text-[22px] font-bold'>모집 중인 스터디</p>
 
-          <div className="flex justify-between">
-            <div className="flex gap-4 mt-[35px] relative">
-              <div className="relative">
+          <div className='flex justify-between'>
+            <div className='flex gap-4 mt-[35px] relative'>
+              <div className='relative'>
                 <button
-                  type="button"
+                  type='button'
                   className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
                     isSelectedCategory
                       ? 'border-main text-text1 tm3'
@@ -94,12 +96,12 @@ export default function Main() {
                   }`}
                   onClick={() => setIsCategoryOpen((prev) => !prev)}
                 >
-                  <p className="mr-1">{selectedCategory}</p>
-                  <ChevronDown className="w-4 h-4" />
+                  <p className='mr-1'>{selectedCategory}</p>
+                  <ChevronDown className='w-4 h-4' />
                 </button>
 
                 {isCategoryOpen && (
-                  <div className="absolute top-10 left-0 z-10">
+                  <div className='absolute top-10 left-0 z-10'>
                     <CategoryModal
                       onSelect={(category: string) => {
                         setSelectedCategory(category);
@@ -110,7 +112,7 @@ export default function Main() {
                 )}
               </div>
 
-              <div className="relative">
+              <div className='relative'>
                 <button
                   className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
                     isSelectedMeetingType
@@ -119,12 +121,12 @@ export default function Main() {
                   }`}
                   onClick={() => setMeetingTypeOpen((prev) => !prev)}
                 >
-                  <p className="mr-1">{selectedMeetingType}</p>
-                  <ChevronDown className="w-4 h-4" />
+                  <p className='mr-1'>{selectedMeetingType}</p>
+                  <ChevronDown className='w-4 h-4' />
                 </button>
 
                 {isMeetingTypeOpen && (
-                  <div className="absolute top-10 left-0 z-10">
+                  <div className='absolute top-10 left-0 z-10'>
                     <MeetingTypeModal
                       onSelect={(meeting: string) => {
                         setSelectedMeetingType(meeting);
@@ -136,17 +138,17 @@ export default function Main() {
               </div>
             </div>
 
-            <div className="w-[260px] h-[34px] bg-gray4 rounded-[50px] flex items-center gap-4 px-4 text-text1/50 mt-[35px]">
-              <Search className="w-4 h-4" />
+            <div className='w-[260px] h-[34px] bg-gray4 rounded-[50px] flex items-center gap-4 px-4 text-text1/50 mt-[35px]'>
+              <Search className='w-4 h-4' />
               <input
-                type="text"
-                placeholder="검색어를 입력해주세요."
-                className="focus:outline-none"
+                type='text'
+                placeholder='검색어를 입력해주세요.'
+                className='focus:outline-none'
               />
             </div>
           </div>
 
-          <div className="mt-[34px] flex flex-col gap-[30px]">
+          <div className='mt-[34px] flex flex-col gap-[30px]'>
             {recruitmentList.map((recruitment, index) => (
               <RecruitmentCard
                 key={index}

@@ -3,20 +3,24 @@ import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function SideBar() {
   const userName = '박스영';
   const router = useRouter();
+  const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴'>('pr');
 
   const handleEditProfile = () => {
     router.push('/profile/edit-profile');
   };
 
   const handleWithdrawal = () => {
+    setSelectedMenu('회원 탈퇴');
     router.push('/profile/withdrawal');
   };
 
   const handlePr = () => {
+    setSelectedMenu('pr');
     router.push('/profile/pr');
   };
 
@@ -54,16 +58,24 @@ export default function SideBar() {
           </button>
         </div>
         <div className='flex flex-col gap-[30px] tm4 mt-[35px]'>
-          <div className='flex justify-between items-center' onClick={handlePr}>
-            <button type='button'>PR</button>
-            <ChevronRight className='w-[22px] h-[22px] opacity-30 cursor-pointer' />
-          </div>
           <div
-            className='flex justify-between items-center'
+            className={`flex justify-between items-center cursor-pointer ${
+              selectedMenu === 'pr' ? 'opacity-100' : 'opacity-30'
+            }`}
+            onClick={handlePr}
+          >
+            <span>PR</span>
+            <ChevronRight className='w-[22px] h-[22px]' />
+          </div>
+
+          <div
+            className={`flex justify-between items-center cursor-pointer ${
+              selectedMenu === '회원 탈퇴' ? 'opacity-100' : 'opacity-30'
+            }`}
             onClick={handleWithdrawal}
           >
-            <button type='button'>회원 탈퇴</button>
-            <ChevronRight className='w-[22px] h-[22px] opacity-30 cursor-pointer' />
+            <span>회원 탈퇴</span>
+            <ChevronRight className='w-[22px] h-[22px]' />
           </div>
         </div>
       </div>

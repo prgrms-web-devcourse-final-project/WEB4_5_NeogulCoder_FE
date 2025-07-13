@@ -37,31 +37,28 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
     },
   ];
   return (
-    <div className="flex flex-col bg-white w-[520px] h-[620px] overflow-auto rounded-[10px] items-center shadow-sm gap-[35px] px-6 py-6">
-      <div className="flex justify-between items-center w-full">
-        <h2 className="tm2">피드백</h2>
-        <X
-          className="w-6 h-6 cursor-pointer text-text1/40 hover:text-text1/60"
-          onClick={onClose}
-        />
+    <div className='flex flex-col bg-white w-[520px] h-[620px] overflow-auto rounded-[10px] items-center shadow-sm gap-[35px] px-6 py-6'>
+      <div className='flex justify-between items-center w-full'>
+        <h2 className='tm2'>피드백</h2>
+        <X className='w-6 h-6 cursor-pointer' onClick={onClose} />
       </div>
 
       {feedbackList.map((feedback, index) => (
-        <div key={feedback.id} className="flex flex-col gap-3 w-full">
-          <div className="flex gap-3">
-            <div className="w-[46px] h-[46px] bg-gray3 rounded-full overflow-hidden flex-shrink-0">
-              <Image src={musicBunny} alt="예시 기본 프사" />
+        <div key={feedback.id} className='flex flex-col gap-3 w-full'>
+          <div className='flex gap-3'>
+            <div className='w-[46px] h-[46px] bg-gray3 rounded-full overflow-hidden flex-shrink-0'>
+              <Image src={musicBunny} alt='예시 기본 프사' />
             </div>
 
-            <div className="flex flex-col justify-center">
-              <p className="tm4">{feedback.userName}</p>
-              <p className="t5 text-text1/50">{feedback.date}</p>
+            <div className='flex flex-col justify-center'>
+              <p className='tm4'>{feedback.userName}</p>
+              <p className='t5 text-text1/50'>{feedback.date}</p>
             </div>
           </div>
 
-          <p className="t4 text-text1 pl-[60px] ">{feedback.content}</p>
+          <p className='t4 text-text1 pl-[60px] '>{feedback.content}</p>
           {index !== feedbackList.length - 1 && (
-            <hr className="border border-main/10 m-0" />
+            <hr className='border border-main/10 m-0' />
           )}
         </div>
       ))}
