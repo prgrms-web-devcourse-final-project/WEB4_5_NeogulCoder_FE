@@ -23,7 +23,7 @@ export default function Calendar() {
   return (
     <>
       <div>
-        <h1 className='tb2'>팀 캘린더</h1>
+        <h1 className='tb3'>팀 캘린더</h1>
       </div>
       <div className='flex justify-end mb-3'>
         <button onClick={writeOpenHandler} className='button-sm-type1'>

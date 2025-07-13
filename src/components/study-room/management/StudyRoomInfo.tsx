@@ -44,7 +44,7 @@ export default function StudyRoomInfo() {
   return (
     <>
       <div className='flex justify-between mb-10'>
-        <h3 className='tb2 leading-none'>스터디 정보</h3>
+        <h3 className='tb3 leading-none'>스터디 정보</h3>
         <button onClick={infoModalOpen}>
           <PenLine className='w-5 h-5' />
         </button>

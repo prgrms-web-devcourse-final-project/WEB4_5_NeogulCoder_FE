@@ -12,14 +12,14 @@ export default function CalendarBigDetail({
         <div className='pt-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px]'>
           <div className='flex justify-between mb-8 px-9 '>
             {/* 모달헤더 */}
-            <h3 className='tb2'>일정 상세</h3>
+            <h3 className='tm2'>일정 상세</h3>
             <button onClick={closeHandler}>
               <X className='w-8 y-8' />
             </button>
           </div>
           <div>
             {/* 내용 */}
-            <p className='tm2 mb-6 px-9 '>7월 4일 금요일</p>
+            <p className='t3 mb-6 px-9 '>7월 4일 금요일</p>
             <div className='overflow-auto max-h-[calc(90vh-160px)] flex flex-col gap-5 px-9 pb-7'>
               <CalendarBigDetailItem />
               <CalendarBigDetailItem />
