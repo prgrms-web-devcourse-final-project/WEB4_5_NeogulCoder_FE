@@ -37,7 +37,7 @@ export default function Comment() {
           <div className='flex justify-between items-start'>
             <div className='flex'>
               <button
-                className='tb3'
+                className='tm3'
                 onClick={handleGoToPr}
                 style={{ color: 'var(--color-text1)' }}
               >
@@ -65,7 +65,7 @@ export default function Comment() {
           </div>
 
           <div
-            className='tm2 mt-[-10px]'
+            className='tm3 mt-[-10px]'
             style={{ color: 'var(--color-text1)' }}
           >
             댓글 작성 댓글 작성

@@ -48,22 +48,22 @@ export default function Page() {
           </div>
         </div>
 
-        <div className='tb2 mt-5'>
+        <div className='tb2 mt-3'>
           <span>오늘 공부한 내용 정리해서 올립니다!</span>
         </div>
-        <div className='flex space-x-6 items-center my-10 justify-between'>
+        <div className='flex space-x-6 items-center my-6 justify-between'>
           <div className='flex justify-center items-center'>
             <button
-              className='w-15 h-15 rounded-full bg-gray-300 mr-5'
+              className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'
               onClick={handleGoToPr}
             ></button>
-            <button className='tm2 ' onClick={handleGoToPr}>
+            <button className='tm3 ' onClick={handleGoToPr}>
               닉네임
             </button>
           </div>
 
           <div>
-            <span className='text-[#111111] opacity-50 mr-3'>2025-07-02</span>
+            <span className='opacity-50 mr-3 tm4'>2025-07-02</span>
           </div>
         </div>
         <div
@@ -74,10 +74,10 @@ export default function Page() {
         </div>
         <div className='flex justify-end'>
           <button
-            className='button-type4 mb-10 hover:bg-[#292929]'
+            className='button-type4 mb-10 hover:bg-[#292929] '
             onClick={() => setIsOpen(true)}
           >
-            AI 퀴즈 풀기
+            <span className='tm4'>AI 퀴즈 풀기</span>
           </button>
         </div>
         <div className='w-[898px]'>
@@ -125,7 +125,7 @@ export default function Page() {
                   </span>
                 </button>
               </div>
-              <span className='flex tm3 justify-end'>2/3</span>
+              <span className='flex tm4 justify-end'>2/3</span>
             </div>
           </Modal>
         )}
