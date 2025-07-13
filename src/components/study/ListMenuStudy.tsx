@@ -2,17 +2,17 @@
 
 import { ChevronDown, Search } from 'lucide-react';
 import { useState } from 'react';
-import CategoryModal from '../main/CategoryModal';
-import MeetingTypeModal from '../main/MeetingTypeModal';
+import CategoryStudyModal from './CategoryStudyModal';
+import SortingTypeModal from './SortingTypeModal';
 
-export default function ListMenu() {
+export default function ListMenuStudy() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('카테고리');
   const isSelectedCategory = selectedCategory !== '카테고리';
 
-  const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
-  const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
-  const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
+  const [isSortingTypeOpen, setSortingTypeOpen] = useState(false);
+  const [selectedSortingType, setSelectedSortingType] = useState('정렬');
+  const isSelectedSortingType = selectedSortingType !== '정렬';
 
   return (
     <div className="flex justify-between mt-8">
@@ -33,7 +33,7 @@ export default function ListMenu() {
 
           {isCategoryOpen && (
             <div className="absolute top-10 left-0 z-10">
-              <CategoryModal
+              <CategoryStudyModal
                 onSelect={(category: string) => {
                   setSelectedCategory(category);
                   setIsCategoryOpen(false);
@@ -46,22 +46,22 @@ export default function ListMenu() {
         <div className="relative">
           <button
             className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
-              isSelectedMeetingType
+              isSelectedSortingType
                 ? 'border-main text-text1 tm4'
                 : 'border-main/10 text-text1/50 tm4'
             }`}
-            onClick={() => setMeetingTypeOpen((prev) => !prev)}
+            onClick={() => setSortingTypeOpen((prev) => !prev)}
           >
-            <p className="mr-1">{selectedMeetingType}</p>
+            <p className="mr-1">{selectedSortingType}</p>
             <ChevronDown className="w-4 h-4" />
           </button>
 
-          {isMeetingTypeOpen && (
+          {isSortingTypeOpen && (
             <div className="absolute top-10 left-0 z-10">
-              <MeetingTypeModal
-                onSelect={(meeting: string) => {
-                  setSelectedMeetingType(meeting);
-                  setMeetingTypeOpen(false);
+              <SortingTypeModal
+                onSelect={(sorting: string) => {
+                  setSelectedSortingType(sorting);
+                  setSortingTypeOpen(false);
                 }}
               />
             </div>

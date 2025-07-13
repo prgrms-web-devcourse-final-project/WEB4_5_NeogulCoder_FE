@@ -13,11 +13,11 @@ export default function Header() {
   const router = useRouter();
 
   const handleHome = () => {
-    router.push('/main');
+    router.push('/');
   };
   return (
-    <div className="w-full flex justify-center pt-6 text-text1">
-      <div className="w-full max-w-[1248px] flex items-center justify-between">
+    <div className="w-full flex justify-center pt-[10px] text-text1">
+      <div className="w-full max-w-[1280px] px-4 flex items-center justify-between">
         <Image
           src={logoWibby}
           alt="로고"
