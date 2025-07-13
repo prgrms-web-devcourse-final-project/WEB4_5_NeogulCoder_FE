@@ -37,7 +37,7 @@ export default function EditProfile() {
           </button>
           <button
             type='button'
-            className='t4 self-end text-text1/50 hover:text-text1'
+            className='t4 self-end text-text1/50'
             onClick={() => setIsModalOpen(true)}
           >
             비밀번호 변경
