@@ -23,7 +23,7 @@ export default function SideMenu() {
         <button
           onClick={() => router.push('/study/1/my-study-info')}
           type='button'
-          className='w-full tm3 h-[40px] bg-gray4 rounded-[10px]'
+          className='w-full tm4 h-[40px] bg-gray4 rounded-[10px]'
         >
           스터디의 My 정보
         </button>
