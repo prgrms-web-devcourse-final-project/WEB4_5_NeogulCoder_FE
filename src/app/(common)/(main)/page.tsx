@@ -20,7 +20,7 @@ export default function Main() {
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
 
-  const studyList = Array.from({ length: 4 }, (_, i) => ({
+  const studyList = Array.from({ length: 4 }, () => ({
     studyName: '주말이 이렇게 방가울수가',
     studyLeader: '서영이',
     currentMemberCount: 3,
@@ -30,7 +30,7 @@ export default function Main() {
     studyWay: '온라인',
   }));
 
-  const recruitmentList = Array.from({ length: 10 }, (_, i) => ({
+  const recruitmentList = Array.from({ length: 10 }, () => ({
     title: '낭만',
     content:
       '사랑이라 믿었던 것들은 어린 날의 추억일 뿐 추억이라 믿었던 것들은 오래 썩는 기억일 뿐 기억이라 믿었던 것들은 지금 너와 나의 기쁨 깊은 곳에서 숨 쉬는 불행들의 연료일 뿐',

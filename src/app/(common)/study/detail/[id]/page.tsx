@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+"use client";
+
+import {
+  ChevronLeft,
+  ChevronRight,
+  EllipsisVertical,
+  Tally1,
+} from "lucide-react";
+import Comment from "@/components/common/Comment";
+import WriteComment from "@/components/common/WriteComment";
+import Modal from "@/components/common/Modal";
+import { useState } from "react";
+
+export default function Page() {
+  const [isOpen, setIsOpen] = useState(false);
+=======
 'use client';
 
 import { ChevronLeft, ChevronRight, EllipsisVertical } from 'lucide-react';
@@ -27,11 +44,47 @@ export default function Page() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+>>>>>>> dev
 
   return (
     <>
       <div className='w-[898px] mx-auto'>
         <div className='flex justify-between'>
+<<<<<<< HEAD
+          <button>
+            <ChevronLeft />
+          </button>
+          <button>
+            <EllipsisVertical />
+          </button>
+        </div>
+        <div className='tag-type3 red tb5 mb-6 mt-10'>
+          <span>공지</span>
+        </div>
+        <div className='tb1'>
+          <span>오늘 공부한 내용 정리해서 올립니다!</span>
+        </div>
+        <div className='flex space-x-6 items-center my-10'>
+          <div>
+            <button className='w-15 h-15 rounded-full bg-gray-300 mr-5'></button>
+          </div>
+          <div className='tm2'>닉네임</div>
+          <div className='text-[#111111] opacity-20'>
+            <Tally1 />
+          </div>
+          <div>
+            <span className='text-[#111111] opacity-50'>2025-07-02</span>
+          </div>
+        </div>
+        <hr
+          className='h-0.5 my-10'
+          style={{ borderColor: "var(--color-border2)" }}
+        />
+        <div className='w-full h-[600px] mb-10'>내용</div>
+        <div className='flex justify-end'>
+          <button
+            className='button-type4 mb-10'
+=======
           <div className='tag-type3 red tb5'>
             <span>공지</span>
           </div>
@@ -75,6 +128,7 @@ export default function Page() {
         <div className='flex justify-end'>
           <button
             className='button-type4 mb-10 hover:bg-[#292929]'
+>>>>>>> dev
             onClick={() => setIsOpen(true)}
           >
             AI 퀴즈 풀기
@@ -90,7 +144,11 @@ export default function Page() {
           <Modal
             title=''
             onClose={() => setIsOpen(false)}
+<<<<<<< HEAD
+            className='w-[680px] h-[450px]'
+=======
             className='w-[680px] h-auto'
+>>>>>>> dev
           >
             <div className='w-full'>
               <div className='p-3'>
@@ -100,25 +158,42 @@ export default function Page() {
                 </span>
               </div>
               <div className=' flex justify-between py-10'>
+<<<<<<< HEAD
+                <button>
+                  <ChevronLeft />
+                </button>
+                <button>
+=======
                 <button className='flex w-10 h-10 rounded-full justify-center items-center hover:bg-[#f5f5f5]'>
                   <ChevronLeft />
                 </button>
                 <button className='flex w-10 h-10 rounded-full justify-center items-center hover:bg-[#f5f5f5]'>
+>>>>>>> dev
                   <ChevronRight />
                 </button>
               </div>
               <div className='flex justify-center items-center mx-auto space-x-5 py-2'>
                 <button
+<<<<<<< HEAD
+                  className='w-[200px] h-[104px] border-[1px] rounded-[10px]'
+                  style={{ borderColor: "var(--color-border3)" }}
+=======
                   className='w-[200px] h-[104px] border-[1px] rounded-[10px] hover:bg-[#f5f5f5]'
                   style={{ borderColor: 'var(--color-border3)' }}
+>>>>>>> dev
                 >
                   <span className='text-[#90CFF1] font-bold text-[70px]'>
                     O
                   </span>
                 </button>
                 <button
+<<<<<<< HEAD
+                  className='w-[200px] h-[104px] border-[1px] rounded-[10px]'
+                  style={{ borderColor: "var(--color-border3)" }}
+=======
                   className='w-[200px] h-[104px] border-[1px] rounded-[10px] hover:bg-[#f5f5f5]'
                   style={{ borderColor: 'var(--color-border3)' }}
+>>>>>>> dev
                 >
                   <span className='text-[#FBAE8F] font-bold text-[70px] mx-auto'>
                     X

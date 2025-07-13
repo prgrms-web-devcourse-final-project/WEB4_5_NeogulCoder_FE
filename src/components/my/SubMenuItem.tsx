@@ -16,7 +16,7 @@ export default function SubMenuItem({
   onClick,
   className,
 }: SubnavItemProps) {
-  const subMenuBasicStyle = 'w-[120px] h-[48px] t2 text-text1 text-center';
+  const subMenuBasicStyle = 'w-[100px] h-[48px] t3 text-text1 text-center';
 
   const activeStyle = 'border-b-3 border-main text-text1';
   const inactiveStyle = 'text-text1 opacity-40 hover:opacity-100';

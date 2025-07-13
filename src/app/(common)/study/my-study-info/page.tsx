@@ -1,8 +1,8 @@
 'use client';
 
-import ListMenu from '@/components/my/ListMenu';
+import Pagination from '@/components/common/Pagination';
 import RecruitmentCard from '@/components/my/RecruitmentCard';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import ListMenuStudy from '@/components/study/ListMenuStudy';
 
 export default function MyStudyInfo() {
   const recruitmentType = {
@@ -16,62 +16,38 @@ export default function MyStudyInfo() {
   };
 
   return (
-    // py-15
-    <div className="w-full px-6">
-      <div className="tb1 text-[22px] text-text1">스터디 My 정보</div>
-      <div className="tm1 text-[20px] text-text1 mt-[30px]">
-        내가 작성한 모집 글
-      </div>
+    <div className="w-full">
+      <div className="tb2  text-text1">스터디 My 정보</div>
+      <div className="tm2 text-text1 mt-[30px]">내가 작성한 모집 글</div>
       <div className="mt-6">
-        <ListMenu />
+        <ListMenuStudy />
       </div>
-      {/* flex justify-between */}
       <div className="flex flex-col gap-[30px] mt-[30px]">
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <RecruitmentCard {...recruitmentType} />
-        <div className="flex gap-5 justify-center items-center">
-          <ChevronLeft className="w-6 h-6 cursor-pointer" />
-          <div className="flex items-center gap-3 tl2 text-text1">
-            <button className="flex justify-center items-center bg-main text-white w-6 h-6 rounded-[50%]">
-              1
-            </button>
-            <button className="flex justify-center items-center bg-none text-text1 w-6 h-6 rounded-[50%]">
-              2
-            </button>
-            <button className="flex justify-center items-center bg-none text-text1 w-6 h-6 rounded-[50%]">
-              3
-            </button>
-            <button className="flex justify-center items-center bg-none text-text1 w-6 h-6 rounded-[50%]">
-              4
-            </button>
-            <button className="flex justify-center items-center bg-none text-text1 w-6 h-6 rounded-[50%]">
-              5
-            </button>
-          </div>
-          <ChevronRight className="w-6 h-6 cursor-pointer" />
-        </div>
+        {[...Array(5)].map((_, i) => (
+          <RecruitmentCard key={i} {...recruitmentType} />
+        ))}
+      </div>
+      <div className="mt-[30px]">
+        <Pagination />
       </div>
       <div className="mt-13">
-        <div className="tm1 text-[20px] text-text1">스터디 연장</div>
+        <div className="tm2 text-text1">스터디 연장</div>
         <hr className="mt-4 text-border2" />
-        <div className="flex justify-between items-center mt-6 t2">
+        <div className="flex justify-between items-center mt-6 t3">
           <span className="text-red">스터디를 연장하실 수 있습니다.</span>
-          <button className="w-[144px] h-[48px] bg-main rounded-[10px] text-white">
+          <button className="w-[144px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]">
             스터디 연장하기
           </button>
         </div>
       </div>
       <div className="mt-13">
-        <div className="tm1 text-[20px] text-text1">스터디 탈퇴</div>
+        <div className="tm2 text-text1">스터디 탈퇴</div>
         <hr className="mt-4 text-border2" />
-        <div className="flex justify-between items-center mt-6 t2">
+        <div className="flex justify-between items-center mt-6 t3">
           <span className="text-red">
             스터디를 탈퇴하면 불이익이 발생합니다.
           </span>
-          <button className="w-[144px] h-[48px] bg-main rounded-[10px] text-white">
+          <button className="w-[144px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]">
             스터디 탈퇴하기
           </button>
         </div>
