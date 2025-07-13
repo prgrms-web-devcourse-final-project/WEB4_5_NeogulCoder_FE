@@ -1,41 +1,47 @@
-import { ChevronDown } from "lucide-react";
-import ClientEditorWrapper from "@/components/common/ClientEditorWrapper";
+import { ChevronDown } from 'lucide-react';
+import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 
 export default async function page() {
   return (
     <>
       <div className='w-[920px] mx-auto'>
-        <div className='flex items-center'>
-          <div className='flex w-15 h-15 rounded-full bg-[#111111] justify-center items-center'>
-            <span className='text-white text-[28px]'>1</span>
-          </div>
-          <span className='font-medium text-2xl mx-[25px] '>
-            스터디 기본 정보를 입력해주세요
-          </span>
-          <div className='relative inline-block w-[320px] ml-14.5 mr-5'>
-            <select
-              className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
-              style={{ borderColor: "var(--color-border3)" }}
-              name='selectedStudy'
-              defaultValue=''
-            >
-              <option value='' disabled hidden>
-                스터디를 선택해주세요
-              </option>
-              <option value='study1'>스터디 1</option>
-              <option value='study2'>스터디 2</option>
-            </select>
-
-            {/* 커스텀 화살표 아이콘 (왼쪽으로 옮긴 예시) */}
-            <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-              <ChevronDown />
+        <div className='flex items-center justify-between'>
+          <div className='flex justify-center items-center'>
+            <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
+              <span className='text-white tb2'>1</span>
             </div>
+            <span className='tb2 mx-[25px] '>
+              스터디 기본 정보를 입력해주세요
+            </span>
           </div>
-          <button className='button-type7'>가져오기</button>
+          <div>
+            <div className='relative inline-block w-[320px] ml-14.5 mr-5'>
+              <select
+                className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
+                style={{ borderColor: 'var(--color-border3)' }}
+                name='selectedStudy'
+                defaultValue=''
+              >
+                <option value='' disabled hidden>
+                  스터디를 선택해주세요
+                </option>
+                <option value='study1'>스터디 1</option>
+                <option value='study2'>스터디 2</option>
+              </select>
+
+              {/* 커스텀 화살표 아이콘 (왼쪽으로 옮긴 예시) */}
+              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
+                <ChevronDown />
+              </div>
+            </div>
+            <button className='button-type7 hover:bg-[#292929]'>
+              가져오기
+            </button>
+          </div>
         </div>
         <hr
           className='h-0.5 my-10'
-          style={{ borderColor: "var(--color-border2)" }}
+          style={{ borderColor: 'var(--color-border2)' }}
         />
         <div className='flex space-x-10'>
           <div className='flex flex-col w-[440px]'>
@@ -43,7 +49,7 @@ export default async function page() {
             <input
               type='date'
               className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
-              style={{ borderColor: "var(--color-border3)" }}
+              style={{ borderColor: 'var(--color-border3)' }}
             ></input>
           </div>
           <div className='flex flex-col w-[440px]'>
@@ -51,7 +57,7 @@ export default async function page() {
             <input
               type='date'
               className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
-              style={{ borderColor: "var(--color-border3)" }}
+              style={{ borderColor: 'var(--color-border3)' }}
             ></input>
           </div>
         </div>
@@ -63,7 +69,7 @@ export default async function page() {
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
                 defaultValue=''
-                style={{ borderColor: "var(--color-border3)" }}
+                style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>
                   인원 미정 ~ 10명 이상
@@ -93,7 +99,7 @@ export default async function page() {
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
                 defaultValue=''
-                style={{ borderColor: "var(--color-border3)" }}
+                style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>
                   카테고리
@@ -127,7 +133,7 @@ export default async function page() {
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
                 defaultValue=''
-                style={{ borderColor: "var(--color-border3)" }}
+                style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>
                   지역
@@ -163,7 +169,7 @@ export default async function page() {
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
                 defaultValue=''
-                style={{ borderColor: "var(--color-border3)" }}
+                style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>
                   진행 방식
@@ -185,32 +191,32 @@ export default async function page() {
           <input
             type='date'
             className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
-            style={{ borderColor: "var(--color-border3)" }}
+            style={{ borderColor: 'var(--color-border3)' }}
           ></input>
         </div>
-        <div className='flex items-center'>
-          <div className='flex w-15 h-15 rounded-full bg-[#111111] justify-center items-center'>
-            <span className='text-white text-[28px]'>2</span>
+        <div className='flex items-center  mt-10'>
+          <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
+            <span className='text-white tb2'>2</span>
           </div>
-          <span className='font-medium text-2xl mx-[25px] '>
-            스터디에 대해 소개해주세요
-          </span>
+          <span className='tb2 mx-[25px]'>스터디에 대해 소개해주세요</span>
         </div>
         <hr
           className='h-0.5 my-10'
-          style={{ borderColor: "var(--color-border2)" }}
+          style={{ borderColor: 'var(--color-border2)' }}
         />
         <input
           className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10'
-          style={{ borderColor: "var(--color-border3)" }}
+          style={{ borderColor: 'var(--color-border3)' }}
           placeholder='제목을 입력해주세요'
         ></input>
         <div className='mb-10'>
           <ClientEditorWrapper />
         </div>
         <div className='flex justify-end'>
-          <button className='button-type6 mr-[15px]'>취소</button>
-          <button className='button-type5'>등록</button>
+          <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+            취소
+          </button>
+          <button className='button-type5 hover:bg-[#292929]'>등록</button>
         </div>
       </div>
     </>
