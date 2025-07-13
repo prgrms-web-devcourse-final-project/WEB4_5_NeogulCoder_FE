@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import "@toast-ui/editor/dist/toastui-editor.css";
-import { Editor } from "@toast-ui/react-editor";
-import { useRef } from "react";
-import { useEffect } from "react";
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 export default function MyEditor() {
   const editorRef = useRef<Editor>(null);
@@ -16,7 +16,7 @@ export default function MyEditor() {
   useEffect(() => {
     const instance = editorRef.current?.getInstance();
     if (instance) {
-      instance.setMarkdown(""); // 강제로 빈 내용으로 설정
+      instance.setMarkdown(''); // 강제로 빈 내용으로 설정
     }
   }, []);
 
