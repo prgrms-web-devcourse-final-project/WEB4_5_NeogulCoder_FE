@@ -15,18 +15,18 @@ export default function ApplyStudyList() {
   };
 
   return (
-    <div className="w-full">
-      <div className="tb2">내가 신청한 스터디</div>
-      <div className="mt-6">
+    <div className='w-full'>
+      <div className='tb3'>내가 신청한 스터디</div>
+      <div className='mt-6'>
         <ListMenu />
       </div>
-      <div className="grid grid-cols-3 gap-[26px] mt-[30px]">
+      <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
         {[...Array(4)].map((_, i) => (
           <ApplyingStudyCard
             key={i}
             {...studyType}
             isShown={false}
-            status="미완료"
+            status='미완료'
           />
         ))}
         {[...Array(4)].map((_, i) => (
@@ -34,7 +34,7 @@ export default function ApplyStudyList() {
             key={i}
             {...studyType}
             isShown={true}
-            status="승인"
+            status='승인'
           />
         ))}
         {[...Array(4)].map((_, i) => (
@@ -42,11 +42,11 @@ export default function ApplyStudyList() {
             key={i}
             {...studyType}
             isShown={true}
-            status="거절"
+            status='거절'
           />
         ))}
       </div>
-      <div className="mt-[30px]">
+      <div className='mt-[30px]'>
         <Pagination />
       </div>
     </div>

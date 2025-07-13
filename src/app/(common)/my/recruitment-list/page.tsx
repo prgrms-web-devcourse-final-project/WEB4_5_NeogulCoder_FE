@@ -16,17 +16,17 @@ export default function RecruitmentList() {
   };
 
   return (
-    <div className="w-full">
-      <div className="tb2">내가 작성한 모집 글</div>
-      <div className="mt-6">
+    <div className='w-full'>
+      <div className='tb3'>내가 작성한 모집 글</div>
+      <div className='mt-6'>
         <ListMenu />
       </div>
-      <div className="flex flex-col gap-[30px] mt-[30px]">
+      <div className='flex flex-col gap-[30px] mt-[30px]'>
         {[...Array(10)].map((_, i) => (
           <RecruitmentCard key={i} {...recruitmentType} />
         ))}
       </div>
-      <div className="mt-[30px]">
+      <div className='mt-[30px]'>
         <Pagination />
       </div>
     </div>

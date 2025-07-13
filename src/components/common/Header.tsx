@@ -18,46 +18,46 @@ export default function Header() {
     router.push('/');
   };
   return (
-    <div className="w-full flex justify-center pt-2.5 text-text1">
-      <div className="w-full max-w-[1280px] flex items-center justify-between px-4">
+    <div className='w-full flex justify-center pt-2.5 text-text1'>
+      <div className='w-full max-w-[1280px] flex items-center justify-between px-4'>
         <Image
           src={logoWibby}
-          alt="로고"
-          className="w-[80px] h-9 cursor-pointer"
+          alt='로고'
+          className='w-[80px] h-9 cursor-pointer'
           onClick={handleGoToHome}
         />
 
-        <div className="flex items-center gap-[18px]">
-          <div className="flex items-center justify-center gap-4">
+        <div className='flex items-center gap-[18px]'>
+          <div className='flex items-center justify-center gap-4'>
             <div
-              className="w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 relative"
+              className='w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 relative cursor-pointer'
               onClick={() => setIsProfileModalOpen((prev) => !prev)}
             >
-              <span className="tm5 cursor-pointer">내 정보</span>
+              <span className='tm5 cursor-pointer'>내 정보</span>
 
-              <button type="button">
-                <ChevronDown className="w-[18px] h-[18px]" />
+              <button type='button'>
+                <ChevronDown className='w-[18px] h-[18px]' />
               </button>
 
               {isProfileModalOpen && (
-                <div className="absolute right-0 top-10">
+                <div className='absolute right-0 top-10'>
                   <ProfileInfoModal />
                 </div>
               )}
             </div>
             <div
-              className="relative"
+              className='relative'
               onClick={() => setIsNotificationModalOpen(true)}
             >
               <button
-                type="button"
-                className="flex items-center justify-center"
+                type='button'
+                className='flex items-center justify-center'
               >
-                <Bell className="w-[22px] h-6" />
+                <Bell className='w-[22px] h-6' />
               </button>
             </div>
             {isNotificationModalOpen && (
-              <div className="fixed bottom-5 right-5 z-50">
+              <div className='fixed bottom-5 right-5 z-50'>
                 <NotificationModal
                   onClose={() => setIsNotificationModalOpen(false)}
                 />
@@ -65,13 +65,13 @@ export default function Header() {
             )}
             <div>
               <button
-                type="button"
-                className="flex items-center justify-center"
+                type='button'
+                className='flex items-center justify-center'
               >
                 <Image
                   src={darkMode}
-                  className="w-[26px] h-[26px]"
-                  alt="다크모드"
+                  className='w-[26px] h-[26px]'
+                  alt='다크모드'
                 />
               </button>
             </div>

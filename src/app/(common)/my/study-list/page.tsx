@@ -15,18 +15,18 @@ export default function StudyList() {
   };
 
   return (
-    <div className="w-full">
-      <div className="tb2">전체 스터디</div>
-      <div className="mt-6">
+    <div className='w-full'>
+      <div className='tb3'>전체 스터디</div>
+      <div className='mt-6'>
         <SubMenuItem isActive={true}>진행 중</SubMenuItem>
         <SubMenuItem isActive={false}>종료</SubMenuItem>
       </div>
-      <div className="grid grid-cols-3 gap-[26px] mt-[30px]">
+      <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
         {[...Array(12)].map((_, i) => (
           <StudyCard key={i} {...studyType} />
         ))}
       </div>
-      <div className="mt-[30px]">
+      <div className='mt-[30px]'>
         <Pagination />
       </div>
     </div>
