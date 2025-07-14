@@ -4,17 +4,50 @@ import Image from 'next/image';
 import topBlue from '@/assets/images/auth-top-right-blue.svg';
 import bottomPink from '@/assets/images/auth-bottom-left-pink.svg';
 import musicBunny from '@/assets/images/music-bunny.svg';
+import deleteText from '@/assets/images/delete-text.svg';
 import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
+import { login } from '@/lib/api/axios';
 
 export default function Login() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
 
   const handleGoToSignUp = () => {
     router.push('/auth/signup');
   };
 
-  const handleGoToHome = () => {
-    router.push('/');
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
+  const handleLogin = async () => {
+    if (!email && !password) {
+      setLoginError('이메일과 비밀번호는 필수 입력 항목입니다.');
+      emailRef.current?.focus();
+      return;
+    }
+    if (!email) {
+      emailRef.current?.focus();
+      return;
+    }
+    if (!password) {
+      passwordRef.current?.focus();
+      return;
+    }
+    try {
+      await login(email, password);
+      alert('로그인 성공');
+      router.push('/');
+    } catch (error: any) {
+      if (error.response?.status === 401) {
+        setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
+        passwordRef.current?.focus();
+      } else {
+        console.error(error);
+      }
+    }
   };
   return (
     <div className='w-full min-h-screen flex justify-center relative'>
@@ -34,6 +67,7 @@ export default function Login() {
           src={musicBunny}
           alt='토끼 캐릭터'
           className='absolute bottom-0 drop-shadow-[0_8px_10px_rgba(0,0,0,0.15)]'
+          priority
         />
       </div>
 
@@ -47,26 +81,60 @@ export default function Login() {
         </p>
         <div className='z-10'>
           <div className='mb-8'>
-            <p className='pb-2 tm4'>이메일</p>
-            <input
-              type='text'
-              className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-            />
+            <p className='pb-2 t4'>이메일</p>
+            <div className='relative'>
+              <input
+                type='text'
+                value={email}
+                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                onChange={(e) => setEmail(e.target.value)}
+                ref={emailRef}
+              />
+              {email && (
+                <Image
+                  src={deleteText}
+                  alt='전체 삭제'
+                  onClick={() => {
+                    setEmail('');
+                  }}
+                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                />
+              )}
+            </div>
           </div>
           <div className='mb-[35px]'>
-            <p className='pb-2 tm4'>비밀번호</p>
-            <input
-              type='password'
-              className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-            />
+            <p className='pb-2 t4'>비밀번호</p>
+            <div className='relative'>
+              <input
+                type='password'
+                value={password}
+                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                onChange={(e) => setPassword(e.target.value)}
+                ref={passwordRef}
+              />
+              {password && (
+                <Image
+                  src={deleteText}
+                  alt='전체 삭제'
+                  onClick={() => {
+                    setPassword('');
+                  }}
+                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                />
+              )}
+            </div>
           </div>
+          <p className='t5 text-red-500 px-1 mb-2'>
+            {loginError ? loginError : '\u00A0'}
+          </p>
           <button
             type='button'
             className='button-type1 cursor-pointer mb-[14px]'
-            onClick={handleGoToHome}
+            onClick={handleLogin}
           >
             로그인
           </button>
+
           <div className='flex justify-center space-x-2 mb-[60px] t4'>
             <span className='opacity-50'>회원이 아니신가요?</span>
             <span className='cursor-pointer' onClick={handleGoToSignUp}>

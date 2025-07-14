@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
-import banner from '@/assets/images/banner.svg';
+// import banner from '@/assets/images/banner.svg';
+import banner1 from '@/assets/images/banner1.svg';
 import { ChevronDown } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import { ChevronLeft } from 'lucide-react';
@@ -45,7 +46,7 @@ export default function Main() {
   return (
     <>
       <div>
-        <Image src={banner} alt='banner' className='w-full rounded-[10px]' />
+        <Image src={banner1} alt='banner' className='w-full rounded-[10px]' />
 
         <div className='mt-[110px]'>
           <div className='flex items-center justify-between mt-[6px]'>

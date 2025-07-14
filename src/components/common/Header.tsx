@@ -4,19 +4,25 @@ import logoWibby from '@/assets/images/wibby.svg';
 import darkMode from '@/assets/images/dark-mode.svg';
 import { ChevronDown } from 'lucide-react';
 import { Bell } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProfileInfoModal from '../profile/ProfileInfoModal';
 import { useRouter } from 'next/navigation';
 import NotificationModal from './NotificationModal';
 
 export default function Header() {
+  const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleGoToHome = () => {
     router.push('/');
   };
+
+  const handleGoToLogin = () => {
+    router.push('/auth/login');
+  };
+
   return (
     <div className='w-full flex justify-center pt-2.5 text-text1'>
       <div className='w-full max-w-[1280px] flex items-center justify-between px-4'>
