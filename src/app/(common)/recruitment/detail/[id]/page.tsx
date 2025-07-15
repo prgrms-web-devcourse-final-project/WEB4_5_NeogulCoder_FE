@@ -84,7 +84,7 @@ export default function Page() {
           </div>
         </div>
         <hr
-          className='h-0.5 my-10'
+          className='h-0.5 mb-10'
           style={{ borderColor: 'var(--color-border2)' }}
         />
         <div className='space-y-10'>
@@ -132,13 +132,13 @@ export default function Page() {
         {/* 반응형 */}
         <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10'>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => setAppIsOpen(true)}
             className='w-full h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
           >
             모집 중
           </button>
           <button
-            onClick={() => setAppIsOpen(true)}
+            onClick={() => setIsOpen(true)}
             className='w-full h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
             style={{ borderColor: 'var(--color-gray2)' }}
           >

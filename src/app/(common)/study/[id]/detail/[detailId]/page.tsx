@@ -48,7 +48,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className='tb2 mt-3'>
+        <div className='tb2'>
           <span>오늘 공부한 내용 정리해서 올립니다!</span>
         </div>
         <div className='flex space-x-6 items-center my-6 justify-between'>

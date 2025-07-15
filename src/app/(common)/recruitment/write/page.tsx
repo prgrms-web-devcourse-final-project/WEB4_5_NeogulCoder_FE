@@ -1,7 +1,100 @@
-import { ChevronDown } from 'lucide-react';
-import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
+'use client';
 
-export default async function page() {
+import { ChevronDown, Calendar } from 'lucide-react';
+import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
+import { useRef, useState } from 'react';
+import axios from 'axios';
+import { Editor as ToastEditor } from '@toast-ui/react-editor';
+
+export default function Page() {
+  const [subject, setSubject] = useState('');
+  const [studyId, setStudyId] = useState('');
+  const [recruitmentCount, setRecruitmentCount] = useState<number>(0);
+  const [expireDate, setExpireDate] = useState('');
+  const [category, setCategory] = useState('');
+  const [location, setLocation] = useState('');
+  const [studyType, setStudyType] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const editorRef = useRef<ToastEditor>(null);
+
+  // const handleFetchData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `https://wibby.cedartodo.uk/recruitment-posts/studies/${studyId}`
+  //     );
+  //     const data = res.data.data;
+
+  //     setCategory(data.category);
+  //     setLocation(data.location);
+  //     setStudyType(data.studyType);
+  //     setStartDate(data.startDate);
+  //     setEndDate(data.endDate);
+  //     setRecruitmentCount(data.recruitmentCount);
+  //   } catch (error) {
+  //     console.error('데이터 불러오기 실패ㅠㅠ:', error);
+  //   }
+  // };
+
+  const handleFetchData = async () => {
+    try {
+      // 실제 요청 대신 더미 데이터 사용
+      const dummyResponse = {
+        category: 'IT',
+        location: '서울',
+        studyType: 'online',
+        startDate: '2025-07-16',
+        endDate: '2025-08-07',
+        recruitmentCount: 3,
+      };
+
+      // 응답으로 받은 것처럼 state 세팅
+      setCategory(dummyResponse.category);
+      setLocation(dummyResponse.location);
+      setStudyType(dummyResponse.studyType);
+      setStartDate(dummyResponse.startDate);
+      setEndDate(dummyResponse.endDate);
+      setRecruitmentCount(dummyResponse.recruitmentCount);
+    } catch (error) {
+      console.error('데이터 불러오기 실패:', error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const instance = editorRef.current?.getInstance();
+    const content = instance?.getMarkdown() || '';
+
+    const payload = {
+      studyId: studyId,
+      subject: subject,
+      content: content,
+      recruitmentCount: recruitmentCount,
+      expireDate: expireDate,
+    };
+
+    try {
+      const res = await axios.post(
+        'https://wibby.cedartodo.uk/recruitment-posts',
+        payload
+      );
+      console.log('생성 완료', res.data);
+    } catch (error) {
+      console.error('생성 실패', error);
+    }
+    console.log(
+      'StudyId:',
+      studyId,
+      'Subject:',
+      subject,
+      'Content:',
+      content,
+      'RecruitmentCount:',
+      recruitmentCount,
+      'ExpireDate:',
+      expireDate
+    );
+  };
+
   return (
     <>
       <div className='w-[920px] mx-auto'>
@@ -20,21 +113,24 @@ export default async function page() {
                 className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
                 style={{ borderColor: 'var(--color-border3)' }}
                 name='selectedStudy'
-                defaultValue=''
+                value={studyId}
+                onChange={(e) => setStudyId(e.target.value)}
               >
                 <option value='' disabled hidden>
                   스터디를 선택해주세요
                 </option>
-                <option value='study1'>스터디 1</option>
-                <option value='study2'>스터디 2</option>
+                <option value='1'>스터디 1</option>
+                <option value='2'>스터디 2</option>
               </select>
 
-              {/* 커스텀 화살표 아이콘 (왼쪽으로 옮긴 예시) */}
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
                 <ChevronDown />
               </div>
             </div>
-            <button className='button-type7 hover:bg-[#292929]'>
+            <button
+              className='button-type7 hover:bg-[#292929]'
+              onClick={handleFetchData}
+            >
               가져오기
             </button>
           </div>
@@ -44,21 +140,27 @@ export default async function page() {
           style={{ borderColor: 'var(--color-border2)' }}
         />
         <div className='flex space-x-10'>
-          <div className='flex flex-col w-[440px]'>
+          <div className='flex flex-col w-[440px]  '>
             <span className='tm-0 mb-2.5'>시작 날짜</span>
-            <input
-              type='date'
-              className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
-              style={{ borderColor: 'var(--color-border3)' }}
-            ></input>
+            <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
+              <div>
+                <span>{startDate ? startDate : '연도-월-일'}</span>
+              </div>
+              <div>
+                <Calendar className='w-4 h-4' />
+              </div>
+            </div>
           </div>
-          <div className='flex flex-col w-[440px]'>
+          <div className='flex flex-col w-[440px]  '>
             <span className='tm-0 mb-2.5'>종료 날짜</span>
-            <input
-              type='date'
-              className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
-              style={{ borderColor: 'var(--color-border3)' }}
-            ></input>
+            <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
+              <div>
+                <span>{endDate ? endDate : '연도-월-일'}</span>
+              </div>
+              <div>
+                <Calendar className='w-4 h-4' />
+              </div>
+            </div>
           </div>
         </div>
         <div className='flex space-x-10'>
@@ -68,23 +170,24 @@ export default async function page() {
               <select
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
-                defaultValue=''
+                value={recruitmentCount}
+                onChange={(e) => setRecruitmentCount(Number(e.target.value))}
                 style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>
                   인원 미정 ~ 10명 이상
                 </option>
-                <option value='count0'>인원 미정</option>
-                <option value='count1'>1명</option>
-                <option value='count2'>2명</option>
-                <option value='count3'>3명</option>
-                <option value='count4'>4명</option>
-                <option value='count5'>5명</option>
-                <option value='count6'>6명</option>
-                <option value='count7'>7명</option>
-                <option value='count8'>8명</option>
-                <option value='count9'>9명</option>
-                <option value='count10'>10명 이상</option>
+                <option value={0}>인원 미정</option>
+                <option value={1}>1명</option>
+                <option value={2}>2명</option>
+                <option value={3}>3명</option>
+                <option value={4}>4명</option>
+                <option value={5}>5명</option>
+                <option value={6}>6명</option>
+                <option value={7}>7명</option>
+                <option value={8}>8명</option>
+                <option value={9}>9명</option>
+                <option value={10}>10명 이상</option>
               </select>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
@@ -95,28 +198,9 @@ export default async function page() {
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>카테고리</span>
             <div className='relative inline-block w-[440px] '>
-              <select
-                className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
-                name='selectedRecruitmentPerson'
-                defaultValue=''
-                style={{ borderColor: 'var(--color-border3)' }}
-              >
-                <option value='' disabled hidden>
-                  카테고리
-                </option>
-                <option value='category0'>어학</option>
-                <option value='category1'>IT</option>
-                <option value='category2'>고시/자격증</option>
-                <option value='category3'>금융</option>
-                <option value='category4'>경영</option>
-                <option value='category5'>디자인</option>
-                <option value='category6'>예술</option>
-                <option value='category7'>사진/영상</option>
-                <option value='category8'>뷰티</option>
-                <option value='category9'>스포츠</option>
-                <option value='category10'>취미</option>
-                <option value='category10'>기타</option>
-              </select>
+              <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
+                <span>{category ? category : '카테고리'}</span>
+              </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
                 <ChevronDown />
@@ -129,33 +213,9 @@ export default async function page() {
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>지역</span>
             <div className='relative inline-block w-[440px] '>
-              <select
-                className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
-                name='selectedRecruitmentPerson'
-                defaultValue=''
-                style={{ borderColor: 'var(--color-border3)' }}
-              >
-                <option value='' disabled hidden>
-                  지역
-                </option>
-                <option value='country0'>서울</option>
-                <option value='country1'>부산</option>
-                <option value='country2'>대구</option>
-                <option value='country3'>인천</option>
-                <option value='country4'>광주</option>
-                <option value='country5'>대전</option>
-                <option value='country6'>울산</option>
-                <option value='country7'>세종</option>
-                <option value='country8'>경기도</option>
-                <option value='country9'>충청북도</option>
-                <option value='country10'>충청남도</option>
-                <option value='country11'>전라북도</option>
-                <option value='country12'>전라남도</option>
-                <option value='country13'>경상북도</option>
-                <option value='country14'>경상남도</option>
-                <option value='country15'>강원도</option>
-                <option value='country16'>제주도</option>
-              </select>
+              <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
+                <span>{location ? location : '지역'}</span>
+              </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
                 <ChevronDown />
@@ -165,19 +225,9 @@ export default async function page() {
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>진행 방식</span>
             <div className='relative inline-block w-[440px] '>
-              <select
-                className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
-                name='selectedRecruitmentPerson'
-                defaultValue=''
-                style={{ borderColor: 'var(--color-border3)' }}
-              >
-                <option value='' disabled hidden>
-                  진행 방식
-                </option>
-                <option value='online'>온라인</option>
-                <option value='offline'>오프라인</option>
-                <option value='onofflune'>온/오프라인</option>
-              </select>
+              <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
+                <span>{studyType ? studyType : '진행 방식'}</span>
+              </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
                 <ChevronDown />
@@ -192,6 +242,8 @@ export default async function page() {
             type='date'
             className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
             style={{ borderColor: 'var(--color-border3)' }}
+            value={expireDate}
+            onChange={(e) => setExpireDate(e.target.value)}
           ></input>
         </div>
         <div className='flex items-center  mt-10'>
@@ -208,15 +260,22 @@ export default async function page() {
           className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10'
           style={{ borderColor: 'var(--color-border3)' }}
           placeholder='제목을 입력해주세요'
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
         ></input>
         <div className='mb-10'>
-          <ClientEditorWrapper />
+          <ClientEditorWrapper editorRef={editorRef} />
         </div>
         <div className='flex justify-end'>
           <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
             취소
           </button>
-          <button className='button-type5 hover:bg-[#292929]'>등록</button>
+          <button
+            className='button-type5 hover:bg-[#292929]'
+            onClick={handleSubmit}
+          >
+            등록
+          </button>
         </div>
       </div>
     </>
