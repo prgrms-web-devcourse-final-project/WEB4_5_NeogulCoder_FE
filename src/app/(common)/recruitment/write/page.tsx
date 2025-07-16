@@ -3,13 +3,14 @@
 import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useRef, useState } from 'react';
-import axios from 'axios';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
+import { writeRecruitmentPost } from '@/lib/api/recruitment/write';
+// import { fetchStudyInfo } from '@/lib/api/recruitment/write';
 
 export default function Page() {
   const [subject, setSubject] = useState('');
-  const [studyId, setStudyId] = useState('');
-  const [recruitmentCount, setRecruitmentCount] = useState<number>(0);
+  const [studyId, setStudyId] = useState<number>(1);
+  const [remainSlots, setRemainSlots] = useState<number>(0);
   const [expireDate, setExpireDate] = useState('');
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
@@ -20,17 +21,14 @@ export default function Page() {
 
   // const handleFetchData = async () => {
   //   try {
-  //     const res = await axios.get(
-  //       `https://wibby.cedartodo.uk/recruitment-posts/studies/${studyId}`
-  //     );
-  //     const data = res.data.data;
+  //     const data = await fetchStudyInfo(studyId);
 
   //     setCategory(data.category);
   //     setLocation(data.location);
   //     setStudyType(data.studyType);
   //     setStartDate(data.startDate);
   //     setEndDate(data.endDate);
-  //     setRecruitmentCount(data.recruitmentCount);
+  //     setRemainSlots(data.remainSlots);
   //   } catch (error) {
   //     console.error('데이터 불러오기 실패ㅠㅠ:', error);
   //   }
@@ -54,7 +52,7 @@ export default function Page() {
       setStudyType(dummyResponse.studyType);
       setStartDate(dummyResponse.startDate);
       setEndDate(dummyResponse.endDate);
-      setRecruitmentCount(dummyResponse.recruitmentCount);
+      setRemainSlots(dummyResponse.recruitmentCount);
     } catch (error) {
       console.error('데이터 불러오기 실패:', error);
     }
@@ -68,16 +66,13 @@ export default function Page() {
       studyId: studyId,
       subject: subject,
       content: content,
-      recruitmentCount: recruitmentCount,
+      remainSlots: remainSlots,
       expireDate: expireDate,
     };
 
     try {
-      const res = await axios.post(
-        'https://wibby.cedartodo.uk/recruitment-posts',
-        payload
-      );
-      console.log('생성 완료', res.data);
+      const data = await writeRecruitmentPost(payload);
+      console.log('생성 완료', data);
     } catch (error) {
       console.error('생성 실패', error);
     }
@@ -88,8 +83,8 @@ export default function Page() {
       subject,
       'Content:',
       content,
-      'RecruitmentCount:',
-      recruitmentCount,
+      'remainSlots:',
+      remainSlots,
       'ExpireDate:',
       expireDate
     );
@@ -114,7 +109,7 @@ export default function Page() {
                 style={{ borderColor: 'var(--color-border3)' }}
                 name='selectedStudy'
                 value={studyId}
-                onChange={(e) => setStudyId(e.target.value)}
+                onChange={(e) => setStudyId(Number(e.target.value))}
               >
                 <option value='' disabled hidden>
                   스터디를 선택해주세요
@@ -170,8 +165,8 @@ export default function Page() {
               <select
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
-                value={recruitmentCount}
-                onChange={(e) => setRecruitmentCount(Number(e.target.value))}
+                value={remainSlots}
+                onChange={(e) => setRemainSlots(Number(e.target.value))}
                 style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>

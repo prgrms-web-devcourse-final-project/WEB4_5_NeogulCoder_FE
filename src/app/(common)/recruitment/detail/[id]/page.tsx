@@ -1,7 +1,6 @@
 'use client';
 
 import { EllipsisVertical, Tally1 } from 'lucide-react';
-import Comment from '@/components/common/Comment';
 import WriteComment from '@/components/common/WriteComment';
 import Modal from '@/components/common/Modal';
 import { useEffect, useRef, useState } from 'react';
@@ -9,6 +8,7 @@ import ClickVerticalMenu from '@/components/common/ClickVerticalMenu';
 import Image from 'next/image';
 import buddyEnergy from '@/assets/images/buddy-energy.svg';
 import { useRouter } from 'next/navigation';
+import CommentList from '@/components/common/CommentList';
 
 export default function Page() {
   const router = useRouter();
@@ -58,7 +58,7 @@ export default function Page() {
           <div className='relative' ref={menuRef}>
             <button
               className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
-                isOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
+                menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
               }`}
               onClick={() => menuSetIsOpen((prev) => !prev)}
             >
@@ -149,10 +149,7 @@ export default function Page() {
           <WriteComment />
         </div>
         <div className='w-[852px]'>
-          <Comment />
-          <Comment />
-          <Comment />
-          <Comment />
+          <CommentList studyId={1} postId={4} />
         </div>
         {isOpen && (
           <Modal

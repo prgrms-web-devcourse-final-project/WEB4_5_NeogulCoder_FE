@@ -1,15 +1,19 @@
 'use client';
 
-import axios from 'axios';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { ChevronDown } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
+import { writeStudyPost } from '@/lib/api/study/write';
+// import { useParams } from 'next/navigation';
 
 export default function Page() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const studyId = 1; // 더미 데이터
+  // 파라미터로 스터디 아이디 받아오는 코드
+  // const params = useParams();
+  // const studyId = Number(params.studyId);
   const editorRef = useRef<ToastEditor>(null);
 
   const handleSubmit = async () => {
@@ -23,11 +27,8 @@ export default function Page() {
     };
 
     try {
-      const res = await axios.post(
-        `https://wibby.cedartodo.uk/api/studies/${studyId}/posts`,
-        payload
-      );
-      console.log('생성 완료', res.data);
+      const data = await writeStudyPost(studyId, payload);
+      console.log('생성 완료', data);
     } catch (error) {
       console.error('생성 실패', error);
     }
