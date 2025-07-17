@@ -8,6 +8,8 @@ import deleteText from '@/assets/images/delete-text.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { login } from '@/lib/api/axios';
+import Link from 'next/link';
+import { userAuthStore } from '@/store/userStore';
 
 export default function Login() {
   const router = useRouter();
@@ -22,7 +24,8 @@ export default function Login() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!email && !password) {
       setLoginError('이메일과 비밀번호는 필수 입력 항목입니다.');
       emailRef.current?.focus();
@@ -37,7 +40,17 @@ export default function Login() {
       return;
     }
     try {
-      await login(email, password);
+      const res = await login(email, password);
+      const user = res.data.data.user;
+      // console.log(user);
+
+      userAuthStore.getState().setUser({
+        id: user.userId,
+        email: user.email,
+        nickname: user.nickname,
+        role: user.role,
+        profileImgUrl: null,
+      });
       alert('로그인 성공');
       router.push('/');
     } catch (error: any) {
@@ -65,7 +78,7 @@ export default function Login() {
         />
         <Image
           src={musicBunny}
-          alt='토끼 캐릭터'
+          alt='토끼'
           className='absolute bottom-0 drop-shadow-[0_8px_10px_rgba(0,0,0,0.15)]'
           priority
         />
@@ -80,60 +93,62 @@ export default function Login() {
           세워보세요.
         </p>
         <div className='z-10'>
-          <div className='mb-8'>
-            <p className='pb-2 t4'>이메일</p>
-            <div className='relative'>
-              <input
-                type='text'
-                value={email}
-                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-                onChange={(e) => setEmail(e.target.value)}
-                ref={emailRef}
-              />
-              {email && (
-                <Image
-                  src={deleteText}
-                  alt='전체 삭제'
-                  onClick={() => {
-                    setEmail('');
-                  }}
-                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+          <form onSubmit={handleLogin}>
+            <div className='mb-8'>
+              <p className='pb-2 t4'>이메일</p>
+              <div className='relative'>
+                <input
+                  type='text'
+                  value={email}
+                  className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                  onChange={(e) => setEmail(e.target.value)}
+                  ref={emailRef}
                 />
-              )}
+                {email && (
+                  <Image
+                    src={deleteText}
+                    alt='전체 삭제'
+                    onClick={() => {
+                      setEmail('');
+                    }}
+                    className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                  />
+                )}
+              </div>
             </div>
-          </div>
-          <div className='mb-[35px]'>
-            <p className='pb-2 t4'>비밀번호</p>
-            <div className='relative'>
-              <input
-                type='password'
-                value={password}
-                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-                onChange={(e) => setPassword(e.target.value)}
-                ref={passwordRef}
-              />
-              {password && (
-                <Image
-                  src={deleteText}
-                  alt='전체 삭제'
-                  onClick={() => {
-                    setPassword('');
-                  }}
-                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+            <div className='mb-[35px]'>
+              <p className='pb-2 t4'>비밀번호</p>
+              <div className='relative'>
+                <input
+                  type='password'
+                  value={password}
+                  className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                  onChange={(e) => setPassword(e.target.value)}
+                  ref={passwordRef}
                 />
-              )}
+                {password && (
+                  <Image
+                    src={deleteText}
+                    alt='전체 삭제'
+                    onClick={() => {
+                      setPassword('');
+                    }}
+                    className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                  />
+                )}
+              </div>
             </div>
-          </div>
-          <p className='t5 text-red-500 px-1 mb-2'>
-            {loginError ? loginError : '\u00A0'}
-          </p>
-          <button
-            type='button'
-            className='button-type1 cursor-pointer mb-[14px]'
-            onClick={handleLogin}
-          >
-            로그인
-          </button>
+            <p className='t5 text-red-500 px-1 mb-2 transition duration-200'>
+              {loginError || '\u00A0'}
+            </p>
+
+            <button
+              type='submit'
+              className='button-type1 cursor-pointer mb-[14px]'
+            >
+              로그인
+            </button>
+          </form>
 
           <div className='flex justify-center space-x-2 mb-[60px] t4'>
             <span className='opacity-50'>회원이 아니신가요?</span>
@@ -149,16 +164,20 @@ export default function Login() {
           </div>
 
           <div className='flex justify-center'>
-            <button className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'>
-              <Image
-                src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'
-                alt='구글'
-                className='w-5 h-5'
-                width={0}
-                height={0}
-              />
-              <span className='pl-4'>구글로 시작하기</span>
-            </button>
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`}
+            >
+              <button className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'>
+                <Image
+                  src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'
+                  alt='구글'
+                  className='w-5 h-5'
+                  width={0}
+                  height={0}
+                />
+                <span className='pl-4'>구글로 시작하기</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
