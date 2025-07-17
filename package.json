@@ -14,9 +14,7 @@
     "@fullcalendar/interaction": "^6.1.18",
     "@fullcalendar/react": "^6.1.18",
     "@fullcalendar/timegrid": "^6.1.18",
-
     "@toast-ui/react-editor": "^3.2.3",
-
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
     "lucide-react": "^0.525.0",
