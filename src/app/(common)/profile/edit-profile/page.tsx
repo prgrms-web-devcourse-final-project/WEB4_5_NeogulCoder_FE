@@ -4,11 +4,14 @@ import photoUpload from '@/assets/images/photo-upload.svg';
 import { useEffect, useState } from 'react';
 import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
 import { axiosInstance } from '@/lib/api/axios';
-import { userAuthStore } from '@/store/userStore';
+import { userAuthStore } from '@/stores/userStore';
+import { nicknameRegex } from '@/lib/auth/regex';
+import axios from 'axios';
 
 export default function EditProfile() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
 
@@ -41,24 +44,49 @@ export default function EditProfile() {
   };
 
   const handleSubmit = async () => {
-    const finalImgUrl = previewImg || '';
-
-    await axiosInstance.put('/api/users/update/profile', {
-      nickname,
-
-      // 더미 이미지
-      profileImgUrl: finalImgUrl,
-    });
-    await userAuthStore.getState().fetchUser();
-    const user = userAuthStore.getState().user;
-    if (user) {
-      setNickname(user.nickname);
-      setPreviewImg(user.profileImgUrl || '');
+    if (!nicknameRegex.test(nickname)) {
+      setNicknameError('닉네임은 2~10자이여야 합니다.');
+      return;
+    } else {
+      setNicknameError('');
     }
+    // const finalImgUrl = previewImg || '';
 
-    alert('프로필 수정 완료');
+    try {
+      const formData = new FormData();
+      formData.append('nickname', nickname);
+      if (imgFile) {
+        formData.append('profileImgUrl', imgFile);
+      }
+      await axiosInstance.put('/api/users/update/profile', {
+        nickname,
+      });
+
+      //   await axiosInstance.put('/api/users/update/profile', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // });
+
+      await userAuthStore.getState().fetchUser();
+      const user = userAuthStore.getState().user;
+      if (user) {
+        setNickname(user.nickname);
+        setPreviewImg(user.profileImgUrl || '');
+      }
+      alert('프로필 수정 완료');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const msg = error.response?.data?.message;
+        console.log(msg);
+        if (msg?.includes('닉네임')) {
+          setNicknameError(msg);
+        }
+      } else {
+        console.error(error);
+      }
+    }
   };
-
   return (
     <>
       <div className='tb3'>프로필 수정</div>
@@ -66,7 +94,7 @@ export default function EditProfile() {
         <div className='w-[140px] h-[140px] rounded-full bg-gray4 relative '>
           {/* 미리보기 */}
           {previewImg ? (
-            <img
+            <Image
               src={previewImg}
               alt='프로필 미리보기'
               className='w-full h-full object-cover rounded-full'
@@ -96,13 +124,23 @@ export default function EditProfile() {
           <p className='pb-2 mt-[60px] t4'>
             닉네임 <span className='text-red'>(필수)</span>
           </p>
-          <input
-            type='text'
-            value={nickname}
-            className='input-type3 w-[390px] focus:outline-1 focus:outline-main mb-[5px]'
-            onChange={(e) => setNickname(e.target.value)}
-          />
+          <div>
+            <input
+              type='text'
+              value={nickname}
+              className='input-type3 w-[390px] focus:outline-1 focus:outline-main mb-[5px]'
+              onChange={(e) => setNickname(e.target.value)}
+            />
+          </div>
+          <p
+            className={`t5 ml-1 pt-1 transition duration-200 ${
+              nicknameError ? 'text-red-500' : 'invisible'
+            }`}
+          >
+            {nicknameError || '\u00A0'}
+          </p>
         </div>
+
         <div className='flex flex-col items-start mt-8'>
           <button
             type='button'
