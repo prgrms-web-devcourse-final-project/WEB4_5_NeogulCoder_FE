@@ -6,8 +6,23 @@ import koLocale from '@fullcalendar/core/locales/ko';
 import { useRef } from 'react';
 import '@/styles/attendance/attendance.css';
 
-export default function StudyAttendance() {
+export default function StudyAttendance({
+  data,
+  total,
+}: {
+  data: {
+    studyId: number;
+    userId: number;
+    attendanceDate: string;
+  }[];
+  total: number;
+}) {
   const calendarRef = useRef(null);
+
+  const checks = data.map((item) => ({
+    title: '출석',
+    date: item.attendanceDate,
+  }));
   return (
     <>
       <div className='flex justify-between mb-3'>
@@ -23,11 +38,7 @@ export default function StudyAttendance() {
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView='dayGridWeek'
               locale={koLocale}
-              events={[
-                { title: '출석', date: '2025-07-11' },
-                { title: '출석', date: '2025-07-10' },
-                { title: '출석', date: '2025-07-02' },
-              ]}
+              events={checks}
               headerToolbar={{
                 left: 'prev',
                 center: 'title',
@@ -45,9 +56,16 @@ export default function StudyAttendance() {
         <div>
           <h3 className='tm3'>전체 출석률</h3>
           <div>
-            <div className='text-right tm4 mb-1.5'>60%</div>
+            <div className='text-right tm4 mb-1.5'>
+              {Math.ceil((checks.length / total) * 100)}%
+            </div>
             <div className='w-full h-[16px] rounded-2xl bg-gray3/50 overflow-hidden'>
-              <div className='w-60/100 h-full bg-orange'></div>
+              <div
+                className='h-full bg-orange'
+                style={{
+                  width: `${(checks.length / total) * 100}%`,
+                }}
+              ></div>
             </div>
           </div>
         </div>
