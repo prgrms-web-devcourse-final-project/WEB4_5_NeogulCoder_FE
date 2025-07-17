@@ -4,11 +4,12 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import { ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { userAuthStore } from '@/store/userStore';
 
 export default function SideBar() {
-  const userName = '박스영';
   const router = useRouter();
   const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴'>('pr');
+  const user = userAuthStore((state) => state.user);
 
   const handleEditProfile = () => {
     router.push('/profile/edit-profile');
@@ -37,7 +38,7 @@ export default function SideBar() {
               <Image src={musicBunny} alt='예시 기본 프사' />
             </div>
             <div className='flex flex-col justify-center'>
-              <span className='tm2 cursor-default'>{userName}</span>
+              <span className='tm2 cursor-default'>{user?.nickname}</span>
               <button
                 type='button'
                 className='t5 opacity-50 mt-[5px]'
