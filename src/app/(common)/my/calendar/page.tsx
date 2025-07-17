@@ -1,51 +1,73 @@
-'use client';
+import CalendarBigShell from '@/components/common/calendar/CalendarBigShell';
+import { getStudies, getUserEvents } from '@/lib/api/calendar.api';
 
-import CalendarBig from '@/components/common/calendar/CalendarBig';
-import CalendarBigDetail from '@/components/common/calendar/CalendarBigDetail';
-import CalendarWrite from '@/components/common/calendar/CalendarWrite';
-import { ChevronDown } from 'lucide-react';
-import { useState } from 'react';
+export default async function Calendar() {
+  const authId = 12;
+  // api 개발이 덜 돼서 막아놓음
+  // const { data: studies } = await getStudies(); // 가입된 스터디 목록
+  // const { data: events } = await getUserEvents(authId); // 개인 일정 기본 fetch
+  // 가입되어 있는 스터디 목록 더미데이터
+  const studies = [
+    {
+      studyId: 1,
+      name: '파이썬 스터디',
+      leaderNickname: '바보',
+      capacity: 8,
+      currentCount: 1,
+      startDate: '2025-09-01',
+      imageUrl: 'https://example.com/python.jpg',
+      introduction: '파이썬 기초부터 심화까지 학습합니다.',
+      category: 'IT',
+      studyType: 'OFFLINE',
+      finished: false,
+    },
+  ];
+  // 스터디 목록으로 가공한 넘겨줄 카테고리
+  const categories = [
+    //사용자가 select 할 수 있는 카테고리 목록
+    { name: '내 일정', id: authId },
+    ...(studies?.map((study: StudiesType) => ({
+      name: study.name,
+      id: study.studyId,
+    })) ?? []),
+  ];
+  // 개인일정 더미 데이터
+  const results = [
+    {
+      calendarId: 1001,
+      userId: 1,
+      writerNickname: '유강현',
+      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
+      title: '면접 준비',
+      description: '코테 대비 공부',
+      startTime: '2025-07-16T01:27:27.011Z',
+      endTime: '2025-07-16T01:27:27.011Z',
+    },
+    {
+      calendarId: 1001,
+      userId: 1,
+      writerNickname: '유강현',
+      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
+      title: '면접 준비',
+      description: '코테 대비 공부',
+      startTime: '2025-07-18T01:27:27.011Z',
+      endTime: '2025-07-19T01:27:27.011Z',
+    },
+  ];
 
-export default function Calendar() {
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [writeOpen, setWriteOpen] = useState(false);
-  const openHandler = () => {
-    setDetailOpen(true);
-  };
-  const closeHandler = () => {
-    setDetailOpen(false);
-  };
+  // userId -> writerId , 개인일정이랑 스터디일정이랑 포맷이 약간만 달라서 스터디일정 포맷에 맞춰서 데이터 전달
+  const updatedEvents = results.map(({ userId, ...rest }) => ({
+    ...rest,
+    writerId: userId,
+  }));
 
-  const writeOpenHandler = () => {
-    setWriteOpen(true);
-  };
-  const writeCloseHandler = () => {
-    setWriteOpen(false);
-  };
   return (
     <>
-      <div>
-        <h1 className='tb3 mb-8'>캘린더</h1>
-      </div>
-      <div className='flex justify-between items-end mb-3'>
-        <div className='flex items-center t1'>
-          <div className='w-2 h-8 rounded-full bg-logo2'></div>
-          <div className='w-full relative z-1'>
-            <select className='w-full h-10 appearance-none pl-3 pr-9!'>
-              <option>내 일정</option>
-              <option>스터디 A일정</option>
-              <option>스터디 B일정</option>
-            </select>
-            <ChevronDown className='absolute w-6 h-6 right-3 top-1/2 -translate-y-1/2 -z-1' />
-          </div>
-        </div>
-        <button onClick={writeOpenHandler} className='button-sm-type1'>
-          일정등록
-        </button>
-      </div>
-      <CalendarBig openHandler={openHandler} />
-      {detailOpen && <CalendarBigDetail closeHandler={closeHandler} />}
-      {writeOpen && <CalendarWrite writeCloseHandler={writeCloseHandler} />}
+      <CalendarBigShell
+        type='my'
+        defaultEvents={updatedEvents}
+        categories={categories}
+      />
     </>
   );
 }
