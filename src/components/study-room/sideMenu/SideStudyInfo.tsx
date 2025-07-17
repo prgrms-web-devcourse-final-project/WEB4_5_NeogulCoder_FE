@@ -31,12 +31,13 @@ export default function SideStudyInfo({
               : '온/오프라인'}{' '}
             스터디
           </p>
-          {studyHeaderData.location && (
-            <p className='t5 flex gap-1 items-center'>
-              <MapPin className='w-[18px] h-[18px]' strokeWidth={1} />
-              {studyHeaderData.location}
-            </p>
-          )}
+          {studyHeaderData.studyType !== 'ONLINE' &&
+            studyHeaderData.location && (
+              <p className='t5 flex gap-1 items-center'>
+                <MapPin className='w-[18px] h-[18px]' strokeWidth={1} />
+                {studyHeaderData.location}
+              </p>
+            )}
         </div>
       </div>
     </>
