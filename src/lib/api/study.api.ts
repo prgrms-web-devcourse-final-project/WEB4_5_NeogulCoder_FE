@@ -11,3 +11,9 @@ export const getStudyInfoData = (studyId: number) => {
 export const getStudyHeaderData = (studyId: number) => {
   return axiosInstance.get(`/api/studies/${studyId}/header`);
 };
+export const putStudyInfo = (
+  studyId: number,
+  updateData: StudyInfoUpdateType
+) => {
+  return axiosInstance.put(`/api/studies/${studyId}`, updateData);
+};
