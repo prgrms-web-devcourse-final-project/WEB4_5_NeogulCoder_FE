@@ -1,11 +1,11 @@
 'use client';
 import WithdrawalModal from '@/components/profile/WithdrawalModal';
 import { axiosInstance } from '@/lib/api/axios';
-import { userAuthStore } from '@/store/userStore';
+import { userAuthStore } from '@/stores/userStore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function page() {
+export default function Withdrawal() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
