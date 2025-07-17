@@ -1,21 +1,13 @@
-const revalidateOption = {
-  next: {
-    revalidate: 60 * 60 * 24,
-  },
+import axios from 'axios';
+
+export const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
+});
+
+export const getStudyInfoData = (studyId: number) => {
+  return axiosInstance.get(`/api/studies/${studyId}/info`);
 };
 
-export const getStudyInfoData = async (studyId: number) => {
-  return await (
-    await fetch(`${url}/api/studies/${studyId}/info`, {
-      ...options,
-    })
-  ).json();
-};
-
-export const getStudyHeaderData = async (studyId: number) => {
-  return await (
-    await fetch(`${url}/api/studies/${studyId}/header`, {
-      ...options,
-    })
-  ).json();
+export const getStudyHeaderData = (studyId: number) => {
+  return axiosInstance.get(`/api/studies/${studyId}/header`);
 };
