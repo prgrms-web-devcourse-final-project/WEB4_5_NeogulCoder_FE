@@ -5,10 +5,6 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export const login = (email: string, password: string) => {
-  return axiosInstance.post('/auth/login', { email, password });
-};
-
 export const signup = (
   email: string,
   nickname: string,
@@ -21,4 +17,12 @@ export const signup = (
     password,
     passwordCheck,
   });
+};
+
+export const login = (email: string, password: string) => {
+  return axiosInstance.post('/auth/login', { email, password });
+};
+
+export const getUser = async () => {
+  return await axiosInstance.get('/api/users/me');
 };
