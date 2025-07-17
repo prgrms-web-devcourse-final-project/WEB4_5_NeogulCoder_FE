@@ -235,11 +235,12 @@ export default function Page() {
           <span className='tm-0 mb-2.5'>모집 마감일</span>
           <input
             type='date'
-            className='border-[1px]  h-15 rounded-[10px] p-5 mb-10'
+            className='border-[1px] h-15 rounded-[10px] p-5 mb-10'
             style={{ borderColor: 'var(--color-border3)' }}
             value={expireDate}
             onChange={(e) => setExpireDate(e.target.value)}
-          ></input>
+            min={new Date().toISOString().split('T')[0]} // 선택 가능한 최소 날짜를 오늘로 지정
+          />
         </div>
         <div className='flex items-center  mt-10'>
           <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
