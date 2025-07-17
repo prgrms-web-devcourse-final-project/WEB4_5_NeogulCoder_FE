@@ -16,19 +16,27 @@ export default function SignUp() {
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
+
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordCheckError, setPasswordCheckError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [nicknameError, setNicknameError] = useState('');
   const [signupError, setSignupError] = useState({
     email: false,
     nickname: false,
     password: false,
     passwordCheck: false,
   });
-  const [passwordError, setPasswordError] = useState('');
-  const [passwordCheckError, setPasswordCheckError] = useState('');
 
   const emailRef = useRef<HTMLInputElement>(null);
   const nicknameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordCheckRef = useRef<HTMLInputElement>(null);
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (emailError) setEmailError('');
+  };
 
   const handlePassword = () => {
     if (!passwordRegex.test(password)) {
@@ -58,7 +66,9 @@ export default function SignUp() {
     }
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     const errorMsg = {
       email: email.trim() === '',
       nickname: nickname.trim() === '',
@@ -88,8 +98,16 @@ export default function SignUp() {
       await signup(email, nickname, password, passwordCheck);
       alert('회원가입 성공');
       router.push('/auth/login');
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      const msg = error.response?.data?.message;
+
+      if (msg?.includes('이메일')) {
+        setEmailError(msg);
+        emailRef.current?.focus();
+      } else if (msg?.includes('닉네임')) {
+        setNicknameError(msg);
+        nicknameRef.current?.focus();
+      }
     }
   };
   return (
@@ -117,133 +135,150 @@ export default function SignUp() {
       <div className='flex flex-col items-center justify-center'>
         <Image src={logoWibby} alt='로고' className='mb-[96px] w-30' />
         <div className='z-10'>
-          <div className='mb-8'>
-            <p className='pb-2 t4'>
-              이메일
-              {signupError.email && (
-                <span className='text-red-500 ml-2'>(필수)</span>
-              )}
-            </p>
-            <div className='relative'>
-              <input
-                type='text'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-                ref={emailRef}
-              />
-
-              {email && (
-                <Image
-                  src={deleteText}
-                  alt='전체 삭제'
-                  onClick={() => {
-                    setEmail('');
-                  }}
-                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
-                />
-              )}
-            </div>
-          </div>
-          <div className='mb-8'>
-            <p className='pb-2 t4'>
-              닉네임
-              {signupError.nickname && (
-                <span className='text-red-500 ml-2'>(필수)</span>
-              )}
-            </p>
-
-            <div className='relative'>
-              <input
-                type='text'
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-                ref={nicknameRef}
-              />
-              {nickname && (
-                <Image
-                  src={deleteText}
-                  alt='전체 삭제'
-                  onClick={() => {
-                    setNickname('');
-                  }}
-                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
-                />
-              )}
-            </div>
-          </div>
-          <div className='mb-[35px]'>
-            <p className='pb-2 t4'>
-              비밀번호{' '}
-              {signupError.password && (
-                <span className='text-red-500 ml-2'>(필수)</span>
-              )}
-            </p>
-            <div className='relative'>
-              <input
-                type='password'
-                value={password}
-                onChange={validatePassword}
-                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-                ref={passwordRef}
-                onBlur={handlePassword}
-              />
-
-              {password && (
-                <Image
-                  src={deleteText}
-                  alt='전체 삭제'
-                  onClick={() => {
-                    setPassword('');
-                  }}
-                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
-                />
-              )}
-            </div>
-            {passwordError && (
-              <p className='text-red-500 t5'>{passwordError || '\u00A0'}</p>
-            )}
-          </div>
-
-          <div className='mb-[35px]'>
-            <p className='pb-2 t4'>
-              비밀번호 확인{' '}
-              {signupError.passwordCheck && (
-                <span className='text-red-500 ml-2'>(필수)</span>
-              )}
-            </p>
-            <div className='relative'>
-              <input
-                type='password'
-                value={passwordCheck}
-                onChange={handlePasswordCheck}
-                className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
-                ref={passwordCheckRef}
-              />
-              {passwordCheck && (
-                <Image
-                  src={deleteText}
-                  alt='전체 삭제'
-                  onClick={() => {
-                    setPasswordCheck('');
-                  }}
-                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
-                />
-              )}
-            </div>
-            {passwordCheckError && (
-              <p className='text-red-500 t5 ml-1'>
-                {passwordCheckError || '\u00A0'}
+          <form onSubmit={handleSignUp}>
+            <div className='mb-6'>
+              <p className='pb-2 t4'>
+                이메일{' '}
+                {signupError.email && (
+                  <span className='text-red-500'>(필수)</span>
+                )}
               </p>
-            )}
-          </div>
-          <input
-            type='button'
-            className='button-type1 cursor-pointer mb-[14px]'
-            value={'회원가입'}
-            onClick={handleSignUp}
-          />
+              <div className='relative'>
+                <input
+                  type='text'
+                  value={email}
+                  onChange={handleEmailChange}
+                  className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                  ref={emailRef}
+                />
+
+                {email && (
+                  <Image
+                    src={deleteText}
+                    alt='전체 삭제'
+                    onClick={() => setEmail('')}
+                    className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                  />
+                )}
+              </div>
+
+              <p
+                className={`t5 ml-1 h-5 pt-1 ${
+                  emailError ? 'text-red-500' : 'invisible'
+                }`}
+              >
+                {emailError || '\u00A0'}
+              </p>
+            </div>
+
+            <div className='mb-6'>
+              <p className='pb-2 t4'>
+                닉네임{' '}
+                {signupError.nickname && (
+                  <span className='text-red-500'>(필수)</span>
+                )}
+              </p>
+              <div className='relative'>
+                <input
+                  type='text'
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
+                  className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                  ref={nicknameRef}
+                />
+                {nickname && (
+                  <Image
+                    src={deleteText}
+                    alt='전체 삭제'
+                    onClick={() => setNickname('')}
+                    className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                  />
+                )}
+              </div>
+
+              <p
+                className={`t5 ml-1 h-5 pt-1 ${
+                  nicknameError ? 'text-red-500' : 'invisible'
+                }`}
+              >
+                {nicknameError || '\u00A0'}
+              </p>
+            </div>
+
+            <div className='mb-6'>
+              <p className='pb-2 t4'>
+                비밀번호{' '}
+                {signupError.password && (
+                  <span className='text-red-500'>(필수)</span>
+                )}
+              </p>
+              <div className='relative'>
+                <input
+                  type='password'
+                  value={password}
+                  onChange={validatePassword}
+                  className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                  ref={passwordRef}
+                  onBlur={handlePassword}
+                />
+                {password && (
+                  <Image
+                    src={deleteText}
+                    alt='전체 삭제'
+                    onClick={() => setPassword('')}
+                    className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                  />
+                )}
+              </div>
+              <p
+                className={`t5 ml-1 h-5 pt-1 ${
+                  passwordError ? 'text-red-500' : 'invisible'
+                }`}
+              >
+                {passwordError || '\u00A0'}
+              </p>
+            </div>
+
+            <div className='mb-6'>
+              <p className='pb-2 t4'>
+                비밀번호 확인{' '}
+                {signupError.passwordCheck && (
+                  <span className='text-red-500'>(필수)</span>
+                )}
+              </p>
+              <div className='relative'>
+                <input
+                  type='password'
+                  value={passwordCheck}
+                  onChange={handlePasswordCheck}
+                  className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                  ref={passwordCheckRef}
+                />
+                {passwordCheck && (
+                  <Image
+                    src={deleteText}
+                    alt='전체 삭제'
+                    onClick={() => setPasswordCheck('')}
+                    className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                  />
+                )}
+              </div>
+              <p
+                className={`t5 ml-1 h-5 pt-1 ${
+                  passwordCheckError ? 'text-red-500' : 'invisible'
+                }`}
+              >
+                {passwordCheckError || 'placeholder'}
+              </p>
+            </div>
+
+            <button
+              type='submit'
+              className='button-type1 cursor-pointer mb-[14px]'
+            >
+              회원가입
+            </button>
+          </form>
         </div>
       </div>
     </div>
