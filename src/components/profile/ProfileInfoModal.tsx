@@ -1,27 +1,38 @@
 'use client';
 import { axiosInstance } from '@/lib/api/axios';
+import { userAuthStore } from '@/store/userStore';
 import { BookCopy, LogOut } from 'lucide-react';
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function UserInfoModal() {
+export default function UserInfoModal({
+  onItemClick,
+}: {
+  onItemClick: () => void;
+}) {
   const router = useRouter();
 
   const handleGoToPr = () => {
     router.push('/profile/pr');
+    onItemClick();
   };
 
-  const handleMyPage = async () => {
+  const handleMyPage = () => {
+    router.push('/my/calendar');
+    onItemClick();
+  };
+
+  const handleLogout = async () => {
     try {
-      await axiosInstance.post('/logout');
-    } catch (e) {
-      alert('로그아웃 실패');
+      await axiosInstance.post('/auth/logout');
+      onItemClick();
+      userAuthStore.getState().clearUser();
+      router.push('/');
+    } catch (error) {
+      console.error('로그아웃 실패: ', error);
     }
   };
 
-  const handleLogout = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/logout`;
-  };
   return (
     <div className='w-[160px] border border-main/10 bg-white rounded-md shadow-sm overflow-hidden tm5'>
       <button

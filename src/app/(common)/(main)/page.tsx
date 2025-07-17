@@ -1,16 +1,16 @@
 'use client';
 import Image from 'next/image';
-// import banner from '@/assets/images/banner.svg';
 import banner1 from '@/assets/images/banner1.svg';
 import { ChevronDown } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import { ChevronLeft } from 'lucide-react';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CategoryModal from '@/components/main/CategoryModal';
 import MeetingTypeModal from '@/components/main/MeetingTypeModal';
 import StudyCard from '@/components/my/StudyCard';
 import RecruitmentCard from '@/components/my/RecruitmentCard';
+import { axiosInstance } from '@/lib/api/axios';
 
 export default function Main() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -20,6 +20,14 @@ export default function Main() {
   const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
+
+  useEffect(() => {
+    const fetchStudyList = async () => {
+      const { data } = await axiosInstance.get('/api/studies');
+      console.log(data);
+    };
+    fetchStudyList();
+  }, []);
 
   const studyList = Array.from({ length: 4 }, () => ({
     studyName: '주말이 이렇게 방가울수가',
@@ -48,7 +56,7 @@ export default function Main() {
       <div>
         <Image src={banner1} alt='banner' className='w-full rounded-[10px]' />
 
-        <div className='mt-[110px]'>
+        <div className='mt-[105px]'>
           <div className='flex items-center justify-between mt-[6px]'>
             <p className='text-[22px] font-bold'>내 스터디</p>
             <div className='flex gap-2'>
