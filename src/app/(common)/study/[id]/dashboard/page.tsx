@@ -6,11 +6,12 @@ import { ChevronRight } from 'lucide-react';
 import StudyPostItem from '@/components/study-room/dashboard/StudyPostItem';
 
 import StudyExtendCheckModal from '@/components/study-room/dashboard/StudyExtendCheckModal';
+
+import Link from 'next/link';
 import {
   getStudyDashBoardData,
   getStudyHeaderData,
-} from '@/lib/api/studydashboard';
-import Link from 'next/link';
+} from '@/lib/api/studyDashboard.api';
 
 export default async function DashBoard({
   params,
@@ -18,9 +19,9 @@ export default async function DashBoard({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { data } = await getStudyDashBoardData(Number(id));
-  const { data: studyHeaderData } = await getStudyHeaderData(Number(id));
-  console.log(data, studyHeaderData);
+  // const { data } = await getStudyDashBoardData(Number(id));
+  // const { data: studyHeaderData } = await getStudyHeaderData(Number(id));
+
   const studyData = {
     progressDays: 45,
     totalDays: 320,
@@ -99,7 +100,13 @@ export default async function DashBoard({
       },
     ],
   };
-
+  const studyHeaderData = {
+    name: '자바 스터디',
+    introduction: '자바 스터디',
+    imageUrl: 'http://localhost:8083/image.jpg',
+    studyType: 'ONLINE',
+    location: '서울',
+  };
   const studyInfos = [
     {
       title: '스터디 총 기간',

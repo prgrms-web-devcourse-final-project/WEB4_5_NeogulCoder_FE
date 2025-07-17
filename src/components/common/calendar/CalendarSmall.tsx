@@ -24,10 +24,10 @@ export default function CalendarSmall() {
           }}
           views={{
             dayGridMonth: {
-              dayFormat: { day: 'numeric' }, // 숫자만 보이게
+              dayHeaderFormat: { day: 'numeric' }, // 숫자만 보이게
             },
             dayGridWeek: {
-              dayFormat: { weekday: 'short', day: 'numeric' }, // 요일+숫자
+              dayHeaderFormat: { weekday: 'short', day: 'numeric' }, // 요일+숫자
             },
           }}
           events={[

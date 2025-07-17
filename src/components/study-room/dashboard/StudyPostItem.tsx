@@ -1,4 +1,4 @@
-import dateFormat from '@/utils/dateFomatting';
+import dateFormatting from '@/utils/dateFormatting';
 
 type DashBoardPostType = {
   id: number;
@@ -22,7 +22,9 @@ export default function StudyPostItem({ data }: { data: DashBoardPostType }) {
           </span>
           <p className='w-full line-clamp-1 tm4'>{data.title}</p>
         </div>
-        <p className='shrink-0 t5 text-gray5'>{dateFormat(data.createdDate)}</p>
+        <p className='shrink-0 t5 text-gray5'>
+          {dateFormatting(data.createdDate)}
+        </p>
       </div>
     </>
   );
