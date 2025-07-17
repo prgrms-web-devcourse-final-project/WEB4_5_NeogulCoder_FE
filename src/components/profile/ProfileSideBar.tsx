@@ -2,14 +2,42 @@
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { ChevronRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { userAuthStore } from '@/store/userStore';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { userAuthStore, UserInfo } from '@/stores/userStore';
+import { getUserById } from '@/lib/api/axios';
 
 export default function SideBar() {
   const router = useRouter();
   const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴'>('pr');
-  const user = userAuthStore((state) => state.user);
+  const me = userAuthStore((state) => state.user);
+  // console.log(me);
+  const params = useParams();
+  const userId = params?.userId ? Number(params.userId) : null;
+  // console.log(userId);
+  const [otherUser, setOtherUser] = useState<UserInfo | null>(null);
+
+  const pathname = usePathname();
+  const isEditOrWithdrawal =
+    pathname.includes('/edit-profile') || pathname.includes('/withdrawal');
+
+  const isMyPage = isEditOrWithdrawal || me?.id === userId;
+  // console.log(isMyPage);
+
+  useEffect(() => {
+    if (!isMyPage && userId) {
+      getUserById(userId)
+        .then((res) => {
+          // console.log(res.data);
+          setOtherUser(res.data);
+        })
+        .catch((error) => {
+          console.error('다른 사용자 정보 가져오기 실패: ', error);
+        });
+    }
+  }, [userId, isMyPage]);
+
+  const userData = isMyPage ? me : otherUser;
 
   const handleEditProfile = () => {
     router.push('/profile/edit-profile');
@@ -22,7 +50,9 @@ export default function SideBar() {
 
   const handlePr = () => {
     setSelectedMenu('pr');
-    router.push('/profile/pr');
+    if (me?.id) {
+      router.push(`/profile/pr/${me.id}`);
+    }
   };
 
   const handleMyPage = () => {
@@ -38,7 +68,7 @@ export default function SideBar() {
               <Image src={musicBunny} alt='예시 기본 프사' />
             </div>
             <div className='flex flex-col justify-center'>
-              <span className='tm2 cursor-default'>{user?.nickname}</span>
+              <span className='tm2 cursor-default'>{userData?.nickname}</span>
               <button
                 type='button'
                 className='t5 opacity-50 mt-[5px]'
