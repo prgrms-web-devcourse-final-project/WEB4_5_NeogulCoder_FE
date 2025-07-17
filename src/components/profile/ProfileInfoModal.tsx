@@ -1,6 +1,6 @@
 'use client';
 import { axiosInstance } from '@/lib/api/axios';
-import { userAuthStore } from '@/store/userStore';
+import { userAuthStore } from '@/stores/userStore';
 import { BookCopy, LogOut } from 'lucide-react';
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -11,10 +11,14 @@ export default function UserInfoModal({
   onItemClick: () => void;
 }) {
   const router = useRouter();
+  const me = userAuthStore((state) => state.user);
+  // console.log(me);
 
   const handleGoToPr = () => {
-    router.push('/profile/pr');
-    onItemClick();
+    if (me?.id) {
+      router.push(`/profile/pr/${me.id}`);
+      onItemClick();
+    }
   };
 
   const handleMyPage = () => {
