@@ -1,4 +1,5 @@
 'use client';
+import { axiosInstance } from '@/lib/api/axios';
 import { BookCopy, LogOut } from 'lucide-react';
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -10,12 +11,16 @@ export default function UserInfoModal() {
     router.push('/profile/pr');
   };
 
-  const handleMyPage = () => {
-    router.push('/my/calendar');
+  const handleMyPage = async () => {
+    try {
+      await axiosInstance.post('/logout');
+    } catch (e) {
+      alert('로그아웃 실패');
+    }
   };
 
-  const handleLogin = () => {
-    router.push('/auth/login');
+  const handleLogout = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/logout`;
   };
   return (
     <div className='w-[160px] border border-main/10 bg-white rounded-md shadow-sm overflow-hidden tm5'>
@@ -44,7 +49,7 @@ export default function UserInfoModal() {
       <button
         type='button'
         className='flex items-center gap-3 px-4 py-3 w-full hover:bg-gray4'
-        onClick={handleLogin}
+        onClick={handleLogout}
       >
         <LogOut className='w-4 h-4 text-gray5' />
         로그아웃
