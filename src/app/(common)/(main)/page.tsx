@@ -5,12 +5,11 @@ import { ChevronDown } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import { ChevronLeft } from 'lucide-react';
 import { Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CategoryModal from '@/components/main/CategoryModal';
 import MeetingTypeModal from '@/components/main/MeetingTypeModal';
 import StudyCard from '@/components/my/StudyCard';
 import RecruitmentCard from '@/components/my/RecruitmentCard';
-import { axiosInstance } from '@/lib/api/axios';
 
 export default function Main() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -20,14 +19,6 @@ export default function Main() {
   const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
-
-  useEffect(() => {
-    const fetchStudyList = async () => {
-      const { data } = await axiosInstance.get('/api/studies');
-      console.log(data);
-    };
-    fetchStudyList();
-  }, []);
 
   const studyList = Array.from({ length: 4 }, () => ({
     studyName: '주말이 이렇게 방가울수가',
