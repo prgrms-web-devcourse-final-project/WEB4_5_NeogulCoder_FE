@@ -2,8 +2,8 @@ import MannersClient from '@/components/my/MannersClient';
 import { fetchStudyList, fetchUserListByStudyId } from '@/lib/api/manners';
 
 export default async function Manners() {
-  const initialStudyList = await fetchStudyList();
-  const initialStudyId = initialStudyList[0]?.studyId;
+  const initialStudyList = (await fetchStudyList()) ?? [];
+  const initialStudyId = initialStudyList[0]?.studyId ?? -1;
   const initialUserList = initialStudyId
     ? await fetchUserListByStudyId(initialStudyId)
     : [];

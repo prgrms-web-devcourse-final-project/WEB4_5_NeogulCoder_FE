@@ -1,15 +1,15 @@
 import axiosInstance from '@/lib/api/axiosInstance';
 
 export const fetchStudyList = async () => {
-  const { data } = await axiosInstance.get('/reviews/studies');
-  return data;
+  const { data } = await axiosInstance.get('/reviews/studies/me');
+  return data.studiesInfo;
 };
 
 export const fetchUserListByStudyId = async (studyId: number) => {
   const { data } = await axiosInstance.get(
     `/reviews/studies/${studyId}/targets`
   );
-  return data;
+  return data.userInfos;
 };
 
 export const postReviews = async (
