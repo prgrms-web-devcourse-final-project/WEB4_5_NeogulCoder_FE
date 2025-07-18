@@ -189,3 +189,32 @@ body {
     cursor: pointer;
   }
 }
+
+/* 스크롤 */
+.scroll-custom::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.scroll-custom::-webkit-scrollbar-thumb {
+  background: #939393;
+}
+
+/* 도장 */
+@keyframes stamp {
+  0% {
+    transform: scale(2) rotate(-15deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(0.95) rotate(2deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.animate-stamp {
+  animation: stamp 0.4s ease-out forwards;
+}

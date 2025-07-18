@@ -14,7 +14,7 @@ export default function SideMenuMy() {
     { name: '전체 스터디', to: '/my/study-list' },
     { name: '내가 신청한 스터디', to: '/my/apply-study-list' },
     { name: '내가 작성한 모집 글', to: '/my/recruitment-list' },
-    { name: '스터디원 피어리뷰', to: '/my/review' },
+    { name: '스터디원 매너 평가', to: '/my/manners' },
   ];
 
   return (
