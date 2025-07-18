@@ -1,18 +1,15 @@
-import axios from 'axios';
+import { axiosInstance } from '../axios';
 
 export const writeRecruitmentPost = async (payload: {
-  studyId: number;
+  studyId: number | '';
   subject: string;
   content: string;
-  remainSlots: number;
+  recruitmentCount: number;
   expireDate: string;
 }) => {
   try {
-    const response = await axios.post(
-      'https://wibby.cedartodo.uk/recruitment-posts',
-      payload
-    );
-    return response.data;
+    const res = await axiosInstance.post('/recruitment-posts', payload);
+    return res.data;
   } catch (error) {
     console.error('post error:', error);
     throw error;

@@ -1,8 +1,6 @@
-import axios from 'axios';
+import { axiosInstance } from '../axios';
 
-export const fetchStudyInfo = async (studyId: string) => {
-  const res = await axios.get(
-    `https://wibby.cedartodo.uk/recruitment-posts/studies/${studyId}`
-  );
+export const fetchStudy = async (studyId: number) => {
+  const res = await axiosInstance.get(`/recruitment-posts/studies/${studyId}`);
   return res.data.data;
 };

@@ -2,61 +2,79 @@
 
 import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
 import { writeRecruitmentPost } from '@/lib/api/recruitment/write';
-// import { fetchStudyInfo } from '@/lib/api/recruitment/write';
+import { fetchStudy } from '@/lib/api/recruitment/fetchStudy';
+import { fetchStudyList } from '@/lib/api/recruitment/fetchStudyList';
 
 export default function Page() {
   const [subject, setSubject] = useState('');
-  const [studyId, setStudyId] = useState<number>(1);
-  const [remainSlots, setRemainSlots] = useState<number>(0);
+  const [studyId, setStudyId] = useState<number | ''>(''); // 초기값을 ''로 변경
+
+  const [recruitmentCount, setRecruitmentCount] = useState<number>(0);
   const [expireDate, setExpireDate] = useState('');
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [studyType, setStudyType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [studyList, setStudyList] = useState<
+    { studyId: number; name: string }[]
+  >([]);
   const editorRef = useRef<ToastEditor>(null);
-
-  // const handleFetchData = async () => {
-  //   try {
-  //     const data = await fetchStudyInfo(studyId);
-
-  //     setCategory(data.category);
-  //     setLocation(data.location);
-  //     setStudyType(data.studyType);
-  //     setStartDate(data.startDate);
-  //     setEndDate(data.endDate);
-  //     setRemainSlots(data.remainSlots);
-  //   } catch (error) {
-  //     console.error('데이터 불러오기 실패ㅠㅠ:', error);
-  //   }
-  // };
 
   const handleFetchData = async () => {
     try {
-      // 실제 요청 대신 더미 데이터 사용
-      const dummyResponse = {
-        category: 'IT',
-        location: '서울',
-        studyType: 'online',
-        startDate: '2025-07-16',
-        endDate: '2025-08-07',
-        recruitmentCount: 3,
-      };
-
-      // 응답으로 받은 것처럼 state 세팅
-      setCategory(dummyResponse.category);
-      setLocation(dummyResponse.location);
-      setStudyType(dummyResponse.studyType);
-      setStartDate(dummyResponse.startDate);
-      setEndDate(dummyResponse.endDate);
-      setRemainSlots(dummyResponse.recruitmentCount);
+      const data = await fetchStudy(Number(studyId));
+      console.log(studyId);
+      setCategory(data.category);
+      setLocation(data.location);
+      setStudyType(data.studyType);
+      setStartDate(data.startDate);
+      setEndDate(data.endDate);
+      setRecruitmentCount(data.recruitmentCount);
     } catch (error) {
-      console.error('데이터 불러오기 실패:', error);
+      console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
   };
+
+  useEffect(() => {
+    const loadStudyList = async () => {
+      try {
+        const data = await fetchStudyList();
+        setStudyList(data.studyInfos);
+      } catch (error) {
+        console.error('스터디 리스트 불러오기 실패:', error);
+      }
+    };
+
+    loadStudyList();
+  }, []);
+
+  // const handleFetchData = async () => {
+  //   try {
+  //     // 실제 요청 대신 더미 데이터 사용
+  //     const dummyResponse = {
+  //       category: 'IT',
+  //       location: '서울',
+  //       studyType: 'online',
+  //       startDate: '2025-07-16',
+  //       endDate: '2025-08-07',
+  //       recruitmentCount: 3,
+  //     };
+
+  //     // 응답으로 받은 것처럼 state 세팅
+  //     setCategory(dummyResponse.category);
+  //     setLocation(dummyResponse.location);
+  //     setStudyType(dummyResponse.studyType);
+  //     setStartDate(dummyResponse.startDate);
+  //     setEndDate(dummyResponse.endDate);
+  //     setRemainSlots(dummyResponse.recruitmentCount);
+  //   } catch (error) {
+  //     console.error('데이터 불러오기 실패:', error);
+  //   }
+  // };
 
   const handleSubmit = async () => {
     const instance = editorRef.current?.getInstance();
@@ -66,7 +84,7 @@ export default function Page() {
       studyId: studyId,
       subject: subject,
       content: content,
-      remainSlots: remainSlots,
+      recruitmentCount: recruitmentCount,
       expireDate: expireDate,
     };
 
@@ -83,8 +101,8 @@ export default function Page() {
       subject,
       'Content:',
       content,
-      'remainSlots:',
-      remainSlots,
+      'recruitmentCount:',
+      recruitmentCount,
       'ExpireDate:',
       expireDate
     );
@@ -114,8 +132,11 @@ export default function Page() {
                 <option value='' disabled hidden>
                   스터디를 선택해주세요
                 </option>
-                <option value='1'>스터디 1</option>
-                <option value='2'>스터디 2</option>
+                {studyList.map((study) => (
+                  <option key={study.studyId} value={study.studyId}>
+                    {study.name}
+                  </option>
+                ))}
               </select>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
@@ -165,8 +186,8 @@ export default function Page() {
               <select
                 className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
                 name='selectedRecruitmentPerson'
-                value={remainSlots}
-                onChange={(e) => setRemainSlots(Number(e.target.value))}
+                value={recruitmentCount}
+                onChange={(e) => setRecruitmentCount(Number(e.target.value))}
                 style={{ borderColor: 'var(--color-border3)' }}
               >
                 <option value='' disabled hidden>
