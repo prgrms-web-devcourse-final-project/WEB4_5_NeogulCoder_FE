@@ -13,7 +13,8 @@ export default function SideBar() {
   const me = userAuthStore((state) => state.user);
   // console.log(me);
   const params = useParams();
-  const userId = params?.userId ? Number(params.userId) : null;
+  const userId =
+    params?.userId && params?.userId !== 'me' ? Number(params?.userId) : null;
   // console.log(userId);
   const [otherUser, setOtherUser] = useState<UserInfo | null>(null);
 
@@ -21,7 +22,8 @@ export default function SideBar() {
   const isEditOrWithdrawal =
     pathname.includes('/edit-profile') || pathname.includes('/withdrawal');
 
-  const isMyPage = isEditOrWithdrawal || me?.id === userId;
+  const isMyPage =
+    params?.userId === 'me' || isEditOrWithdrawal || me?.id === userId;
   // console.log(isMyPage);
 
   useEffect(() => {
@@ -69,46 +71,52 @@ export default function SideBar() {
             </div>
             <div className='flex flex-col justify-center'>
               <span className='tm2 cursor-default'>{userData?.nickname}</span>
-              <button
-                type='button'
-                className='t5 opacity-50 mt-[5px]'
-                onClick={handleEditProfile}
-              >
-                프로필 수정
-              </button>
+              {isMyPage && (
+                <button
+                  type='button'
+                  className='t5 opacity-50 mt-[5px]'
+                  onClick={handleEditProfile}
+                >
+                  프로필 수정
+                </button>
+              )}
             </div>
           </div>
         </div>
         <div className='flex gap-5 mt-4'>
-          <button
-            type='button'
-            className='w-full h-10 bg-gray4 rounded-[10px] tm4'
-            onClick={handleMyPage}
-          >
-            개인 일정
-          </button>
+          {isMyPage && (
+            <button
+              type='button'
+              className='w-full h-10 bg-gray4 rounded-[10px] tm4'
+              onClick={handleMyPage}
+            >
+              개인 일정
+            </button>
+          )}
         </div>
-        <div className='flex flex-col gap-[30px] tm4 mt-[35px]'>
-          <div
-            className={`flex justify-between items-center cursor-pointer ${
-              selectedMenu === 'pr' ? 'opacity-100' : 'opacity-30'
-            }`}
-            onClick={handlePr}
-          >
-            <span>PR</span>
-            <ChevronRight className='w-[22px] h-[22px]' />
-          </div>
+        {isMyPage && (
+          <div className='flex flex-col gap-[30px] tm4 mt-[35px]'>
+            <div
+              className={`flex justify-between items-center cursor-pointer ${
+                selectedMenu === 'pr' ? 'opacity-100' : 'opacity-30'
+              }`}
+              onClick={handlePr}
+            >
+              <span>PR</span>
+              <ChevronRight className='w-[22px] h-[22px]' />
+            </div>
 
-          <div
-            className={`flex justify-between items-center cursor-pointer ${
-              selectedMenu === '회원 탈퇴' ? 'opacity-100' : 'opacity-30'
-            }`}
-            onClick={handleWithdrawal}
-          >
-            <span>회원 탈퇴</span>
-            <ChevronRight className='w-[22px] h-[22px]' />
+            <div
+              className={`flex justify-between items-center cursor-pointer ${
+                selectedMenu === '회원 탈퇴' ? 'opacity-100' : 'opacity-30'
+              }`}
+              onClick={handleWithdrawal}
+            >
+              <span>회원 탈퇴</span>
+              <ChevronRight className='w-[22px] h-[22px]' />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

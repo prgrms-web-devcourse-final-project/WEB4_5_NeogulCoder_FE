@@ -30,6 +30,7 @@ export default function UserInfoModal({
     try {
       await axiosInstance.post('/auth/logout');
       onItemClick();
+      localStorage.removeItem('login_status');
       userAuthStore.getState().clearUser();
       router.push('/');
     } catch (error) {
