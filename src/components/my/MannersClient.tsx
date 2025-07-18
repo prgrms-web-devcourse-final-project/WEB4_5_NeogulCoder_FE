@@ -9,6 +9,7 @@ import { BadgeQuestionMark } from 'lucide-react';
 import Image from 'next/image';
 import completeStamp from '@/assets/images/complete-stamp.svg';
 import { useEffect, useState } from 'react';
+import { Study, User } from '@/types/manners';
 
 export default function MannersClient({
   initialStudyList,
@@ -24,6 +25,7 @@ export default function MannersClient({
   const [activeUserIndex, setActiveUserIndex] = useState(0);
 
   const [studyList, setStudyList] = useState<Study[]>(initialStudyList ?? []);
+  // const [studyList, setStudyList] = useState<Study[]>([]);
   const [userList, setUserList] = useState<User[]>(initialUserList ?? []);
 
   const [currentStudyId, setCurrentStudyId] = useState<number>(
