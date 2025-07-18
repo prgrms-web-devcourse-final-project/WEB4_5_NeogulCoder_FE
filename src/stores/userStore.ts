@@ -1,7 +1,7 @@
 import { getUser } from '@/lib/api/axios';
 import { create } from 'zustand';
 
-interface UserInfo {
+export interface UserInfo {
   id: number;
   email: string;
   nickname: string;
@@ -40,14 +40,14 @@ export const userAuthStore = create<UserStore>((set) => ({
       // console.log(user);
       set({
         user: {
-          id: user.userId,
+          id: user.id,
           email: user.email,
           nickname: user.nickname,
           role: user.role,
           profileImgUrl: user.profileImgUrl,
         },
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error('실패: ', error);
       set({ user: null });
     }
