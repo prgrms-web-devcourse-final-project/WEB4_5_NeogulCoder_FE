@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
+import UserStore from './user-store';
 
 export const metadata: Metadata = {
   title: 'Wibby',
@@ -15,8 +16,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
-      <body>{children}</body>
+    <html lang='ko'>
+      <body>
+        <UserStore />
+        {children}
+      </body>
     </html>
   );
 }
