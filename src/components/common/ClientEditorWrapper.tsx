@@ -1,12 +1,16 @@
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic';
+import { Editor as ToastEditor } from '@toast-ui/react-editor';
 
-// ✅ dynamic import로 ssr: false
-const Editor = dynamic(() => import("./Editor"), {
+type Props = {
+  editorRef: React.RefObject<ToastEditor | null>;
+};
+
+const Editor = dynamic(() => import('./Editor'), {
   ssr: false,
 });
 
-export default function ClientEditorWrapper() {
-  return <Editor />;
+export default function ClientEditorWrapper({ editorRef }: Props) {
+  return <Editor editorRef={editorRef} />;
 }
