@@ -42,7 +42,7 @@ export default function CalendarBigShell({
   const [colorNumber, setColorNumber] = useState(0);
 
   const [events, setEvent] = useState<StudyScheduleType[]>(defaultEvents);
-
+  console.log(events);
   // 카테고리가 변경 되면 각 카테고리에 맞는 api일정을 가져오도록.. api 개발이 덜 돼서 막아놓음
   // useEffect(() => {
   //   if (!first.current) {

@@ -14,8 +14,7 @@ export const getStudy = async (studyId: number) => {
 
 // 스터디별 일정 전체 목록 조회
 export const getStudyEvents = async (studyId: number) => {
-  const { data } = await axiosInstance.get(`/api/teams/${studyId}/calendar`);
-  return data;
+  return await axiosInstance.get(`/api/teams/${studyId}/calendar`);
 };
 
 // 스터디 일정 날짜별 조회
