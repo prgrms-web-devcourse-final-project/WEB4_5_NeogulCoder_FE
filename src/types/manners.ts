@@ -1,10 +1,10 @@
-type Study = {
+export type Study = {
   studyId: number;
   studyName: string;
   imageUrl: string;
 };
 
-type User = {
+export type User = {
   userId: number;
   nickname: string;
 };
