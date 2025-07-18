@@ -1,7 +1,10 @@
+import CategoriesModal from '@/components/common/CategoriesModal';
+import OnlineModal from '@/components/common/OnlineModal';
+import RegionModal from '@/components/common/RegionModal';
 import dayjs from 'dayjs';
 import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
@@ -12,14 +15,52 @@ export default function StudyRoomInfoWrite({
 }) {
   const [image, setImage] = useState(studyInfoData.imageUrl);
   const [name, setName] = useState(studyInfoData.name);
-  const [category, setCategory] = useState(studyInfoData.category);
+
   const [capacity, setCapacity] = useState(studyInfoData.capacity);
-  const [studyType, setStudyType] = useState(studyInfoData.studyType);
-  const [location, setLocation] = useState(studyInfoData.location);
+  //  const [category, setCategory] = useState();
+  // const [studyType, setStudyType] = useState();
+  // const [location, setLocation] = useState();
   const [startDate, setStartDate] = useState(studyInfoData.startDate);
   const [introduction, setIntroduction] = useState(studyInfoData.introduction);
 
   const [capacityCheck, setCapacityCheck] = useState(false);
+  const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(
+    studyInfoData.category
+  );
+  const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState(studyInfoData.location);
+  const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
+  const [selectedStudyType, setSelectedStudyType] = useState(
+    studyInfoData.studyType === 'ONLINE'
+      ? '온라인'
+      : studyInfoData.studyType === 'OFFLINE'
+      ? '오프라인'
+      : studyInfoData.studyType === 'HYBRID'
+      ? '온/오프라인'
+      : studyInfoData.studyType
+  );
+
+  const [imageFile, setImageFiles] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState(studyInfoData.imageUrl);
+
+  const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      setImageFiles(file);
+
+      const imagePreviewUrl = URL.createObjectURL(file);
+      setImagePreview(imagePreviewUrl);
+    }
+  };
+
+  // 메모리 누수 방지 - 이미지 업로드 후 Blob URL 해제
+  useEffect(() => {
+    if (imagePreview) {
+      return () => URL.revokeObjectURL(imagePreview);
+    }
+  }, [imagePreview]);
 
   const handleCapacity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const number = e.target.value.replace(/[^0-9]/g, '');
@@ -46,18 +87,39 @@ export default function StudyRoomInfoWrite({
       capacityUpdate = capacity;
     }
 
-    const updateData: StudyInfoUpdateType = {
-      imageUrl: image,
-      name: name,
-      category: category,
-      capacity: capacityUpdate,
-      studyType: studyType,
-      location: location,
-      startDate: startDate,
-      introduction: introduction,
-    };
+    const studyType =
+      selectedStudyType === '온라인'
+        ? 'ONLINE'
+        : selectedStudyType === '오프라인'
+        ? 'OFFLINE'
+        : 'HYBRID';
 
-    console.log(updateData);
+    const formData = new FormData();
+
+    if (imageFile) {
+      formData.append('name', name);
+      formData.append('category', selectedCategory);
+      formData.append('capacity', String(capacityUpdate));
+      formData.append('studyType', studyType);
+      formData.append('location', selectedRegion);
+      formData.append('startDate', startDate);
+      formData.append('introduction', introduction);
+      formData.append('imageUrl', imageFile); // 여기!
+
+      console.log('formData', ...formData);
+    } else {
+      const updateData: StudyInfoUpdateType = {
+        name: name,
+        category: selectedCategory,
+        capacity: capacityUpdate,
+        studyType: studyType,
+        location: selectedRegion,
+        startDate: startDate,
+        introduction: introduction,
+        imageUrl: image,
+      };
+      console.log('updateData', updateData);
+    }
   };
 
   return (
@@ -71,21 +133,34 @@ export default function StudyRoomInfoWrite({
             </button>
           </div>
           <div>
-            <form onSubmit={hadleSubmit}>
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
-                <div className='w-[100px] h-[100px] mx-auto relative shrink-0'>
-                  <div className='w-full h-full rounded-full bg-gray3'>
+                {/* 사진 */}
+                <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
+                  <div className='w-full h-full rounded-full border border-border1 bg-gray3 overflow-hidden'>
                     <Image
-                      src={studyInfoData.imageUrl}
+                      src={imagePreview ?? image}
                       width='100'
-                      height='0'
+                      height='100'
+                      className='w-full h-full object-cover'
                       alt={`${studyInfoData.name} 프로필 사진`}
                     />
                   </div>
-                  <button className='w-[30px] h-[30px] rounded-full flex items-center justify-center bg-main absolute right-0 bottom-0'>
+                  <label
+                    htmlFor='image-upload'
+                    className='w-[30px] h-[30px] cursor-pointer rounded-full flex items-center justify-center bg-main absolute right-0 bottom-0'
+                  >
+                    <input
+                      type='file'
+                      accept='image/png, image/jpeg, image/jpg'
+                      onChange={onUploadImage}
+                      className='hidden'
+                      id='image-upload'
+                    />
                     <Camera className='w-5 h-5 text-white' />
-                  </button>
+                  </label>
                 </div>
+                {/* 이름 */}
                 <div className=' shrink-0'>
                   <p className='t3 mb-3'>
                     이름 <span className='tm5 text-red'>(필수)</span>
@@ -97,18 +172,36 @@ export default function StudyRoomInfoWrite({
                     className='w-full input-type2'
                   />
                 </div>
+                {/* 카테고리 */}
                 <div className=' shrink-0'>
                   <p className='t3 mb-3'>
                     카테고리 <span className='tm5 text-red'>(필수)</span>
                   </p>
-                  <div className='w-full relative'>
-                    <select className='w-full input-type2 appearance-none pr-9!'>
-                      <option>개발/IT</option>
-                    </select>
+                  <div className='w-full relative input-type2'>
+                    <button
+                      className='w-full h-full text-left'
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsOpenCategoryModal((prev) => !prev);
+                      }}
+                    >
+                      {selectedCategory}
+                    </button>
                     <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
+                    {isOpenCategoryModal && (
+                      <div className='absolute top-full w-full left-0 z-1'>
+                        <CategoriesModal
+                          onSelect={(category: string) => {
+                            setSelectedCategory(category);
+                            setIsOpenCategoryModal(false);
+                          }}
+                          customCss='!w-full !h-[120px] !overflow-auto t4'
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
-
+                {/* 인원 수 */}
                 <div className=' shrink-0'>
                   <p className='t3 mb-3'>
                     인원 수{' '}
@@ -129,6 +222,7 @@ export default function StudyRoomInfoWrite({
                     <span className='tm4 shrink-0'>명</span>
                   </div>
                 </div>
+                {/* 시작 날짜 (스터디 시작 전에만 수정 가능) */}
                 {dayjs(startDate).isAfter(dayjs().format('YYYY-MM-DD')) && (
                   <div className=' shrink-0'>
                     <p className='t3 mb-3'>
@@ -139,6 +233,11 @@ export default function StudyRoomInfoWrite({
                         type='date'
                         min={dayjs().format('YYYY-MM-DD')}
                         className='date-custom w-full input-type2 pr-9!'
+                        onChange={(e) =>
+                          setStartDate(
+                            dayjs(e.target.value).format('YYYY-MM-DD')
+                          )
+                        }
                       />
                       <CalendarDays
                         strokeWidth={1}
@@ -147,32 +246,63 @@ export default function StudyRoomInfoWrite({
                     </label>
                   </div>
                 )}
-
+                {/* 진행방식 */}
                 <div className=' shrink-0'>
                   <p className='t3 mb-3'>
                     진행방식 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='flex gap-3'>
-                    <div className='w-full relative'>
-                      <select className='w-full input-type2 appearance-none pr-9!'>
-                        <option>온/오프라인</option>
-                        <option>오프라인</option>
-                        <option>온라인</option>
-                      </select>
+                    <div className='w-full relative input-type2'>
+                      <button
+                        className='w-full h-full text-left'
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsOpenStudyTypeModal((prev) => !prev);
+                        }}
+                      >
+                        {selectedStudyType}
+                      </button>
                       <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
+                      {isOpenStudyTypeModal && (
+                        <div className='absolute top-full w-full left-0 z-1'>
+                          <OnlineModal
+                            onSelect={(online: string) => {
+                              setSelectedStudyType(online);
+                              setIsOpenStudyTypeModal(false);
+                            }}
+                            customCss='!w-full !h-[120px] !overflow-auto t4'
+                          />
+                        </div>
+                      )}
                     </div>
-                    <div className='w-full relative'>
-                      <select className='w-full input-type2 appearance-none pr-9!'>
-                        <option>서울시</option>
-                        <option>수원시</option>
-                        <option>고양시</option>
-                        <option>용인시</option>
-                        <option>성남시</option>
-                      </select>
-                      <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
-                    </div>
+                    {selectedStudyType !== '온라인' && (
+                      <div className='w-full relative input-type2'>
+                        <button
+                          className='w-full h-full text-left'
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setIsOpenRegionModal((prev) => !prev);
+                          }}
+                        >
+                          {selectedRegion}
+                        </button>
+                        <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
+                        {isOpenRegionModal && (
+                          <div className='absolute top-full w-full left-0 z-1'>
+                            <RegionModal
+                              onSelect={(region: string) => {
+                                setSelectedRegion(region);
+                                setIsOpenRegionModal(false);
+                              }}
+                              customCss='!w-full !h-[120px] !overflow-auto t4'
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
+                {/* 스터디 한 줄 소개 */}
                 <div className=' shrink-0'>
                   <p className='t3 mb-3'>스터디 한 줄 소개</p>
                   <textarea
@@ -183,7 +313,18 @@ export default function StudyRoomInfoWrite({
                 </div>
               </div>
               <div className='px-9'>
-                <button className='button-modal1'>등록</button>
+                <button
+                  className='button-modal1'
+                  onClick={hadleSubmit}
+                  disabled={
+                    name === '' ||
+                    selectedCategory === '' ||
+                    capacityCheck ||
+                    selectedStudyType === ''
+                  }
+                >
+                  등록
+                </button>
               </div>
             </form>
           </div>
