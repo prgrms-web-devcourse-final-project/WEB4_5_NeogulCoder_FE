@@ -21,13 +21,17 @@ export default function Main() {
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
 
   const studyList = Array.from({ length: 4 }, () => ({
-    studyName: '주말이 이렇게 방가울수가',
-    studyLeader: '서영이',
-    currentMemberCount: 3,
-    totalMemberCount: 5,
+    studyId: 4,
+    name: '주말이 이렇게 방가울수가',
+    leaderNickname: '서영이',
+    currentCount: 3,
+    capacity: 5,
     startDate: '2025-09-21',
+    imageUrl: '',
+    introduction: '',
     category: 'IT',
-    studyWay: '온라인',
+    studyType: 'ONLINE',
+    finished: false,
   }));
 
   const recruitmentList = Array.from({ length: 10 }, () => ({
@@ -67,16 +71,7 @@ export default function Main() {
           </div>
           <div className='mt-[30px] flex gap-[52px]'>
             {studyList.map((study, index) => (
-              <StudyCard
-                key={index}
-                studyName={study.studyName}
-                studyLeader={study.studyLeader}
-                currentMemberCount={study.currentMemberCount}
-                totalMemberCount={study.totalMemberCount}
-                startDate={study.startDate}
-                category={study.category}
-                studyWay={study.studyWay}
-              />
+              <StudyCard key={index} {...study} />
             ))}
           </div>
         </div>
