@@ -9,7 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { login } from '@/lib/api/axios';
 import Link from 'next/link';
-import { userAuthStore } from '@/store/userStore';
+import { userAuthStore } from '@/stores/userStore';
+import axios from 'axios';
 
 export default function Login() {
   const router = useRouter();
@@ -17,12 +18,12 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
 
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+
   const handleGoToSignUp = () => {
     router.push('/auth/signup');
   };
-
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,14 +52,19 @@ export default function Login() {
         role: user.role,
         profileImgUrl: null,
       });
+      localStorage.setItem('login_status', 'Y');
       alert('로그인 성공');
       router.push('/');
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
-        passwordRef.current?.focus();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 401) {
+          setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
+          passwordRef.current?.focus();
+        } else {
+          console.error('다른 오류', error.response?.status, error.message);
+        }
       } else {
-        console.error(error);
+        console.error('Axios 외의 오류', error);
       }
     }
   };
@@ -68,6 +74,7 @@ export default function Login() {
         src={topBlue}
         alt='로그인 및 회원가입 페이지 배경 도형'
         className='absolute top-0 right-0'
+        priority
       />
 
       <div className='absolute bottom-0 left-0'>
@@ -75,6 +82,7 @@ export default function Login() {
           src={bottomPink}
           alt='로그인 및 회원가입 페이지 배경 도형'
           className='relative'
+          priority
         />
         <Image
           src={musicBunny}

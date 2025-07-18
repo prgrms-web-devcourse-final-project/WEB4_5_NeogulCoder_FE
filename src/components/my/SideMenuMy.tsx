@@ -1,13 +1,13 @@
 'use client';
+
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SideMenuItemMy from './SideMenuItemMy';
 import { useRouter } from 'next/navigation';
-import { userAuthStore } from '@/store/userStore';
 
 export default function SideMenuMy() {
   const router = useRouter();
-  const user = userAuthStore((state) => state.user);
+  const userName = '한유빙';
 
   const menuItems = [
     { name: '캘린더', to: '/my/calendar' },
@@ -27,7 +27,7 @@ export default function SideMenuMy() {
                 <Image src={musicBunny} alt='예시 기본 프사' />
               </div>
               <div>
-                <p className='tm2 cursor-default'>{user?.nickname}</p>
+                <p className='tm2 cursor-default'>{userName}</p>
                 <button
                   type='button'
                   className='t5 text-text1/50'

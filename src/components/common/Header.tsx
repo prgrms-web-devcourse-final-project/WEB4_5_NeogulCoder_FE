@@ -8,7 +8,7 @@ import { useState } from 'react';
 import ProfileInfoModal from '../profile/ProfileInfoModal';
 import { useRouter } from 'next/navigation';
 import NotificationModal from './NotificationModal';
-import { userAuthStore } from '@/store/userStore';
+import { userAuthStore } from '@/stores/userStore';
 import Link from 'next/link';
 
 export default function Header() {

@@ -8,7 +8,8 @@ import deleteText from '@/assets/images/delete-text.svg';
 import { useRef, useState } from 'react';
 import { signup } from '@/lib/api/axios';
 import { useRouter } from 'next/navigation';
-import { passwordRegex } from '@/lib/auth/regex';
+import { nicknameRegex, passwordRegex } from '@/lib/auth/regex';
+import axios from 'axios';
 
 export default function SignUp() {
   const router = useRouter();
@@ -36,6 +37,22 @@ export default function SignUp() {
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (emailError) setEmailError('');
+  };
+
+  const handleNickname = () => {
+    if (!nicknameRegex.test(nickname)) {
+      setNicknameError('닉네임은 2~10자이여야 합니다.');
+    } else {
+      setNicknameError('');
+    }
+  };
+
+  const validateNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const nick = e.target.value;
+    setNickname(nick);
+    if (nicknameError && nicknameRegex.test(nick)) {
+      setNicknameError('');
+    }
   };
 
   const handlePassword = () => {
@@ -98,15 +115,20 @@ export default function SignUp() {
       await signup(email, nickname, password, passwordCheck);
       alert('회원가입 성공');
       router.push('/auth/login');
-    } catch (error: any) {
-      const msg = error.response?.data?.message;
-
-      if (msg?.includes('이메일')) {
-        setEmailError(msg);
-        emailRef.current?.focus();
-      } else if (msg?.includes('닉네임')) {
-        setNicknameError(msg);
-        nicknameRef.current?.focus();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const msg = error.response?.data?.message;
+        if (msg.includes('이메일')) {
+          setEmailError(msg);
+          emailRef.current?.focus();
+        } else if (msg.includes('닉네임')) {
+          setNicknameError(msg);
+          nicknameRef.current?.focus();
+        } else {
+          console.error(error);
+        }
+      } else {
+        console.error('Axios 외의 오류: ', error);
       }
     }
   };
@@ -140,7 +162,9 @@ export default function SignUp() {
               <p className='pb-2 t4'>
                 이메일{' '}
                 {signupError.email && (
-                  <span className='text-red-500'>(필수)</span>
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
                 )}
               </p>
               <div className='relative'>
@@ -161,30 +185,31 @@ export default function SignUp() {
                   />
                 )}
               </div>
-
               <p
-                className={`t5 ml-1 h-5 pt-1 ${
+                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
                   emailError ? 'text-red-500' : 'invisible'
                 }`}
               >
                 {emailError || '\u00A0'}
               </p>
             </div>
-
             <div className='mb-6'>
               <p className='pb-2 t4'>
                 닉네임{' '}
                 {signupError.nickname && (
-                  <span className='text-red-500'>(필수)</span>
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
                 )}
               </p>
               <div className='relative'>
                 <input
                   type='text'
                   value={nickname}
-                  onChange={(e) => setNickname(e.target.value)}
+                  onChange={validateNickname}
                   className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
                   ref={nicknameRef}
+                  onBlur={handleNickname}
                 />
                 {nickname && (
                   <Image
@@ -195,21 +220,21 @@ export default function SignUp() {
                   />
                 )}
               </div>
-
               <p
-                className={`t5 ml-1 h-5 pt-1 ${
+                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
                   nicknameError ? 'text-red-500' : 'invisible'
                 }`}
               >
                 {nicknameError || '\u00A0'}
               </p>
             </div>
-
             <div className='mb-6'>
               <p className='pb-2 t4'>
                 비밀번호{' '}
                 {signupError.password && (
-                  <span className='text-red-500'>(필수)</span>
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
                 )}
               </p>
               <div className='relative'>
@@ -231,19 +256,20 @@ export default function SignUp() {
                 )}
               </div>
               <p
-                className={`t5 ml-1 h-5 pt-1 ${
+                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
                   passwordError ? 'text-red-500' : 'invisible'
                 }`}
               >
                 {passwordError || '\u00A0'}
               </p>
             </div>
-
             <div className='mb-6'>
               <p className='pb-2 t4'>
                 비밀번호 확인{' '}
                 {signupError.passwordCheck && (
-                  <span className='text-red-500'>(필수)</span>
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
                 )}
               </p>
               <div className='relative'>
@@ -264,14 +290,13 @@ export default function SignUp() {
                 )}
               </div>
               <p
-                className={`t5 ml-1 h-5 pt-1 ${
+                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
                   passwordCheckError ? 'text-red-500' : 'invisible'
                 }`}
               >
-                {passwordCheckError || 'placeholder'}
+                {passwordCheckError || '\u00A0'}
               </p>
             </div>
-
             <button
               type='submit'
               className='button-type1 cursor-pointer mb-[14px]'

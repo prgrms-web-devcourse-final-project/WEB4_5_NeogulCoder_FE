@@ -1,3 +1,4 @@
+import { UserInfo } from '@/stores/userStore';
 import axios from 'axios';
 
 export const axiosInstance = axios.create({
@@ -25,4 +26,8 @@ export const login = (email: string, password: string) => {
 
 export const getUser = async () => {
   return await axiosInstance.get('/api/users/me');
+};
+
+export const getUserById = async (userid: number) => {
+  return await axiosInstance.get<UserInfo>(`/api/users/${userid}`);
 };
