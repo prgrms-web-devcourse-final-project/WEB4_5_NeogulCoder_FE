@@ -11,3 +11,10 @@ export const getStudyHeaderData = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/header`);
   return data;
 };
+
+export const putStudyInfo = (
+  studyId: number,
+  updateData: StudyInfoUpdateType
+) => {
+  return axiosInstance.put(`/api/studies/${studyId}`, updateData);
+};

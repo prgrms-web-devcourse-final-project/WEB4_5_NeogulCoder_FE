@@ -1,6 +1,12 @@
 'use client';
 
-export default function StudyRoomInfoCard({ title, content }: { title: string; content: string }) {
+export default function StudyRoomInfoCard({
+  title,
+  content,
+}: {
+  title: string;
+  content: string | number;
+}) {
   return (
     <>
       <div className='w-full border-border1 border rounded-[10px] p-6 pb-5'>

@@ -1,8 +1,32 @@
 'use client';
 
 import { Camera, ChevronDown } from 'lucide-react';
+import { useState } from 'react';
 
 export default function CreateStudyModal() {
+  const [personCount, setPersonCount] = useState<number | ''>('');
+
+  const handlePersonCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+
+    if (!/^\d*$/.test(input)) return;
+    if (input === '') {
+      setPersonCount('');
+      return;
+    }
+
+    const value = Number(input);
+
+    // 3. 숫자 범위 제한
+    if (value < 1) {
+      setPersonCount(1);
+    } else if (value > 1000) {
+      setPersonCount(1000);
+    } else {
+      setPersonCount(value);
+    }
+  };
+
   return (
     <>
       <div className='relative w-fit mx-auto my-10'>
@@ -63,9 +87,14 @@ export default function CreateStudyModal() {
           </div>
           <div className='relative inline-block w-full'>
             <input
-              className='w-full h-[60px] border-[1px] pl-4 pr-10 appearance-none rounded-[10px]'
+              type='number'
+              min={1}
+              max={1000}
+              className='w-full h-[60px] border-[1px] px-4 appearance-none rounded-[10px]'
               name='PersonCount'
               placeholder='인원 수를 입력해주세요'
+              value={personCount}
+              onChange={handlePersonCountChange}
               style={{ borderColor: 'var(--color-border3)' }}
             />
           </div>

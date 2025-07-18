@@ -4,7 +4,11 @@ import { useRouter } from 'next/navigation';
 import SideMenuItem from './SideMenuItem';
 import SideStudyInfo from './SideStudyInfo';
 
-export default function SideMenu() {
+export default function SideMenu({
+  studyHeaderData,
+}: {
+  studyHeaderData: StudyHeaderType;
+}) {
   const router = useRouter();
 
   const menuItems = [
@@ -19,7 +23,7 @@ export default function SideMenu() {
   return (
     <>
       <div>
-        <SideStudyInfo name='너굴코더' />
+        <SideStudyInfo studyHeaderData={studyHeaderData} />
         <button
           onClick={() => router.push('/study/1/my-study-info')}
           type='button'

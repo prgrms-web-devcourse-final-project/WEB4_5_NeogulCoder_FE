@@ -1,34 +1,53 @@
-import Pagination from '@/components/common/Pagination';
-import StudyCard from '@/components/my/StudyCard';
-import SubMenuItem from '@/components/my/SubMenuItem';
+import StudyListClient from '@/components/my/StudyListClient';
 
 export default function StudyList() {
-  const studyType = {
-    studyName: '알고리즘 알고가자',
-    studyLeader: '한유빙',
-    currentMemberCount: 5,
-    totalMemberCount: 6,
-    startDate: '2025.06.24',
-    studyIntro: '알고리즘은 알고 가야 하지 않겠니',
-    category: 'IT',
-    studyWay: '온라인',
+  const responseType = {
+    studies: [
+      {
+        studyId: 1,
+        name: '자바 스터디',
+        leaderNickname: 'test',
+        capacity: 4,
+        currentCount: 1,
+        startDate: '2025-07-15',
+        imageUrl: '',
+        introduction: '자바 스터디입니다.',
+        category: 'IT',
+        studyType: 'ONLINE',
+        finished: false,
+      },
+      {
+        studyId: 2,
+        name: '알고리즘 스터디',
+        leaderNickname: 'test',
+        capacity: 4,
+        currentCount: 1,
+        startDate: '2025-07-15',
+        imageUrl: '',
+        introduction: '알고리즘 스터디입니다.',
+        category: 'IT',
+        studyType: 'OFFLINE',
+        finished: true,
+      },
+      {
+        studyId: 3,
+        name: '모각코',
+        leaderNickname: 'test',
+        capacity: 4,
+        currentCount: 1,
+        startDate: '2025-07-15',
+        imageUrl: '',
+        introduction: '모각코입니다.',
+        category: 'IT',
+        studyType: 'ONLINE',
+        finished: false,
+      },
+    ],
+    totalPage: 2,
+    totalElementCount: 10,
   };
 
-  return (
-    <div className='w-full'>
-      <div className='tb3'>전체 스터디</div>
-      <div className='mt-6'>
-        <SubMenuItem isActive={true}>진행 중</SubMenuItem>
-        <SubMenuItem isActive={false}>종료</SubMenuItem>
-      </div>
-      <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
-        {[...Array(12)].map((_, i) => (
-          <StudyCard key={i} {...studyType} />
-        ))}
-      </div>
-      <div className='mt-[30px]'>
-        <Pagination />
-      </div>
-    </div>
-  );
+  const studyList = responseType;
+
+  return <StudyListClient studyList={studyList} />;
 }

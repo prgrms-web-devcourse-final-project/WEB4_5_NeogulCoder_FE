@@ -7,7 +7,7 @@ type MenuProps = {
 export default function ClickVerticalMenu({ title }: MenuProps) {
   return (
     <>
-      <div className='absolute right-0 mt-2 w-[160px] border border-main/10 bg-white rounded-md shadow-lg overflow-hidden tm3 z-11'>
+      <div className='absolute right-0 mt-2 w-[160px] border border-main/10 bg-white rounded-md shadow-lg overflow-hidden tm3 z-3'>
         <div className='gap-3 px-4 py-3'>
           <span className='text-[#b2b2b2] tm5'>{`${title}`}</span>
         </div>
