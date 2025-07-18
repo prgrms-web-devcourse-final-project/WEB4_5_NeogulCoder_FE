@@ -1,21 +1,30 @@
-export default function StudyPostItem({ type }: { type: string }) {
+import dateFormatting from '@/utils/dateFormatting';
+
+type DashBoardPostType = {
+  id: number;
+  title: string;
+  category: string;
+  content: string;
+  createdDate: string;
+  commentCount: number;
+};
+export default function StudyPostItem({ data }: { data: DashBoardPostType }) {
   return (
     <>
       <div className='flex justify-between items-center gap-3'>
         <div className='w-full flex gap-3'>
           <span
-            className={`shrink-0 tag-type3 ${type === '공지' && 'red'} ${
-              type === 'new' && 'bg-yellow!'
+            className={`shrink-0 tag-type3 ${
+              data.category === 'NOTICE' ? 'red' : 'bg-yellow!'
             }`}
           >
-            {type}
+            {data.category === 'NOTICE' ? '공지' : 'new'}
           </span>
-          <p className='w-full line-clamp-1 tm4'>
-            공지글 제목입니다.공지글 제목입니다.공지글 제목입니다.공지글
-            제목입니다.공지글 제목입니다.공지글 제목입니다.공지글 제목입니다.
-          </p>
+          <p className='w-full line-clamp-1 tm4'>{data.title}</p>
         </div>
-        <p className='shrink-0 t5 text-gray5'>2025.07.02</p>
+        <p className='shrink-0 t5 text-gray5'>
+          {dateFormatting(data.createdDate)}
+        </p>
       </div>
     </>
   );
