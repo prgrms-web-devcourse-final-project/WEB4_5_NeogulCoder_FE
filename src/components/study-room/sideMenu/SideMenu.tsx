@@ -12,12 +12,12 @@ export default function SideMenu({
   const router = useRouter();
 
   const menuItems = [
-    { name: '스터디 대시보드', to: '/study/1/dashboard' },
-    { name: '팀 캘린더', to: '/study/1/calendar' },
-    { name: '모임 일정 조율', to: '/study/1/study-schedule' },
-    { name: '스터디 커뮤니티', to: '/study/1/study-community' },
-    { name: '팀 채팅', to: '/study/1/chat' },
-    { name: '스터디 관리', to: '/study/1/management' },
+    { name: '스터디 대시보드', to: '/study/10/dashboard' },
+    { name: '팀 캘린더', to: '/study/10/calendar' },
+    { name: '모임 일정 조율', to: '/study/10/study-schedule' },
+    { name: '스터디 커뮤니티', to: '/study/10/study-community' },
+    { name: '팀 채팅', to: '/study/10/chat' },
+    { name: '스터디 관리', to: '/study/10/management' },
   ];
   // 추후에 실제 study/1 을 실제 study/id로 수정해주세요!
   return (

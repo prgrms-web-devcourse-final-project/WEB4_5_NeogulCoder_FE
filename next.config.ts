@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       new URL('https://i.pinimg.com/**'),
       new URL('https://dummyimage.com/**'),
       new URL('http://localhost:8083/**'),
+      new URL('https://wibby.com/profile/**'),
     ],
   },
 };
