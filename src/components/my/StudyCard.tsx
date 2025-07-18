@@ -39,12 +39,14 @@ export default function StudyCard({
             </span>
           </div>
         </div>
-        <div className='flex justify-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%]'>
-          <Image
-            src={imageUrl ? imageUrl : studyDefault}
-            alt='스터디 대표 이미지'
-            priority
-          />
+        <div className='flex justify-center items-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%]'>
+          <div className='relative w-[40px] h-[40px]'>
+            <Image
+              src={imageUrl ? imageUrl : studyDefault}
+              alt='스터디 대표 이미지'
+              fill
+            />
+          </div>
         </div>
       </div>
       <div className='flex justify-center items-center px-3 py-4 rounded-[10px] bg-gray4 mt-5'>
