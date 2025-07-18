@@ -1,9 +1,7 @@
-import Pr from './pr/page';
-
-export default function page() {
+export default function Profile() {
   return (
     <>
-      <Pr />
+      <h1>Profile Component</h1>
     </>
   );
 }

@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { userAuthStore } from '@/store/userStore';
+import { userAuthStore } from '@/stores/userStore';
 
 export default function UserStore() {
   useEffect(() => {
-    userAuthStore.getState().fetchUser();
+    const loginStatus = localStorage.getItem('login_status');
+    // console.log(loginStatus);
+    if (loginStatus === 'Y') userAuthStore.getState().fetchUser();
   }, []);
 
   return null;
