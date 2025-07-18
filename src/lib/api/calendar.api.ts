@@ -2,7 +2,13 @@ import { axiosInstance } from './axios';
 
 // 내 스터디 목록
 export const getStudies = async () => {
-  const { data } = await axiosInstance.get('/api/studies');
+  const { data } = await axiosInstance.get('/api/studies', {
+    params: {
+      page: 0,
+      size: 1,
+      sort: [],
+    },
+  });
   return data;
 };
 
@@ -14,7 +20,8 @@ export const getStudy = async (studyId: number) => {
 
 // 스터디별 일정 전체 목록 조회
 export const getStudyEvents = async (studyId: number) => {
-  return await axiosInstance.get(`/api/teams/${studyId}/calendar`);
+  const { data } = await axiosInstance.get(`/api/teams/${studyId}/calendar`);
+  return data;
 };
 
 // 스터디 일정 날짜별 조회
@@ -51,9 +58,12 @@ export const putStudyEvent = async (
 };
 
 // 스터디팀 일정 삭제
-export const deleteStudyEvent = async (studyId: number, calendarId: number) => {
+export const deleteStudyEvent = async (
+  studyId: number,
+  teamCalendarId: number
+) => {
   const { data } = await axiosInstance.delete(
-    `/api/teams/${studyId}/calendar/${calendarId}`
+    `/api/teams/${studyId}/calendar/${teamCalendarId}`
   );
   return data;
 };

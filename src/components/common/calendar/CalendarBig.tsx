@@ -12,11 +12,12 @@ export default function CalendarBig({
   openDetailHandler,
   colorStr,
 }: {
-  events: StudyScheduleType[];
+  events: UnionScheduleType[];
   openDetailHandler: (date: string) => void;
   colorStr?: string;
 }) {
   const calendarRef = useRef(null);
+  console.log('calendar', events);
 
   // 캘린더 컬러값
   const colors = [
@@ -68,7 +69,7 @@ export default function CalendarBig({
       colorStr != null
         ? colorStr
         : userColors.find(
-            (item) => item.id === (result as StudyScheduleType).writerId
+            (item) => item.id === (result as UnionScheduleType).writerId
           )?.color;
 
     const startDate = dayjs(result.startTime).format('YYYY-MM-DD');

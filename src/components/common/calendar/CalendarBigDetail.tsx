@@ -5,8 +5,13 @@ import CalendarBigDetailItem from './CalendarBigDetailItem';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { dayFormatting } from '@/utils/day';
-import { getStudyDayEvents, getUserDayEvents } from '@/lib/api/calendar.api';
+import {
+  deleteStudyEvent,
+  getStudyDayEvents,
+  getUserDayEvents,
+} from '@/lib/api/calendar.api';
 import { useEffect, useState } from 'react';
+import { userAuthStore } from '@/stores/userStore';
 dayjs.extend(isBetween);
 
 export default function CalendarBigDetail({
@@ -20,7 +25,7 @@ export default function CalendarBigDetail({
   studyId: number;
   type: string;
 }) {
-  const authId = 12; // 로그인 기능 구현 되면 로그인사용자 ID
+  const authId = userAuthStore().user?.id;
   const dateFormat = (date: string) => {
     const dateString =
       dayjs(date).get('y') +
@@ -34,85 +39,42 @@ export default function CalendarBigDetail({
   };
 
   // 해당 날짜에 해당하는 개인일정, 스터디일정의 목록을 조회하는 api호출 예정...
-  // const [event, setEvents] = useState([]);
-  // useEffect(() => {
-  //   const fetchDateEvent = async () => {
-  //     if (type === 'personal') {
-  //       const { data } = await getUserDayEvents(authId, date);
-  //       setEvents(data);
-  //     } else {
-  //       const { data } = await getStudyDayEvents(studyId, date);
-  //       setEvents(data);
-  //     }
-  //   };
-  //   fetchDateEvent();
-  // }, [type, studyId, date]);
-
-  // 더미데이터 (날짜별 api 생기면 삭제할 내용)
-  const results = [
-    {
-      calendarId: 2001,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '14일 일정',
-      description: '기획 회의',
-      startTime: '2025-07-14T02:01:35',
-      endTime: '2025-07-14T02:01:35',
-    },
-    {
-      calendarId: 2002,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '24-25',
-      description: '기획 회의',
-      startTime: '2025-07-24T02:01:35',
-      endTime: '2025-07-25T18:01:35',
-    },
-    {
-      calendarId: 2003,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '기능개발',
-      description: '기획 회의',
-      startTime: '2025-07-17T02:01:35',
-      endTime: '2025-07-18T03:01:35',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-18T02:01:35',
-      endTime: '2025-07-20T03:18:35',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-16T02:01:35',
-      endTime: '2025-07-16T03:18:35',
-    },
-  ];
-
-  // 더미데이터 날짜 filter (날짜별 api 생기면 대체할 내용)
-  const filterResults = results.filter((result) => {
-    const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
-    const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
-    return dayjs(date).isBetween(startDay, endDay, 'day', '[]');
-  });
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    if (!authId) return;
+    const fetchDateEvent = async () => {
+      if (type === 'personal') {
+        const { data } = await getUserDayEvents(authId, date);
+        setEvents(data);
+      } else {
+        const { data } = await getStudyDayEvents(studyId, date);
+        setEvents(data);
+      }
+    };
+    fetchDateEvent();
+  }, [type, studyId, date, authId]);
+  const refetch = async () => {
+    if (!authId) return;
+    if (type === 'personal') {
+      const { data } = await getUserDayEvents(authId, date);
+      setEvents(data);
+    } else {
+      const { data } = await getStudyDayEvents(studyId, date);
+      setEvents(data);
+    }
+  };
+  const handleDelete = async (teamCalendarId: number) => {
+    await deleteStudyEvent(studyId, teamCalendarId)
+      .then((res) => {
+        if (res) {
+          alert('일정 삭제에 성공했습니다.');
+          refetch(); //📌 일정삭제후에 디테일 refetch() 하고 싶음 근데 안되는중
+        }
+      })
+      .catch((error) => {
+        console.log('일정 삭제에 실패했습니다.', error);
+      });
+  };
 
   return (
     <>
@@ -129,12 +91,14 @@ export default function CalendarBigDetail({
             {/* 내용 */}
             <p className='t3 mb-6 px-9 '>{`${dateFormat(date)}요일`}</p>
             <div className='overflow-auto max-h-[calc(90vh-160px)] flex flex-col gap-5 px-9 pb-7'>
-              {filterResults && filterResults.length > 0 ? (
-                filterResults.map((result, i) => (
+              {events && events.length > 0 ? (
+                events.map((event, i) => (
                   <CalendarBigDetailItem
                     key={`schedule${i}`}
                     studyId={studyId}
-                    result={result}
+                    result={event}
+                    type={type}
+                    handleDelete={handleDelete}
                   />
                 ))
               ) : (

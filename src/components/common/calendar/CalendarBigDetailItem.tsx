@@ -12,21 +12,39 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CalendarWrite from './CalendarWrite';
 import dayjs from 'dayjs';
+import musicBunny from '@/assets/images/music-bunny.svg';
+import { userAuthStore } from '@/stores/userStore';
+import { scheduler } from 'timers/promises';
 
 export default function CalendarBigDetailItem({
+  type,
   result,
   studyId,
+  handleDelete,
 }: {
+  type: string;
   result: StudyScheduleType;
   studyId: number;
+  handleDelete: (calendarId: number) => void;
 }) {
-  const authId = 12;
+  const authId = userAuthStore().user?.id;
   const [open, setOpen] = useState(false);
   const [writeOpen, setWriteOpen] = useState(false);
   const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
   const startTime = dayjs(result.startTime).format('HH:mm');
   const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
   const endTime = dayjs(result.endTime).format('HH:mm');
+
+  // userId -> writerId , 개인일정이랑 스터디일정이랑 포맷이 약간만 달라서 포맷에 맞춰서 데이터 전달
+  function FormattingResult(item: StudyScheduleType | UserScheduleType) {
+    if ('userId' in item) {
+      const { userId, personalCalendarId, ...rest } = item;
+      return { ...rest, writerId: userId, scheduleId: personalCalendarId };
+    } else {
+      const { teamCalendarId, ...rest } = item;
+      return { ...rest, scheduleId: teamCalendarId };
+    }
+  }
 
   return (
     <>
@@ -53,7 +71,7 @@ export default function CalendarBigDetailItem({
               <div>
                 <div className='w-12 h-12 rounded-full overflow-hidden border border-border1'>
                   <Image
-                    src={result.writerProfileImageUrl}
+                    src={result.writerProfileImageUrl ?? musicBunny}
                     width={48}
                     height={0}
                     alt='작성자 프로필'
@@ -81,7 +99,10 @@ export default function CalendarBigDetailItem({
                   >
                     <PencilLine className='w-4 h-4' /> 수정하기
                   </button>
-                  <button className='flex gap-3 text-red'>
+                  <button
+                    onClick={() => handleDelete(result.teamCalendarId)}
+                    className='flex gap-3 text-red'
+                  >
                     <Trash2 className='w-4 h-4' color='#ff5955' /> 삭제하기
                   </button>
                 </div>
@@ -93,8 +114,9 @@ export default function CalendarBigDetailItem({
       </div>
       {writeOpen && (
         <CalendarWrite
+          type={type}
           writeCloseHandler={() => setWriteOpen(false)}
-          data={result}
+          data={FormattingResult(result)}
           studyId={studyId}
         />
       )}

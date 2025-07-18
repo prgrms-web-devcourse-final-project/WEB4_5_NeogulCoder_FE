@@ -7,6 +7,7 @@ import {
   putStudyEvent,
   putUserEvent,
 } from '@/lib/api/calendar.api';
+import { userAuthStore } from '@/stores/userStore';
 
 export default function CalendarWrite({
   type,
@@ -16,10 +17,10 @@ export default function CalendarWrite({
 }: {
   type: string;
   writeCloseHandler: () => void;
-  data?: StudyScheduleType;
+  data?: UnionScheduleType;
   studyId: number;
 }) {
-  const userId = 12; //로그인 구현되면 가져올 Id값
+  const authId = Number(userAuthStore().user?.id);
   const [title, setTitle] = useState(data ? data.title : '');
   const [content, setContent] = useState(data ? data.description : '');
   const [startDay, setStartDay] = useState(
@@ -63,11 +64,11 @@ export default function CalendarWrite({
             endTime: end,
           };
           // api 구현후...
-          // if (data) {
-          //   putUserEvent(userId, data.calendarId, inputData);
-          // } else {
-          //   postUserEvent(userId, inputData);
-          // }
+          if (data) {
+            putUserEvent(authId, data.scheduleId, inputData);
+          } else {
+            postUserEvent(authId, inputData);
+          }
         } else {
           const inputData = {
             teamId: studyId,
@@ -77,13 +78,13 @@ export default function CalendarWrite({
             endTime: end,
           };
           // api 구현후...
-          // if (data) {
-          //   putStudyEvent(studyId, data.calendarId, inputData);
-          // } else {
-          //   postStudyEvent(studyId, inputData);
-          // }
+          if (data) {
+            putStudyEvent(studyId, data.scheduleId, inputData);
+          } else {
+            postStudyEvent(studyId, inputData);
+          }
         }
-
+        writeCloseHandler();
         alert('✨데이터가 등록 되었습니다.');
       } else {
         alert('🚫시작날짜가 종료날짜보다 큽니다.');

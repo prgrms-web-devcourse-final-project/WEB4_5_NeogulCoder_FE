@@ -1,9 +1,9 @@
 type StudyScheduleType = {
-  calendarId: number;
+  teamCalendarId: number;
+  studyId: number;
   writerId: number;
   writerNickname: string;
-  writerProfileImageUrl: string;
-  teamId?: number;
+  writerProfileImageUrl: string | null;
   title: string;
   description: string;
   startTime: string;
@@ -11,10 +11,22 @@ type StudyScheduleType = {
 };
 
 type UserScheduleType = {
-  calendarId: number;
+  personalCalendarId: number;
   userId: number;
   writerNickname: string;
-  writerProfileImageUrl: string;
+  writerProfileImageUrl: string | null;
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+};
+
+type UnionScheduleType = {
+  scheduleId: number;
+  studyId?: number;
+  writerId: number;
+  writerNickname: string;
+  writerProfileImageUrl: string | null;
   title: string;
   description: string;
   startTime: string;

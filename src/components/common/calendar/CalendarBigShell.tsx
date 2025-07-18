@@ -12,7 +12,7 @@ export default function CalendarBigShell({
   categories,
 }: {
   type: string;
-  defaultEvents: StudyScheduleType[];
+  defaultEvents: UnionScheduleType[];
   categories: { name: string; id: number }[];
 }) {
   const first = useRef(false);
@@ -41,34 +41,51 @@ export default function CalendarBigShell({
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [colorNumber, setColorNumber] = useState(0);
 
-  const [events, setEvent] = useState<StudyScheduleType[]>(defaultEvents);
-  console.log(events);
-  // 카테고리가 변경 되면 각 카테고리에 맞는 api일정을 가져오도록.. api 개발이 덜 돼서 막아놓음
-  // useEffect(() => {
-  //   if (!first.current) {
-  //     first.current = true;
-  //     return;
-  //   }
-  //   if (type !== 'my') return;
-  //   const fetchEvents = async () => {
-  //     if (selectedCategory.name === '내 일정') {
-  //       const { data }: { data: UserScheduleType[] } = await getUserEvents(
-  //         selectedCategory.id
-  //       );
-  //       // userId -> writerId
-  //       const updatedEvents = data.map(({ userId, ...rest }) => ({
-  //         ...rest,
-  //         writerId: userId,
-  //       }));
-  //       setEvent(updatedEvents);
-  //     } else {
-  //       const { data } = await getStudyEvents(selectedCategory.id);
-  //       setEvent(data);
-  //     }
-  //   };
+  // defaultEvents 값이 들어오면 화면 업데이트
+  const [events, setEvents] = useState<UnionScheduleType[]>(defaultEvents);
+  useEffect(() => {
+    setEvents(defaultEvents);
+  }, [defaultEvents]);
 
-  //   fetchEvents();
-  // }, [selectedCategory, type]);
+  // userId -> writerId
+  function FormattingResult(items: StudyScheduleType[] | UserScheduleType[]) {
+    return items.map((item) => {
+      if ('userId' in item) {
+        const { userId, personalCalendarId, ...rest } = item;
+        return {
+          ...rest,
+          writerId: userId,
+          scheduleId: personalCalendarId,
+        };
+      } else {
+        const { teamCalendarId, ...rest } = item;
+        return { ...rest, scheduleId: teamCalendarId };
+      }
+    });
+  }
+
+  // 카테고리가 변경 되면 각 카테고리에 맞는 api일정을 가져오도록.. api 개발이 덜 돼서 막아놓음
+  useEffect(() => {
+    if (!first.current) {
+      first.current = true;
+      return;
+    }
+    if (type !== 'my') return;
+    const fetchEvents = async () => {
+      if (selectedCategory.name === '내 일정') {
+        const { data }: { data: UserScheduleType[] } = await getUserEvents(
+          selectedCategory.id
+        );
+
+        setEvents(FormattingResult(data));
+      } else {
+        const { data } = await getStudyEvents(selectedCategory.id);
+        setEvents(FormattingResult(data));
+      }
+    };
+
+    fetchEvents();
+  }, [selectedCategory, type]);
 
   // 캘린더 컬러값
   const colors = [
