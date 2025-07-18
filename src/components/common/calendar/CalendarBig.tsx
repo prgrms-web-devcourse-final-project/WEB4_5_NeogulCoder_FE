@@ -17,7 +17,6 @@ export default function CalendarBig({
   colorStr?: string;
 }) {
   const calendarRef = useRef(null);
-  console.log('calendar', events);
 
   // 캘린더 컬러값
   const colors = [

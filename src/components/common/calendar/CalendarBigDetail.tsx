@@ -7,22 +7,29 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { dayFormatting } from '@/utils/day';
 import {
   deleteStudyEvent,
+  deleteUserEvent,
   getStudyDayEvents,
   getUserDayEvents,
 } from '@/lib/api/calendar.api';
 import { useEffect, useState } from 'react';
 import { userAuthStore } from '@/stores/userStore';
+import { ScheduleInputType } from './CalendarBigShell';
+import CalendarBigDetailItemSkeleton from './Skeleton/CalendarBigDetailItemSkeleton';
 dayjs.extend(isBetween);
 
 export default function CalendarBigDetail({
+  handleEventUpdate,
+  handleEventDelete,
   closeDetailHandler,
   date,
-  studyId,
+  categoryId,
   type,
 }: {
+  handleEventUpdate: (id: number, data: ScheduleInputType) => void;
+  handleEventDelete: (id: number) => void;
   closeDetailHandler: () => void;
   date: string;
-  studyId: number;
+  categoryId: number;
   type: string;
 }) {
   const authId = userAuthStore().user?.id;
@@ -39,41 +46,91 @@ export default function CalendarBigDetail({
   };
 
   // 해당 날짜에 해당하는 개인일정, 스터디일정의 목록을 조회하는 api호출 예정...
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<UnionScheduleType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (!authId) return;
     const fetchDateEvent = async () => {
-      if (type === 'personal') {
-        const { data } = await getUserDayEvents(authId, date);
-        setEvents(data);
-      } else {
-        const { data } = await getStudyDayEvents(studyId, date);
-        setEvents(data);
+      setIsLoading(true);
+      let data;
+      try {
+        if (type === 'personal') {
+          const { data: result } = await getUserDayEvents(authId, date);
+          data = result;
+        } else {
+          const { data: result } = await getStudyDayEvents(categoryId, date);
+          data = result;
+        }
+        setEvents(FormattingResult(data));
+      } catch (error) {
+        console.log('상세일정을 불러오지 못했습니다.', error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchDateEvent();
-  }, [type, studyId, date, authId]);
-  const refetch = async () => {
-    if (!authId) return;
-    if (type === 'personal') {
-      const { data } = await getUserDayEvents(authId, date);
-      setEvents(data);
-    } else {
-      const { data } = await getStudyDayEvents(studyId, date);
-      setEvents(data);
+  }, [type, categoryId, date, authId]);
+
+  // userId -> writerId, teamCalendarId,personalCalendarId -> scheduleId //개인일정, 팀일정 포맷 맞추기
+  function FormattingResult(items: StudyScheduleType[] | UserScheduleType[]) {
+    return items.map((item) => {
+      if ('userId' in item) {
+        const { userId, personalCalendarId, ...rest } = item;
+        return {
+          ...rest,
+          writerId: userId,
+          scheduleId: personalCalendarId,
+        };
+      } else {
+        const { teamCalendarId, ...rest } = item;
+        return { ...rest, scheduleId: teamCalendarId };
+      }
+    });
+  }
+
+  // 상세일정삭제
+  const handleEventDetailDelete = (scheduleId: number) => {
+    setEvents((prev) => prev.filter((f) => f.scheduleId !== scheduleId));
+  };
+
+  const handleDelete = async (scheduleId: number) => {
+    try {
+      const deleteFn = type === 'personal' ? deleteUserEvent : deleteStudyEvent;
+      const res = await deleteFn(categoryId, scheduleId);
+
+      if (res) {
+        alert('일정 삭제에 성공했습니다.');
+        handleEventDelete(scheduleId); // 전체에서 삭제
+        handleEventDetailDelete(scheduleId); // 상세에서 삭제
+      } else {
+        alert('일정 삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('일정 삭제 중 오류 발생:', error);
+      alert('일정 삭제 중 오류가 발생했습니다.');
     }
   };
-  const handleDelete = async (teamCalendarId: number) => {
-    await deleteStudyEvent(studyId, teamCalendarId)
-      .then((res) => {
-        if (res) {
-          alert('일정 삭제에 성공했습니다.');
-          refetch(); //📌 일정삭제후에 디테일 refetch() 하고 싶음 근데 안되는중
-        }
-      })
-      .catch((error) => {
-        console.log('일정 삭제에 실패했습니다.', error);
-      });
+
+  // 상세일정수정
+  const handleDetailUpdate = (
+    scheduleId: number,
+    newData: ScheduleInputType
+  ) => {
+    setEvents((prev) =>
+      prev.map((item) =>
+        item.scheduleId === scheduleId ? { ...item, ...newData } : item
+      )
+    );
+  };
+
+  const handleUpdate = async (
+    scheduleId: number,
+    newData: ScheduleInputType
+  ) => {
+    handleEventUpdate(scheduleId, newData);
+    handleDetailUpdate(scheduleId, newData);
+
+    alert('수정 되었습니다.');
   };
 
   return (
@@ -91,14 +148,17 @@ export default function CalendarBigDetail({
             {/* 내용 */}
             <p className='t3 mb-6 px-9 '>{`${dateFormat(date)}요일`}</p>
             <div className='overflow-auto max-h-[calc(90vh-160px)] flex flex-col gap-5 px-9 pb-7'>
-              {events && events.length > 0 ? (
+              {isLoading ? (
+                <CalendarBigDetailItemSkeleton />
+              ) : events && events.length > 0 ? (
                 events.map((event, i) => (
                   <CalendarBigDetailItem
                     key={`schedule${i}`}
-                    studyId={studyId}
+                    categoryId={categoryId}
                     result={event}
                     type={type}
                     handleDelete={handleDelete}
+                    handleUpdate={handleUpdate}
                   />
                 ))
               ) : (

@@ -8,17 +8,22 @@ import {
   putUserEvent,
 } from '@/lib/api/calendar.api';
 import { userAuthStore } from '@/stores/userStore';
+import { ScheduleInputType } from './CalendarBigShell';
 
 export default function CalendarWrite({
   type,
-  writeCloseHandler,
+  categoryId,
   data,
-  studyId,
+  writeCloseHandler,
+  handleEventAdd,
+  handleUpdate,
 }: {
   type: string;
-  writeCloseHandler: () => void;
+  categoryId: number;
   data?: UnionScheduleType;
-  studyId: number;
+  writeCloseHandler: () => void;
+  handleEventAdd?: (data: ScheduleInputType) => void;
+  handleUpdate?: (id: number, data: ScheduleInputType) => void;
 }) {
   const authId = Number(userAuthStore().user?.id);
   const [title, setTitle] = useState(data ? data.title : '');
@@ -51,39 +56,52 @@ export default function CalendarWrite({
       const date1 = dayjs(start);
       const date2 = dayjs(end);
 
+      const event = {
+        title: title,
+        description: content,
+        startTime: start,
+        endTime: end,
+      };
+
       //시작날짜와 종료날짜  유효성 검사
       if (date1.isBefore(date2)) {
         // 개인일정 수정, 개인일정 등록
-        // 팀일정 수정, 팀일정 등록
         if (type === 'personal') {
           const inputData = {
-            userId: studyId,
+            userId: categoryId,
             title: title,
             description: content,
             startTime: start,
             endTime: end,
           };
-          // api 구현후...
+          // api
           if (data) {
-            putUserEvent(authId, data.scheduleId, inputData);
+            await putUserEvent(authId, data.scheduleId, inputData);
           } else {
-            postUserEvent(authId, inputData);
+            await postUserEvent(authId, inputData);
           }
         } else {
+          // 팀일정 수정, 팀일정 등록
           const inputData = {
-            teamId: studyId,
+            teamId: categoryId,
             title: title,
             description: content,
             startTime: start,
             endTime: end,
           };
-          // api 구현후...
+          // api
           if (data) {
-            putStudyEvent(studyId, data.scheduleId, inputData);
+            await putStudyEvent(categoryId, data.scheduleId, inputData);
           } else {
-            postStudyEvent(studyId, inputData);
+            await postStudyEvent(categoryId, inputData);
           }
         }
+        // 프론트에서 보이는 변경
+        // 등록 함수가 있으면 등록
+        handleEventAdd?.(event);
+        // 수정 함수가 있으면 수정
+        if (data) handleUpdate?.(data?.scheduleId, event);
+
         writeCloseHandler();
         alert('✨데이터가 등록 되었습니다.');
       } else {
@@ -210,9 +228,9 @@ export default function CalendarWrite({
                 <button
                   type='submit'
                   className='button-modal1'
-                  disabled={!(title && startDay && endDay)}
+                  disabled={!title || !startDay || !endDay || isPending}
                 >
-                  등록
+                  {data ? '수정' : '등록'}
                 </button>
               </div>
             </form>
