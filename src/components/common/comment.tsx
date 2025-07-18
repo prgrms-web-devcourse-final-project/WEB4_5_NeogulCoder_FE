@@ -25,6 +25,7 @@ export default function Comment({
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
+  // 상수로 사용하기
   const handleGoToPr = () => {
     router.push('/profile/pr');
   };
@@ -40,6 +41,7 @@ export default function Comment({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // util로 빼기
   const formatDate = (isoDate?: string) => {
     if (!isoDate) return '';
     return new Date(isoDate).toLocaleDateString('ko-KR', {

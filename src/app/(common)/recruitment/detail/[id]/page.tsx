@@ -17,6 +17,7 @@ export default function Page() {
   const handleGoToPr = () => {
     router.push('/profile/pr');
   };
+  const target = 'recruitment';
   const recruitmentPostId = Number(pathname.split('/').pop());
   const [isOpen, setIsOpen] = useState(false);
   const [appIsOpen, setAppIsOpen] = useState(false);
@@ -31,7 +32,10 @@ export default function Page() {
   const [userName, setUserName] = useState('');
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
-  // 추후에 추가될 데이터 const [expireDate, setExpireDate] = useState('');
+  const [commentCount, setCommentCount] = useState(0);
+  const [profileImageUrl, setProfileImageUrl] = useState('');
+  // 추후에 추가될 데이터
+  // const [expireDate, setExpireDate] = useState('');
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +50,7 @@ export default function Page() {
   //     setEndDate(data.endDate);
   //     setRecruitmentCount(data.recruitmentCount);
   //     setCreatedDate(data.createdDate);
-  //     setUsername(data.username);
+  //     setUserName(data.username);
   //     setSubject(data.subject);
   //     setContent(data.content);
   //   } catch (error) {
@@ -68,6 +72,8 @@ export default function Page() {
         userName: '닉네임',
         subject: '너굴 코더 스터디를 모집 합니다',
         content: '이펙티브 자바를 정독 하는 것을 목표로 하는 스터디 입니다',
+        commentCount: 11,
+        profileImageUrl: 'https://cdn.example.com/profile.jpg',
       };
 
       // 응답으로 받은 것처럼 state 세팅
@@ -81,6 +87,8 @@ export default function Page() {
       setUserName(dummyResponse.userName);
       setSubject(dummyResponse.subject);
       setContent(dummyResponse.content);
+      setCommentCount(dummyResponse.commentCount);
+      setProfileImageUrl(dummyResponse.profileImageUrl);
     } catch (error) {
       console.error('데이터 불러오기 실패:', error);
     }
@@ -220,10 +228,15 @@ export default function Page() {
           </button>
         </div>
         <div className='w-[852px]'>
-          <WriteComment />
+          <WriteComment
+            target={target}
+            postId={recruitmentPostId}
+            commentCount={commentCount}
+            profileImageUrl={profileImageUrl}
+          />
         </div>
         <div className='w-[852px]'>
-          <CommentList studyId={1} postId={4} />
+          <CommentList target={target} studyId={1} postId={4} />
         </div>
         {isOpen && (
           <Modal
