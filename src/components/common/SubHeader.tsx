@@ -27,7 +27,7 @@ export default function SubHeader() {
           </div>
           <div className='flex gap-6 cursor-pointer'>
             <Link
-              href={'/study/1/dashboard'}
+              href={'/study/9/dashboard'}
               type='button'
               className='w-8 h-8 rounded-[12px] bg-gray3 flex items-center justify-center 
              shadow-[0_1px_4px_rgba(0,0,0,0.12)] hover:drop-shadow'
@@ -39,7 +39,7 @@ export default function SubHeader() {
               />
             </Link>
             <Link
-              href={'/study/2/dashboard'}
+              href={'/study/10/dashboard'}
               type='button'
               className='w-8 h-8 rounded-[12px] bg-gray3 flex items-center justify-center 
              shadow-[0_1px_4px_rgba(0,0,0,0.12)] hover:drop-shadow'

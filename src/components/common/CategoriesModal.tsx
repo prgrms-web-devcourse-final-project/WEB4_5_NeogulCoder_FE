@@ -1,7 +1,9 @@
-export default function CategoryModal({
+export default function CategoriesModal({
   onSelect,
+  customCss,
 }: {
   onSelect: (category: string) => void;
+  customCss?: string;
 }) {
   const category = [
     '어학',
@@ -18,12 +20,17 @@ export default function CategoryModal({
     '기타',
   ];
   return (
-    <div className='w-[132px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3'>
-      <div className='flex flex-col gap-2'>
+    <div
+      className={`w-[200px] border border-main/10 bg-white rounded-[10px] shadow-sm overflow-hidden tm4 p-3 ${
+        customCss ? customCss : ''
+      }`}
+    >
+      <div className='grid grid-cols-2 gap-2 items-center justify-center'>
         {category.map((category) => (
           <button
+            type='button'
             key={category}
-            className='px-4 py-2 text-tm3 hover:bg-gray4 rounded-[10px] text-left'
+            className='px-4 py-2 text-tm3 hover:bg-gray4 rounded-[10px]'
             onClick={() => onSelect(category)}
           >
             {category}

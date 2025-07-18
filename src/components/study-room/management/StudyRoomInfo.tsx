@@ -6,7 +6,11 @@ import { PenLine } from 'lucide-react';
 import StudyRoomInfoWrite from './StudyRoomInfoWrite';
 import { useState } from 'react';
 
-export default function StudyRoomInfo() {
+export default function StudyRoomInfo({
+  studyInfoData,
+}: {
+  studyInfoData: StudyInfoType;
+}) {
   const [infoModal, setInfoModal] = useState(false);
   const infoModalOpen = () => {
     setInfoModal(true);
@@ -17,28 +21,37 @@ export default function StudyRoomInfo() {
   const infos = [
     {
       title: '이름',
-      conent: '너굴코더',
+      content: studyInfoData.name,
     },
     {
       title: '카테고리',
-      conent: '개발/IT',
+      content: studyInfoData.category,
     },
     {
       title: '인원수',
-      conent: '6명',
+      content: `${studyInfoData.capacity}명`,
     },
     {
       title: '진행방식',
-      conent: '온/오프라인, 서울시',
+      content: `${
+        studyInfoData.studyType === 'ONLINE'
+          ? '온라인'
+          : studyInfoData.studyType === 'OFFLINE'
+          ? '오프라인'
+          : '온/오프라인'
+      } ${
+        studyInfoData.studyType !== 'ONLINE'
+          ? ', ' + studyInfoData.location
+          : ''
+      }`,
     },
     {
       title: '기간',
-      conent: '2025.07.07 ~ 2025.07.31',
+      content: `${studyInfoData.startDate} ~ ${studyInfoData.endDate}`,
     },
     {
       title: '한줄소개',
-      conent:
-        ' 안녕하세요. 너굴코더 스터디입니다.안녕하세요. 너굴코더 스터디입니다.안녕하세요. 너굴코더 스터디입니다.',
+      content: studyInfoData.introduction,
     },
   ];
   return (
@@ -51,7 +64,7 @@ export default function StudyRoomInfo() {
       </div>
       <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto'>
         <Image
-          src='https://i.pinimg.com/1200x/7f/6a/56/7f6a561d683ee6001f540e358b933da9.jpg'
+          src={studyInfoData.imageUrl}
           width={120}
           height={0}
           alt='스터디이미지'
@@ -62,11 +75,16 @@ export default function StudyRoomInfo() {
           <StudyRoomInfoCard
             key={`info${i}`}
             title={info.title}
-            content={info.conent}
+            content={info.content}
           />
         ))}
       </div>
-      {infoModal && <StudyRoomInfoWrite closeFn={infoModalClose} />}
+      {infoModal && (
+        <StudyRoomInfoWrite
+          studyInfoData={studyInfoData}
+          closeFn={infoModalClose}
+        />
+      )}
     </>
   );
 }
