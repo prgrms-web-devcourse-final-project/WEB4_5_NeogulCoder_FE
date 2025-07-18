@@ -15,3 +15,21 @@ export type StudyList = {
   totalPage: number;
   totalElementCount: number;
 };
+
+export type ApplicationList = {
+  applications: {
+    name: string;
+    leaderNickname: string;
+    capacity: number;
+    currentCount: number;
+    startDate: string;
+    imageUrl: string;
+    introduction: string;
+    category: string;
+    studyType: string;
+    status: string;
+    read: boolean;
+  }[];
+  totalPage: number;
+  totalElementCount: number;
+};
