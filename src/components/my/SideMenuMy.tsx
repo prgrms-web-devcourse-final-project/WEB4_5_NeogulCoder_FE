@@ -1,4 +1,5 @@
 'use client';
+
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SideMenuItemMy from './SideMenuItemMy';

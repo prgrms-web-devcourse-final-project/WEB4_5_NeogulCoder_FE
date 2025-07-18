@@ -1,22 +1,43 @@
 'use client';
+import { axiosInstance } from '@/lib/api/axios';
+import { userAuthStore } from '@/stores/userStore';
 import { BookCopy, LogOut } from 'lucide-react';
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function UserInfoModal() {
+export default function UserInfoModal({
+  onItemClick,
+}: {
+  onItemClick: () => void;
+}) {
   const router = useRouter();
+  const me = userAuthStore((state) => state.user);
+  // console.log(me);
 
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    if (me?.id) {
+      router.push(`/profile/pr/${me.id}`);
+      onItemClick();
+    }
   };
 
   const handleMyPage = () => {
     router.push('/my/calendar');
+    onItemClick();
   };
 
-  const handleLogin = () => {
-    router.push('/auth/login');
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/auth/logout');
+      onItemClick();
+      localStorage.removeItem('login_status');
+      userAuthStore.getState().clearUser();
+      router.push('/');
+    } catch (error) {
+      console.error('로그아웃 실패: ', error);
+    }
   };
+
   return (
     <div className='w-[160px] border border-main/10 bg-white rounded-md shadow-sm overflow-hidden tm5'>
       <button
@@ -44,7 +65,7 @@ export default function UserInfoModal() {
       <button
         type='button'
         className='flex items-center gap-3 px-4 py-3 w-full hover:bg-gray4'
-        onClick={handleLogin}
+        onClick={handleLogout}
       >
         <LogOut className='w-4 h-4 text-gray5' />
         로그아웃
