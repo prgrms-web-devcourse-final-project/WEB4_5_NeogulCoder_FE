@@ -1,38 +1,37 @@
 'use client';
-import CalendarBig from '@/components/common/calendar/CalendarBig';
-import CalendarBigDetail from '@/components/common/calendar/CalendarBigDetail';
-import CalendarWrite from '@/components/common/calendar/CalendarWrite';
-import { useState } from 'react';
+import CalendarBigShell from '@/components/common/calendar/CalendarBigShell';
+import { getStudyEvents } from '@/lib/api/calendar.api';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function Calendar() {
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [writeOpen, setWriteOpen] = useState(false);
-  const openHandler = () => {
-    setDetailOpen(true);
-  };
-  const closeHandler = () => {
-    setDetailOpen(false);
-  };
+  const params = useParams();
+  const studyId = Number(params.id);
 
-  const writeOpenHandler = () => {
-    setWriteOpen(true);
-  };
-  const writeCloseHandler = () => {
-    setWriteOpen(false);
-  };
+  const [events, setEvents] = useState<StudyScheduleType[]>([]);
+  useEffect(() => {
+    const fetchStudyEvent = async () => {
+      await getStudyEvents(studyId)
+        .then((res) => {
+          const { data: result } = res.data;
+          setEvents(result);
+        })
+        .catch((error) => {
+          console.error('스터디 일정 가져오기 실패: ', error);
+        });
+    };
+    fetchStudyEvent();
+  }, [studyId]);
+
+  const categories = [{ name: '스터디', id: studyId }]; // 스터디 캘린더에서는 해당 스터디만 보임
+
   return (
     <>
-      <div>
-        <h1 className='tb3'>팀 캘린더</h1>
-      </div>
-      <div className='flex justify-end mb-3'>
-        <button onClick={writeOpenHandler} className='button-sm-type1'>
-          일정등록
-        </button>
-      </div>
-      <CalendarBig openHandler={openHandler} />
-      {detailOpen && <CalendarBigDetail closeHandler={closeHandler} />}
-      {writeOpen && <CalendarWrite writeCloseHandler={writeCloseHandler} />}
+      <CalendarBigShell
+        type='study'
+        defaultEvents={events}
+        categories={categories}
+      />
     </>
   );
 }

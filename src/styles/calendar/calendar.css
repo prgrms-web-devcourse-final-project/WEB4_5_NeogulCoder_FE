@@ -59,6 +59,9 @@
 .big-calendar .fc .fc-daygrid-day.fc-day-today {
   background-color: transparent;
 }
+.big-calendar .fc .fc-daygrid-day {
+  cursor: pointer;
+}
 
 .big-calendar .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
   color: #fff;
@@ -78,6 +81,12 @@
   font-size: 12px;
   font-weight: 300;
   float: right;
+}
+.big-calendar .fc-event-time {
+  display: none;
+}
+.big-calendar .fc-daygrid-event-harness {
+  z-index: -1;
 }
 
 /* 대시보드 작은 캘린더 */
@@ -113,7 +122,6 @@
 .small-calendar .fc .fc-day-other .fc-daygrid-day-top {
   opacity: 0;
 }
-
 .small-calendar .fc-daygrid-day-bottom {
   display: flex;
   justify-content: center;
@@ -136,8 +144,10 @@
 }
 .small-calendar .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
   min-height: 0;
+  z-index: -1;
 }
 
 .small-calendar .fc-day.fc-daygrid-day {
   min-height: 50px;
+  cursor: pointer;
 }
