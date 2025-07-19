@@ -1,5 +1,4 @@
 import SideMenu from '@/components/study-room/sideMenu/SideMenu';
-import { getStudyHeaderData } from '@/lib/api/study.api';
 
 export default async function layout({
   children,
@@ -9,7 +8,6 @@ export default async function layout({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  // const { data: StudyHeaderType } = await getStudyHeaderData(Number(id));
 
   const studyHeaderData = {
     name: '자바 스터디',
@@ -18,11 +16,12 @@ export default async function layout({
     studyType: 'ONLINE',
     location: '서울',
   };
+
   return (
     <>
       <div className='flex'>
         <div className='w-[300px] mr-10 shrink-0'>
-          <SideMenu studyHeaderData={studyHeaderData} />
+          <SideMenu studyHeaderData={studyHeaderData} studyId={Number(id)} />
         </div>
         <div className='w-full'>{children}</div>
       </div>

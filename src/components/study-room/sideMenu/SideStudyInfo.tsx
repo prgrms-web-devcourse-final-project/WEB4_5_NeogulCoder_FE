@@ -1,11 +1,12 @@
 import { Backpack, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
+import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 
 export default function SideStudyInfo({
-  studyHeaderData,
+  studyInfo,
 }: {
-  studyHeaderData: StudyHeaderType;
+  studyInfo: StudyInfoType;
 }) {
   return (
     <>
@@ -15,29 +16,23 @@ export default function SideStudyInfo({
             <Image width={70} src={musicBunny} alt='예시 기본 프사' />
           </div>
           <div>
-            <p className='tb3 cursor-default'>{studyHeaderData.name}</p>
+            <p className='tb3 cursor-default'>{studyInfo.name}</p>
             <p className='t4 break-words whitespace-normal'>
-              {studyHeaderData.introduction}
+              {studyInfo.introduction}
             </p>
           </div>
         </div>
         <div className='flex gap-x-4 justify-center mt-1.5'>
           <p className='t5 flex gap-1 items-center'>
             <Backpack className='w-[18px] h-[18px]' strokeWidth={1} />
-            {studyHeaderData.studyType === 'ONLINE'
-              ? '온라인'
-              : studyHeaderData.studyType === 'OFFLINE'
-              ? '오프라인'
-              : '온/오프라인'}{' '}
-            스터디
+            {`${studyTypeFormatting(studyInfo.studyType)} 스터디`}
           </p>
-          {studyHeaderData.studyType !== 'ONLINE' &&
-            studyHeaderData.location && (
-              <p className='t5 flex gap-1 items-center'>
-                <MapPin className='w-[18px] h-[18px]' strokeWidth={1} />
-                {studyHeaderData.location}
-              </p>
-            )}
+          {studyInfo.studyType !== 'ONLINE' && studyInfo.location && (
+            <p className='t5 flex gap-1 items-center'>
+              <MapPin className='w-[18px] h-[18px]' strokeWidth={1} />
+              {studyInfo.location}
+            </p>
+          )}
         </div>
       </div>
     </>
