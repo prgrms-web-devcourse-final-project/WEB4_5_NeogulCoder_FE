@@ -33,13 +33,14 @@ export default function CalendarBigDetail({
   type: string;
 }) {
   const authId = userAuthStore().user?.id;
+  console.log('date', date);
   const dateFormat = (date: string) => {
     const dateString =
-      dayjs(date).get('y') +
+      dayjs(date).format('YYYY') +
       '년 ' +
-      dayjs(date).get('M') +
+      dayjs(date).format('M') +
       '월 ' +
-      dayjs(date).get('D') +
+      dayjs(date).format('D') +
       '일 ' +
       dayFormatting(date);
     return dateString;
