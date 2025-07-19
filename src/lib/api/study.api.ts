@@ -18,3 +18,9 @@ export const putStudyInfo = (
 ) => {
   return axiosInstance.put(`/api/studies/${studyId}`, updateData);
 };
+
+// 가입한 스터디 목록 (메인에 사용됨)
+export const getStudiesInfo = async () => {
+  const { data } = await axiosInstance.get(`/api/studies`);
+  return data;
+};

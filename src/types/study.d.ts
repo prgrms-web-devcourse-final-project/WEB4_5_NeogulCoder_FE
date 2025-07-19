@@ -1,3 +1,4 @@
+// 스터디공간 사이드 메뉴 스터디 정보
 type StudyHeaderType = {
   name: string;
   introduction: string;
@@ -47,8 +48,24 @@ type StudyInfoUpdateType = {
   imageUrl: string;
 };
 
+// 서브헤더 스터디 목록
 type HeaderStudiesType = {
   studyId: number;
   imageUrl: string;
   name?: string;
+};
+
+// 메인 내 스터디 목록
+type StudiesListType = {
+  studyId: number;
+  name: string;
+  leaderNickname: string;
+  capacity: number;
+  currentCount: number;
+  startDate: string;
+  imageUrl: string;
+  introduction: string;
+  category: string;
+  studyType: string;
+  finished: boolean;
 };
