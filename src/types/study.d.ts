@@ -20,7 +20,6 @@ type StudyInfoType = {
 };
 
 type StudyInfoUpdateType = {
-  imageUrl: string;
   name: string;
   category: string;
   capacity: number;
@@ -28,21 +27,18 @@ type StudyInfoUpdateType = {
   location: string;
   startDate: string;
   introduction: string;
+  imageUrl: string;
 };
 
 type StudyMemberType = {
   userId: number;
   nickname: string;
   profileImageUrl: string;
+  role: string;
 };
 
-type StudyInfoUpdateType = {
-  name: string;
-  category: string;
-  capacity: number;
-  studyType: string;
-  location: string;
-  startDate: string;
-  introduction: string;
-  imageUrl: string;
+type StudyExtendType = {
+  studyId: number;
+  members: StudyMemberType[];
+  extended: boolean;
 };

@@ -1,54 +1,53 @@
+'use client';
 import StudyExtend from '@/components/study-room/management/StudyExtend';
 import StudyMemberList from '@/components/study-room/management/StudyMemberList';
 import StudyRoomInfo from '@/components/study-room/management/StudyRoomInfo';
 import { getStudyInfoData } from '@/lib/api/study.api';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-export default async function Management({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  // const { data: studyInfoData } = await getStudyInfoData(Number(id));
-  const studyInfoData: StudyInfoType = {
-    imageUrl: 'http://localhost:8083/image.jpg',
-    name: '자바 스터디',
-    category: 'IT',
-    capacity: 6,
-    studyType: 'OFFLINE',
-    location: '서울',
-    startDate: '2025-07-15',
-    endDate: '2025-07-28',
-    introduction: '자바 스터디입니다.',
-    members: [
-      {
-        userId: 1,
-        nickname: '너굴',
-        profileImageUrl: 'http://localhost:8083/image.jpg',
-      },
-      {
-        userId: 2,
-        nickname: '코더',
-        profileImageUrl: 'http://localhost:8083/image.jpg',
-      },
-      {
-        userId: 3,
-        nickname: '바보',
-        profileImageUrl: 'http://localhost:8083/image.jpg',
-      },
-    ],
+export default function Management() {
+  const params = useParams();
+  const studyId = Number(params.id);
+
+  const [studyInfo, setStudyInfo] = useState<StudyInfoType>();
+
+  const [membersInfo, setMembersInfo] = useState<StudyMemberType[]>([]);
+  useEffect(() => {
+    const fetchStudyInfo = async () => {
+      try {
+        const { data } = await getStudyInfoData(studyId);
+        setStudyInfo(data);
+        setMembersInfo(data.members);
+      } catch (error) {
+        console.error('스터디 정보를 불러오지 못했습니다', error);
+      }
+    };
+    fetchStudyInfo();
+  }, [studyId]);
+
+  // 스터디 정보 수정
+  const handleUpdate = (newData: StudyInfoUpdateType) => {
+    setStudyInfo((prev) => prev && { ...prev, ...newData });
   };
-  const memberInfo: StudyMemberType[] = studyInfoData.members;
+
+  if (!studyInfo) return <div>스터디 정보를 불러오는 중입니다...</div>;
+
   return (
     <>
       <div className='mb-24'>
-        <StudyRoomInfo studyInfoData={studyInfoData} />
+        <StudyRoomInfo
+          studyInfoData={studyInfo}
+          studyId={studyId}
+          handleUpdate={handleUpdate}
+        />
       </div>
       <div className='mb-24'>
-        <StudyMemberList memberInfo={memberInfo} />
+        <StudyMemberList memberInfo={membersInfo} studyId={studyId} />
       </div>
+
       <div>
-        <StudyExtend />
+        <StudyExtend endDate={studyInfo.endDate} studyId={studyId} />
       </div>
     </>
   );

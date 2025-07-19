@@ -4,12 +4,20 @@ import Image from 'next/image';
 import StudyRoomInfoCard from './StudyRoomInfoCard';
 import { PenLine } from 'lucide-react';
 import StudyRoomInfoWrite from './StudyRoomInfoWrite';
+import musicBunny from '@/assets/images/music-bunny.svg';
 import { useState } from 'react';
+import dayjs from 'dayjs';
+import { categoryFormatting } from '@/utils/categoryFormatting';
+import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 
 export default function StudyRoomInfo({
   studyInfoData,
+  studyId,
+  handleUpdate,
 }: {
   studyInfoData: StudyInfoType;
+  studyId: number;
+  handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
   const [infoModal, setInfoModal] = useState(false);
   const infoModalOpen = () => {
@@ -25,29 +33,21 @@ export default function StudyRoomInfo({
     },
     {
       title: '카테고리',
-      content: studyInfoData.category,
+      content: categoryFormatting(studyInfoData.category),
     },
     {
       title: '인원수',
-      content: `${studyInfoData.capacity}명`,
+      content: `${studyInfoData.members.length}/${studyInfoData.capacity}명`,
     },
     {
       title: '진행방식',
-      content: `${
-        studyInfoData.studyType === 'ONLINE'
-          ? '온라인'
-          : studyInfoData.studyType === 'OFFLINE'
-          ? '오프라인'
-          : '온/오프라인'
-      } ${
-        studyInfoData.studyType !== 'ONLINE'
-          ? ', ' + studyInfoData.location
-          : ''
-      }`,
+      content: studyTypeFormatting(studyInfoData.studyType),
     },
     {
       title: '기간',
-      content: `${studyInfoData.startDate} ~ ${studyInfoData.endDate}`,
+      content: `${dayjs(studyInfoData.startDate).format(
+        'YYYY-MM-DD'
+      )} ~ ${dayjs(studyInfoData.endDate).format('YYYY-MM-DD')}`,
     },
     {
       title: '한줄소개',
@@ -64,7 +64,7 @@ export default function StudyRoomInfo({
       </div>
       <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto'>
         <Image
-          src={studyInfoData.imageUrl}
+          src={studyInfoData.imageUrl ?? musicBunny}
           width={120}
           height={0}
           alt='스터디이미지'
@@ -81,7 +81,9 @@ export default function StudyRoomInfo({
       </div>
       {infoModal && (
         <StudyRoomInfoWrite
+          studyId={studyId}
           studyInfoData={studyInfoData}
+          handleUpdate={handleUpdate}
           closeFn={infoModalClose}
         />
       )}
