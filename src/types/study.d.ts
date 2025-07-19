@@ -46,3 +46,9 @@ type StudyInfoUpdateType = {
   introduction: string;
   imageUrl: string;
 };
+
+type HeaderStudiesType = {
+  studyId: number;
+  imageUrl: string;
+  name?: string;
+};
