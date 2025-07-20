@@ -1,9 +1,23 @@
 'use client';
 import { ChevronDown, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CategoryModal from './CategoryModal';
 import MeetingTypeModal from './MeetingTypeModal';
 import RecruitmentCard from '../my/RecruitmentCard';
+import { getRecruitments } from '@/lib/api/main/main';
+import { userAuthStore } from '@/stores/userStore';
+import RecruitmentCardSkeleton from './RecruitmentCardSkeleton';
+import Pagination from '../common/Pagination';
+
+export type MainPostType = {
+  subject: string;
+  content: string;
+  category: string;
+  studyType: string;
+  status: string;
+  commentCount: number;
+  createAt: string;
+};
 
 export default function MainRecruitmentList() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -14,17 +28,26 @@ export default function MainRecruitmentList() {
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
 
-  const recruitmentList = Array.from({ length: 10 }, () => ({
-    title: '낭만',
-    content:
-      '사랑이라 믿었던 것들은 어린 날의 추억일 뿐 추억이라 믿었던 것들은 오래 썩는 기억일 뿐 기억이라 믿었던 것들은 지금 너와 나의 기쁨 깊은 곳에서 숨 쉬는 불행들의 연료일 뿐',
-    createdAt: '2025-09-21',
-    commentCount: 921,
-    category: 'IT',
-    studyWay: 'online',
-    status: '모집 중',
-    type: 'my',
-  }));
+  const user = userAuthStore().user;
+  const [posts, setPosts] = useState<MainPostType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  // 스터디 fetch
+  useEffect(() => {
+    if (!user) return;
+    const fetchRecruitments = async () => {
+      setIsLoading(true);
+      try {
+        const { data } = await getRecruitments();
+        setPosts(data.postInfos);
+      } catch (error) {
+        console.error('모집글 목록을 불러오는데 실패했습니다.', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRecruitments();
+  }, [user]);
 
   return (
     <>
@@ -92,21 +115,27 @@ export default function MainRecruitmentList() {
         </div>
       </div>
 
-      <div className='mt-[34px] flex flex-col gap-[30px]'>
-        {recruitmentList.map((recruitment, index) => (
-          <RecruitmentCard
-            key={index}
-            title={recruitment.title}
-            content={recruitment.content}
-            createdAt={recruitment.createdAt}
-            commentCount={recruitment.commentCount}
-            category={recruitment.category}
-            studyWay={recruitment.studyWay}
-            status={recruitment.status}
-            type={recruitment.type}
-          />
-        ))}
+      <div className='mt-[34px] flex flex-col gap-[30px] mb-9'>
+        {isLoading
+          ? Array.from({ length: 10 }).map((_, i) => (
+              <RecruitmentCardSkeleton key={`skeleton${i}`} />
+            ))
+          : posts.map((recruitment, index) => (
+              <RecruitmentCard
+                key={index}
+                title={recruitment.subject}
+                content={recruitment.content}
+                createdAt={recruitment.createAt}
+                commentCount={recruitment.commentCount}
+                category={recruitment.category}
+                studyWay={recruitment.studyType}
+                status={recruitment.status}
+                type={'my'}
+              />
+            ))}
       </div>
+
+      <Pagination />
     </>
   );
 }
