@@ -45,34 +45,39 @@ export default function CalendarWrite({
 
   const handleAllDay = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAllDay(e.target.checked);
+    if (e.target.checked) {
+      setStartTime('00:00');
+      setEndTime('23:59');
+    } else {
+      setStartTime('');
+      setEndTime('');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     startTransition(async () => {
-      const start = allDay ? `${startDay}T00:00` : `${startDay}T${startTime}`;
-      const end = allDay ? `${endDay}T23:59` : `${endDay}T${endTime}`;
-
-      const date1 = dayjs(start);
-      const date2 = dayjs(end);
+      //  날짜 비교를 위해 dayjs 객체로 변환
+      const start = dayjs(`${startDay} ${startTime}`);
+      const end = dayjs(`${endDay} ${endTime}`);
 
       const event = {
         title: title,
         description: content,
-        startTime: start,
-        endTime: end,
+        startTime: start.format('YYYY-MM-DDTHH:mm'),
+        endTime: end.format('YYYY-MM-DDTHH:mm'),
       };
 
       //시작날짜와 종료날짜  유효성 검사
-      if (date1.isBefore(date2)) {
+      if (start.isBefore(end)) {
         // 개인일정 수정, 개인일정 등록
         if (type === 'personal') {
           const inputData = {
             userId: categoryId,
             title: title,
             description: content,
-            startTime: start,
-            endTime: end,
+            startTime: start.format('YYYY-MM-DDTHH:mm'),
+            endTime: end.format('YYYY-MM-DDTHH:mm'),
           };
           // api
           if (data) {
@@ -86,8 +91,8 @@ export default function CalendarWrite({
             teamId: categoryId,
             title: title,
             description: content,
-            startTime: start,
-            endTime: end,
+            startTime: start.format('YYYY-MM-DDTHH:mm'),
+            endTime: end.format('YYYY-MM-DDTHH:mm'),
           };
           // api
           if (data) {
@@ -228,7 +233,14 @@ export default function CalendarWrite({
                 <button
                   type='submit'
                   className='button-modal1'
-                  disabled={!title || !startDay || !endDay || isPending}
+                  disabled={
+                    !title ||
+                    !startDay ||
+                    !endDay ||
+                    !startTime ||
+                    !endTime ||
+                    isPending
+                  }
                 >
                   {data ? '수정' : '등록'}
                 </button>
