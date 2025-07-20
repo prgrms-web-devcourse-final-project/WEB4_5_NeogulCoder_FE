@@ -1,3 +1,4 @@
+'use client';
 import { ChevronDown, Search } from 'lucide-react';
 import { useState } from 'react';
 import CategoryModal from './CategoryModal';
