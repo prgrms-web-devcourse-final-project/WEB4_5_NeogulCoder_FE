@@ -86,6 +86,10 @@ export default function MannersClient({
 
   useEffect(() => {
     setShowAnimation(true);
+
+    console.log('initialStudyList:', initialStudyList);
+    console.log('initialStudyId:', initialStudyId);
+    console.log('initialUserList:', initialUserList);
   }, []);
 
   return (
