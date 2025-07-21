@@ -1,4 +1,4 @@
-import { getUser } from '@/lib/api/axios';
+import { getUser } from '@/lib/api/user';
 import { create } from 'zustand';
 
 export interface UserInfo {
@@ -6,34 +6,38 @@ export interface UserInfo {
   email: string;
   nickname: string;
   role: string;
-  profileImgUrl: string | null;
+  profileImageUrl: string | null;
 }
 
-interface UserStore {
+export interface UserStore {
   user: UserInfo | null;
-  setUser: (user: UserInfo) => void;
-  clearUser: () => void;
-  fetchUser: () => Promise<void>;
+  setUser: (user: UserInfo) => void; // 사용자 정보 저장
+  clearUser: () => void; // 사용자 상태 초기화
+  fetchUser: () => Promise<void>; // 사용자 정보 가져오기
 }
 
 export const userAuthStore = create<UserStore>((set) => ({
-  user: null,
+  user: null, // 로그인 전 null
 
   setUser: (user) => {
+    // 로그인 하고 나서 저장
     const userData = {
       id: user.id,
       email: user.email,
       nickname: user.nickname,
       role: user.role,
-      profileImgUrl: user.profileImgUrl,
+      profileImageUrl: user.profileImageUrl,
     };
     set({ user: userData });
   },
+
   clearUser: () => {
+    // 로그아웃 하고 나서 초기화
     set({ user: null });
   },
 
   fetchUser: async () => {
+    // 페이지 새로고침 후 정보 다시 불러오기
     try {
       const res = await getUser();
       const user = res.data.data;
@@ -44,7 +48,7 @@ export const userAuthStore = create<UserStore>((set) => ({
           email: user.email,
           nickname: user.nickname,
           role: user.role,
-          profileImgUrl: user.profileImgUrl,
+          profileImageUrl: user.profileImageUrl,
         },
       });
     } catch (error) {
