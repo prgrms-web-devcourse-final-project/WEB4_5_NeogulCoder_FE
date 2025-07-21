@@ -5,7 +5,12 @@ import { Editor } from '@toast-ui/react-editor';
 import { useRef } from 'react';
 import { useEffect } from 'react';
 
-export default function MyEditor() {
+type MyEditorProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+
+export default function MyEditor({ value, onChange }: MyEditorProps) {
   const editorRef = useRef<Editor>(null);
 
   // const handleSave = () => {
@@ -15,10 +20,17 @@ export default function MyEditor() {
 
   useEffect(() => {
     const instance = editorRef.current?.getInstance();
-    if (instance) {
-      instance.setMarkdown(''); // 강제로 빈 내용으로 설정
+    if (instance && value) {
+      instance.setMarkdown(value); // 강제로 빈 내용으로 설정
     }
   }, []);
+
+  const handleChange = () => {
+    const markdown = editorRef.current?.getInstance().getMarkdown();
+    if (markdown !== undefined) {
+      onChange(markdown);
+    }
+  };
 
   return (
     <div>
@@ -30,6 +42,7 @@ export default function MyEditor() {
         useCommandShortcut={true}
         hideModeSwitch={true}
         initialValue=''
+        onChange={handleChange}
       />
       {/* <button
         onClick={handleSave}
