@@ -4,30 +4,29 @@ import React, { useState, useRef, useEffect } from 'react';
 import dayjs from 'dayjs';
 import SetPeriodModal from './SetPeriodModal';
 
-const serverData = [
+type Cell = { day: number; hour: number };
+type Vote = { timeSlot: string; voteCount: number };
+
+const serverData: Vote[] = [
   {
-    startTime: '2025-07-04T05:00:00.000Z',
-    endTime: '2025-07-04T06:00:00.000Z',
+    timeSlot: '2025-07-04T05:00:00.000Z',
     voteCount: 3,
   },
   {
-    startTime: '2025-07-10T07:00:00.000Z',
-    endTime: '2025-07-10T08:00:00.000Z',
+    timeSlot: '2025-07-10T07:00:00.000Z',
     voteCount: 1,
   },
 ];
 
-type Cell = { day: number; hour: number };
-
-const day = ['금', '토', '일', '월', '화', '수', '목'];
+const day = ['일', '월', '화', '수', '목', '금', '토'];
 const date = [
-  '2025-07-04',
-  '2025-07-05',
   '2025-07-06',
   '2025-07-07',
   '2025-07-08',
   '2025-07-09',
   '2025-07-10',
+  '2025-07-04',
+  '2025-07-05',
 ];
 
 export default function TimeGrid() {
@@ -35,6 +34,7 @@ export default function TimeGrid() {
   const [selectedCells, setSelectedCells] = useState<Cell[]>([]);
   const [anchorCell, setAnchorCell] = useState<Cell | null>(null);
   const isDragging = useRef(false);
+  const isRemoving = useRef(false);
   const [voteMap, setVoteMap] = useState<Map<string, number>>(new Map());
 
   const closePeriodModalHandler = () => {
@@ -44,8 +44,7 @@ export default function TimeGrid() {
   useEffect(() => {
     const newMap = new Map<string, number>();
     serverData.forEach((item) => {
-      const start = dayjs(item.startTime);
-      const end = dayjs(item.endTime);
+      const start = dayjs(item.timeSlot);
       const dateKey = start.format('YYYY-MM-DD');
       const hour = start.hour();
       newMap.set(`${dateKey}-${hour}`, item.voteCount);
@@ -76,8 +75,14 @@ export default function TimeGrid() {
 
   const handleMouseDown = (cell: Cell) => {
     isDragging.current = true;
+    isRemoving.current = isCellSelected(cell);
     setAnchorCell(cell);
-    addCell(cell);
+    if (isRemoving.current) {
+      removeCell(cell);
+    } else {
+      addCell(cell);
+      console.log('handleMouseDown:', cell);
+    }
   };
 
   const handleMouseUp = (cell: Cell) => {
@@ -91,19 +96,29 @@ export default function TimeGrid() {
           day: cell.day,
           hour: minHour + i,
         }));
-        const newSet = [
-          ...selectedCells.filter((c) => c.day !== cell.day),
-          ...range,
-        ];
+
+        const newSet = isRemoving.current
+          ? selectedCells.filter(
+              (c) =>
+                !(c.day === cell.day && c.hour >= minHour && c.hour <= maxHour)
+            )
+          : [...selectedCells.filter((c) => c.day !== cell.day), ...range];
         setSelectedCells(newSet);
+        console.log(newSet);
       }
-      setAnchorCell(null);
     }
+    setAnchorCell(null);
+    isRemoving.current = false;
   };
 
   const handleMouseEnter = (cell: Cell) => {
-    if (isDragging.current) {
-      addCell(cell);
+    if (isDragging.current && anchorCell?.day === cell.day) {
+      if (isRemoving.current) {
+        removeCell(cell);
+      } else {
+        addCell(cell);
+        console.log('handleMouseEnter:', cell);
+      }
     }
   };
 
