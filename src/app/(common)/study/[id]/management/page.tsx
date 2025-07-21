@@ -4,18 +4,21 @@ import StudyMamagementSkeleton from '@/components/study-room/management/StudyMam
 import StudyMemberList from '@/components/study-room/management/StudyMemberList';
 import StudyRoomInfo from '@/components/study-room/management/StudyRoomInfo';
 import { getStudyInfoData } from '@/lib/api/study.api';
+import { userAuthStore } from '@/stores/userStore';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Management() {
   const params = useParams();
   const studyId = Number(params.id);
+  const user = userAuthStore().user;
 
   const [studyInfo, setStudyInfo] = useState<StudyInfoType>();
   const [membersInfo, setMembersInfo] = useState<StudyMemberType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
     const fetchStudyInfo = async () => {
       setIsLoading(true);
       try {
@@ -29,7 +32,7 @@ export default function Management() {
       }
     };
     fetchStudyInfo();
-  }, [studyId]);
+  }, [studyId, user]);
 
   // 스터디 정보 수정
   const handleUpdate = (newData: StudyInfoUpdateType) => {
