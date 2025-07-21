@@ -3,13 +3,18 @@ import WithdrawalModal from '@/components/profile/WithdrawalModal';
 import { axiosInstance } from '@/lib/api/axios';
 import { userAuthStore } from '@/stores/userStore';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import deleteText from '@/assets/images/delete-text.svg';
 
 export default function Withdrawal() {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
+
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordCheckRef = useRef<HTMLInputElement>(null);
 
   const user = userAuthStore((state) => state.user);
 
@@ -29,6 +34,25 @@ export default function Withdrawal() {
     await axiosInstance.delete(`/api/users/delete/me`, {
       data: { password },
     });
+  };
+
+  const handleDeleteBtn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!password && !passwordCheck) {
+      passwordRef.current?.focus();
+      return;
+    }
+
+    if (!password) {
+      passwordRef.current?.focus();
+      return;
+    }
+
+    if (!passwordCheck) {
+      passwordCheckRef.current?.focus();
+      return;
+    }
+    setIsModalOpen(true);
   };
 
   const handleDeleteUser = async () => {
@@ -57,31 +81,58 @@ export default function Withdrawal() {
           <p className='w-[120px] text-left t4 cursor-default'>
             비밀번호 <span className='text-red'>(필수)</span>
           </p>
-          <input
-            type='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
-          />
+          <div className='relative'>
+            <input
+              type='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
+              ref={passwordRef}
+            />
+            {password && (
+              <Image
+                src={deleteText}
+                alt='전체 삭제'
+                onClick={() => {
+                  setPassword('');
+                }}
+                className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+              />
+            )}
+          </div>
         </div>
 
         <div className='flex items-center gap-6'>
           <p className='w-[120px] text-left t4 cursor-default'>
             비밀번호 확인 <span className='text-red'>(필수)</span>
           </p>
-          <input
-            type='password'
-            value={passwordCheck}
-            className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
-            onChange={(e) => setPasswordCheck(e.target.value)}
-          />
+          <div className='relative'>
+            <input
+              type='password'
+              value={passwordCheck}
+              className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
+              onChange={(e) => setPasswordCheck(e.target.value)}
+              ref={passwordCheckRef}
+            />
+            {passwordCheck && (
+              <Image
+                src={deleteText}
+                alt='전체 삭제'
+                onClick={() => {
+                  setPasswordCheck('');
+                }}
+                className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+              />
+            )}
+          </div>
         </div>
 
-        <div
-          className='w-[534px] flex justify-end'
-          onClick={() => setIsModalOpen(true)}
-        >
-          <button type='button' className='button-type1 hover:bg-[#292929]'>
+        <div className='w-[534px] flex justify-end'>
+          <button
+            type='button'
+            className='button-type1 hover:bg-[#292929]'
+            onClick={handleDeleteBtn}
+          >
             탈퇴하기
           </button>
         </div>
