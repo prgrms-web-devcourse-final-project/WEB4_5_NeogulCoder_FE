@@ -14,6 +14,7 @@ export default function EditProfile() {
   const [nicknameError, setNicknameError] = useState('');
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
+  const user = userAuthStore((state) => state.user);
 
   useEffect(() => {
     const initUserProfile = async () => {
@@ -21,14 +22,16 @@ export default function EditProfile() {
       if (!store.user) {
         await store.fetchUser();
       }
-      const user = userAuthStore.getState().user;
-      if (user) {
-        setNickname(user.nickname);
-        setPreviewImg(user.profileImgUrl || '');
-      }
     };
     initUserProfile();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setNickname(user.nickname);
+      setPreviewImg(user.profileImageUrl || '');
+    }
+  }, [user]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,7 +39,7 @@ export default function EditProfile() {
       setImgFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        // console.log(reader.result);
+        console.log(reader.result);
         setPreviewImg(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -50,30 +53,24 @@ export default function EditProfile() {
     } else {
       setNicknameError('');
     }
-    // const finalImgUrl = previewImg || '';
 
     try {
       const formData = new FormData();
       formData.append('nickname', nickname);
+
       if (imgFile) {
-        formData.append('profileImgUrl', imgFile);
+        formData.append('profileImage', imgFile);
       }
-      await axiosInstance.put('/api/users/update/profile', {
-        nickname,
-      });
 
-      //   await axiosInstance.put('/api/users/update/profile', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-
+      await axiosInstance.put('/api/users/update/profile', formData);
       await userAuthStore.getState().fetchUser();
-      const user = userAuthStore.getState().user;
-      if (user) {
-        setNickname(user.nickname);
-        setPreviewImg(user.profileImgUrl || '');
+
+      const updatedUser = userAuthStore.getState().user;
+      console.log(updatedUser);
+      if (updatedUser) {
+        setPreviewImg(updatedUser.profileImageUrl || '');
       }
+
       alert('프로필 수정 완료');
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -92,9 +89,8 @@ export default function EditProfile() {
       <div className='tb3'>프로필 수정</div>
       <div className='mt-[60px] flex flex-col items-center justify-center'>
         <div className='w-[140px] h-[140px] rounded-full bg-gray4 relative '>
-          {/* 미리보기 */}
           {previewImg ? (
-            <Image
+            <img
               src={previewImg}
               alt='프로필 미리보기'
               className='w-full h-full object-cover rounded-full'
@@ -103,7 +99,6 @@ export default function EditProfile() {
             <div className='w-full h-full' />
           )}
 
-          {/* 업로드 버튼 */}
           <label
             htmlFor='profile-upload'
             className='absolute right-[5px] bottom-[5px] cursor-pointer z-10'
