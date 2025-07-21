@@ -23,6 +23,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
   const [isLeaderChecked, setIsLeaderChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // 가지고 있는 사이드 메뉴
   const menuItems = useMemo(() => {
     const rawMenuItems: rawMenuItemsType[] = [
       { name: '스터디 대시보드', to: `/study/${studyId}/dashboard` },
@@ -71,7 +72,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
           <>
             {studyInfo && <SideStudyInfo studyInfo={studyInfo} />}
             <button
-              onClick={() => router.push('/study/1/my-study-info')}
+              onClick={() => router.push(`/study/${studyId}/my-study-info`)}
               type='button'
               className='w-full tm4 h-[40px] bg-gray4 rounded-[10px]'
             >

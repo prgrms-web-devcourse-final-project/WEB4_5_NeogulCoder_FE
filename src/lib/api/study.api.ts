@@ -47,3 +47,17 @@ export const postStudyExtend = async (studyId: number, newEndDate: string) => {
   );
   return data;
 };
+
+// 스터디 연장 참여하기
+export const postStudyJoinExtend = async (studyId: number, check: boolean) => {
+  const { data } = await axiosInstance.post(
+    `/api/studies/${studyId}/extension/participations`
+  );
+  return data;
+};
+
+// 스터디 삭제 (팀장만 스터디에 있는 경우)
+export const deleteStudy = async (studyId: number) => {
+  const { data } = await axiosInstance.delete(`/api/studies/${studyId}`);
+  return data;
+};

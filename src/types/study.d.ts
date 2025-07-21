@@ -39,6 +39,11 @@ type StudyMemberType = {
 
 type StudyExtendType = {
   studyId: number;
-  members: StudyMemberType[];
+  members: {
+    userId: number;
+    nickname: string;
+    role: string;
+    participated: boolean | null;
+  }[];
   extended: boolean;
 };

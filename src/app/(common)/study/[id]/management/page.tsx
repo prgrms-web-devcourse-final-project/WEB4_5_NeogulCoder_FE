@@ -1,4 +1,5 @@
 'use client';
+import StudyDelete from '@/components/study-room/management/StudyDelete';
 import StudyExtend from '@/components/study-room/management/StudyExtend';
 import StudyMamagementSkeleton from '@/components/study-room/management/StudyMamagementSkeleton';
 import StudyMemberList from '@/components/study-room/management/StudyMemberList';
@@ -19,6 +20,7 @@ export default function Management() {
 
   useEffect(() => {
     if (!user) return;
+    // 스터디 정보 가져오기
     const fetchStudyInfo = async () => {
       setIsLoading(true);
       try {
@@ -57,9 +59,10 @@ export default function Management() {
               <StudyMemberList memberInfo={membersInfo} studyId={studyId} />
             </div>
 
-            <div>
-              <StudyExtend endDate={studyInfo.endDate} studyId={studyId} />
-            </div>
+            <StudyExtend endDate={studyInfo.endDate} studyId={studyId} />
+
+            {/* 스터디에 팀장만 있을경우 스터디 삭제 할 수 있게 */}
+            {studyInfo.members.length <= 1 && <StudyDelete studyId={studyId} />}
           </>
         )
       )}
