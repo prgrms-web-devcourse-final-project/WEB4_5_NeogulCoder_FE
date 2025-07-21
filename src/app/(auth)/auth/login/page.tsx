@@ -50,7 +50,7 @@ export default function Login() {
         email: user.email,
         nickname: user.nickname,
         role: user.role,
-        profileImgUrl: null,
+        profileImageUrl: null,
       });
       localStorage.setItem('login_status', 'Y');
       alert('로그인 성공');
