@@ -22,7 +22,7 @@ export default function CalendarWrite({
   categoryId: number;
   data?: UnionScheduleType;
   writeCloseHandler: () => void;
-  handleEventAdd?: (data: ScheduleInputType) => void;
+  handleEventAdd?: (id: number, data: ScheduleInputType) => void;
   handleUpdate?: (id: number, data: ScheduleInputType) => void;
 }) {
   const authId = Number(userAuthStore().user?.id);
@@ -68,6 +68,8 @@ export default function CalendarWrite({
         endTime: end.format('YYYY-MM-DDTHH:mm'),
       };
 
+      let responseId: number;
+
       //시작날짜와 종료날짜  유효성 검사
       if (start.isBefore(end)) {
         // 개인일정 수정, 개인일정 등록
@@ -83,7 +85,10 @@ export default function CalendarWrite({
           if (data) {
             await putUserEvent(authId, data.scheduleId, inputData);
           } else {
-            await postUserEvent(authId, inputData);
+            const { data: id } = await postUserEvent(authId, inputData);
+            // 프론트에서 보이는 변경
+            // 등록 함수가 있으면 등록
+            handleEventAdd?.(id, event);
           }
         } else {
           // 팀일정 수정, 팀일정 등록
@@ -98,12 +103,14 @@ export default function CalendarWrite({
           if (data) {
             await putStudyEvent(categoryId, data.scheduleId, inputData);
           } else {
-            await postStudyEvent(categoryId, inputData);
+            const { data: id } = await postStudyEvent(categoryId, inputData);
+            // 프론트에서 보이는 변경
+            // 등록 함수가 있으면 등록
+            handleEventAdd?.(id, event);
           }
         }
+
         // 프론트에서 보이는 변경
-        // 등록 함수가 있으면 등록
-        handleEventAdd?.(event);
         // 수정 함수가 있으면 수정
         if (data) handleUpdate?.(data?.scheduleId, event);
 

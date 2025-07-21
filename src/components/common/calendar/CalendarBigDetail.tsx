@@ -34,7 +34,7 @@ export default function CalendarBigDetail({
   type: string;
 }) {
   const authId = userAuthStore().user?.id;
-  console.log('date', date);
+
   const dateFormat = (date: string) => {
     const dateString =
       dayjs(date).format('YYYY') +
@@ -65,7 +65,7 @@ export default function CalendarBigDetail({
         }
         setEvents(calendarFormattingResult(data));
       } catch (error) {
-        console.log('상세일정을 불러오지 못했습니다.', error);
+        console.error('상세일정을 불러오지 못했습니다.', error);
       } finally {
         setIsLoading(false);
       }

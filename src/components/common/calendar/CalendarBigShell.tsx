@@ -8,6 +8,7 @@ import { getStudyEvents, getUserEvents } from '@/lib/api/calendar.api';
 import { UserInfo } from '@/stores/userStore';
 import CalendarBigSkeleton from './Skeleton/CalendarBigSkeleton';
 import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
+import { scheduler } from 'timers/promises';
 
 export type ScheduleInputType = {
   title: string;
@@ -79,13 +80,13 @@ export default function CalendarBigShell({
   }, [selectedCategory, type]);
 
   // 일정등록
-  const handleEventAdd = (newData: ScheduleInputType) => {
+  const handleEventAdd = (schedulerId: number, newData: ScheduleInputType) => {
     const newDataFormatting = {
       ...newData,
       writerId: user.id,
       writerNickname: user.nickname,
       writerProfileImageUrl: user.profileImgUrl,
-      scheduleId: 0,
+      scheduleId: schedulerId,
     };
     setEvents((prev) => [...prev, newDataFormatting]);
   };
