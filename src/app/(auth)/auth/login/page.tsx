@@ -7,10 +7,10 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import deleteText from '@/assets/images/delete-text.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { login } from '@/lib/api/axios';
 import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
+import { login } from '@/lib/api/user';
 
 export default function Login() {
   const router = useRouter();

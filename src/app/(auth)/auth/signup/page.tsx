@@ -6,10 +6,10 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import logoWibby from '@/assets/images/wibby.svg';
 import deleteText from '@/assets/images/delete-text.svg';
 import { useRef, useState } from 'react';
-import { signup } from '@/lib/api/axios';
 import { useRouter } from 'next/navigation';
 import { nicknameRegex, passwordRegex } from '@/lib/auth/regex';
 import axios from 'axios';
+import { signup } from '@/lib/api/user';
 
 export default function SignUp() {
   const router = useRouter();
