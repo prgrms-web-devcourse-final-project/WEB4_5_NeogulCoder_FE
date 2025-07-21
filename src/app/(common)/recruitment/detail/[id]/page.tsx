@@ -14,6 +14,7 @@ import { formatDate } from '@/utils/formatIsoDate';
 import { userAuthStore } from '@/stores/userStore';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Viewer } from '@toast-ui/react-editor';
+import { changeStatus } from '@/lib/api/recruitment/changeStatus';
 
 export default function Page() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export default function Page() {
   const [isOpen, setIsOpen] = useState(false);
   const [appIsOpen, setAppIsOpen] = useState(false);
   const [menuIsOpen, menuSetIsOpen] = useState(false);
+  const [statusModalIsOpen, setStatusModalIsOpen] = useState(false);
   const [startedDate, setStartedDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [recruitmentCount, setRecruitmentCount] = useState(0);
@@ -64,42 +66,6 @@ export default function Page() {
     }
   }, [recruitmentPostId]);
 
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     // 실제 요청 대신 더미 데이터 사용
-  //     const dummyResponse = {
-  //       category: 'IT',
-  //       location: '서울',
-  //       studyType: '온/오프라인',
-  //       startedDate: '2025-07-16',
-  //       endDate: '2025-08-07',
-  //       recruitmentCount: 3,
-  //       createdDate: '2025-07-16',
-  //       nickname: '닉네임',
-  //       subject: '너굴 코더 스터디를 모집 합니다',
-  //       content: '이펙티브 자바를 정독 하는 것을 목표로 하는 스터디 입니다',
-  //       commentCount: 11,
-  //       profileImageUrl: 'https://cdn.example.com/profile.jpg',
-  //     };
-
-  //     // 응답으로 받은 것처럼 state 세팅
-  //     setCategory(dummyResponse.category);
-  //     setLocation(dummyResponse.location);
-  //     setStudyType(dummyResponse.studyType);
-  //     setStartedDate(dummyResponse.startedDate);
-  //     setEndDate(dummyResponse.endDate);
-  //     setRecruitmentCount(dummyResponse.recruitmentCount);
-  //     setCreatedDate(dummyResponse.createdDate);
-  //     setNickname(dummyResponse.nickname);
-  //     setSubject(dummyResponse.subject);
-  //     setContent(dummyResponse.content);
-  //     setCommentCount(dummyResponse.commentCount);
-  //     setProfileImageUrl(dummyResponse.profileImageUrl);
-  //   } catch (error) {
-  //     console.error('데이터 불러오기 실패:', error);
-  //   }
-  // }, []);
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -117,27 +83,31 @@ export default function Page() {
     }
   }, [recruitmentPostId, fetchData]);
 
-  useEffect(() => {
-    console.log('🪵 content:', content);
-  }, [content]);
-
   return (
     <>
       <div className='w-[852px] mx-auto'>
         <div className='hidden 2xl:flex flex-col fixed right-[15%] space-y-2.5'>
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => {
+              if (me?.nickname === nickname) {
+                setStatusModalIsOpen(true);
+              } else {
+                setAppIsOpen(true);
+              }
+            }}
             className='w-[118px] h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
           >
-            모집 중
+            {me?.nickname === nickname ? '모집 중' : '모집 신청'}
           </button>
-          <button
-            onClick={() => setAppIsOpen(true)}
-            className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
-            style={{ borderColor: 'var(--color-gray2)' }}
-          >
-            신청 내역
-          </button>
+          {me?.nickname === nickname && (
+            <button
+              onClick={() => setIsOpen(true)}
+              className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
+              style={{ borderColor: 'var(--color-gray2)' }}
+            >
+              신청 내역
+            </button>
+          )}
         </div>
 
         <div className='flex justify-between'>
@@ -233,18 +203,26 @@ export default function Page() {
         </div>
         <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10'>
           <button
-            onClick={() => setAppIsOpen(true)}
+            onClick={() => {
+              if (me?.nickname === nickname) {
+                setStatusModalIsOpen(true);
+              } else {
+                setAppIsOpen(true);
+              }
+            }}
             className='w-full h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
           >
-            모집 중
+            {me?.nickname === nickname ? '모집 중' : '모집 신청'}
           </button>
-          <button
-            onClick={() => setIsOpen(true)}
-            className='w-full h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
-            style={{ borderColor: 'var(--color-gray2)' }}
-          >
-            신청 내역
-          </button>
+          {me?.nickname === nickname && (
+            <button
+              onClick={() => setIsOpen(true)}
+              className='w-full h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
+              style={{ borderColor: 'var(--color-gray2)' }}
+            >
+              신청 내역
+            </button>
+          )}
         </div>
         <div className='w-[852px]'>
           <WriteComment
@@ -331,6 +309,32 @@ export default function Page() {
               <button className='button-type5 hover:bg-[#292929]'>확인</button>
             </div>
           </Modal>
+        )}
+        {statusModalIsOpen && (
+          <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+            <div className='pt-10 pb-8 px-9 rounded-[10px] bg-white drop-shadow-md'>
+              <p className='mb-7 tm3 text-center'>
+                스터디 모집을 완료하시겠습니까? <br />
+                모집 완료로 변경하면 더 이상 신청을 받을 수 없습니다.
+              </p>
+              <div className='flex gap-4 justify-center'>
+                <button
+                  className='button-type6 w-[120px]!'
+                  onClick={() => setStatusModalIsOpen(false)}
+                >
+                  취소
+                </button>
+                <button
+                  className='button-type5 w-[120px]! bg-red! text-white!'
+                  onClick={async () => {
+                    changeStatus(recruitmentPostId);
+                  }}
+                >
+                  확인
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </>

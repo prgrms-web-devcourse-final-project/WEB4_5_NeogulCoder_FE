@@ -16,7 +16,7 @@ export default function MyEditor({ editorRef, content }: Props) {
   }, [editorRef, content]);
 
   return (
-    <div>
+    <div className='tm3'>
       <ToastEditor
         ref={editorRef}
         previewStyle='vertical'
