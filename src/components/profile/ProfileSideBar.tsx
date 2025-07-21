@@ -1,43 +1,51 @@
 'use client';
-import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { ChevronRight } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { userAuthStore, UserInfo } from '@/stores/userStore';
-import { getUserById } from '@/lib/api/axios';
+import { getUserById } from '@/lib/api/user';
 
 export default function SideBar() {
   const router = useRouter();
+
+  // 사이드 메뉴
   const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴'>('pr');
+  // 로그인 된 사용자 정보
   const me = userAuthStore((state) => state.user);
-  // console.log(me);
+  // 로그인 후 새로고침
+  const fetchUser = userAuthStore((state) => state.fetchUser);
+
   const params = useParams();
   const userId =
     params?.userId && params?.userId !== 'me' ? Number(params?.userId) : null;
-  // console.log(userId);
+
   const [otherUser, setOtherUser] = useState<UserInfo | null>(null);
 
   const pathname = usePathname();
   const isEditOrWithdrawal =
-    pathname.includes('/edit-profile') || pathname.includes('/withdrawal');
+    pathname.includes('/edit-profile') ||
+    pathname.includes('/withdrawal') ||
+    pathname.includes('/pr/edit-pr');
 
   const isMyPage =
     params?.userId === 'me' || isEditOrWithdrawal || me?.id === userId;
-  // console.log(isMyPage);
 
   useEffect(() => {
-    if (!isMyPage && userId) {
+    if (isMyPage) {
+      // 내 페이지면 항상 최신 정보 가져오기
+      fetchUser();
+    } else if (userId) {
+      // 다른 사람 페이지면 그 사람 정보 가져오기
       getUserById(userId)
         .then((res) => {
-          // console.log(res.data);
           setOtherUser(res.data);
         })
         .catch((error) => {
           console.error('다른 사용자 정보 가져오기 실패: ', error);
         });
     }
-  }, [userId, isMyPage]);
+  }, [userId, isMyPage, fetchUser]);
 
   const userData = isMyPage ? me : otherUser;
 
@@ -67,9 +75,13 @@ export default function SideBar() {
         <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
           <div className='flex items-center gap-[28px] pl-8'>
             <div className='w-[70px] h-[70px] bg-gray3 rounded-full'>
-              <Image src={musicBunny} alt='예시 기본 프사' />
+              <img
+                src={userData?.profileImageUrl ?? musicBunny}
+                alt='예시 기본 프사'
+                className='w-full h-full object-cover rounded-full'
+              />
             </div>
-            <div className='flex flex-col justify-center'>
+            <div className='flex flex-col justify-center items-start'>
               <span className='tm2 cursor-default'>{userData?.nickname}</span>
               {isMyPage && (
                 <button

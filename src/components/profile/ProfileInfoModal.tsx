@@ -15,10 +15,11 @@ export default function UserInfoModal({
   // console.log(me);
 
   const handleGoToPr = () => {
-    if (me?.id) {
-      router.push(`/profile/pr/${me.id}`);
-      onItemClick();
+    if (!me?.id) {
+      return;
     }
+    router.push(`/profile/pr/${me.id}`);
+    onItemClick();
   };
 
   const handleMyPage = () => {
