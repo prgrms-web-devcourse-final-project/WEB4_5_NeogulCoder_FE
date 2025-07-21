@@ -5,7 +5,7 @@ export const writeRecruitmentPost = async (payload: {
   subject: string;
   content: string;
   recruitmentCount: number;
-  expireDate: string;
+  expiredDate: string;
 }) => {
   try {
     const res = await axiosInstance.post('/recruitment-posts', payload);

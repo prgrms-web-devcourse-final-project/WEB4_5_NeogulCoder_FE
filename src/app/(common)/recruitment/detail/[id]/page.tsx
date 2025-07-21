@@ -9,11 +9,16 @@ import Image from 'next/image';
 import buddyEnergy from '@/assets/images/buddy-energy.svg';
 import { usePathname, useRouter } from 'next/navigation';
 import CommentList from '@/components/common/CommentList';
-// import { fetchInfo } from '@/lib/api/recruitment/fetchInfo';
+import { fetchInfo } from '@/lib/api/recruitment/fetchInfo';
+import { formatDate } from '@/utils/formatIsoDate';
+import { userAuthStore } from '@/stores/userStore';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Viewer } from '@toast-ui/react-editor';
 
 export default function Page() {
   const router = useRouter();
   const pathname = usePathname();
+  const me = userAuthStore((state) => state.user);
   const handleGoToPr = () => {
     router.push('/profile/pr');
   };
@@ -29,70 +34,71 @@ export default function Page() {
   const [studyType, setStudyType] = useState('');
   const [location, setLocation] = useState('');
   const [createdDate, setCreatedDate] = useState('');
-  const [userName, setUserName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [profileImageUrl, setProfileImageUrl] = useState('');
-  // 추후에 추가될 데이터
-  // const [expireDate, setExpireDate] = useState('');
+  const [expiredDate, setExpiredDate] = useState('');
 
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // api로 연결 할 예시
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const data = await fetchInfo(recruitmentPostId);
-  //     setCategory(data.category);
-  //     setLocation(data.location);
-  //     setStudyType(data.studyType);
-  //     setStartedDate(data.startedDate);
-  //     setEndDate(data.endDate);
-  //     setRecruitmentCount(data.recruitmentCount);
-  //     setCreatedDate(data.createdDate);
-  //     setUserName(data.username);
-  //     setSubject(data.subject);
-  //     setContent(data.content);
-  //   } catch (error) {
-  //     console.error('데이터 불러오기 실패ㅠㅠ:', error);
-  //   }
-  // }, [recruitmentPostId]);
-
   const fetchData = useCallback(async () => {
     try {
-      // 실제 요청 대신 더미 데이터 사용
-      const dummyResponse = {
-        category: 'IT',
-        location: '서울',
-        studyType: '온/오프라인',
-        startedDate: '2025-07-16',
-        endDate: '2025-08-07',
-        recruitmentCount: 3,
-        createdDate: '2025-07-16',
-        userName: '닉네임',
-        subject: '너굴 코더 스터디를 모집 합니다',
-        content: '이펙티브 자바를 정독 하는 것을 목표로 하는 스터디 입니다',
-        commentCount: 11,
-        profileImageUrl: 'https://cdn.example.com/profile.jpg',
-      };
-
-      // 응답으로 받은 것처럼 state 세팅
-      setCategory(dummyResponse.category);
-      setLocation(dummyResponse.location);
-      setStudyType(dummyResponse.studyType);
-      setStartedDate(dummyResponse.startedDate);
-      setEndDate(dummyResponse.endDate);
-      setRecruitmentCount(dummyResponse.recruitmentCount);
-      setCreatedDate(dummyResponse.createdDate);
-      setUserName(dummyResponse.userName);
-      setSubject(dummyResponse.subject);
-      setContent(dummyResponse.content);
-      setCommentCount(dummyResponse.commentCount);
-      setProfileImageUrl(dummyResponse.profileImageUrl);
+      const data = await fetchInfo(recruitmentPostId);
+      setCategory(data.postDetailsInfo.category);
+      setLocation(data.postDetailsInfo.location);
+      setStudyType(data.postDetailsInfo.studyType);
+      setStartedDate(data.postDetailsInfo.startedDate);
+      setEndDate(data.postDetailsInfo.endDate);
+      setRecruitmentCount(data.postDetailsInfo.recruitmentCount);
+      setCreatedDate(data.postDetailsInfo.createdDate);
+      setNickname(data.postDetailsInfo.nickname);
+      setSubject(data.postDetailsInfo.subject);
+      setContent(data.postDetailsInfo.content);
+      setCommentCount(data.postDetailsInfo.commentCount);
+      setProfileImageUrl(data.postDetailsInfo.profileImageUrl);
+      setExpiredDate(data.postDetailsInfo.expiredDate);
     } catch (error) {
-      console.error('데이터 불러오기 실패:', error);
+      console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
-  }, []);
+  }, [recruitmentPostId]);
+
+  // const fetchData = useCallback(async () => {
+  //   try {
+  //     // 실제 요청 대신 더미 데이터 사용
+  //     const dummyResponse = {
+  //       category: 'IT',
+  //       location: '서울',
+  //       studyType: '온/오프라인',
+  //       startedDate: '2025-07-16',
+  //       endDate: '2025-08-07',
+  //       recruitmentCount: 3,
+  //       createdDate: '2025-07-16',
+  //       nickname: '닉네임',
+  //       subject: '너굴 코더 스터디를 모집 합니다',
+  //       content: '이펙티브 자바를 정독 하는 것을 목표로 하는 스터디 입니다',
+  //       commentCount: 11,
+  //       profileImageUrl: 'https://cdn.example.com/profile.jpg',
+  //     };
+
+  //     // 응답으로 받은 것처럼 state 세팅
+  //     setCategory(dummyResponse.category);
+  //     setLocation(dummyResponse.location);
+  //     setStudyType(dummyResponse.studyType);
+  //     setStartedDate(dummyResponse.startedDate);
+  //     setEndDate(dummyResponse.endDate);
+  //     setRecruitmentCount(dummyResponse.recruitmentCount);
+  //     setCreatedDate(dummyResponse.createdDate);
+  //     setNickname(dummyResponse.nickname);
+  //     setSubject(dummyResponse.subject);
+  //     setContent(dummyResponse.content);
+  //     setCommentCount(dummyResponse.commentCount);
+  //     setProfileImageUrl(dummyResponse.profileImageUrl);
+  //   } catch (error) {
+  //     console.error('데이터 불러오기 실패:', error);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -110,6 +116,10 @@ export default function Page() {
       fetchData();
     }
   }, [recruitmentPostId, fetchData]);
+
+  useEffect(() => {
+    console.log('🪵 content:', content);
+  }, [content]);
 
   return (
     <>
@@ -136,17 +146,24 @@ export default function Page() {
               {subject}
             </span>
           </div>
-          <div className='relative' ref={menuRef}>
-            <button
-              className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
-                menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
-              }`}
-              onClick={() => menuSetIsOpen((prev) => !prev)}
-            >
-              <EllipsisVertical />
-            </button>
-            {menuIsOpen && <ClickVerticalMenu title='내 게시물' />}
-          </div>
+          {me?.nickname === nickname && (
+            <div className='relative' ref={menuRef}>
+              <button
+                className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
+                  menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
+                }`}
+                onClick={() => menuSetIsOpen((prev) => !prev)}
+              >
+                <EllipsisVertical />
+              </button>
+              {menuIsOpen && (
+                <ClickVerticalMenu
+                  title='내 게시물'
+                  recruitmentPostId={recruitmentPostId}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         <div className='flex space-x-6 items-center my-6 justify-between'>
@@ -156,12 +173,14 @@ export default function Page() {
               onClick={handleGoToPr}
             ></button>
             <button className='tm3' onClick={handleGoToPr}>
-              {userName}
+              {nickname}
             </button>
           </div>
 
           <div>
-            <span className='tm4 opacity-50 mr-3'>{createdDate}</span>
+            <span className='tm4 opacity-50 mr-3'>
+              {formatDate(createdDate)}
+            </span>
           </div>
         </div>
         <hr
@@ -172,11 +191,11 @@ export default function Page() {
           <div className='flex space-x-12'>
             <div className='flex w-[400px]'>
               <span className='mr-8 tm3 opacity-50'>시작 날짜</span>
-              <span className='tm3'>{startedDate}</span>
+              <span className='tm3'>{formatDate(startedDate)}</span>
             </div>
             <div className='flex w-[400px]'>
               <span className=' mr-8 tm3 opacity-50'>종료 날짜</span>
-              <span className='tm3'>{endDate}</span>
+              <span className='tm3'>{formatDate(endDate)}</span>
             </div>
           </div>
           <div className='flex space-x-12'>
@@ -201,17 +220,17 @@ export default function Page() {
           </div>
           <div className='flex w-[400px]'>
             <span className='mr-8 tm3 opacity-50'>모집 마감일</span>
-            <span className='tm3'>2025-08-06</span>
-            {/* <span className='tm3'>{expireDate}</span> */}
+            <span className='tm3'>{formatDate(expiredDate)}</span>
           </div>
         </div>
         <div
-          className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5'
+          className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5 tm3'
           style={{ borderColor: 'var(--color-border3)' }}
         >
-          {content}
+          {content && (
+            <Viewer key={content} height='100%' initialValue={content} />
+          )}
         </div>
-        {/* 반응형 */}
         <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10'>
           <button
             onClick={() => setAppIsOpen(true)}

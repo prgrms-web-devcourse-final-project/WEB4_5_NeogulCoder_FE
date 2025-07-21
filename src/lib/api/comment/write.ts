@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from '../axios';
 
 type CommentPayload = {
   postId?: number;
@@ -17,13 +17,13 @@ export const writeComment = async (
     let data = {};
 
     if (target === 'recruitment') {
-      url = `https://wibby.cedartodo.uk/recruitment-posts/comments`;
+      url = `/recruitment-posts/comments`;
       data = {
         postId: payload.postId,
         content: payload.content,
       };
     } else if (target === 'study' && payload.studyId && payload.postId) {
-      url = `https://wibby.cedartodo.uk/api/studies/${payload.studyId}/posts/${payload.postId}/comments`;
+      url = `/api/studies/${payload.studyId}/posts/${payload.postId}/comments`;
       data = {
         content: payload.content,
       };
@@ -31,7 +31,7 @@ export const writeComment = async (
       throw new Error('잘못된 payload');
     }
 
-    const res = await axios.post(url, data);
+    const res = await axiosInstance.post(url, data);
     return res.data;
   } catch (error) {
     console.error('댓글 등록 실패:', error);

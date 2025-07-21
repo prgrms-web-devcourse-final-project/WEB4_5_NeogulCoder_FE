@@ -4,6 +4,7 @@ import { EllipsisVertical } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import ClickVerticalMenu from './ClickVerticalMenu';
 import { useRouter } from 'next/navigation';
+import { formatDate } from '@/utils/formatIsoDate';
 // import Image from 'next/image';
 
 type CommentProps = {
@@ -40,16 +41,6 @@ export default function Comment({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  // util로 빼기
-  const formatDate = (isoDate?: string) => {
-    if (!isoDate) return '';
-    return new Date(isoDate).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-  };
 
   return (
     <div className='flex w-full my-3 items-start mb-6'>
