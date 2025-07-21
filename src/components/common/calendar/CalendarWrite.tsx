@@ -91,8 +91,8 @@ export default function CalendarWrite({
             teamId: categoryId,
             title: title,
             description: content,
-            startTime: start.format('YYYY-MM-DDTHH:mm'),
-            endTime: end.format('YYYY-MM-DDTHH:mm'),
+            startTime: start.format('YYYY-MM-DDTHH:mm:ss'),
+            endTime: end.format('YYYY-MM-DDTHH:mm:ss'),
           };
           // api
           if (data) {
