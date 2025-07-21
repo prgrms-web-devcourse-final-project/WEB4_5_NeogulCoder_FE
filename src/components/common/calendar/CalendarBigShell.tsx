@@ -7,6 +7,7 @@ import { ChevronDown } from 'lucide-react';
 import { getStudyEvents, getUserEvents } from '@/lib/api/calendar.api';
 import { UserInfo } from '@/stores/userStore';
 import CalendarBigSkeleton from './Skeleton/CalendarBigSkeleton';
+import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
 
 export type ScheduleInputType = {
   title: string;
@@ -53,8 +54,6 @@ export default function CalendarBigShell({
   const [events, setEvents] = useState<UnionScheduleType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(categories);
-
   // 카테고리가 변경 되면 각 카테고리에 맞는 api일정을 가져오도록..
   useEffect(() => {
     const fetchEvents = async () => {
@@ -68,7 +67,7 @@ export default function CalendarBigShell({
           const { data: result } = await getStudyEvents(selectedCategory.id);
           data = result;
         }
-        setEvents(FormattingResult(data));
+        setEvents(calendarFormattingResult(data));
       } catch (error) {
         console.error('일정을 불러오지 못했습니다.', error);
       } finally {
@@ -107,23 +106,6 @@ export default function CalendarBigShell({
   const handleEventDelete = (scheduleId: number) => {
     setEvents((prev) => prev.filter((f) => f.scheduleId !== scheduleId));
   };
-
-  // userId -> writerId, teamCalendarId,personalCalendarId -> scheduleId //개인일정, 팀일정 포맷 맞추기
-  function FormattingResult(items: StudyScheduleType[] | UserScheduleType[]) {
-    return items.map((item) => {
-      if ('userId' in item) {
-        const { userId, personalCalendarId, ...rest } = item;
-        return {
-          ...rest,
-          writerId: userId,
-          scheduleId: personalCalendarId,
-        };
-      } else {
-        const { teamCalendarId, ...rest } = item;
-        return { ...rest, scheduleId: teamCalendarId };
-      }
-    });
-  }
 
   // 카테고리 외부 클릭시 닫힘
   useEffect(() => {

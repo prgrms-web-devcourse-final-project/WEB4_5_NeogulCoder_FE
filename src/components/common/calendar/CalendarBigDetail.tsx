@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
 import CalendarBigDetailItemSkeleton from './Skeleton/CalendarBigDetailItemSkeleton';
+import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
 dayjs.extend(isBetween);
 
 export default function CalendarBigDetail({
@@ -62,7 +63,7 @@ export default function CalendarBigDetail({
           const { data: result } = await getStudyDayEvents(categoryId, date);
           data = result;
         }
-        setEvents(FormattingResult(data));
+        setEvents(calendarFormattingResult(data));
       } catch (error) {
         console.log('상세일정을 불러오지 못했습니다.', error);
       } finally {
@@ -71,23 +72,6 @@ export default function CalendarBigDetail({
     };
     fetchDateEvent();
   }, [type, categoryId, date, authId]);
-
-  // userId -> writerId, teamCalendarId,personalCalendarId -> scheduleId //개인일정, 팀일정 포맷 맞추기
-  function FormattingResult(items: StudyScheduleType[] | UserScheduleType[]) {
-    return items.map((item) => {
-      if ('userId' in item) {
-        const { userId, personalCalendarId, ...rest } = item;
-        return {
-          ...rest,
-          writerId: userId,
-          scheduleId: personalCalendarId,
-        };
-      } else {
-        const { teamCalendarId, ...rest } = item;
-        return { ...rest, scheduleId: teamCalendarId };
-      }
-    });
-  }
 
   // 상세일정삭제
   const handleEventDetailDelete = (scheduleId: number) => {
@@ -100,9 +84,9 @@ export default function CalendarBigDetail({
       const res = await deleteFn(categoryId, scheduleId);
 
       if (res) {
-        alert('일정 삭제에 성공했습니다.');
         handleEventDelete(scheduleId); // 전체에서 삭제
         handleEventDetailDelete(scheduleId); // 상세에서 삭제
+        alert('일정 삭제에 성공했습니다.');
       } else {
         alert('일정 삭제에 실패했습니다.');
       }

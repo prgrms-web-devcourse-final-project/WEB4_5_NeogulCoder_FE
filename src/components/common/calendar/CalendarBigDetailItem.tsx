@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
+import CalendarDeleteCheckModal from './CalendarDeleteCheckModal';
 
 export default function CalendarBigDetailItem({
   type,
@@ -31,6 +32,7 @@ export default function CalendarBigDetailItem({
 }) {
   const authId = userAuthStore().user?.id;
   const [open, setOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [writeModalOpen, setWriteModalOpen] = useState(false);
   const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
   const startTime = dayjs(result.startTime).format('HH:mm');
@@ -95,7 +97,7 @@ export default function CalendarBigDetailItem({
                   </button>
                   <button
                     onClick={() => {
-                      handleDelete(result.scheduleId);
+                      setDeleteModalOpen(true);
                       setOpen(false);
                     }}
                     className='flex gap-3 text-red'
@@ -116,6 +118,12 @@ export default function CalendarBigDetailItem({
           data={result}
           categoryId={categoryId}
           handleUpdate={handleUpdate}
+        />
+      )}
+      {deleteModalOpen && (
+        <CalendarDeleteCheckModal
+          closeModal={() => setDeleteModalOpen(false)}
+          handleDelete={() => handleDelete(result.scheduleId)}
         />
       )}
     </>
