@@ -1,10 +1,4 @@
-export default function StudyExtendCheckModal({
-  handleExtendCheck,
-  isPending,
-}: {
-  handleExtendCheck: (check: boolean) => void;
-  isPending: boolean;
-}) {
+export default function StudyExtendCheckModal() {
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
@@ -14,20 +8,8 @@ export default function StudyExtendCheckModal({
             내정보에서 참가하실 수 있습니다.
           </p>
           <div className='flex gap-4 justify-center'>
-            <button
-              onClick={() => handleExtendCheck(false)}
-              className='button-type6 !w-[120px]'
-              disabled={isPending}
-            >
-              거절하기
-            </button>
-            <button
-              onClick={() => handleExtendCheck(true)}
-              className='button-type5 !w-[120px]'
-              disabled={isPending}
-            >
-              참가하기
-            </button>
+            <button className='button-type6 !w-[120px]'>거절하기</button>
+            <button className='button-type5 !w-[120px]'>참가하기</button>
           </div>
         </div>
       </div>
