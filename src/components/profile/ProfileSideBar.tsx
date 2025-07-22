@@ -1,5 +1,6 @@
 'use client';
-import musicBunny from '@/assets/images/music-bunny.svg';
+// import sunBunny from '@/assets/images/sun-bunny.svg';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 import { ChevronRight } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,9 @@ export default function SideBar() {
   const router = useRouter();
 
   // 사이드 메뉴
-  const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴'>('pr');
+  const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴' | ''>(
+    'pr'
+  );
   // 로그인 된 사용자 정보
   const me = userAuthStore((state) => state.user);
   // 로그인 후 새로고침
@@ -51,6 +54,7 @@ export default function SideBar() {
 
   const handleEditProfile = () => {
     router.push('/profile/edit-profile');
+    setSelectedMenu('');
   };
 
   const handleWithdrawal = () => {
@@ -74,11 +78,11 @@ export default function SideBar() {
       <div className='w-full max-w-[1248px] flex flex-col'>
         <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
           <div className='flex items-center gap-[28px] pl-8'>
-            <div className='w-[70px] h-[70px] bg-gray3 rounded-full'>
+            <div className='w-[70px] h-[70px] bg-black rounded-full overflow-hidden'>
               <img
-                src={userData?.profileImageUrl ?? musicBunny}
+                src={userData?.profileImageUrl ?? basicBunny.src}
                 alt='예시 기본 프사'
-                className='w-full h-full object-cover rounded-full'
+                className='w-full h-20 object-cover object-center rounded-full'
               />
             </div>
             <div className='flex flex-col justify-center items-start'>
@@ -118,15 +122,19 @@ export default function SideBar() {
               <ChevronRight className='w-[22px] h-[22px]' />
             </div>
 
-            <div
-              className={`flex justify-between items-center cursor-pointer ${
-                selectedMenu === '회원 탈퇴' ? 'opacity-100' : 'opacity-30'
-              }`}
-              onClick={handleWithdrawal}
-            >
-              <span>회원 탈퇴</span>
-              <ChevronRight className='w-[22px] h-[22px]' />
-            </div>
+            {me?.oauth === 'Google' ? (
+              ''
+            ) : (
+              <div
+                className={`flex justify-between items-center cursor-pointer ${
+                  selectedMenu === '회원 탈퇴' ? 'opacity-100' : 'opacity-30'
+                }`}
+                onClick={handleWithdrawal}
+              >
+                <span>회원 탈퇴</span>
+                <ChevronRight className='w-[22px] h-[22px]' />
+              </div>
+            )}
           </div>
         )}
       </div>
