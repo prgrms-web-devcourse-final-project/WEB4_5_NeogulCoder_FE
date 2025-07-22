@@ -1,57 +1,244 @@
-import Pagination from '@/components/common/Pagination';
+'use client';
+import ManagerCategoriesModal from '@/components/manager/ManagerCategoriesModal';
+import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
+import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerStudyList from '@/components/manager/ManagerStudyList';
-export default function page() {
-  const studies = [
-    {
-      name: '스터디1',
-    },
-    {
-      name: '스터디2',
-    },
-    {
-      name: '스터디3',
-    },
-    {
-      name: '스터디4',
-    },
-    {
-      name: '스터디5',
-    },
-    {
-      name: '스터디6',
-    },
-    {
-      name: '스터디7',
-    },
-    {
-      name: '스터디8',
-    },
-    {
-      name: '스터디9',
-    },
-    {
-      name: '스터디10',
-    },
-  ];
+import { deleteAdminStudy, getAdminStudies } from '@/lib/api/manager/manager';
+import { userAuthStore } from '@/stores/userStore';
+import { ChevronDown, Search, SearchX, X } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+
+export type AdminStudyType = {
+  id: number;
+  name: string;
+  category: string;
+  finished: boolean;
+  activated: boolean;
+};
+
+export default function StudyPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParams = useMemo(
+    () => Number(searchParams.get('page')) || 0,
+    [searchParams]
+  );
+  const searchKeyword = useMemo(
+    () => searchParams.get('name') || '',
+    [searchParams]
+  );
+  const searchCategory = useMemo(
+    () => searchParams.get('category') || '',
+    [searchParams]
+  );
+  const user = userAuthStore((state) => state.user);
+  const [studies, setStudies] = useState<AdminStudyType[]>([]);
+  const [isLoading, setLoading] = useState(true);
+  const [totalPage, setTotalPage] = useState(1);
+  const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
+  const [keyword, setKeyword] = useState(searchKeyword || '');
+  const [page, setPage] = useState(pageParams || 1);
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchCategory || 'All'
+  );
+
+  // 이용자 삭제
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAdminStudy(id);
+      setStudies((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, activated: false } : item
+        )
+      );
+      alert('삭제');
+    } catch (error) {
+      console.error('사용자 삭제 실패', error);
+    }
+  };
+
+  // 목록 가져오기
+  useEffect(() => {
+    if (!user) return;
+    const fetchStudies = async () => {
+      setLoading(true);
+      try {
+        const { data } = await getAdminStudies(
+          page - 1,
+          searchKeyword || '',
+          searchCategory
+        );
+        setTotalPage(data.totalPages);
+        setStudies(data.content);
+      } catch (error) {
+        console.error('사용자 목록을 불러오지 못했습니다.', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudies();
+  }, [user, page, searchKeyword, searchCategory]);
+
+  // // 이름 검색
+  // const searchName = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     router.push(
+  //       `/manager/study?name=${keyword}&category=${selectedCategory}&page=1`
+  //     );
+  //   }
+  // };
+
+  // // https://wibby.cedartodo.uk/admin/studies?page=0&name=asd&category=IT
+  // // 카테고리 선택
+  const handleCategory = (category: string) => {
+    setSelectedCategory(category);
+    setIsOpenCategoryModal(false);
+  };
+
+  // 페이지 변경
+  const handlePage = (num: number) => {
+    router.push(
+      `/manager/study?name=${keyword}&category=${selectedCategory}&page=${num}`
+    );
+    setPage(num);
+  };
+
+  const handleClear = () => {
+    setSelectedCategory('All');
+    setKeyword('');
+    router.push(`/manager/study?page=1`);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newCategory = selectedCategory === 'All' ? '' : selectedCategory;
+    router.push(
+      `/manager/study?name=${keyword}&category=${newCategory}&page=1`
+    );
+  };
+  const handleClickSubmit = () => {
+    const newCategory = selectedCategory === 'All' ? '' : selectedCategory;
+    router.push(
+      `/manager/study?name=${keyword}&category=${newCategory}&page=1`
+    );
+  };
+
   return (
     <>
-      <h1 className='tb2 mb-6'>스터디 목록</h1>
+      <div className='flex justify-between items-start mb-4'>
+        <h1 className='tb2'>스터디 목록</h1>
+
+        <div className='flex items-center bg-gray4 rounded-2xl pr-4'>
+          <div className='w-[150px] h-9 relative z-1 pl-4 pr-6'>
+            <button
+              className={`w-full h-full t4 text-left ${
+                selectedCategory === 'All' && 'text-gray3'
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                setIsOpenCategoryModal((prev) => !prev);
+              }}
+            >
+              {selectedCategory}
+            </button>
+            <ChevronDown className='absolute w-5 h-5 text-main/60 right-0 top-1/2 -translate-y-1/2 -z-1' />
+            {isOpenCategoryModal && (
+              <div className='absolute top-full w-full left-0 z-1'>
+                <ManagerCategoriesModal
+                  onSelect={handleCategory}
+                  customCss='!w-full !h-[200px] !overflow-auto t4'
+                />
+              </div>
+            )}
+          </div>
+          <div className='relative'>
+            <form onSubmit={handleSubmit}>
+              <input
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                // onKeyDown={searchName}
+                className='h-9 t4 px-3 placeholder:text-gray3'
+                placeholder='스터디 이름 검색'
+              ></input>
+            </form>
+          </div>
+
+          <div className='flex gap-3 w-[60px] items-center justify-end'>
+            {(keyword || selectedCategory !== 'All') && (
+              <button className='' onClick={handleClear}>
+                <X className='w-4.5 h-4.5 text-gray2/80' />
+              </button>
+            )}
+            <button onClick={handleClickSubmit}>
+              <Search className='w-5 h-5' />
+            </button>
+          </div>
+        </div>
+      </div>
       <div className='w-full border rounded-[10px] border-border1 overflow-hidden mb-10'>
         <table className='w-full'>
+          <colgroup>
+            <col className='w-[30%]'></col>
+            <col className='w-[25%]'></col>
+            <col className='w-[15%]'></col>
+            <col className='w-[15%]'></col>
+            <col className='w-[15%]'></col>
+          </colgroup>
           <thead className='bg-gray4 h-15'>
             <tr className='border-b border-border1'>
               <th className='px-5'>이름</th>
+              <th className='px-5'>카테고리</th>
+              <th className='px-5'>종료여부</th>
+              <th className='px-5'>상태</th>
               <th className='w-[200px] px-5'>삭제</th>
             </tr>
           </thead>
           <tbody>
-            {studies.map((study, i) => (
-              <ManagerStudyList key={`${study.name}${i}`} study={study} />
-            ))}
+            {isLoading ? (
+              Array.from({ length: 10 }).map((_, i) => (
+                <ManagerListSkeleton colsNumber={5} key={`skeleton${i}`} />
+              ))
+            ) : studies.length > 0 ? (
+              studies.map((study) => (
+                <ManagerStudyList
+                  key={`${study.id}`}
+                  study={study}
+                  handleDelete={handleDelete}
+                />
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5}>
+                  <div className='w-full h-[500px] flex items-center justify-center text-gray3'>
+                    <div>
+                      <SearchX
+                        className='w-12 h-12 mx-auto mb-3'
+                        strokeWidth={1.5}
+                      />
+                      <div className='flex gap-2 items-center'>
+                        <span className='tb3'>
+                          {searchCategory !== '' ? `" ${searchCategory} "` : ''}
+                        </span>
+                        <span className='tb3'>
+                          {searchKeyword !== '' ? `" ${searchKeyword} "` : ''}
+                        </span>
+                        조회 결과가 없습니다.
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
-      <Pagination />
+      <ManagerPagination
+        page={page}
+        handlePage={handlePage}
+        total={totalPage}
+      />
     </>
   );
 }

@@ -5,7 +5,7 @@ import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
 import ManagerUserList from '@/components/manager/ManagerUserList';
 import { deleteAdminUser, getAdminUser } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
-import { Search, SearchX } from 'lucide-react';
+import { Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
@@ -33,7 +33,7 @@ export default function UserPage() {
   const [users, setUsers] = useState<AdminUserType[]>([]);
   const [isLoading, setLoading] = useState(true);
 
-  const [totalPage, setTotalPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
 
   // 페이지 변경
   const handlePage = (num: number) => {
@@ -82,19 +82,41 @@ export default function UserPage() {
     }
   };
 
+  // 리셋
+  const handleClear = () => {
+    setKeyword('');
+    router.push(`/manager?page=1`);
+  };
+
+  // 버튼 클릭 검색
+  const handleClickSubmit = () => {
+    router.push(`/manager?search=${keyword}&page=1`);
+  };
   return (
     <>
       <div className='flex justify-between items-start mb-4'>
         <h1 className='tb2'>회원 목록</h1>
-        <div className='relative'>
-          <Search className='w-5 h-5 text-gray3 absolute top-1/2 -translate-y-1/2 left-3' />
-          <input
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            onKeyDown={searchEmail}
-            className='bg-gray4 rounded-2xl px-3 py-1.5 pl-10'
-            placeholder='이메일 검색'
-          ></input>
+        <div className='flex items-center bg-gray4 rounded-2xl pr-4'>
+          <div className='relative'>
+            <input
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={searchEmail}
+              className='h-9 t4 px-3 placeholder:text-gray3'
+              placeholder='스터디 이름 검색'
+            ></input>
+          </div>
+
+          <div className='flex gap-3 w-[60px] items-center justify-end'>
+            {keyword && (
+              <button className='' onClick={handleClear}>
+                <X className='w-4.5 h-4.5 text-gray2/80' />
+              </button>
+            )}
+            <button onClick={handleClickSubmit}>
+              <Search className='w-5 h-5' />
+            </button>
+          </div>
         </div>
       </div>
       <div className='h-[580px] mb-10'>
@@ -111,13 +133,13 @@ export default function UserPage() {
                 <th className='px-5'>이름</th>
                 <th className='px-5'>이메일</th>
                 <th className='px-5'>상태</th>
-                <th className='px-5'>상태변경</th>
+                <th className='px-5'>삭제</th>
               </tr>
             </thead>
             <tbody>
               {isLoading ? (
                 Array.from({ length: 10 }).map((_, i) => (
-                  <ManagerListSkeleton colsNumber={4} key={i} />
+                  <ManagerListSkeleton colsNumber={4} key={`skeleton${i}`} />
                 ))
               ) : users.length > 0 ? (
                 users.map((user) => (
@@ -130,7 +152,7 @@ export default function UserPage() {
               ) : (
                 <tr>
                   <td colSpan={4}>
-                    <div className='w-full h-[300px] flex items-center justify-center text-gray3'>
+                    <div className='w-full h-[500px] flex items-center justify-center text-gray3'>
                       <div>
                         <SearchX
                           className='w-12 h-12 mx-auto mb-3'
@@ -138,7 +160,7 @@ export default function UserPage() {
                         />
                         <div className='flex gap-2 items-center'>
                           <span className='tb3'>
-                            {keyword !== '' ? `" ${keyword} "` : ''}
+                            {searchKeyword !== '' ? `" ${searchKeyword} "` : ''}
                           </span>
                           조회 결과가 없습니다.
                         </div>
