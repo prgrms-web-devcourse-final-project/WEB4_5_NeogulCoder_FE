@@ -15,10 +15,12 @@ export default function InfoSection() {
   return (
     <>
       <div className='w-1/2 h-[180px] border border-main/10 rounded-[10px] p-5 flex flex-col'>
-        <p className='tm3 mb-6'>정보</p>
+        <p className={`tm3 ${locationLinksMessage ? '' : 'mb-6'}`}>정보</p>
 
         {locationLinksMessage ? (
-          <span className='text-text1/50 t4'>지역과 URL을 등록해 주세요</span>
+          <div className='flex flex-1 items-center justify-center'>
+            <span className='text-text1/50 t4'>지역과 URL을 등록해 주세요</span>
+          </div>
         ) : (
           <>
             {/* 지역 */}

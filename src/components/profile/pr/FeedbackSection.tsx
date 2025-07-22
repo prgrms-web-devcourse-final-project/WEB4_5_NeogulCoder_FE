@@ -40,7 +40,7 @@ export default function FeedbackSection() {
 
         {pr.reviewContents.length === 0 ? (
           <div className='flex flex-1 justify-center items-center text-text1/50 t4'>
-            받은 피드백이 없습니다.
+            받은 피드백이 없습니다
           </div>
         ) : (
           <div className='flex flex-col gap-3'>
