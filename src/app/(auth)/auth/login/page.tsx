@@ -49,8 +49,9 @@ export default function Login() {
         id: user.userId,
         email: user.email,
         nickname: user.nickname,
-        role: user.role,
         profileImageUrl: null,
+        oauth: user.oauth,
+        role: user.role,
       });
       localStorage.setItem('login_status', 'Y');
       alert('로그인 성공');
@@ -60,6 +61,8 @@ export default function Login() {
         if (error.response?.status === 401) {
           setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
           passwordRef.current?.focus();
+        } else if (error.response?.status === 400) {
+          setLoginError('탈퇴된 회원입니다.');
         } else {
           console.error('다른 오류', error.response?.status, error.message);
         }

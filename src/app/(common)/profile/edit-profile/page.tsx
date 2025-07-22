@@ -9,7 +9,7 @@ import { nicknameRegex } from '@/lib/auth/regex';
 import axios from 'axios';
 
 export default function EditProfile() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
   const [nicknameError, setNicknameError] = useState('');
   const [imgFile, setImgFile] = useState<File | null>(null);
@@ -144,20 +144,26 @@ export default function EditProfile() {
           >
             저장
           </button>
-          <button
-            type='button'
-            className='t4 self-end text-text1/50'
-            onClick={() => setIsModalOpen(true)}
-          >
-            비밀번호 변경
-          </button>
+          {user?.oauth === 'Google' ? (
+            ''
+          ) : (
+            <button
+              type='button'
+              className='t4 self-end text-text1/50'
+              onClick={() => setIsPasswordModalOpen(true)}
+            >
+              비밀번호 변경
+            </button>
+          )}
 
-          {isModalOpen && (
+          {isPasswordModalOpen && (
             <div className='fixed inset-0 z-50 flex items-center justify-center'>
               <div className='absolute inset-0 bg-main opacity-80' />
 
               <div className='relative z-10'>
-                <PasswordChangeModal onClose={() => setIsModalOpen(false)} />
+                <PasswordChangeModal
+                  onClose={() => setIsPasswordModalOpen(false)}
+                />
               </div>
             </div>
           )}

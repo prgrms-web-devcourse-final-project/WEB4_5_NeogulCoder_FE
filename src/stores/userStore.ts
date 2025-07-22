@@ -5,8 +5,9 @@ export interface UserInfo {
   id: number;
   email: string;
   nickname: string;
-  role: string;
   profileImageUrl: string | null;
+  oauth: string;
+  role: string;
 }
 
 export interface UserStore {
@@ -25,8 +26,9 @@ export const userAuthStore = create<UserStore>((set) => ({
       id: user.id,
       email: user.email,
       nickname: user.nickname,
-      role: user.role,
       profileImageUrl: user.profileImageUrl,
+      oauth: user.oauth,
+      role: user.role,
     };
     set({ user: userData });
   },
@@ -47,8 +49,9 @@ export const userAuthStore = create<UserStore>((set) => ({
           id: user.id,
           email: user.email,
           nickname: user.nickname,
-          role: user.role,
           profileImageUrl: user.profileImageUrl,
+          oauth: user.oauth,
+          role: user.role,
         },
       });
     } catch (error) {
