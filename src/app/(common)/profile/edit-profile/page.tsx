@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import photoUpload from '@/assets/images/photo-upload.svg';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 import { useEffect, useState } from 'react';
 import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
 import { axiosInstance } from '@/lib/api/axios';
@@ -88,16 +89,18 @@ export default function EditProfile() {
     <>
       <div className='tb3'>프로필 수정</div>
       <div className='mt-[60px] flex flex-col items-center justify-center'>
-        <div className='w-[140px] h-[140px] rounded-full bg-gray4 relative '>
-          {previewImg ? (
+        <div className='relative'>
+          <div className='w-[140px] h-[140px] rounded-full relative bg-black overflow-hidden'>
             <img
-              src={previewImg}
+              src={
+                previewImg && previewImg.trim() !== ''
+                  ? previewImg
+                  : basicBunny.src
+              }
               alt='프로필 미리보기'
-              className='w-full h-full object-cover rounded-full'
+              className='w-full h-[160px] object-cover rounded-full'
             />
-          ) : (
-            <div className='w-full h-full' />
-          )}
+          </div>
 
           <label
             htmlFor='profile-upload'

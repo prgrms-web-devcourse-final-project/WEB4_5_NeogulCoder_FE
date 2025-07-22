@@ -9,7 +9,6 @@ import { getUserById } from '@/lib/api/user';
 
 export default function SideBar() {
   const router = useRouter();
-
   // 사이드 메뉴
   const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴' | ''>(
     'pr'
@@ -22,14 +21,14 @@ export default function SideBar() {
   const params = useParams();
   const userId =
     params?.userId && params?.userId !== 'me' ? Number(params?.userId) : null;
-
   const [otherUser, setOtherUser] = useState<UserInfo | null>(null);
 
   const pathname = usePathname();
   const isEditOrWithdrawal =
-    pathname.includes('/edit-profile') ||
-    pathname.includes('/withdrawal') ||
-    pathname.includes('/pr/edit-pr');
+    pathname.includes('/profile/edit-profile') ||
+    pathname.includes('/profile/withdrawal') ||
+    pathname.includes('/profile/pr/edit-pr') ||
+    (me?.id && pathname === `/profile/pr/${me.id}`);
 
   const isMyPage =
     params?.userId === 'me' || isEditOrWithdrawal || me?.id === userId;
@@ -49,6 +48,14 @@ export default function SideBar() {
         });
     }
   }, [userId, isMyPage, fetchUser]);
+
+  useEffect(() => {
+    if (me?.id && pathname === `/profile/pr/${me.id}`) {
+      setSelectedMenu('pr');
+    } else if (pathname === '/profile/withdrawal') {
+      setSelectedMenu('회원 탈퇴');
+    }
+  }, [me?.id, pathname]);
 
   const userData = isMyPage ? me : otherUser;
 
