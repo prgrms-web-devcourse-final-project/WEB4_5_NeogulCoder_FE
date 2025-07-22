@@ -16,29 +16,12 @@ import '@/styles/swiper/main.css';
 import Link from 'next/link';
 import MainStudyListCardSkeleton from './MainStudyListCardSkeleton';
 import { userAuthStore } from '@/stores/userStore';
+import { useStudyStore } from '@/stores/useStudyStore';
 
 export default function MainStudyList() {
   const user = userAuthStore().user;
-  const [studies, setStudies] = useState<StudiesListType[]>([]);
   const [swiper, setSwiper] = useState<SwiperClass>();
-  const [loading, setIsLoading] = useState(true);
-
-  // 스터디 fetch
-  useEffect(() => {
-    if (!user) return;
-    const fetchStudies = async () => {
-      try {
-        const { data } = await getStudiesInfo();
-        setStudies(data.studies);
-      } catch (error) {
-        console.error('스터디 목록을 불러오는데 실패했습니다.', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchStudies();
-  }, [user]);
+  const { studies, loading } = useStudyStore();
 
   // 비회원
   if (user === null) return null;
@@ -114,7 +97,11 @@ export default function MainStudyList() {
                     ))}
                 </Swiper>
               ) : (
-                <div className='flex pt-[30px] pb-[10px] gap-10'>
+                <div
+                  className={`flex pt-[30px] pb-[10px] ${
+                    studies.length !== 0 && 'gap-10'
+                  } `}
+                >
                   <div className='flex shrink-0 gap-10'>
                     {studies &&
                       studies.map((study) => (

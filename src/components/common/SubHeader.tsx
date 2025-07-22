@@ -5,30 +5,23 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CreateStudyModal from '../study/CreateStudyModal';
 import Link from 'next/link';
-import { getHeaderStudies } from '@/lib/api/header/header.api';
 import { userAuthStore } from '@/stores/userStore';
 import Modal from '@/components/common/modal';
+import { useStudyStore } from '@/stores/useStudyStore';
 
 export default function SubHeader() {
   const router = useRouter();
   const user = userAuthStore().user;
+  const { studies, fetchStudies } = useStudyStore();
   const [isOpen, setIsOpen] = useState(false);
   const handleHome = () => {
     router.push('/');
   };
-  const [studies, setStudies] = useState<HeaderStudiesType[]>([]);
+
   useEffect(() => {
     if (!user) return;
-    const fetchStudies = async () => {
-      try {
-        const { data } = await getHeaderStudies();
-        setStudies(data);
-      } catch (error) {
-        console.error('스터디 목록을 불러오지 못했습니다.', error);
-      }
-    };
     fetchStudies();
-  }, []);
+  }, [user, fetchStudies]);
 
   return (
     <>
