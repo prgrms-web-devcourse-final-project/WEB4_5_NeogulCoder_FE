@@ -1,29 +1,28 @@
 'use client';
 
+import { formatDate } from '@/utils/formatDate';
 import { MessageSquareMore } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
-export default function RecruitmentCard(props: {
+export default function RecruitmentCard({
+  title,
+  content,
+  createdDate,
+  commentCount,
+  category,
+  studyWay,
+  status,
+  type,
+}: {
   title: string;
   content: string;
-  createdAt: string;
+  createdDate: string;
   commentCount: number;
   category?: string;
   studyWay?: string;
-  status: string;
+  status?: string;
   type: string;
 }) {
-  const {
-    title,
-    content,
-    createdAt,
-    commentCount,
-    category,
-    studyWay,
-    status,
-    type,
-  } = props;
-
   const router = useRouter();
 
   return (
@@ -33,29 +32,31 @@ export default function RecruitmentCard(props: {
     >
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
-          {status === '모집 중' && (
+          {type === 'my' && status === '모집 중' && (
             <div className='tag-type2 green py-3'>
               <span className='tb5'>모집 중</span>
             </div>
           )}
-          {status === '모집 완료' && (
+          {type === 'my' && status === '모집 완료' && (
             <div className='tag-type2 py-3'>
               <span className='tb5 text-white'>모집 완료</span>
             </div>
           )}
-          {status === '공지' && (
+          {type === 'study' && category === 'NOTICE' && (
             <div className='tag-type3 red py-3'>
               <span className='tb5'>공지</span>
             </div>
           )}
-          {status === '자유' && (
+          {type === 'study' && category === 'FREE' && (
             <div className='tag-type3 py-3'>
               <span className='tb5'>자유</span>
             </div>
           )}
           <div className='tm3 text-text1 w-[460px] truncate'>{title}</div>
         </div>
-        <div className='t4 text-text1 opacity-30'>{createdAt}</div>
+        <div className='t4 text-text1 opacity-30'>
+          {formatDate(createdDate, 'YYYY.MM.DD')}
+        </div>
       </div>
       {type === 'my' && (
         <>
