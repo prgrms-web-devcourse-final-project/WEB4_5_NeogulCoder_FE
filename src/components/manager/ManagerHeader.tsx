@@ -1,10 +1,12 @@
 'use client';
+import { axiosInstance } from '@/lib/api/axios';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
 import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
 export default function ManagerHeader() {
   const user = userAuthStore((state) => state.user);
@@ -18,6 +20,17 @@ export default function ManagerHeader() {
       return;
     }
   }, [user, router]);
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/auth/logout');
+      userAuthStore.getState().clearUser();
+      localStorage.removeItem('login_status');
+      router.push('/');
+    } catch (error) {
+      console.error('로그아웃 실패: ', error);
+    }
+  };
 
   return (
     <>
@@ -38,9 +51,14 @@ export default function ManagerHeader() {
           </div>
           <div>
             {user && (
-              <p className='t3'>
-                <span className='font-bold mr-1'>{user.nickname}</span>님
-              </p>
+              <div className='flex items-center gap-3'>
+                <p className='t3'>
+                  <span className='font-bold mr-1'>{user.nickname}</span>님
+                </p>
+                <button className='flex items-center t5' onClick={handleLogout}>
+                  <LogOut className='w-5 h-5' />
+                </button>
+              </div>
             )}
           </div>
         </div>

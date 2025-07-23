@@ -11,7 +11,7 @@ export default function ManagerStudyList({
     <tr className='h-13 tm4 text-center border-b border-border1 last:border-b-0 hover:bg-gray4'>
       <td className='px-5'>{study.name}</td>
       <td className='px-5'>{study.category}</td>
-      <td className='px-5'>{study.finished ? '진행중' : '종료'}</td>
+      <td className='px-5'>{study.finished ? '종료' : '진행중'}</td>
       <td className='px-5'>
         {study.activated ? (
           <span className='text-green'>활성화</span>
