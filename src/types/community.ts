@@ -1,4 +1,4 @@
-export type StudyCommunityData = {
+export type StudyListType = {
   noticePostInfos: {
     postId: number;
     category: string;
@@ -18,11 +18,52 @@ export type StudyCommunityData = {
   hasNext: boolean;
 };
 
-export type RequestBodyType = {
+export type StudyListQueryType = {
   page: number;
   pageSize: number;
-  category: string;
-  content: string;
-  attributeName: string;
+  category?: string;
+  content?: string;
+  attributeName?: string;
   sort: string;
+};
+
+export type MyListType = {
+  postInfos: {
+    id: number;
+    title: string;
+    category: string;
+    content: string;
+    createdDate: string;
+    commentCount: number;
+  }[];
+  totalPage: number;
+  totalElementCount: number;
+  hasNext: boolean;
+};
+
+export type MyListQueryType = {
+  page: number;
+  pageSize: number;
+  category?: string;
+  content?: string;
+  attributeName?: string;
+  sort: string;
+};
+
+export type ExtensionType = {
+  studyId: number;
+  extended: boolean;
+  members: {
+    userId: number;
+    nickname: string;
+    role: string;
+    participated: boolean;
+  }[];
+};
+
+export type MyInfoInStudyType = {
+  userId: number;
+  studyId: number;
+  role: string;
+  nickname: string;
 };
