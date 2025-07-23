@@ -6,11 +6,15 @@ import { deleteRecruitmentPost } from '@/lib/api/recruitment/delete';
 type MenuProps = {
   title?: string;
   recruitmentPostId?: number;
+  onEditClick?: () => void;
+  onDeleteClick?: () => void;
 };
 
 export default function ClickVerticalMenu({
   title,
   recruitmentPostId,
+  onEditClick,
+  onDeleteClick,
 }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
@@ -27,7 +31,7 @@ export default function ClickVerticalMenu({
         {(title === '내 게시물' || title === '내 댓글') && (
           <button
             type='button'
-            onClick={title === '내 게시물' ? handleGoToModify : undefined}
+            onClick={title === '내 게시물' ? handleGoToModify : onEditClick}
             className='flex gap-3 px-4 py-3 w-full hover:bg-gray4 tm5'
           >
             <PencilLine className='w-4 h-4' />
@@ -38,7 +42,9 @@ export default function ClickVerticalMenu({
         {(title === '내 게시물' || title === '내 댓글') && (
           <button
             type='button'
-            onClick={title === '내 게시물' ? () => setIsOpen(true) : undefined}
+            onClick={
+              title === '내 게시물' ? () => setIsOpen(true) : onDeleteClick
+            }
             className='flex items-center gap-3 px-4 py-3 w-full hover:bg-gray4 text-[#ff5955] tm5'
           >
             <Trash2 className='w-4 h-4' color='#ff5955' />

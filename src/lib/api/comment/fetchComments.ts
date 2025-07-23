@@ -14,6 +14,6 @@ export const fetchComments = async (props: FetchCommentsProps) => {
     url = `/api/recruitment-posts/${postId}/comments`;
   }
 
-  const response = await axiosInstance.get(url);
-  return response.data.data;
+  const res = await axiosInstance.get(url);
+  return res.data.data;
 };

@@ -5,8 +5,10 @@ import { useState } from 'react';
 type CommentWriteProps = {
   target: 'recruitment' | 'study';
   postId: number;
-  profileImageUrl: string;
+  // studyId?: number;
+  profileImageUrl: string | null | undefined;
   commentCount: number;
+  onCommentAdd?: () => void;
 };
 
 export default function WriteComment({
@@ -14,6 +16,7 @@ export default function WriteComment({
   profileImageUrl,
   commentCount,
   postId,
+  onCommentAdd,
 }: CommentWriteProps) {
   const [comment, setComment] = useState('');
   const router = useRouter();
@@ -27,8 +30,8 @@ export default function WriteComment({
         postId,
         content: comment,
       });
+      onCommentAdd?.();
       setComment('');
-      router.refresh(); // 댓글 새로고침
     } catch (error) {
       console.error('댓글 등록 실패:', error);
     }
@@ -61,6 +64,7 @@ export default function WriteComment({
             <input
               className='w-full h-[50px]  rounded-xl border-[1px] p-5 ml-5 border-[#B8B8B8] tb-4'
               placeholder='댓글을 입력해주세요'
+              value={comment}
               onChange={(e) => setComment(e.target.value)}
               style={{
                 color: 'var(--color-text1)',

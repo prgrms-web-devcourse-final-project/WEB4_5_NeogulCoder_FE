@@ -16,7 +16,7 @@ export const modifyRecruitmentPost = async (
     );
     return res.data;
   } catch (error) {
-    console.error('post error:', error);
+    console.error('put error:', error);
     throw error;
   }
 };

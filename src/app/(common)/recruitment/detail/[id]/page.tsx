@@ -15,6 +15,7 @@ import { userAuthStore } from '@/stores/userStore';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Viewer } from '@toast-ui/react-editor';
 import { changeStatus } from '@/lib/api/recruitment/changeStatus';
+import { studyApplication } from '@/lib/api/recruitment/studyApplication';
 
 export default function Page() {
   const router = useRouter();
@@ -42,8 +43,18 @@ export default function Page() {
   const [commentCount, setCommentCount] = useState(0);
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [expiredDate, setExpiredDate] = useState('');
-
+  const [comments, setComments] = useState<CommentType[]>([]);
+  const [applicationReason, setApplicationReason] = useState('');
   const menuRef = useRef<HTMLDivElement>(null);
+
+  type CommentType = {
+    userId: number;
+    nickname: string;
+    imageUrl: string;
+    content: string;
+    createdAt: string;
+    commentId: number;
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -58,13 +69,26 @@ export default function Page() {
       setNickname(data.postDetailsInfo.nickname);
       setSubject(data.postDetailsInfo.subject);
       setContent(data.postDetailsInfo.content);
-      setCommentCount(data.postDetailsInfo.commentCount);
       setProfileImageUrl(data.postDetailsInfo.profileImageUrl);
       setExpiredDate(data.postDetailsInfo.expiredDate);
+      setCommentCount(data.commentCount);
+      setComments(data.commentsWithWriterInfos);
     } catch (error) {
       console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
   }, [recruitmentPostId]);
+
+  const handleStudyAppSubmit = async () => {
+    try {
+      const appData = await studyApplication(
+        recruitmentPostId,
+        applicationReason
+      );
+      console.log('생성 완료', appData);
+    } catch (error) {
+      console.error('생성 실패', error);
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -141,7 +165,9 @@ export default function Page() {
             <button
               className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'
               onClick={handleGoToPr}
-            ></button>
+            >
+              {profileImageUrl}
+            </button>
             <button className='tm3' onClick={handleGoToPr}>
               {nickname}
             </button>
@@ -229,11 +255,12 @@ export default function Page() {
             target={target}
             postId={recruitmentPostId}
             commentCount={commentCount}
-            profileImageUrl={profileImageUrl}
+            profileImageUrl={me?.profileImgUrl}
+            onCommentAdd={fetchData}
           />
         </div>
         <div className='w-[852px]'>
-          <CommentList target={target} studyId={1} postId={4} />
+          <CommentList postId={recruitmentPostId} comments={comments} />
         </div>
         {isOpen && (
           <Modal
@@ -296,17 +323,23 @@ export default function Page() {
             className='w-[1020px] h-auto'
             onClose={() => setAppIsOpen(false)}
           >
-            <div
+            <textarea
               className='w-full h-[440px] border-[1px] p-5  my-6 rounded-[6px]'
+              placeholder='지원 동기를 입력해주세요'
               style={{ borderColor: 'var(--color-border3)' }}
-            >
-              <span>지원 동기를 입력해주세요</span>
-            </div>
+              value={applicationReason}
+              onChange={(e) => setApplicationReason(e.target.value)}
+            ></textarea>
             <div className='flex justify-end '>
               <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
                 취소
               </button>
-              <button className='button-type5 hover:bg-[#292929]'>확인</button>
+              <button
+                className='button-type5 hover:bg-[#292929]'
+                onClick={handleStudyAppSubmit}
+              >
+                확인
+              </button>
             </div>
           </Modal>
         )}
@@ -325,7 +358,7 @@ export default function Page() {
                   취소
                 </button>
                 <button
-                  className='button-type5 w-[120px]! bg-red! text-white!'
+                  className='button-type5 w-[120px]! bg-red! text-white! hover:bg-[#e14d4a]!'
                   onClick={async () => {
                     changeStatus(recruitmentPostId);
                   }}
