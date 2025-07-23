@@ -60,6 +60,11 @@ export default function UserPage() {
   useEffect(() => {
     if (!user) return;
 
+    if (user.role !== 'ROLE_ADMIN') {
+      router.push('/');
+      return;
+    }
+
     const fetchUsers = async () => {
       setLoading(true);
       try {
@@ -74,7 +79,7 @@ export default function UserPage() {
     };
 
     fetchUsers();
-  }, [user, page, searchKeyword]);
+  }, [user, page, searchKeyword, router]);
 
   const searchEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -103,7 +108,7 @@ export default function UserPage() {
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={searchEmail}
               className='h-9 t4 px-3 placeholder:text-gray3'
-              placeholder='스터디 이름 검색'
+              placeholder='회원 이메일 검색'
             ></input>
           </div>
 

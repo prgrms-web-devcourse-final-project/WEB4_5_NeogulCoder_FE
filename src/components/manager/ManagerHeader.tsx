@@ -2,8 +2,23 @@
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
 import Link from 'next/link';
+import { userAuthStore } from '@/stores/userStore';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function ManagerHeader() {
+  const user = userAuthStore((state) => state.user);
+  const router = useRouter();
+
+  // 목록 가져오기
+  useEffect(() => {
+    if (!user) return;
+    if (user.role !== 'ROLE_ADMIN') {
+      router.push('/');
+      return;
+    }
+  }, [user, router]);
+
   return (
     <>
       <header className='py-4 border-b border-border1'>
@@ -22,12 +37,11 @@ export default function ManagerHeader() {
             <Link href={'/manager/recruitment'}>모집글관리</Link>
           </div>
           <div>
-            <Link href={'/auth/login'} className='tm3'>
-              로그인
-            </Link>
-            {/* <p className='t3'>
-            <span className='font-bold mr-1'>관리자</span>님
-          </p> */}
+            {user && (
+              <p className='t3'>
+                <span className='font-bold mr-1'>{user.nickname}</span>님
+              </p>
+            )}
           </div>
         </div>
       </header>

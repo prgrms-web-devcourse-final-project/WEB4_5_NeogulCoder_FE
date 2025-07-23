@@ -52,7 +52,10 @@ export default function RecruitPage() {
   // 목록 가져오기
   useEffect(() => {
     if (!user) return;
-
+    if (user.role !== 'ROLE_ADMIN') {
+      router.push('/');
+      return;
+    }
     const fetchRecruit = async () => {
       setLoading(true);
       try {
@@ -67,7 +70,7 @@ export default function RecruitPage() {
     };
 
     fetchRecruit();
-  }, [user, page, searchKeyword]);
+  }, [user, page, searchKeyword, router]);
 
   // 키보드 Enter검색
   const searchSubject = (e: React.KeyboardEvent<HTMLInputElement>) => {

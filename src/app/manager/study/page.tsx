@@ -61,13 +61,20 @@ export default function StudyPage() {
   // 목록 가져오기
   useEffect(() => {
     if (!user) return;
+
+    if (user.role !== 'ROLE_ADMIN') {
+      router.push('/');
+      return;
+    }
+
     const fetchStudies = async () => {
       setLoading(true);
+      const newCategory = searchCategory === 'All' ? '' : searchCategory;
       try {
         const { data } = await getAdminStudies(
           page - 1,
           searchKeyword || '',
-          searchCategory
+          newCategory
         );
         setTotalPage(data.totalPages);
         setStudies(data.content);
@@ -79,7 +86,7 @@ export default function StudyPage() {
     };
 
     fetchStudies();
-  }, [user, page, searchKeyword, searchCategory]);
+  }, [user, page, searchKeyword, searchCategory, router]);
 
   // // 이름 검색
   // const searchName = (e: React.KeyboardEvent<HTMLInputElement>) => {
