@@ -5,6 +5,7 @@ import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerStudyList from '@/components/manager/ManagerStudyList';
 import { deleteAdminStudy, getAdminStudies } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
+import { categoryFormatting } from '@/utils/categoryFormatting';
 import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
@@ -40,7 +41,7 @@ export default function StudyPage() {
   const [keyword, setKeyword] = useState(searchKeyword || '');
   const [page, setPage] = useState(pageParams || 1);
   const [selectedCategory, setSelectedCategory] = useState(
-    searchCategory || 'All'
+    searchCategory || '전체'
   );
 
   // 이용자 삭제
@@ -69,7 +70,7 @@ export default function StudyPage() {
 
     const fetchStudies = async () => {
       setLoading(true);
-      const newCategory = searchCategory === 'All' ? '' : searchCategory;
+      const newCategory = searchCategory === '전체' ? '' : searchCategory;
       try {
         const { data } = await getAdminStudies(
           page - 1,
@@ -103,20 +104,20 @@ export default function StudyPage() {
   };
 
   const handleClear = () => {
-    setSelectedCategory('All');
+    setSelectedCategory('전체');
     setKeyword('');
     router.push(`/manager/study?page=1`);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newCategory = selectedCategory === 'All' ? '' : selectedCategory;
+    const newCategory = selectedCategory === '전체' ? '' : selectedCategory;
     router.push(
       `/manager/study?name=${keyword}&category=${newCategory}&page=1`
     );
   };
   const handleClickSubmit = () => {
-    const newCategory = selectedCategory === 'All' ? '' : selectedCategory;
+    const newCategory = selectedCategory === '전체' ? '' : selectedCategory;
     router.push(
       `/manager/study?name=${keyword}&category=${newCategory}&page=1`
     );
@@ -130,14 +131,14 @@ export default function StudyPage() {
           <div className='w-[150px] h-9 relative z-1 pl-4 pr-6'>
             <button
               className={`w-full h-full t4 text-left ${
-                selectedCategory === 'All' && 'text-gray3'
+                selectedCategory === '전체' && 'text-gray3'
               }`}
               onClick={(e) => {
                 e.preventDefault();
                 setIsOpenCategoryModal((prev) => !prev);
               }}
             >
-              {selectedCategory}
+              {categoryFormatting(selectedCategory)}
             </button>
             <ChevronDown className='absolute w-5 h-5 text-main/60 right-0 top-1/2 -translate-y-1/2 -z-1' />
             {isOpenCategoryModal && (
@@ -162,7 +163,7 @@ export default function StudyPage() {
           </div>
 
           <div className='flex gap-3 w-[60px] items-center justify-end'>
-            {(keyword || selectedCategory !== 'All') && (
+            {(keyword || selectedCategory !== '전체') && (
               <button className='' onClick={handleClear}>
                 <X className='w-4.5 h-4.5 text-gray2/80' />
               </button>

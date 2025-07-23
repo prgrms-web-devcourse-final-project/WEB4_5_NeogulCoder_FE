@@ -1,4 +1,5 @@
 import { AdminStudyType } from '@/app/manager/study/page';
+import { categoryFormatting } from '@/utils/categoryFormatting';
 
 export default function ManagerStudyList({
   study,
@@ -10,7 +11,7 @@ export default function ManagerStudyList({
   return (
     <tr className='h-13 tm4 text-center border-b border-border1 last:border-b-0 hover:bg-gray4'>
       <td className='px-5'>{study.name}</td>
-      <td className='px-5'>{study.category}</td>
+      <td className='px-5'>{categoryFormatting(study.category)}</td>
       <td className='px-5'>{study.finished ? '종료' : '진행중'}</td>
       <td className='px-5'>
         {study.activated ? (

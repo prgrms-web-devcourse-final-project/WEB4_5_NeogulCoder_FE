@@ -1,3 +1,5 @@
+import { categoryFormatting } from '@/utils/categoryFormatting';
+
 export default function CategoriesModal({
   onSelect,
   customCss,
@@ -6,7 +8,7 @@ export default function CategoriesModal({
   customCss?: string;
 }) {
   const category = [
-    'All',
+    '전체',
     'LANGUAGE',
     'IT',
     'EXAM',
@@ -34,7 +36,7 @@ export default function CategoriesModal({
             className='px-3 py-1.5 text-left hover:bg-gray4 rounded-[10px]'
             onClick={() => onSelect(category)}
           >
-            {category}
+            {categoryFormatting(category)}
           </button>
         ))}
       </div>
