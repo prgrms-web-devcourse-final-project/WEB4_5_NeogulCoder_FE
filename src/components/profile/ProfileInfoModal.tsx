@@ -31,8 +31,8 @@ export default function UserInfoModal({
     try {
       await axiosInstance.post('/auth/logout');
       onItemClick();
-      localStorage.removeItem('login_status');
       userAuthStore.getState().clearUser();
+      localStorage.removeItem('login_status');
       router.push('/');
     } catch (error) {
       console.error('로그아웃 실패: ', error);
