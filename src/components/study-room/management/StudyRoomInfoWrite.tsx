@@ -5,6 +5,7 @@ import { putStudyInfo } from '@/lib/api/study.api';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import dayjs from 'dayjs';
+import musicBunny from '@/assets/images/music-bunny.svg';
 import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState, useTransition } from 'react';
@@ -93,7 +94,7 @@ export default function StudyRoomInfoWrite({
           : studyInfoData.members.length;
 
       // 이미지 변경없을때 JSON 형식의 데이터
-      const updateData: StudyInfoUpdateType = {
+      const request: StudyInfoUpdateType = {
         name: name,
         category: selectedCategory,
         capacity: capacityUpdate,
@@ -101,29 +102,21 @@ export default function StudyRoomInfoWrite({
         location: selectedRegion,
         startDate: formattedStartDate,
         introduction: introduction,
-        imageUrl: studyInfoData.imageUrl,
       };
 
       try {
-        if (imageFile) {
-          // 이미지 변경 있을때 FormData로 전송
-          const formData = new FormData();
-          formData.append('name', name);
-          formData.append('category', selectedCategory);
-          formData.append('capacity', String(capacityUpdate));
-          formData.append('studyType', selectedStudyType);
-          formData.append('location', selectedRegion);
-          formData.append('startDate', formattedStartDate);
-          formData.append('introduction', introduction);
-          formData.append('image', imageFile);
+        // FormData로 전송
+        const formData = new FormData();
+        formData.append(
+          'request',
+          new Blob([JSON.stringify(request)], { type: 'application/json' })
+        );
+        formData.append('image', imageFile || '');
+        await putStudyInfo(studyId, formData);
 
-          await putStudyInfo(studyId, formData);
-        } else {
-          await putStudyInfo(studyId, updateData);
-        }
         // state 변경은 이미지 변경이 있으면 그 이미지로 변경 되도록
         handleUpdate({
-          ...updateData,
+          ...request,
           imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
         });
 
@@ -149,9 +142,9 @@ export default function StudyRoomInfoWrite({
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 {/* 사진 */}
                 <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
-                  <div className='w-full h-full rounded-full border border-border1 bg-gray3 overflow-hidden'>
+                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden'>
                     <Image
-                      src={imagePreview ?? studyInfoData.imageUrl}
+                      src={imagePreview ?? studyInfoData.imageUrl ?? musicBunny}
                       width='100'
                       height='100'
                       className='w-full h-full object-cover'
@@ -250,6 +243,7 @@ export default function StudyRoomInfoWrite({
                             dayjs(e.target.value).format('YYYY-MM-DD')
                           )
                         }
+                        value={dayjs(startDate).format('YYYY-MM-DD')}
                       />
                       <CalendarDays
                         strokeWidth={1}

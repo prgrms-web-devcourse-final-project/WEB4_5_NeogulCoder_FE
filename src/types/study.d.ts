@@ -7,7 +7,7 @@ type StudyHeaderType = {
 };
 
 type StudyInfoType = {
-  imageUrl: string;
+  imageUrl: string | null;
   name: string;
   category: string;
   capacity: number;
@@ -27,7 +27,7 @@ type StudyInfoUpdateType = {
   location: string;
   startDate: string;
   introduction: string;
-  imageUrl: string;
+  imageUrl?: string | null;
 };
 
 type StudyMemberType = {

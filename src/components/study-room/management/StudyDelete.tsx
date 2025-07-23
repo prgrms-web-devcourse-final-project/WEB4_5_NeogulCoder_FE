@@ -36,10 +36,10 @@ export default function StudyDelete({ studyId }: { studyId: number }) {
       </div>
       <div className='flex justify-between items-center '>
         <p className='t4 leading-none mt-1 text-red'>
-          스터디 종료일자 7일 이내로 스터디 연장을 하실 수 있습니다.
+          현재 스터디를 삭제하면 되돌릴 수 없습니다.
         </p>
         <button className='button-type2' onClick={checkModalOpen}>
-          <span>스터디 연장</span>
+          <span>스터디 삭제</span>
         </button>
       </div>
 
