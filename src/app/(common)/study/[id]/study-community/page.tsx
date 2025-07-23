@@ -1,42 +1,52 @@
-import Pagination from '@/components/common/Pagination';
-import RecruitmentCard from '@/components/my/RecruitmentCard';
-import ListMenuStudy from '@/components/study/ListMenuStudy';
-import NoticeItem from '@/components/study/NoticeItem';
+import StudyCommunityClient from '@/components/study/StudyCommunityClient';
 
 export default function StudyCommunity() {
-  const noticeType = {
-    title: '다음 주 일정 안내',
-    createdAt: '2025.07.01',
+  const responseType = {
+    noticePostInfos: [
+      {
+        postId: 3,
+        category: '공지',
+        title: '제목',
+        createdAt: '2025-07-21',
+      },
+      {
+        postId: 4,
+        category: '공지',
+        title:
+          '공지인데 뭐 공지인데 뭐 공지인데 뭐 공지인데 뭐 공지인데 뭐 공지인데 뭐 공지인데 뭐 공지인데 뭐',
+        createdAt: '2025-07-22',
+      },
+    ],
+    postInfos: [
+      {
+        id: 12,
+        title: '모든 국민은 직업선택의 자유를 가진다.',
+        category: 'NOTICE',
+        content: '국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-21T16:20:58.523Z',
+        commentCount: 3,
+      },
+      {
+        id: 13,
+        title:
+          '아라라라ㅏ라 나난ㄴ나나나ㅏㅏ난나ㅏㅏㄴ나 바나나나나나나미니언 미니언미니언',
+        category: 'FREE',
+        content:
+          '국회는 의원의 자격을 심사하며, 의원을 징계할 있다. 국회는 의원의 자격을 심사하며, 의원을 징계할 있다. 국회는 의원의 자격을 심사하며, 의원을 징계할 있다. 국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-22T16:20:58.523Z',
+        commentCount: 0,
+      },
+    ],
+    totalPage: 13,
+    totalElementCount: 3,
+    hasNext: true,
   };
 
-  const recruitmentType = {
-    title: '오늘 스터디 내용 정리본입니당',
-    content:
-      '국회는 의원의 자격을 심사하며, 의원을 징계할 수 있다. 국무회의는 대통령·국무총리와 15인 이상 30인 이하의 국무위원으로 구성한다. 국회는 헌법 또는 법률에 특별한 규정이 없는 한 나나나나나나나나나',
-    createdAt: '2025.07.01',
-    commentCount: 3,
-    status: '자유',
-    type: 'study',
-  };
+  const initialStudyCommunityData = responseType;
 
   return (
-    <div className="w-full">
-      <div className="tb2 text-text1">커뮤니티</div>
-      <div className="mt-6">
-        <ListMenuStudy />
-      </div>
-      <div className="flex flex-col gap-4 p-6 bg-[#fafafa] rounded-[8px] mt-[30px]">
-        <NoticeItem {...noticeType} />
-        <NoticeItem {...noticeType} />
-      </div>
-      <div className="flex flex-col gap-[30px] mt-[30px]">
-        {[...Array(10)].map((_, i) => (
-          <RecruitmentCard key={i} {...recruitmentType} />
-        ))}
-      </div>
-      <div className="mt-[30px]">
-        <Pagination />
-      </div>
-    </div>
+    <StudyCommunityClient
+      initialStudyCommunityData={initialStudyCommunityData}
+    />
   );
 }
