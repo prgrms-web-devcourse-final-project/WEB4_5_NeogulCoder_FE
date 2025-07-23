@@ -1,0 +1,17 @@
+import { axiosInstance } from '../axios';
+
+export const writeRecruitmentPost = async (payload: {
+  studyId: number | '';
+  subject: string;
+  content: string;
+  recruitmentCount: number;
+  expireDate: string;
+}) => {
+  try {
+    const res = await axiosInstance.post('/recruitment-posts', payload);
+    return res.data;
+  } catch (error) {
+    console.error('post error:', error);
+    throw error;
+  }
+};

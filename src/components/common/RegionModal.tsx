@@ -1,9 +1,11 @@
 export default function RegionModal({
   onSelect,
   selectedRegion,
+  customCss,
 }: {
   onSelect: (region: string | null) => void;
   selectedRegion: string | null;
+  customCss?: string;
 }) {
   const region = [
     '서울',
@@ -33,7 +35,11 @@ export default function RegionModal({
     }
   };
   return (
-    <div className='w-[200px] border border-main/10 bg-white rounded-[10px] shadow-sm overflow-hidden tm4 p-3'>
+    <div
+      className={`w-[200px] border border-main/10 bg-white rounded-[10px] shadow-sm overflow-hidden tm4 p-3 ${
+        customCss ? customCss : ''
+      }`}
+    >
       <div className='grid grid-cols-2 gap-2 items-center justify-center'>
         {region.map((region) => (
           <button

@@ -1,6 +1,7 @@
 'use client';
 
 import { MessageSquareMore } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function RecruitmentCard(props: {
   title: string;
@@ -23,8 +24,13 @@ export default function RecruitmentCard(props: {
     type,
   } = props;
 
+  const router = useRouter();
+
   return (
-    <div className='flex flex-col justify-center w-full px-[24px] py-[24px] bg-white border-2 border-border1 rounded-[10px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'>
+    <div
+      className='flex flex-col justify-center w-full px-[24px] py-[24px] bg-white border-2 border-border1 rounded-[10px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
+      onClick={() => router.push('/recruitment/detail/1')}
+    >
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
           {status === '모집 중' && (

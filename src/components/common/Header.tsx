@@ -46,6 +46,7 @@ export default function Header() {
           alt='로고'
           className='w-[80px] h-9 cursor-pointer'
           onClick={handleGoToHome}
+          priority
         />
         <div className='flex items-center gap-[18px]'>
           {user ? (

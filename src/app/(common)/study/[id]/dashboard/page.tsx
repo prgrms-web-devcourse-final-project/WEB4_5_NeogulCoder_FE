@@ -7,17 +7,143 @@ import StudyPostItem from '@/components/study-room/dashboard/StudyPostItem';
 
 import StudyExtendCheckModal from '@/components/study-room/dashboard/StudyExtendCheckModal';
 
-export default function DashBoard() {
+import Link from 'next/link';
+import {
+  getStudyDashBoardData,
+  getStudyHeaderData,
+} from '@/lib/api/studyDashboard.api';
+
+export default async function DashBoard({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  // const { data } = await getStudyDashBoardData(Number(id));
+  // const { data: studyHeaderData } = await getStudyHeaderData(Number(id));
+
+  const studyData = {
+    progressDays: 45,
+    totalDays: 320,
+    capacity: 4,
+    currentCount: 3,
+    attendances: [
+      {
+        studyId: 1,
+        userId: 2,
+        attendanceDate: '2025-07-10',
+      },
+      {
+        studyId: 1,
+        userId: 2,
+        attendanceDate: '2025-07-15',
+      },
+      {
+        studyId: 1,
+        userId: 2,
+        attendanceDate: '2025-07-16',
+      },
+    ],
+    teamCalenders: [
+      {
+        scheduleId: 2001,
+        teamId: 101,
+        writerId: 123,
+        writerNickname: '유강현',
+        writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
+        title: '스터디A',
+        description: '기획 회의',
+        startTime: '2025-07-16T06:33:12.800Z',
+        endTime: '2025-07-16T06:33:12.800Z',
+      },
+    ],
+    studyPosts: [
+      {
+        id: 12,
+        title: '모든 국민은 직업선택의 자유를 가진다.',
+        category: 'NOTICE',
+        content: '국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-16T06:33:12.800Z',
+        commentCount: 3,
+      },
+      {
+        id: 13,
+        title: '2모든 국민은 직업선택의 자유를 가진다.',
+        category: 'NOTICE',
+        content: '국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-16T06:33:12.800Z',
+        commentCount: 3,
+      },
+      {
+        id: 14,
+        title: '공유글1모든 국민은 직업선택의 자유를 가진다.',
+        category: '',
+        content: '국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-16T06:33:12.800Z',
+        commentCount: 3,
+      },
+      {
+        id: 15,
+        title: '2공유글모든 국민은 직업선택의 자유를 가진다.',
+        category: '',
+        content: '국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-16T01:33:12.800Z',
+        commentCount: 3,
+      },
+      {
+        id: 16,
+        title: '3공유글모든 국민은 직업선택의 자유를 가진다.',
+        category: '',
+        content: '국회는 의원의 자격을 심사하며, 의원을 징계할 있다.',
+        createdDate: '2025-07-15T06:33:12.800Z',
+        commentCount: 3,
+      },
+    ],
+  };
+  const studyHeaderData = {
+    name: '자바 스터디',
+    introduction: '자바 스터디',
+    imageUrl: 'http://localhost:8083/image.jpg',
+    studyType: 'ONLINE',
+    location: '서울',
+  };
   const studyInfos = [
-    { title: '스터디 총 기간', data: '+99999', type: 'day' },
-    { title: '스터디 총 인원', data: '6', subData: '9', type: 'personnel' },
+    {
+      title: '스터디 총 기간',
+      data: `+${studyData.totalDays}`,
+      type: 'day',
+    },
+    {
+      title: '스터디 총 인원',
+      data: studyData.currentCount.toString(),
+      subData: studyData.capacity.toString(),
+      type: 'personnel',
+    },
     { title: '스터디 총 게시물', data: '1,238', type: 'post' },
   ];
+  const noticeLists = studyData.studyPosts.filter(
+    (f) => f.category === 'NOTICE'
+  );
+  const normalLists = studyData.studyPosts.filter(
+    (f) => f.category !== 'NOTICE'
+  );
   return (
     <>
+      <div className='flex gap-3 items-end leading-0 mb-10'>
+        <p className='t4 text-gray3'>
+          {/* 스터디 이름 조회 */}
+          <span className='tb3 text-text1 mr-1'>{studyHeaderData.name}</span>와
+          <span className='text-green tm3'> {studyData.progressDays}</span>일
+          스터디 중!
+        </p>
+      </div>
+
       <div className='flex gap-6 mb-12'>
         <div>
-          <StudyAttendance />
+          <StudyAttendance
+            data={studyData.attendances}
+            total={studyData.totalDays}
+          />
         </div>
         <div className='w-full'>
           <h3 className='tb3 mb-[18px]'>스터디 세부정보</h3>
@@ -49,26 +175,33 @@ export default function DashBoard() {
         <div className='flex justify-between mb-[18px]'>
           <h3 className='tb3'>스터디 공지사항</h3>
 
-          <button className='flex items-center t5'>
+          <Link
+            href={`/study/${id}/study-community`}
+            className='flex items-center t5'
+          >
             더보기 <ChevronRight className='w-4 h-4' />
-          </button>
+          </Link>
         </div>
         <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
-          <StudyPostItem type='공지' />
-          <StudyPostItem type='공지' />
+          {noticeLists.map((list) => (
+            <StudyPostItem key={list.id} data={list} />
+          ))}
         </div>
       </div>
       <div className='mb-12'>
         <div className='flex justify-between  mb-[18px]'>
           <h3 className='tb3'>스터디 최신글</h3>
-          <button className='flex items-center t5'>
+          <Link
+            href={`/study/${id}/study-community`}
+            className='flex items-center t5'
+          >
             더보기 <ChevronRight className='w-4 h-4' />
-          </button>
+          </Link>
         </div>
         <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
-          <StudyPostItem type='new' />
-          <StudyPostItem type='new' />
-          <StudyPostItem type='new' />
+          {normalLists.map((list) => (
+            <StudyPostItem key={list.id} data={list} />
+          ))}
         </div>
       </div>
       {/* 스터디 연장 여부 모달 */}
