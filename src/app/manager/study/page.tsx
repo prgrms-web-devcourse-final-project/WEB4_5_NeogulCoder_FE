@@ -88,16 +88,6 @@ export default function StudyPage() {
     fetchStudies();
   }, [user, page, searchKeyword, searchCategory, router]);
 
-  // // 이름 검색
-  // const searchName = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  //   if (e.key === 'Enter') {
-  //     router.push(
-  //       `/manager/study?name=${keyword}&category=${selectedCategory}&page=1`
-  //     );
-  //   }
-  // };
-
-  // // https://wibby.cedartodo.uk/admin/studies?page=0&name=asd&category=IT
   // // 카테고리 선택
   const handleCategory = (category: string) => {
     setSelectedCategory(category);
@@ -136,7 +126,6 @@ export default function StudyPage() {
     <>
       <div className='flex justify-between items-start mb-4'>
         <h1 className='tb2'>스터디 목록</h1>
-
         <div className='flex items-center bg-gray4 rounded-2xl pr-4'>
           <div className='w-[150px] h-9 relative z-1 pl-4 pr-6'>
             <button
@@ -184,62 +173,66 @@ export default function StudyPage() {
           </div>
         </div>
       </div>
-      <div className='w-full border rounded-[10px] border-border1 overflow-hidden mb-10'>
-        <table className='w-full'>
-          <colgroup>
-            <col className='w-[30%]'></col>
-            <col className='w-[25%]'></col>
-            <col className='w-[15%]'></col>
-            <col className='w-[15%]'></col>
-            <col className='w-[15%]'></col>
-          </colgroup>
-          <thead className='bg-gray4 h-15'>
-            <tr className='border-b border-border1'>
-              <th className='px-5'>이름</th>
-              <th className='px-5'>카테고리</th>
-              <th className='px-5'>종료여부</th>
-              <th className='px-5'>상태</th>
-              <th className='w-[200px] px-5'>삭제</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              Array.from({ length: 10 }).map((_, i) => (
-                <ManagerListSkeleton colsNumber={5} key={`skeleton${i}`} />
-              ))
-            ) : studies.length > 0 ? (
-              studies.map((study) => (
-                <ManagerStudyList
-                  key={`${study.id}`}
-                  study={study}
-                  handleDelete={handleDelete}
-                />
-              ))
-            ) : (
-              <tr>
-                <td colSpan={5}>
-                  <div className='w-full h-[500px] flex items-center justify-center text-gray3'>
-                    <div>
-                      <SearchX
-                        className='w-12 h-12 mx-auto mb-3'
-                        strokeWidth={1.5}
-                      />
-                      <div className='flex gap-2 items-center'>
-                        <span className='tb3'>
-                          {searchCategory !== '' ? `" ${searchCategory} "` : ''}
-                        </span>
-                        <span className='tb3'>
-                          {searchKeyword !== '' ? `" ${searchKeyword} "` : ''}
-                        </span>
-                        조회 결과가 없습니다.
+      <div className='h-[580px] mb-10'>
+        <div className='w-full border rounded-[10px] border-border1 overflow-hidden'>
+          <table className='w-full'>
+            <colgroup>
+              <col className='w-[30%]'></col>
+              <col className='w-[25%]'></col>
+              <col className='w-[15%]'></col>
+              <col className='w-[15%]'></col>
+              <col className='w-[15%]'></col>
+            </colgroup>
+            <thead className='bg-gray4 h-15'>
+              <tr className='border-b border-border1'>
+                <th className='px-5'>이름</th>
+                <th className='px-5'>카테고리</th>
+                <th className='px-5'>종료여부</th>
+                <th className='px-5'>상태</th>
+                <th className='w-[200px] px-5'>삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
+                Array.from({ length: 10 }).map((_, i) => (
+                  <ManagerListSkeleton colsNumber={5} key={`skeleton${i}`} />
+                ))
+              ) : studies.length > 0 ? (
+                studies.map((study) => (
+                  <ManagerStudyList
+                    key={`${study.id}`}
+                    study={study}
+                    handleDelete={handleDelete}
+                  />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5}>
+                    <div className='w-full h-[500px] flex items-center justify-center text-gray3'>
+                      <div>
+                        <SearchX
+                          className='w-12 h-12 mx-auto mb-3'
+                          strokeWidth={1.5}
+                        />
+                        <div className='flex gap-2 items-center'>
+                          <span className='tb3'>
+                            {searchCategory !== ''
+                              ? `" ${searchCategory} "`
+                              : ''}
+                          </span>
+                          <span className='tb3'>
+                            {searchKeyword !== '' ? `" ${searchKeyword} "` : ''}
+                          </span>
+                          조회 결과가 없습니다.
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
       <ManagerPagination
         page={page}
