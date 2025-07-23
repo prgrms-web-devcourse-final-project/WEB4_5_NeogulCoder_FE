@@ -39,7 +39,11 @@ export default function StudyRoomInfo({
     },
     {
       title: '진행방식',
-      content: studyTypeFormatting(studyInfoData.studyType),
+      content: `${studyTypeFormatting(studyInfoData.studyType)}${
+        studyInfoData.studyType !== 'ONLINE'
+          ? ', ' + studyInfoData.location
+          : ''
+      }`,
     },
     {
       title: '기간',
@@ -81,7 +85,6 @@ export default function StudyRoomInfo({
         <StudyRoomInfoWrite
           studyId={studyId}
           studyInfoData={studyInfoData}
-          // handleUpdate={handleUpdate}
           closeFn={infoModalClose}
         />
       )}

@@ -42,6 +42,10 @@ export default function StudyRoomInfoWrite({
 
   const [imageFile, setImageFiles] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(studyInfoData.imageUrl);
+
+  // 미래에 시작하는 스터디 인지 아닌지
+  const isFutureStartDate = dayjs(startDate).isAfter(dayjs(), 'day');
+
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
@@ -82,7 +86,13 @@ export default function StudyRoomInfoWrite({
     e.preventDefault();
     startTransition(async () => {
       // 날짜 형식 맞추기
-      const formattedStartDate = dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss');
+      let formattedStartDate;
+      if (isFutureStartDate) {
+        formattedStartDate = dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss');
+      } else {
+        formattedStartDate = startDate;
+      }
+
       // 현재 가입자 수 보다 작으면 수정 안되도록
       const capacityUpdate =
         capacity > studyInfoData.members.length
@@ -96,8 +106,8 @@ export default function StudyRoomInfoWrite({
         capacity: capacityUpdate,
         studyType: selectedStudyType,
         location: selectedRegion,
-        startDate: formattedStartDate,
         introduction: introduction,
+        startDate: formattedStartDate,
       };
 
       try {
@@ -117,6 +127,9 @@ export default function StudyRoomInfoWrite({
           imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
           studyType: request.studyType,
           location: request.location,
+          category: request.category,
+          capacity: request.capacity,
+          startDate: formattedStartDate,
         });
 
         closeFn(); // 모달 닫기
@@ -227,7 +240,7 @@ export default function StudyRoomInfoWrite({
                   </div>
                 </div>
                 {/* 시작 날짜 (스터디 시작 전에만 수정 가능) */}
-                {dayjs(startDate).isAfter(dayjs().format('YYYY-MM-DD')) && (
+                {isFutureStartDate && (
                   <div className=' shrink-0'>
                     <p className='t3 mb-3'>
                       시작날짜 <span className='tm5 text-red'>(필수)</span>
@@ -295,10 +308,12 @@ export default function StudyRoomInfoWrite({
                         {isOpenRegionModal && (
                           <div className='absolute top-full w-full left-0 z-1'>
                             <RegionModal
-                              onSelect={(region: string) => {
+                              onSelect={(region: string | null) => {
+                                if (region === null) return;
                                 setSelectedRegion(region);
                                 setIsOpenRegionModal(false);
                               }}
+                              selectedRegion={selectedRegion}
                               customCss='!w-full !h-[120px] !overflow-auto t4'
                             />
                           </div>
