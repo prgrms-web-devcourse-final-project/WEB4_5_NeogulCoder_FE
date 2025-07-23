@@ -6,14 +6,19 @@ import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 export default function SideStudyInfo({
   studyInfo,
 }: {
-  studyInfo: StudyInfoType;
+  studyInfo: StudyHeaderType;
 }) {
   return (
     <>
       <div className='px-5 py-5 bg-gray4 rounded-[10px] mb-3'>
         <div className='flex gap-3 mb-3 items-center'>
-          <div className='w-[70px] h-[70px] bg-white rounded-full shrink-0'>
-            <Image width={70} src={musicBunny} alt='예시 기본 프사' />
+          <div className='w-[70px] h-[70px] bg-white rounded-full shrink-0 overflow-hidden'>
+            <Image
+              width={70}
+              height={70}
+              src={studyInfo.imageUrl ?? musicBunny}
+              alt='예시 기본 프사'
+            />
           </div>
           <div>
             <p className='tb3 cursor-default'>{studyInfo.name}</p>

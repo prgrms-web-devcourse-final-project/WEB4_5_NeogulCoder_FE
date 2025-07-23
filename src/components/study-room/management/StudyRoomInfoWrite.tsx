@@ -8,40 +8,36 @@ import dayjs from 'dayjs';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useState, useTransition } from 'react';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
   studyId,
   closeFn,
-  handleUpdate,
 }: {
   studyInfoData: StudyInfoType;
   studyId: number;
   closeFn: () => void;
-  handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
-  // const [image, setImage] = useState(studyInfoData.imageUrl);
+  const updateStudyInfo = useStudyStore().updateStudyInfo;
+
   const [name, setName] = useState(studyInfoData.name);
-
   const [capacity, setCapacity] = useState(studyInfoData.capacity);
-  //  const [category, setCategory] = useState();
-
-  // const [location, setLocation] = useState();
   const [startDate, setStartDate] = useState(studyInfoData.startDate);
   const [introduction, setIntroduction] = useState(studyInfoData.introduction);
-
-  const [capacityCheck, setCapacityCheck] = useState(false);
-  const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(
     studyInfoData.category
   );
-  const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(studyInfoData.location);
-  const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
   const [selectedStudyType, setSelectedStudyType] = useState(
     studyInfoData.studyType
   );
+  const [capacityCheck, setCapacityCheck] = useState(false);
+  const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
+  const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
+  const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
+
   const [isPending, startTransition] = useTransition();
 
   const [imageFile, setImageFiles] = useState<File | null>(null);
@@ -52,18 +48,18 @@ export default function StudyRoomInfoWrite({
     if (file) {
       setImageFiles(file);
 
+      // 이전 미리보기 Blob URL 해제
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+
+      // 새로운 미리보기 URL 생성
       const imagePreviewUrl = URL.createObjectURL(file);
       setImagePreview(imagePreviewUrl);
     }
   };
 
-  // 메모리 누수 방지 - 이미지 업로드 후 Blob URL 해제
-  useEffect(() => {
-    if (imagePreview) {
-      return () => URL.revokeObjectURL(imagePreview);
-    }
-  }, [imagePreview]);
-
+  // 전체 인원수에 작성시 숫자만가능, 현재 스티디원 수보다 적게 지정 할수 없도록 관리
   const handleCapacity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const number = e.target.value.replace(/[^0-9]/g, '');
     if (Number(number) < studyInfoData.members.length) {
@@ -114,10 +110,13 @@ export default function StudyRoomInfoWrite({
         formData.append('image', imageFile || '');
         await putStudyInfo(studyId, formData);
 
-        // state 변경은 이미지 변경이 있으면 그 이미지로 변경 되도록
-        handleUpdate({
-          ...request,
+        // 사이드메뉴 스터디 정보 관리를 위한 전역상태 업데이트
+        updateStudyInfo({
+          name: request.name,
+          introduction: request.introduction,
           imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
+          studyType: request.studyType,
+          location: request.location,
         });
 
         closeFn(); // 모달 닫기

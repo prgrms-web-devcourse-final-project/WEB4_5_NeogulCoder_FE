@@ -1,9 +1,9 @@
 type StudyHeaderType = {
   name: string;
   introduction: string;
-  imageUrl: string;
+  imageUrl: string | null;
   studyType: string;
-  location: string | null;
+  location: string;
 };
 
 type StudyInfoType = {
