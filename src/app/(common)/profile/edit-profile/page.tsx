@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
 import photoUpload from '@/assets/images/photo-upload.svg';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 import { useEffect, useState } from 'react';
 import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
 import { axiosInstance } from '@/lib/api/axios';
@@ -9,11 +10,12 @@ import { nicknameRegex } from '@/lib/auth/regex';
 import axios from 'axios';
 
 export default function EditProfile() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [nickname, setNickname] = useState('');
   const [nicknameError, setNicknameError] = useState('');
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
+  const user = userAuthStore((state) => state.user);
 
   useEffect(() => {
     const initUserProfile = async () => {
@@ -21,14 +23,16 @@ export default function EditProfile() {
       if (!store.user) {
         await store.fetchUser();
       }
-      const user = userAuthStore.getState().user;
-      if (user) {
-        setNickname(user.nickname);
-        setPreviewImg(user.profileImgUrl || '');
-      }
     };
     initUserProfile();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      setNickname(user.nickname);
+      setPreviewImg(user.profileImageUrl || '');
+    }
+  }, [user]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,7 +40,7 @@ export default function EditProfile() {
       setImgFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        // console.log(reader.result);
+        console.log(reader.result);
         setPreviewImg(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -50,30 +54,24 @@ export default function EditProfile() {
     } else {
       setNicknameError('');
     }
-    // const finalImgUrl = previewImg || '';
 
     try {
       const formData = new FormData();
       formData.append('nickname', nickname);
+
       if (imgFile) {
-        formData.append('profileImgUrl', imgFile);
+        formData.append('profileImage', imgFile);
       }
-      await axiosInstance.put('/api/users/update/profile', {
-        nickname,
-      });
 
-      //   await axiosInstance.put('/api/users/update/profile', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   },
-      // });
-
+      await axiosInstance.put('/api/users/update/profile', formData);
       await userAuthStore.getState().fetchUser();
-      const user = userAuthStore.getState().user;
-      if (user) {
-        setNickname(user.nickname);
-        setPreviewImg(user.profileImgUrl || '');
+
+      const updatedUser = userAuthStore.getState().user;
+      console.log(updatedUser);
+      if (updatedUser) {
+        setPreviewImg(updatedUser.profileImageUrl || '');
       }
+
       alert('프로필 수정 완료');
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -91,19 +89,19 @@ export default function EditProfile() {
     <>
       <div className='tb3'>프로필 수정</div>
       <div className='mt-[60px] flex flex-col items-center justify-center'>
-        <div className='w-[140px] h-[140px] rounded-full bg-gray4 relative '>
-          {/* 미리보기 */}
-          {previewImg ? (
-            <Image
-              src={previewImg}
+        <div className='relative'>
+          <div className='w-[140px] h-[140px] rounded-full relative bg-black overflow-hidden'>
+            <img
+              src={
+                previewImg && previewImg.trim() !== ''
+                  ? previewImg
+                  : basicBunny.src
+              }
               alt='프로필 미리보기'
-              className='w-full h-full object-cover rounded-full'
+              className='w-full h-[160px] object-cover rounded-full'
             />
-          ) : (
-            <div className='w-full h-full' />
-          )}
+          </div>
 
-          {/* 업로드 버튼 */}
           <label
             htmlFor='profile-upload'
             className='absolute right-[5px] bottom-[5px] cursor-pointer z-10'
@@ -149,20 +147,26 @@ export default function EditProfile() {
           >
             저장
           </button>
-          <button
-            type='button'
-            className='t4 self-end text-text1/50'
-            onClick={() => setIsModalOpen(true)}
-          >
-            비밀번호 변경
-          </button>
+          {user?.oauth === 'Google' ? (
+            ''
+          ) : (
+            <button
+              type='button'
+              className='t4 self-end text-text1/50'
+              onClick={() => setIsPasswordModalOpen(true)}
+            >
+              비밀번호 변경
+            </button>
+          )}
 
-          {isModalOpen && (
+          {isPasswordModalOpen && (
             <div className='fixed inset-0 z-50 flex items-center justify-center'>
               <div className='absolute inset-0 bg-main opacity-80' />
 
               <div className='relative z-10'>
-                <PasswordChangeModal onClose={() => setIsModalOpen(false)} />
+                <PasswordChangeModal
+                  onClose={() => setIsPasswordModalOpen(false)}
+                />
               </div>
             </div>
           )}

@@ -5,9 +5,9 @@ import good from '@/assets/images/good.svg';
 import notGood from '@/assets/images/not-good.svg';
 import { useEffect, useState } from 'react';
 import MannerModal from './MannerModal';
+import { userPrStore } from '@/stores/prStore';
 
 export default function MannerSection() {
-  const count = 10;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -21,6 +21,9 @@ export default function MannerSection() {
       document.body.style.overflow = '';
     };
   }, [isModalOpen]);
+
+  const { pr } = userPrStore();
+  if (!pr) return null;
 
   return (
     <>
@@ -40,7 +43,9 @@ export default function MannerSection() {
           <div className='flex flex-col gap-5 items-center'>
             <Image src={excellent} alt='최고예요' />
             <p>
-              <span className='tm2'>{count}</span>{' '}
+              <span className='tm2'>
+                {pr.reviewTags?.[0]?.reviewCount ?? 0}
+              </span>
               <span className='t4'>명</span>
             </p>
           </div>
@@ -48,7 +53,9 @@ export default function MannerSection() {
           <div className='flex flex-col gap-5 items-center'>
             <Image src={good} alt='좋아요' />
             <p>
-              <span className='tm2'>{count}</span>{' '}
+              <span className='tm2'>
+                {pr.reviewTags?.[0]?.reviewCount ?? 0}
+              </span>
               <span className='t4'>명</span>
             </p>
           </div>
@@ -56,7 +63,9 @@ export default function MannerSection() {
           <div className='flex flex-col gap-5 items-center'>
             <Image src={notGood} alt='별로예요' />
             <p>
-              <span className='tm2'>{count}</span>{' '}
+              <span className='tm2'>
+                {pr.reviewTags?.[0]?.reviewCount ?? 0}
+              </span>{' '}
               <span className='t4'>명</span>
             </p>
           </div>

@@ -5,11 +5,13 @@ import { ChevronDown } from 'lucide-react';
 import { ChevronRight } from 'lucide-react';
 import { ChevronLeft } from 'lucide-react';
 import { Search } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CategoryModal from '@/components/main/CategoryModal';
 import MeetingTypeModal from '@/components/main/MeetingTypeModal';
 import StudyCard from '@/components/my/StudyCard';
 import RecruitmentCard from '@/components/my/RecruitmentCard';
+import { getUser } from '@/lib/api/user';
+import { userAuthStore } from '@/stores/userStore';
 
 export default function Main() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -19,6 +21,21 @@ export default function Main() {
   const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
+  const { user, setUser } = userAuthStore();
+
+  useEffect(() => {
+    if (!user) {
+      getUser()
+        .then((res) => {
+          setUser(res.data.data);
+          localStorage.setItem('login_status', 'Y');
+        })
+        .catch((error) => {
+          localStorage.removeItem('login_status');
+          console.error('사용자 정보 불러오기 실패: ', error);
+        });
+    }
+  }, [user, setUser]);
 
   const studyList = Array.from({ length: 4 }, () => ({
     studyId: 4,
