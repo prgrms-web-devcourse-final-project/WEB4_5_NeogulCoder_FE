@@ -9,7 +9,7 @@ export const deleteRecruitmentPost = async (
     );
     return res.data;
   } catch (error) {
-    console.error('post error:', error);
+    console.error('delete error:', error);
     throw error;
   }
 };

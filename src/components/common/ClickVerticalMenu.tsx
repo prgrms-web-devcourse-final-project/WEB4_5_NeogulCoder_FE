@@ -2,17 +2,24 @@ import { PencilLine, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { deleteRecruitmentPost } from '@/lib/api/recruitment/delete';
+import { deleteStudyPost } from '@/lib/api/study/delete';
 
 type MenuProps = {
   title?: string;
+  target?: string;
   recruitmentPostId?: number;
+  postId?: number;
+  studyId?: number;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
 };
 
 export default function ClickVerticalMenu({
   title,
+  target,
   recruitmentPostId,
+  postId,
+  studyId,
   onEditClick,
   onDeleteClick,
 }: MenuProps) {
@@ -21,7 +28,9 @@ export default function ClickVerticalMenu({
   const handleGoToModify = () => {
     router.push(`/recruitment/modify/${recruitmentPostId}`);
   };
-
+  const handleGoToModifyStudy = () => {
+    router.push(`/study/${studyId}/study-community/modify`);
+  };
   return (
     <>
       <div className='absolute right-0 mt-2 w-[160px] border border-main/10 bg-white rounded-md shadow-lg overflow-hidden tm3 z-3'>
@@ -31,7 +40,13 @@ export default function ClickVerticalMenu({
         {(title === '내 게시물' || title === '내 댓글') && (
           <button
             type='button'
-            onClick={title === '내 게시물' ? handleGoToModify : onEditClick}
+            onClick={
+              title === '내 게시물' && target === 'recruitment'
+                ? handleGoToModify
+                : title === '내 게시물' && target === 'study'
+                ? handleGoToModifyStudy
+                : onEditClick
+            }
             className='flex gap-3 px-4 py-3 w-full hover:bg-gray4 tm5'
           >
             <PencilLine className='w-4 h-4' />
@@ -66,8 +81,15 @@ export default function ClickVerticalMenu({
               <button
                 className='button-type5 w-[120px]! bg-red! text-white!'
                 onClick={async () => {
-                  await deleteRecruitmentPost(recruitmentPostId);
-                  router.push('/');
+                  if (target === 'recruitment') {
+                    await deleteRecruitmentPost(recruitmentPostId);
+                    router.push('/');
+                  } else if (target === 'study') {
+                    await deleteStudyPost(postId);
+                    router.push(`/study/${studyId}/study-community`);
+                  } else {
+                    console.log('target error');
+                  }
                 }}
               >
                 삭제

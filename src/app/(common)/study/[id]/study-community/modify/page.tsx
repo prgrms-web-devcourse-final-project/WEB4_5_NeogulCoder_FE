@@ -1,18 +1,37 @@
 'use client';
 
-import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { ChevronDown } from 'lucide-react';
-import { useRef, useState } from 'react';
+import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
-import { writeStudyPost } from '@/lib/api/study/write';
 import { usePathname } from 'next/navigation';
+import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
+import { modifyStudyPost } from '@/lib/api/study/modify';
 
 export default function Page() {
   const pathname = usePathname();
+  const postId = Number(pathname.split('/').pop());
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const studyId = Number(pathname.split('/')[2]);
+  const [content, setContent] = useState('');
   const editorRef = useRef<ToastEditor>(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await fetchStudyInfo(postId);
+      setCategory(data.postDetailsInfo.category);
+      setTitle(data.postDetailsInfo.subject);
+      setContent(data.postDetailsInfo.content);
+    } catch (error) {
+      console.error('데이터 불러오기 실패ㅠㅠ:', error);
+    }
+  }, [postId]);
+
+  useEffect(() => {
+    if (!isNaN(postId)) {
+      fetchData();
+    }
+  }, [postId, fetchData]);
 
   const handleSubmit = async () => {
     const instance = editorRef.current?.getInstance();
@@ -25,12 +44,12 @@ export default function Page() {
     };
 
     try {
-      const data = await writeStudyPost(studyId, payload);
+      const data = await modifyStudyPost(postId, payload);
       console.log('생성 완료', data);
     } catch (error) {
       console.error('생성 실패', error);
     }
-    console.log('Title:', title, 'Content:', content, 'Category:', category);
+    console.log('Title:', title, 'Content:', content, 'category:', category);
   };
 
   return (
@@ -63,7 +82,7 @@ export default function Page() {
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <div className='mb-10'>
-        <ClientEditorWrapper editorRef={editorRef} />
+        <ClientEditorWrapper editorRef={editorRef} content={content} />
       </div>
       <div className='flex justify-end'>
         <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
@@ -73,7 +92,7 @@ export default function Page() {
           className='button-type5 hover:bg-[#292929]'
           onClick={handleSubmit}
         >
-          등록
+          수정
         </button>
       </div>
     </>

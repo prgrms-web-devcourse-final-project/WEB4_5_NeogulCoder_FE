@@ -8,70 +8,65 @@ import ClickVerticalMenu from '@/components/common/ClickVerticalMenu';
 import { usePathname, useRouter } from 'next/navigation';
 import AiQuiz from '@/components/study/AiQuiz';
 import CommentList from '@/components/common/CommentList';
-// import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
+import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
+import { userAuthStore } from '@/stores/userStore';
+import { fetchComment } from '@/lib/api/study/fetchComment';
 
 export default function Page() {
   const pathname = usePathname();
+  const me = userAuthStore((state) => state.user);
   const studyId = Number(pathname.split('/')[2]);
   const postId = Number(pathname.split('/').pop());
+  const target = 'study';
   const [isOpen, setIsOpen] = useState(false);
   const [menuIsOpen, menuSetIsOpen] = useState(false);
-  // const [id, setId] = useState('');
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [createdDate, setCreatedDate] = useState('');
   const [userName, setUserName] = useState('');
   const [content, setContent] = useState('');
   const [commentCount, setCommentCount] = useState(0);
-  const [profileImageUrl, setProfileImageUrl] = useState('');
+  const [comments, setComments] = useState<CommentType[]>([]);
+
+  type CommentType = {
+    commentId: number;
+    userId: number;
+    nickname: string;
+    profileImageUrl: string;
+    content: string;
+    createdAt: string;
+  };
 
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const handleGoToPr = () => {
     router.push('/profile/pr');
   };
-
-  // api로 연결 할 예시
-  // const fetchData = useCallback(async () => {
-  //   try {
-  //     const data = await fetchStudyInfo(studyId, postId);
-  //     setId(data.id);
-  //     setCreatedDate(data.createdDate);
-  //     setCategory(data.category);
-  //     setUserName(data.username);
-  //     setTitle(data.title);
-  //     setContent(data.content);
-  //     setCommentCount(data.commentCount)
-  //   } catch (error) {
-  //     console.error('데이터 불러오기 실패ㅠㅠ:', error);
-  //   }
-  // }, [studyId, postId]);
-
+  const handleCommentAdd = () => {
+    setCommentCount((prev) => prev + 1);
+  };
   const fetchData = useCallback(async () => {
     try {
-      // 실제 요청 대신 더미 데이터 사용
-      const dummyResponse = {
-        category: '공지',
-        createdDate: '2025-07-16',
-        userName: '닉네임',
-        title: '너굴 코더 스터디를 모집 합니다',
-        content: '이펙티브 자바를 정독 하는 것을 목표로 하는 스터디 입니다',
-        commentCount: 11,
-        profileImageUrl: 'https://cdn.example.com/profile.jpg',
-      };
-
-      // 응답으로 받은 것처럼 state 세팅
-      setCategory(dummyResponse.category);
-      setCreatedDate(dummyResponse.createdDate);
-      setUserName(dummyResponse.userName);
-      setTitle(dummyResponse.title);
-      setContent(dummyResponse.content);
-      setCommentCount(dummyResponse.commentCount);
-      setProfileImageUrl(dummyResponse.profileImageUrl);
+      const data = await fetchStudyInfo(postId);
+      setCreatedDate(data.createdDate);
+      setCategory(data.category);
+      setUserName(data.username);
+      setTitle(data.title);
+      setContent(data.content);
+      setCommentCount(data.commentCount);
     } catch (error) {
-      console.error('데이터 불러오기 실패:', error);
+      console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
-  }, []);
+  }, [postId]);
+
+  const fetchComments = useCallback(async () => {
+    try {
+      const data = await fetchComment(studyId, postId);
+      setComments(data);
+    } catch (error) {
+      console.error('데이터 불러오기 실패ㅠㅠ:', error);
+    }
+  }, [studyId, postId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,8 +82,9 @@ export default function Page() {
   useEffect(() => {
     if (!isNaN(studyId) && !isNaN(postId)) {
       fetchData();
+      fetchComments();
     }
-  }, [studyId, postId, fetchData]);
+  }, [studyId, postId, fetchData, fetchComments]);
 
   return (
     <>
@@ -106,7 +102,14 @@ export default function Page() {
             >
               <EllipsisVertical />
             </button>
-            {menuIsOpen && <ClickVerticalMenu title='내 게시물' />}
+            {menuIsOpen && (
+              <ClickVerticalMenu
+                title='내 게시물'
+                studyId={studyId}
+                postId={postId}
+                target={target}
+              />
+            )}
           </div>
         </div>
 
@@ -144,12 +147,15 @@ export default function Page() {
         </div>
         <div className='w-[898px]'>
           <WriteComment
+            target={target}
+            postId={postId}
             commentCount={commentCount}
-            profileImageUrl={profileImageUrl}
+            profileImageUrl={me?.profileImgUrl}
+            onCommentAdd={handleCommentAdd}
           />
         </div>
         <div className='w-[898px]'>
-          <CommentList studyId={1} postId={4} />
+          <CommentList postId={postId} comments={comments} />
         </div>
         {isOpen && (
           <Modal
@@ -158,9 +164,7 @@ export default function Page() {
             className='w-[680px] h-auto'
           >
             <AiQuiz
-              postId={'1'} // 더미 데이터
-              postCategory='자유 게시글'
-              postContent='자바에서 클래스와 객체의 차이에 대해 설명한 스터디 요약입니다.'
+              postId={1} // 더미 데이터
             />
           </Modal>
         )}

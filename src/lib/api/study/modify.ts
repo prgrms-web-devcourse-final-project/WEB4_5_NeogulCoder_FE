@@ -1,7 +1,7 @@
 import { axiosInstance } from '../axios';
 
-export const writeStudyPost = async (
-  studyId: number,
+export const modifyStudyPost = async (
+  postId: number,
   payload: {
     title: string;
     category: string;
@@ -9,13 +9,13 @@ export const writeStudyPost = async (
   }
 ) => {
   try {
-    const res = await axiosInstance.post(
-      `/api/studies/${studyId}/posts`,
+    const res = await axiosInstance.put(
+      `/api/studies/posts/${postId}`,
       payload
     );
     return res.data;
   } catch (error) {
-    console.error('post error:', error);
+    console.error('put error:', error);
     throw error;
   }
 };

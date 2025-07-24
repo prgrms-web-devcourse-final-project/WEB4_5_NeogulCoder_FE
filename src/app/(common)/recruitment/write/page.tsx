@@ -11,8 +11,7 @@ import { formatDate } from '@/utils/formatDate';
 
 export default function Page() {
   const [subject, setSubject] = useState('');
-  const [studyId, setStudyId] = useState<number | ''>(''); // 초기값을 ''로 변경
-
+  const [studyId, setStudyId] = useState<number | ''>('');
   const [recruitmentCount, setRecruitmentCount] = useState<number>(0);
   const [expiredDate, setExpiredDate] = useState('');
   const [category, setCategory] = useState('');
@@ -52,30 +51,6 @@ export default function Page() {
 
     loadStudyList();
   }, []);
-
-  // const handleFetchData = async () => {
-  //   try {
-  //     // 실제 요청 대신 더미 데이터 사용
-  //     const dummyResponse = {
-  //       category: 'IT',
-  //       location: '서울',
-  //       studyType: 'online',
-  //       startDate: '2025-07-16',
-  //       endDate: '2025-08-07',
-  //       recruitmentCount: 3,
-  //     };
-
-  //     // 응답으로 받은 것처럼 state 세팅
-  //     setCategory(dummyResponse.category);
-  //     setLocation(dummyResponse.location);
-  //     setStudyType(dummyResponse.studyType);
-  //     setStartDate(dummyResponse.startDate);
-  //     setEndDate(dummyResponse.endDate);
-  //     setRemainSlots(dummyResponse.recruitmentCount);
-  //   } catch (error) {
-  //     console.error('데이터 불러오기 실패:', error);
-  //   }
-  // };
 
   const handleSubmit = async () => {
     const instance = editorRef.current?.getInstance();

@@ -12,10 +12,12 @@ import CommentList from '@/components/common/CommentList';
 import { fetchInfo } from '@/lib/api/recruitment/fetchInfo';
 import { formatDate } from '@/utils/formatIsoDate';
 import { userAuthStore } from '@/stores/userStore';
-import '@toast-ui/editor/dist/toastui-editor.css';
-import { Viewer } from '@toast-ui/react-editor';
+
 import { changeStatus } from '@/lib/api/recruitment/changeStatus';
 import { studyApplication } from '@/lib/api/recruitment/studyApplication';
+import ToastViewer from '@/components/common/ToastViewer';
+import { studyApplicationApprove } from '@/lib/api/recruitment/studyApplicationApprove';
+import { studyApplicationReject } from '@/lib/api/recruitment/studyApplicationReject';
 
 export default function Page() {
   const router = useRouter();
@@ -25,6 +27,8 @@ export default function Page() {
     router.push('/profile/pr');
   };
   const target = 'recruitment';
+  const complete = 'COMPLETE';
+  const applicationId = 1; // 임시값
   const recruitmentPostId = Number(pathname.split('/').pop());
   const [isOpen, setIsOpen] = useState(false);
   const [appIsOpen, setAppIsOpen] = useState(false);
@@ -40,11 +44,13 @@ export default function Page() {
   const [nickname, setNickname] = useState('');
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
+  const [status, setStatus] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [expiredDate, setExpiredDate] = useState('');
   const [comments, setComments] = useState<CommentType[]>([]);
   const [applicationReason, setApplicationReason] = useState('');
+
   const menuRef = useRef<HTMLDivElement>(null);
 
   type CommentType = {
@@ -71,6 +77,7 @@ export default function Page() {
       setContent(data.postDetailsInfo.content);
       setProfileImageUrl(data.postDetailsInfo.profileImageUrl);
       setExpiredDate(data.postDetailsInfo.expiredDate);
+      setStatus(data.postDetailsInfo.status);
       setCommentCount(data.commentCount);
       setComments(data.commentsWithWriterInfos);
     } catch (error) {
@@ -87,6 +94,32 @@ export default function Page() {
       console.log('생성 완료', appData);
     } catch (error) {
       console.error('생성 실패', error);
+    }
+  };
+
+  const handleChangeStatus = async () => {
+    try {
+      await changeStatus(recruitmentPostId, complete); // complete = 'COMPLETE'
+      await fetchData();
+      setStatusModalIsOpen(false); // 모달 닫기
+    } catch (error) {
+      console.error('상태 변경 실패:', error);
+    }
+  };
+
+  const handleApprove = async () => {
+    try {
+      await studyApplicationApprove(applicationId);
+    } catch (error) {
+      console.error('신청 승인 실패:', error);
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      await studyApplicationReject(applicationId);
+    } catch (error) {
+      console.error('신청 승인 실패:', error);
     }
   };
 
@@ -113,16 +146,26 @@ export default function Page() {
         <div className='hidden 2xl:flex flex-col fixed right-[15%] space-y-2.5'>
           <button
             onClick={() => {
+              if (status === '완료') return; // 완료면 클릭 무시
               if (me?.nickname === nickname) {
                 setStatusModalIsOpen(true);
               } else {
                 setAppIsOpen(true);
               }
             }}
-            className='w-[118px] h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
+            className={`w-[118px] h-[44px] tm3 rounded-[10px] text-white ${
+              status === '완료'
+                ? 'bg-gray-400 '
+                : 'bg-[#00C471] hover:bg-[#00B261]'
+            }`}
           >
-            {me?.nickname === nickname ? '모집 중' : '모집 신청'}
+            {status === '완료'
+              ? '모집 완료'
+              : me?.nickname === nickname
+              ? '모집 중'
+              : '모집 신청'}
           </button>
+
           {me?.nickname === nickname && (
             <button
               onClick={() => setIsOpen(true)}
@@ -153,6 +196,7 @@ export default function Page() {
               {menuIsOpen && (
                 <ClickVerticalMenu
                   title='내 게시물'
+                  target={target}
                   recruitmentPostId={recruitmentPostId}
                 />
               )}
@@ -224,21 +268,30 @@ export default function Page() {
           style={{ borderColor: 'var(--color-border3)' }}
         >
           {content && (
-            <Viewer key={content} height='100%' initialValue={content} />
+            <ToastViewer key={content} height='100%' initialValue={content} />
           )}
         </div>
-        <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10'>
+        <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10 '>
           <button
             onClick={() => {
+              if (status === '완료') return;
               if (me?.nickname === nickname) {
                 setStatusModalIsOpen(true);
               } else {
                 setAppIsOpen(true);
               }
             }}
-            className='w-full h-[44px] bg-[#00C471] hover:bg-[#00B261] text-white tm3 rounded-[10px]'
+            className={`w-full h-[44px] tm3 rounded-[10px] text-white ${
+              status === '완료'
+                ? 'bg-gray-400'
+                : 'bg-[#00C471] hover:bg-[#00B261]'
+            }`}
           >
-            {me?.nickname === nickname ? '모집 중' : '모집 신청'}
+            {status === '완료'
+              ? '모집 완료'
+              : me?.nickname === nickname
+              ? '모집 중'
+              : '모집 신청'}
           </button>
           {me?.nickname === nickname && (
             <button
@@ -303,10 +356,16 @@ export default function Page() {
                 지원 동기는 어쩌구 저쩌구입니다.
               </div>
               <div className='flex space-x-[15px] justify-end'>
-                <button className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'>
+                <button
+                  className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
+                  onClick={handleReject}
+                >
                   거절
                 </button>
-                <button className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'>
+                <button
+                  className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
+                  onClick={handleApprove}
+                >
                   승인
                 </button>
               </div>
@@ -359,9 +418,7 @@ export default function Page() {
                 </button>
                 <button
                   className='button-type5 w-[120px]! bg-red! text-white! hover:bg-[#e14d4a]!'
-                  onClick={async () => {
-                    changeStatus(recruitmentPostId);
-                  }}
+                  onClick={handleChangeStatus}
                 >
                   확인
                 </button>
