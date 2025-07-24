@@ -6,6 +6,7 @@ import notion from '@/assets/images/icons/notion.svg';
 import tistory from '@/assets/images/icons/tistory.svg';
 import velog from '@/assets/images/icons/velog.svg';
 import naverBlog from '@/assets/images/icons/naver-blog.png';
+import { Link2 } from 'lucide-react';
 
 const urlIcon: Record<string, { src: StaticImageData; className?: string }> = {
   'github.com': { src: github },
@@ -85,7 +86,7 @@ export default function InfoSection() {
                           target='_blank'
                           className='t4 text-text1 underline flex items-center gap-2'
                         >
-                          {icon && (
+                          {icon ? (
                             <div
                               className={`w-5 h-5 relative flex items-center justify-center ${
                                 icon.className || ''
@@ -98,6 +99,8 @@ export default function InfoSection() {
                                 className='object-contain'
                               />
                             </div>
+                          ) : (
+                            <Link2 className='text-[#2D90FF] w-[22px] h-[22px]' />
                           )}
                           {linkItem.linkName}
                         </a>
