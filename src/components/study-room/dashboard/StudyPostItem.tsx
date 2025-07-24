@@ -1,4 +1,3 @@
-import dateFormatting from '@/utils/dateFormatting';
 import Link from 'next/link';
 
 export default function StudyPostItem({
