@@ -1,53 +1,44 @@
-import ApplicationListClient from '@/components/my/ApplicationListClient';
+'use client';
 
+import ApplicationListClient from '@/components/my/ApplicationListClient';
+import { fetchMyApplicationList } from '@/lib/api/my';
+import { useEffect, useState } from 'react';
+
+// export default async function ApplyStudyList() {
 export default function ApplyStudyList() {
-  const responseType = {
-    applications: [
-      {
-        name: '자바 스터디',
-        leaderNickname: '너굴',
-        capacity: 4,
-        currentCount: 3,
-        startDate: '2025-07-15',
-        imageUrl: '',
-        introduction: '자바 스터디입니다.',
-        category: 'IT',
-        studyType: 'ONLINE',
-        status: 'PENDING',
-        read: true,
-      },
-      {
-        name: '자바 스터디',
-        leaderNickname: '너굴',
-        capacity: 4,
-        currentCount: 3,
-        startDate: '2025-07-15',
-        imageUrl: '',
-        introduction: '자바 스터디입니다.',
-        category: 'IT',
-        studyType: 'ONLINE',
-        status: 'PENDING',
-        read: true,
-      },
-      {
-        name: '자바 스터디',
-        leaderNickname: '너굴',
-        capacity: 4,
-        currentCount: 3,
-        startDate: '2025-07-15',
-        imageUrl: '',
-        introduction: '자바 스터디입니다.',
-        category: 'IT',
-        studyType: 'ONLINE',
-        status: 'PENDING',
-        read: true,
-      },
-    ],
-    totalPage: 2,
-    totalElementCount: 10,
+  const query = {
+    page: 0,
+    pageSize: 12,
+    sort: 'DESC',
   };
 
-  const applicationList = responseType;
+  // const myApplicationListData = await fetchMyApplicationList(query);
 
-  return <ApplicationListClient applicationList={applicationList} />;
+  const [initialApplicationListData, setInitialApplicationListData] =
+    useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const init = async () => {
+    const data = await fetchMyApplicationList(query);
+    setInitialApplicationListData(data);
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  // const initialApplicationListData = myApplicationListData;
+  console.log('initialApplicationListData:', initialApplicationListData);
+
+  if (isLoading) {
+    return <></>;
+  }
+
+  return (
+    <ApplicationListClient
+      initialApplicationListData={initialApplicationListData!}
+    />
+  );
 }
