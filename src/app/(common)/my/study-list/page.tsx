@@ -1,53 +1,39 @@
-import StudyListClient from '@/components/my/StudyListClient';
+'use client';
 
+import StudyListClient from '@/components/my/StudyListClient';
+import { fetchMyStudyList } from '@/lib/api/my';
+import { useEffect, useState } from 'react';
+
+// export default async function StudyList() {
 export default function StudyList() {
-  const responseType = {
-    studies: [
-      {
-        studyId: 1,
-        name: '자바 스터디',
-        leaderNickname: 'test',
-        capacity: 4,
-        currentCount: 1,
-        startDate: '2025-07-15',
-        imageUrl: '',
-        introduction: '자바 스터디입니다.',
-        category: 'IT',
-        studyType: 'ONLINE',
-        finished: false,
-      },
-      {
-        studyId: 2,
-        name: '알고리즘 스터디',
-        leaderNickname: 'test',
-        capacity: 4,
-        currentCount: 1,
-        startDate: '2025-07-15',
-        imageUrl: '',
-        introduction: '알고리즘 스터디입니다.',
-        category: 'IT',
-        studyType: 'OFFLINE',
-        finished: true,
-      },
-      {
-        studyId: 3,
-        name: '모각코',
-        leaderNickname: 'test',
-        capacity: 4,
-        currentCount: 1,
-        startDate: '2025-07-15',
-        imageUrl: '',
-        introduction: '모각코입니다.',
-        category: 'IT',
-        studyType: 'ONLINE',
-        finished: false,
-      },
-    ],
-    totalPage: 2,
-    totalElementCount: 10,
+  const query = {
+    page: 0,
+    pageSize: 12,
+    sort: 'DESC',
   };
 
-  const studyList = responseType;
+  // const myStudyListData = await fetchMyStudyList(query);
 
-  return <StudyListClient studyList={studyList} />;
+  const [initialStudyListData, setInitialStudyListData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const init = async () => {
+    const data = await fetchMyStudyList(query);
+    setInitialStudyListData(data);
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
+
+  // const initialStudyListData = myStudyListData;
+  console.log('initialStudyListData:', initialStudyListData);
+
+  if (isLoading) {
+    return <></>;
+  }
+
+  return <StudyListClient initialStudyListData={initialStudyListData!} />;
 }

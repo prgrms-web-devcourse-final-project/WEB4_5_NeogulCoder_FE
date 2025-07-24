@@ -2,9 +2,16 @@
 
 import Image from 'next/image';
 import studyDefault from '@/assets/images/study-default.svg';
+// import sunBunny from '@/assets/images/sun-bunny.svg';
 import { Calendar, Crown, UsersRound } from 'lucide-react';
-import { StudyList } from '@/types/my';
 import { formatDate } from '@/utils/formatDate';
+import { MyStudyListType } from '@/types/my';
+
+const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
+  ONLINE: '온라인',
+  OFFLINE: '오프라인',
+  HYBRID: '병행',
+};
 
 export default function StudyCard({
   name,
@@ -16,7 +23,7 @@ export default function StudyCard({
   introduction,
   category,
   studyType,
-}: StudyList['studies'][0]) {
+}: MyStudyListType['studies'][0]) {
   return (
     <div className='flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'>
       <div className='tm3 text-text1 truncate'>{name}</div>
@@ -60,7 +67,8 @@ export default function StudyCard({
         </div>
         <div className='tag-type1'>
           <span className='tb5'>
-            {studyType === 'ONLINE' ? '온라인' : '오프라인'}
+            {/* {studyType === 'ONLINE' ? '온라인' : '오프라인'} */}
+            {studyTypeMap[studyType]}
           </span>
         </div>
       </div>
