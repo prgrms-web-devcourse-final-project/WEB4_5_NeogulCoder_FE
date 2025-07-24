@@ -1,8 +1,10 @@
 export default function RegionModal({
   onSelect,
+  selectedRegion,
   customCss,
 }: {
-  onSelect: (region: string) => void;
+  onSelect: (region: string | null) => void;
+  selectedRegion: string | null;
   customCss?: string;
 }) {
   const region = [
@@ -24,6 +26,14 @@ export default function RegionModal({
     '강원도',
     '제주도',
   ];
+
+  const handleClick = (region: string) => {
+    if (selectedRegion === region) {
+      onSelect(null);
+    } else {
+      onSelect(region);
+    }
+  };
   return (
     <div
       className={`w-[200px] border border-main/10 bg-white rounded-[10px] shadow-sm overflow-hidden tm4 p-3 ${
@@ -35,8 +45,10 @@ export default function RegionModal({
           <button
             type='button'
             key={region}
-            className='px-4 py-2 text-tm3 hover:bg-gray4 rounded-[10px]'
-            onClick={() => onSelect(region)}
+            className={`px-4 py-2 text-tm3 rounded-[10px] ${
+              selectedRegion === region ? 'bg-gray4' : 'hover:bg-gray4'
+            }`}
+            onClick={() => handleClick(region)}
           >
             {region}
           </button>

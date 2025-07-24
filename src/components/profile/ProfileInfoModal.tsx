@@ -15,10 +15,11 @@ export default function UserInfoModal({
   // console.log(me);
 
   const handleGoToPr = () => {
-    if (me?.id) {
-      router.push(`/profile/pr/${me.id}`);
-      onItemClick();
+    if (!me?.id) {
+      return;
     }
+    router.push(`/profile/pr/${me.id}`);
+    onItemClick();
   };
 
   const handleMyPage = () => {
@@ -30,8 +31,8 @@ export default function UserInfoModal({
     try {
       await axiosInstance.post('/auth/logout');
       onItemClick();
-      localStorage.removeItem('login_status');
       userAuthStore.getState().clearUser();
+      localStorage.removeItem('login_status');
       router.push('/');
     } catch (error) {
       console.error('로그아웃 실패: ', error);
