@@ -85,14 +85,16 @@ export default function StudyAttendance({
     <>
       <div className='flex justify-between mb-3'>
         <h3 className='tb3'>나의 스터디 출석정보</h3>
-        <button
-          className='button-sm-type1 disabled:!cursor-default'
-          // pending, 오늘 출석 했으면, 진행중이 아닌 스터디 경우 버튼 막기
-          disabled={isPending || todayCheck || !studyIsProgress}
-          onClick={handleAttendance}
-        >
-          출석
-        </button>
+        {!isLoading && (
+          <button
+            className='button-sm-type1 disabled:!cursor-default'
+            // pending, 오늘 출석 했으면, 진행중이 아닌 스터디 경우 버튼 막기
+            disabled={isPending || todayCheck || !studyIsProgress}
+            onClick={handleAttendance}
+          >
+            출석
+          </button>
+        )}
       </div>
       <div className='border border-border1 rounded-[10px] p-6'>
         {isLoading ? (
