@@ -1,3 +1,4 @@
+'use client';
 import Image from 'next/image';
 import banner1 from '@/assets/images/banner1.svg';
 import { useEffect } from 'react';
@@ -32,7 +33,7 @@ export default function Main() {
 
         <div id='recruit' className='pt-[120px]'>
           <p className='text-[22px] font-bold'>모집 중인 스터디</p>
-          <MainRecruitmentList />
+          {/* <MainRecruitmentList /> */}
         </div>
       </div>
     </>

@@ -7,12 +7,12 @@ import CreateStudyModal from '../study/CreateStudyModal';
 import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import Modal from '@/components/common/modal';
-import { useStudyStore } from '@/stores/useStudyStore';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function SubHeader() {
   const router = useRouter();
   const user = userAuthStore().user;
-  const { studies, fetchStudies } = useStudyStore();
+  const { studies, fetchStudies } = useStudiesStore();
   const [isOpen, setIsOpen] = useState(false);
   const handleHome = () => {
     router.push('/');
@@ -44,17 +44,17 @@ export default function SubHeader() {
                   href={`/study/${study.studyId}/dashboard`}
                   type='button'
                   className='group w-8 h-8 rounded-[12px] relative bg-gray3 flex items-center justify-center 
-             shadow-[0_1px_4px_rgba(0,0,0,0.12)] hover:drop-shadow'
+             shadow-[0_1px_4px_rgba(0,0,0,0.12)]'
                 >
                   <Image
                     src={study.imageUrl ?? musicBunny}
-                    alt={study.name ?? '스터디 이미지'}
-                    className='w-[38px] h-[38px]'
+                    alt={study.name}
+                    className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
                     width={38}
                     height={38}
                   />
-                  <span className='absolute bg-white p-1 tl5 border border-border1 rounded-sm whitespace-nowrap bottom-0 right-0 translate-y-1/2 hidden group-hover:block'>
-                    {study.name ?? '임시 이름입니다.'}
+                  <span className='absolute bg-white p-1 px-2 tl5 border border-border1 rounded-sm whitespace-nowrap bottom-0 left-1/2 -translate-x-1/2 translate-y-3/4 hidden group-hover:block  group-hover:drop-shadow z-2'>
+                    {study.name}
                   </span>
                 </Link>
               ))}

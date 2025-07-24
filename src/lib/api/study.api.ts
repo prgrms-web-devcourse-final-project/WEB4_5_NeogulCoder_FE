@@ -20,7 +20,7 @@ export const putStudyInfo = (
 };
 
 // 가입한 스터디 목록 (메인에 사용됨)
-export const getStudiesInfo = async () => {
-  const { data } = await axiosInstance.get(`/api/studies`);
+export const getStudiesMain = async () => {
+  const { data } = await axiosInstance.get(`/api/studies/main`);
   return data;
 };

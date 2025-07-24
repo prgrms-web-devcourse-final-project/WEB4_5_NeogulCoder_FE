@@ -16,12 +16,12 @@ import '@/styles/swiper/main.css';
 import Link from 'next/link';
 import MainStudyListCardSkeleton from './MainStudyListCardSkeleton';
 import { userAuthStore } from '@/stores/userStore';
-import { useStudyStore } from '@/stores/useStudyStore';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function MainStudyList() {
   const user = userAuthStore().user;
   const [swiper, setSwiper] = useState<SwiperClass>();
-  const { studies, loading } = useStudyStore();
+  const { studies, loading } = useStudiesStore();
 
   // 비회원
   if (user === null) return null;
@@ -66,7 +66,7 @@ export default function MainStudyList() {
             </div>
           ) : (
             <>
-              {studies.length > 4 ? (
+              {studies.length >= 4 ? (
                 <Swiper
                   modules={[Navigation, Pagination, A11y]}
                   spaceBetween={0}
@@ -90,7 +90,7 @@ export default function MainStudyList() {
                           category={study.category}
                           studyType={study.studyType}
                           introduction={study.introduction}
-                          imageUrl={study.imageUrl}
+                          imageUrl={study.imageUrl ?? ''}
                           finished={study.finished}
                         />
                       </SwiperSlide>

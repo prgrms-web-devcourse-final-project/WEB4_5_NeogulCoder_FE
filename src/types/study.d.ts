@@ -55,15 +55,16 @@ type HeaderStudiesType = {
   name?: string;
 };
 
-// 메인 내 스터디 목록
-type StudiesListType = {
+// 메인 내 스터디 목록 (서브헤더에서도 사용 됨)
+type StudiesMainType = {
   studyId: number;
   name: string;
   leaderNickname: string;
   capacity: number;
   currentCount: number;
   startDate: string;
-  imageUrl: string;
+  endDate: string;
+  imageUrl: string | null;
   introduction: string;
   category: string;
   studyType: string;
