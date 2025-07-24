@@ -69,7 +69,7 @@ type StudyDashboardType = {
   totalPostCount: number;
   attendances: StudyAttendanceDaysType[];
   attendanceRate: number;
-  teamCalenders: {
+  teamCalendars: {
     teamCalendarId: number;
     studyId: number;
     writerId: number;

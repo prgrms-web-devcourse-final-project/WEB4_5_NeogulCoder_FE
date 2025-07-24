@@ -9,9 +9,11 @@ dayjs.extend(isBetween);
 export default function CalendarSmallDetail({
   date,
   studyId,
+  calendarData,
 }: {
   date: string;
   studyId: number;
+  calendarData: StudyScheduleType[];
 }) {
   const dateFormat = (date: string) => {
     const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(
@@ -19,56 +21,9 @@ export default function CalendarSmallDetail({
     )}일 (${dayFormatting(date)})`;
     return dateString;
   };
-  // 더미데이터 (날짜별 api 생기면 삭제할 내용)
-  const results = [
-    {
-      calendarId: 2001,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '14일 일정',
-      description: '기획 회의',
-      startTime: '2025-07-14T02:01:35',
-      endTime: '2025-07-14T02:01:35',
-    },
-    {
-      calendarId: 2002,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '24-25',
-      description: '기획 회의',
-      startTime: '2025-07-24T02:01:35',
-      endTime: '2025-07-25T18:01:35',
-    },
-    {
-      calendarId: 2003,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '기능개발',
-      description: '기획 회의',
-      startTime: '2025-07-17T02:01:35',
-      endTime: '2025-07-18T03:01:35',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-18T02:01:35',
-      endTime: '2025-07-20T03:18:35',
-    },
-  ];
 
-  // 더미데이터 날짜 filter (날짜별 api 생기면 대체할 내용)
-  const filterResults = results.filter((result) => {
+  // 날짜 filter
+  const filterResults = calendarData.filter((result) => {
     const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
     const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
     return dayjs(date).isBetween(startDay, endDay, 'day', '[]');

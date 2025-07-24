@@ -10,6 +10,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { userAuthStore } from '@/stores/userStore';
 import { useStudyStore } from '@/stores/studyInfoStore';
+import StudyAttendanceSkeleton from './StudyAttendanceSkeleton';
 
 export default function StudyAttendance({
   studyId,
@@ -24,15 +25,19 @@ export default function StudyAttendance({
   const [attendances, setAttendances] = useState<StudyAttendanceDaysType[]>([]);
   const [attendanceRate, setAttendanceRate] = useState();
   const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchAttendance = async () => {
+      setIsLoading(true);
       try {
         const { data } = await getStudyAttendance(studyId);
         setAttendances(data.attendances);
         setAttendanceRate(data.attendanceRate);
       } catch (error) {
         console.error('출석체크 정보를 불러오지 못했습니다.', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -77,47 +82,53 @@ export default function StudyAttendance({
         </button>
       </div>
       <div className='border border-border1 rounded-[10px] p-6'>
-        <div className='mb-12'>
-          <h3 className='tm3 mb-[18px]'>주간 출석</h3>
-          <div className='w-[450px] attendance'>
-            <FullCalendar
-              ref={calendarRef}
-              plugins={[dayGridPlugin, interactionPlugin]}
-              initialView='dayGridWeek'
-              locale={koLocale}
-              events={events}
-              validRange={{
-                start: dayjs(studyInfo?.startDate).format('YYYY-MM-DD'),
-                end: dayjs(studyInfo?.endDate).format('YYYY-MM-DD'),
-              }}
-              headerToolbar={{
-                left: 'prev',
-                center: 'title',
-                right: 'next',
-              }}
-              dayHeaderFormat={{
-                weekday: 'narrow',
-              }}
-              dayMaxEventRows={1}
-              height='auto'
-              contentHeight='auto'
-            />
-          </div>
-        </div>
-        <div>
-          <h3 className='tm3'>전체 출석률</h3>
-          <div>
-            <div className='text-right tm4 mb-1.5'>{attendanceRate}%</div>
-            <div className='w-full h-[16px] rounded-2xl bg-gray3/50 overflow-hidden'>
-              <div
-                className='h-full bg-orange'
-                style={{
-                  width: `${attendanceRate}%`,
-                }}
-              ></div>
+        {isLoading ? (
+          <StudyAttendanceSkeleton />
+        ) : (
+          <>
+            <div className='mb-12'>
+              <h3 className='tm3 mb-[18px]'>주간 출석</h3>
+              <div className='w-[450px] attendance'>
+                <FullCalendar
+                  ref={calendarRef}
+                  plugins={[dayGridPlugin, interactionPlugin]}
+                  initialView='dayGridWeek'
+                  locale={koLocale}
+                  events={events}
+                  validRange={{
+                    start: dayjs(studyInfo?.startDate).format('YYYY-MM-DD'),
+                    end: dayjs(studyInfo?.endDate).format('YYYY-MM-DD'),
+                  }}
+                  headerToolbar={{
+                    left: 'prev',
+                    center: 'title',
+                    right: 'next',
+                  }}
+                  dayHeaderFormat={{
+                    weekday: 'narrow',
+                  }}
+                  dayMaxEventRows={1}
+                  height='auto'
+                  contentHeight='auto'
+                />
+              </div>
             </div>
-          </div>
-        </div>
+            <div>
+              <h3 className='tm3'>전체 출석률</h3>
+              <div>
+                <div className='text-right tm4 mb-1.5'>{attendanceRate}%</div>
+                <div className='w-full h-[16px] rounded-2xl bg-gray3/50 overflow-hidden'>
+                  <div
+                    className='h-full bg-orange'
+                    style={{
+                      width: `${attendanceRate}%`,
+                    }}
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
