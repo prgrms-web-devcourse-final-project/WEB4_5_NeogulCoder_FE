@@ -4,10 +4,11 @@ import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SideMenuItemMy from './SideMenuItemMy';
 import { useRouter } from 'next/navigation';
+import { userAuthStore } from '@/stores/userStore';
 
 export default function SideMenuMy() {
   const router = useRouter();
-  const userName = '한유빙';
+  const me = userAuthStore((state) => state.user);
 
   const menuItems = [
     { name: '캘린더', to: '/my/calendar' },
@@ -24,10 +25,13 @@ export default function SideMenuMy() {
           <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
             <div className='flex items-center gap-[28px] pl-8'>
               <div className='w-[70px] h-[70px] bg-white rounded-full'>
-                <Image src={musicBunny} alt='예시 기본 프사' />
+                <Image
+                  src={me?.profileImgUrl ? me?.profileImgUrl : musicBunny}
+                  alt='예시 기본 프사'
+                />
               </div>
               <div>
-                <p className='tm2 cursor-default'>{userName}</p>
+                <p className='tm2 cursor-default'>{me?.nickname}</p>
                 <button
                   type='button'
                   className='t5 text-text1/50'
