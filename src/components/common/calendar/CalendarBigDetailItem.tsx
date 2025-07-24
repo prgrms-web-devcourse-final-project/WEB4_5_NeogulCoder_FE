@@ -12,17 +12,28 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CalendarWrite from './CalendarWrite';
 import dayjs from 'dayjs';
+import musicBunny from '@/assets/images/music-bunny.svg';
+import { userAuthStore } from '@/stores/userStore';
+import { ScheduleInputType } from './CalendarBigShell';
+import CalendarDeleteCheckModal from './CalendarDeleteCheckModal';
 
 export default function CalendarBigDetailItem({
+  type,
   result,
-  studyId,
+  categoryId,
+  handleDelete,
+  handleUpdate,
 }: {
-  result: StudyScheduleType;
-  studyId: number;
+  type: string;
+  result: UnionScheduleType;
+  categoryId: number;
+  handleDelete: (calendarId: number) => void;
+  handleUpdate: (id: number, data: ScheduleInputType) => void;
 }) {
-  const authId = 12;
+  const authId = userAuthStore().user?.id;
   const [open, setOpen] = useState(false);
-  const [writeOpen, setWriteOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [writeModalOpen, setWriteModalOpen] = useState(false);
   const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
   const startTime = dayjs(result.startTime).format('HH:mm');
   const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
@@ -53,7 +64,7 @@ export default function CalendarBigDetailItem({
               <div>
                 <div className='w-12 h-12 rounded-full overflow-hidden border border-border1'>
                   <Image
-                    src={result.writerProfileImageUrl}
+                    src={result.writerProfileImageUrl ?? musicBunny}
                     width={48}
                     height={0}
                     alt='작성자 프로필'
@@ -76,12 +87,21 @@ export default function CalendarBigDetailItem({
               {open && (
                 <div className='absolute top-0 right-6 bg-white rounded-md drop-shadow-md px-4 w-[110px] py-3 t5 flex flex-col gap-3 items-start'>
                   <button
-                    onClick={() => setWriteOpen(true)}
+                    onClick={() => {
+                      setWriteModalOpen(true);
+                      setOpen(false);
+                    }}
                     className='flex gap-3'
                   >
                     <PencilLine className='w-4 h-4' /> 수정하기
                   </button>
-                  <button className='flex gap-3 text-red'>
+                  <button
+                    onClick={() => {
+                      setDeleteModalOpen(true);
+                      setOpen(false);
+                    }}
+                    className='flex gap-3 text-red'
+                  >
                     <Trash2 className='w-4 h-4' color='#ff5955' /> 삭제하기
                   </button>
                 </div>
@@ -91,11 +111,19 @@ export default function CalendarBigDetailItem({
         </div>
         <div className='t4'>{result.description}</div>
       </div>
-      {writeOpen && (
+      {writeModalOpen && (
         <CalendarWrite
-          writeCloseHandler={() => setWriteOpen(false)}
+          type={type}
+          writeCloseHandler={() => setWriteModalOpen(false)}
           data={result}
-          studyId={studyId}
+          categoryId={categoryId}
+          handleUpdate={handleUpdate}
+        />
+      )}
+      {deleteModalOpen && (
+        <CalendarDeleteCheckModal
+          closeModal={() => setDeleteModalOpen(false)}
+          handleDelete={() => handleDelete(result.scheduleId)}
         />
       )}
     </>
