@@ -3,31 +3,78 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import koLocale from '@fullcalendar/core/locales/ko';
-import { useRef } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import '@/styles/attendance/attendance.css';
+import { getStudyAttendance, postStudyAttendance } from '@/lib/api/study.api';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import { userAuthStore } from '@/stores/userStore';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 export default function StudyAttendance({
-  data,
+  studyId,
   total,
 }: {
-  data: {
-    studyId: number;
-    userId: number;
-    attendanceDate: string;
-  }[];
+  studyId: number;
   total: number;
 }) {
   const calendarRef = useRef(null);
+  const user = userAuthStore().user;
+  const studyInfo = useStudyStore().study;
+  const [attendances, setAttendances] = useState<StudyAttendanceDaysType[]>([]);
+  const [attendanceRate, setAttendanceRate] = useState();
+  const [isPending, startTransition] = useTransition();
 
-  const checks = data.map((item) => ({
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      try {
+        const { data } = await getStudyAttendance(studyId);
+        setAttendances(data.attendances);
+        setAttendanceRate(data.attendanceRate);
+      } catch (error) {
+        console.error('출석체크 정보를 불러오지 못했습니다.', error);
+      }
+    };
+
+    fetchAttendance();
+  }, [studyId]);
+
+  const events = attendances.map((attendance) => ({
     title: '출석',
-    date: item.attendanceDate,
+    date: attendance.attendanceDate,
   }));
+
+  const handleAttendance = () => {
+    startTransition(async () => {
+      try {
+        await postStudyAttendance(studyId);
+        setAttendances((prev) => [
+          ...prev,
+          {
+            studyId: studyId,
+            userId: user?.id || 0,
+            attendanceDate: dayjs().format('YYYY-MM-DD'),
+          },
+        ]);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message ?? '출석 체크 실패';
+          alert(message);
+        }
+      }
+    });
+  };
   return (
     <>
       <div className='flex justify-between mb-3'>
         <h3 className='tb3'>나의 스터디 출석정보</h3>
-        <button className='button-sm-type1'>출석</button>
+        <button
+          className='button-sm-type1'
+          disabled={isPending}
+          onClick={handleAttendance}
+        >
+          출석
+        </button>
       </div>
       <div className='border border-border1 rounded-[10px] p-6'>
         <div className='mb-12'>
@@ -38,7 +85,11 @@ export default function StudyAttendance({
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView='dayGridWeek'
               locale={koLocale}
-              events={checks}
+              events={events}
+              validRange={{
+                start: dayjs(studyInfo?.startDate).format('YYYY-MM-DD'),
+                end: dayjs(studyInfo?.endDate).format('YYYY-MM-DD'),
+              }}
               headerToolbar={{
                 left: 'prev',
                 center: 'title',
@@ -56,14 +107,12 @@ export default function StudyAttendance({
         <div>
           <h3 className='tm3'>전체 출석률</h3>
           <div>
-            <div className='text-right tm4 mb-1.5'>
-              {Math.ceil((checks.length / total) * 100)}%
-            </div>
+            <div className='text-right tm4 mb-1.5'>{attendanceRate}%</div>
             <div className='w-full h-[16px] rounded-2xl bg-gray3/50 overflow-hidden'>
               <div
                 className='h-full bg-orange'
                 style={{
-                  width: `${(checks.length / total) * 100}%`,
+                  width: `${attendanceRate}%`,
                 }}
               ></div>
             </div>

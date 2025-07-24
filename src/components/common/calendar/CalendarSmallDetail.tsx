@@ -11,7 +11,7 @@ export default function CalendarSmallDetail({
   studyId,
 }: {
   date: string;
-  studyId: string;
+  studyId: number;
 }) {
   const dateFormat = (date: string) => {
     const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(
@@ -29,8 +29,8 @@ export default function CalendarSmallDetail({
       teamId: 101,
       title: '14일 일정',
       description: '기획 회의',
-      startTime: '2025-07-14T02:01:35.969Z',
-      endTime: '2025-07-14T02:01:35.969Z',
+      startTime: '2025-07-14T02:01:35',
+      endTime: '2025-07-14T02:01:35',
     },
     {
       calendarId: 2002,
@@ -40,8 +40,8 @@ export default function CalendarSmallDetail({
       teamId: 101,
       title: '24-25',
       description: '기획 회의',
-      startTime: '2025-07-24T02:01:35.969Z',
-      endTime: '2025-07-25T18:01:35.969Z',
+      startTime: '2025-07-24T02:01:35',
+      endTime: '2025-07-25T18:01:35',
     },
     {
       calendarId: 2003,
@@ -51,8 +51,8 @@ export default function CalendarSmallDetail({
       teamId: 101,
       title: '기능개발',
       description: '기획 회의',
-      startTime: '2025-07-17T02:01:35.969Z',
-      endTime: '2025-07-18T03:01:35.969Z',
+      startTime: '2025-07-17T02:01:35',
+      endTime: '2025-07-18T03:01:35',
     },
     {
       calendarId: 2004,
@@ -62,8 +62,8 @@ export default function CalendarSmallDetail({
       teamId: 101,
       title: '달력 기능 개발',
       description: '기획 회의',
-      startTime: '2025-07-18T02:01:35.969Z',
-      endTime: '2025-07-20T03:18:35.969Z',
+      startTime: '2025-07-18T02:01:35',
+      endTime: '2025-07-20T03:18:35',
     },
   ];
 

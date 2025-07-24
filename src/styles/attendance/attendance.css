@@ -130,3 +130,11 @@
 .attendance .fc-theme-standard th {
   border: 0;
 }
+
+.attendance .fc-day-disabled {
+  opacity: 0;
+}
+
+.attendance .fc .fc-button:disabled {
+  opacity: 0.1;
+}

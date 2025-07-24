@@ -4,7 +4,7 @@ import CalendarSmall from './CalendarSmall';
 import CalendarSmallDetail from './CalendarSmallDetail';
 import dayjs from 'dayjs';
 
-export default function CalendarSmallShell({ studyId }: { studyId: string }) {
+export default function CalendarSmallShell({ studyId }: { studyId: number }) {
   const [clickDate, setClickDate] = useState(dayjs().format('YYYY-MM-DD'));
   const handleClickDate = (date: string) => {
     setClickDate(date);

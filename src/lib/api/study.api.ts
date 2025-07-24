@@ -53,3 +53,24 @@ export const deleteStudy = async (studyId: number) => {
   const { data } = await axiosInstance.delete(`/api/studies/${studyId}`);
   return data;
 };
+
+// 스터디 출석 조회
+export const getStudyAttendance = async (studyId: number) => {
+  const { data } = await axiosInstance.get(
+    `/api/studies/${studyId}/attendances`
+  );
+  return data;
+};
+// 스터디 출석 체크
+export const postStudyAttendance = async (studyId: number) => {
+  const { data } = await axiosInstance.post(
+    `/api/studies/${studyId}/attendances`
+  );
+  return data;
+};
+
+// 스터디 대시보드 정보 조회
+export const getStudyDashboard = async (studyId: number) => {
+  const { data } = await axiosInstance.get(`/api/studies/${studyId}`);
+  return data;
+};

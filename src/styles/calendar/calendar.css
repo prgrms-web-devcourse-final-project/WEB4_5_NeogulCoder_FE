@@ -144,7 +144,10 @@
 }
 .small-calendar .fc .fc-daygrid-body-unbalanced .fc-daygrid-day-events {
   min-height: 0;
-  z-index: -1;
+  pointer-events: none;
+}
+.small-calendar .fc .fc-event-main {
+  font-size: 0;
 }
 
 .small-calendar .fc-day.fc-daygrid-day {

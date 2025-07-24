@@ -50,3 +50,42 @@ type StudyExtendType = {
   }[];
   extended: boolean;
 };
+
+type StudyAttendanceType = {
+  attendances: StudyAttendanceDaysType[];
+  attendanceRate: number;
+};
+type StudyAttendanceDaysType = {
+  studyId: number;
+  userId: number;
+  attendanceDate: string;
+};
+
+type StudyDashboardType = {
+  progressDays: number;
+  totalDays: number;
+  capacity: number;
+  currentCount: number;
+  totalPostCount: number;
+  attendances: StudyAttendanceDaysType[];
+  attendanceRate: number;
+  teamCalenders: {
+    teamCalendarId: number;
+    studyId: number;
+    writerId: number;
+    writerNickname: string;
+    writerProfileImageUrl: string | null;
+    title: string;
+    description: string;
+    startTime: string;
+    endTime: string;
+  }[];
+  studyPosts: {
+    id: number;
+    title: string;
+    category: string;
+    content: string;
+    createdDate: string;
+    commentCount: number;
+  }[];
+};

@@ -22,8 +22,8 @@ export default function CalendarSmall({
       teamId: 101,
       title: '14일 일정',
       description: '기획 회의',
-      startTime: '2025-07-14T02:01:35.969Z',
-      endTime: '2025-07-14T02:01:35.969Z',
+      startTime: '2025-07-14T02:01:35',
+      endTime: '2025-07-14T02:01:35',
     },
     {
       calendarId: 2002,
@@ -33,9 +33,10 @@ export default function CalendarSmall({
       teamId: 101,
       title: '24-25',
       description: '기획 회의',
-      startTime: '2025-07-24T02:01:35.969Z',
-      endTime: '2025-07-25T18:01:35.969Z',
+      startTime: '2025-07-24T02:01:35',
+      endTime: '2025-07-25T18:01:35',
     },
+
     {
       calendarId: 2003,
       writerId: 12,
@@ -44,8 +45,8 @@ export default function CalendarSmall({
       teamId: 101,
       title: '기능개발',
       description: '기획 회의',
-      startTime: '2025-07-17T02:01:35.969Z',
-      endTime: '2025-07-18T03:01:35.969Z',
+      startTime: '2025-07-17T02:01:35',
+      endTime: '2025-07-18T03:01:35',
     },
     {
       calendarId: 2004,
@@ -55,8 +56,8 @@ export default function CalendarSmall({
       teamId: 101,
       title: '달력 기능 개발',
       description: '기획 회의',
-      startTime: '2025-07-18T02:01:35.969Z',
-      endTime: '2025-07-20T03:18:35.969Z',
+      startTime: '2025-07-18T02:01:35',
+      endTime: '2025-07-20T03:18:35',
     },
   ];
   // 캘린더 컬러팔렛트
@@ -146,7 +147,6 @@ export default function CalendarSmall({
           }}
           events={formating}
           dateClick={(e) => handleClickDate(e.dateStr)}
-          eventClick={(e) => e.jsEvent.preventDefault()}
           expandRows={true}
           dayMaxEventRows={0}
           fixedWeekCount={false}
