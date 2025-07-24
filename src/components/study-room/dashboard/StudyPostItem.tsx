@@ -1,31 +1,27 @@
 import dateFormatting from '@/utils/dateFormatting';
+import Link from 'next/link';
 
-type DashBoardPostType = {
-  id: number;
-  title: string;
-  category: string;
-  content: string;
-  createdDate: string;
-  commentCount: number;
-};
 export default function StudyPostItem({ data }: { data: DashBoardPostType }) {
   return (
     <>
-      <div className='flex justify-between items-center gap-3'>
+      <Link
+        href={`/study/detail/${data.postId}`}
+        className='flex justify-between items-center gap-3 group'
+      >
         <div className='w-full flex gap-3'>
           <span
             className={`shrink-0 tag-type3 ${
-              data.category === 'NOTICE' ? 'red' : 'bg-yellow!'
+              data.category === '공지' ? 'red' : 'bg-yellow!'
             }`}
           >
-            {data.category === 'NOTICE' ? '공지' : 'new'}
+            {data.category === '공지' ? '공지' : 'new'}
           </span>
-          <p className='w-full line-clamp-1 tm4'>{data.title}</p>
+          <p className='w-full line-clamp-1 tm4 group-hover:font-bold'>
+            {data.title}
+          </p>
         </div>
-        <p className='shrink-0 t5 text-gray5'>
-          {dateFormatting(data.createdDate)}
-        </p>
-      </div>
+        <p className='shrink-0 t5 text-gray5'>{data.createdAt}</p>
+      </Link>
     </>
   );
 }

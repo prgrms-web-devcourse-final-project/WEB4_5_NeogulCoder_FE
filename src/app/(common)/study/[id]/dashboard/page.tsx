@@ -16,6 +16,7 @@ export default function DashBoard() {
   const params = useParams();
   const studyId = Number(params.id);
   const studyInfo = useStudyStore().study;
+  const studyIsProgress = useStudyStore().isProgress;
   const [studyData, setStudyData] = useState<StudyDashboardType>();
   const [studyCalendar, setStudyCalendar] = useState<StudyScheduleType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +39,7 @@ export default function DashBoard() {
 
   const studyInfos = [
     {
-      title: '스터디 총 기간',
+      title: '스터디 총 참여 가능 기간',
       data: `${studyData?.totalDays}`,
       type: 'day',
     },
@@ -54,12 +55,7 @@ export default function DashBoard() {
       type: 'post',
     },
   ];
-  const noticeLists = studyData?.studyPosts?.filter(
-    (f) => f.category === 'NOTICE'
-  );
-  const normalLists = studyData?.studyPosts?.filter(
-    (f) => f.category !== 'NOTICE'
-  );
+
   return (
     <>
       {isLoading ? (
@@ -78,7 +74,7 @@ export default function DashBoard() {
             <div className='shrink-0'>
               <StudyAttendance
                 studyId={studyId}
-                total={studyData?.totalDays ?? 1}
+                totalDays={studyData?.totalDays ?? 1}
               />
             </div>
             <div className='w-full'>
@@ -117,9 +113,9 @@ export default function DashBoard() {
               </Link>
             </div>
             <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
-              {noticeLists && noticeLists.length > 0 ? (
-                noticeLists.map((list) => (
-                  <StudyPostItem key={list.id} data={list} />
+              {studyData?.noticePosts && studyData?.noticePosts.length > 0 ? (
+                studyData?.noticePosts.map((post) => (
+                  <StudyPostItem key={post.postId} data={post} />
                 ))
               ) : (
                 <div className='flex h-full justify-center flex-col gap-5'>
@@ -131,12 +127,14 @@ export default function DashBoard() {
                     <p className='tm4 text-border2  mb-3'>
                       스터디 커뮤니티에 공지글이 없습니다.
                     </p>
-                    <Link
-                      href={`/study/${studyId}/study-community/write`}
-                      className='button-sm-type1  !text-[12px]'
-                    >
-                      작성하러 가기
-                    </Link>
+                    {studyIsProgress && (
+                      <Link
+                        href={`/study/${studyId}/study-community/write`}
+                        className='button-sm-type1  !text-[12px]'
+                      >
+                        작성하러 가기
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}
@@ -153,9 +151,9 @@ export default function DashBoard() {
               </Link>
             </div>
             <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
-              {normalLists && normalLists.length > 0 ? (
-                normalLists.map((list) => (
-                  <StudyPostItem key={list.id} data={list} />
+              {studyData?.freePosts && studyData?.freePosts.length > 0 ? (
+                studyData?.freePosts.map((post) => (
+                  <StudyPostItem key={post.postId} data={post} />
                 ))
               ) : (
                 <div className='flex h-full justify-center flex-col gap-5'>
@@ -167,12 +165,14 @@ export default function DashBoard() {
                     <p className='tm4 text-border2 mb-3'>
                       스터디 커뮤니티에 게시글이 없습니다.
                     </p>
-                    <Link
-                      href={`/study/${studyId}/study-community/write`}
-                      className='button-sm-type1 !text-[12px]'
-                    >
-                      작성하러 가기
-                    </Link>
+                    {studyIsProgress && (
+                      <Link
+                        href={`/study/${studyId}/study-community/write`}
+                        className='button-sm-type1 !text-[12px]'
+                      >
+                        작성하러 가기
+                      </Link>
+                    )}
                   </div>
                 </div>
               )}

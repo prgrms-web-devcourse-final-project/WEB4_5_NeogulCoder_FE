@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import StudyRoomExtendWrite from './StudyRoomExtendWrite';
 import { getStudyExtendInfo } from '@/lib/api/study.api';
 import dayjs from 'dayjs';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 export default function StudyExtend({
   endDate,
@@ -12,6 +13,7 @@ export default function StudyExtend({
   endDate: string;
   studyId: number;
 }) {
+  const studyIsProgress = useStudyStore().isProgress;
   const [extendModal, setExtendModal] = useState(false);
   const extendModalClose = () => {
     setExtendModal(false);
@@ -55,7 +57,7 @@ export default function StudyExtend({
     today.isBefore(end.add(1, 'day'));
 
   // 종료 7일 전 기간동안만 연장할 수 있게
-  if (isInRange)
+  if (studyIsProgress && isInRange)
     return (
       <div className='mb-24'>
         <div className='flex justify-between mb-6 pb-6 border-border1 border-b'>

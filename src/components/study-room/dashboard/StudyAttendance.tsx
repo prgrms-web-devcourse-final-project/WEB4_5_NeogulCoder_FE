@@ -14,16 +14,18 @@ import StudyAttendanceSkeleton from './StudyAttendanceSkeleton';
 
 export default function StudyAttendance({
   studyId,
-  total,
+  totalDays,
 }: {
   studyId: number;
-  total: number;
+  totalDays: number;
 }) {
   const calendarRef = useRef(null);
   const user = userAuthStore().user;
   const studyInfo = useStudyStore().study;
+  const studyIsProgress = useStudyStore().isProgress;
   const [attendances, setAttendances] = useState<StudyAttendanceDaysType[]>([]);
-  const [attendanceRate, setAttendanceRate] = useState();
+  const [attendanceRate, setAttendanceRate] = useState(0);
+  const [todayCheck, setTodayCheck] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -34,6 +36,11 @@ export default function StudyAttendance({
         const { data } = await getStudyAttendance(studyId);
         setAttendances(data.attendances);
         setAttendanceRate(data.attendanceRate);
+        const today = data.attendances.find(
+          (f: StudyAttendanceDaysType) =>
+            f.attendanceDate === dayjs().format('YYYY-MM-DD')
+        );
+        setTodayCheck(today);
       } catch (error) {
         console.error('출석체크 정보를 불러오지 못했습니다.', error);
       } finally {
@@ -52,6 +59,7 @@ export default function StudyAttendance({
   const handleAttendance = () => {
     startTransition(async () => {
       try {
+        const prevCount = attendances.length;
         await postStudyAttendance(studyId);
         setAttendances((prev) => [
           ...prev,
@@ -61,6 +69,8 @@ export default function StudyAttendance({
             attendanceDate: dayjs().format('YYYY-MM-DD'),
           },
         ]);
+        setAttendanceRate(Math.round(((prevCount + 1) / totalDays) * 100));
+        setTodayCheck(true);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const message = error.response?.data?.message ?? '출석 체크 실패';
@@ -69,13 +79,16 @@ export default function StudyAttendance({
       }
     });
   };
+
+  console.log('studyIsProgress', studyIsProgress);
   return (
     <>
       <div className='flex justify-between mb-3'>
         <h3 className='tb3'>나의 스터디 출석정보</h3>
         <button
-          className='button-sm-type1'
-          disabled={isPending}
+          className='button-sm-type1 disabled:!cursor-default'
+          // pending, 오늘 출석 했으면, 진행중이 아닌 스터디 경우 버튼 막기
+          disabled={isPending || todayCheck || !studyIsProgress}
           onClick={handleAttendance}
         >
           출석

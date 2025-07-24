@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { dayFormatting } from '@/utils/day';
 import isBetween from 'dayjs/plugin/isBetween';
 import Link from 'next/link';
+import { useStudyStore } from '@/stores/studyInfoStore';
 dayjs.extend(isBetween);
 
 export default function CalendarSmallDetail({
@@ -15,6 +16,7 @@ export default function CalendarSmallDetail({
   studyId: number;
   calendarData: StudyScheduleType[];
 }) {
+  const studyIsProgress = useStudyStore().isProgress;
   const dateFormat = (date: string) => {
     const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(
       'D'
@@ -53,9 +55,17 @@ export default function CalendarSmallDetail({
                   className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
                   strokeWidth={1}
                 />
-                <p className='tm4 text-border2'>
+                <p className='tm4 text-border2  mb-3'>
                   해당 날짜에 등록된 일정이 없습니다.
                 </p>
+                {studyIsProgress && (
+                  <Link
+                    href={`/study/${studyId}/calendar`}
+                    className='button-sm-type1 !text-[12px]'
+                  >
+                    일정등록하러 가기
+                  </Link>
+                )}
               </div>
             </div>
           )}

@@ -67,8 +67,6 @@ type StudyDashboardType = {
   capacity: number;
   currentCount: number;
   totalPostCount: number;
-  attendances: StudyAttendanceDaysType[];
-  attendanceRate: number;
   teamCalendars: {
     teamCalendarId: number;
     studyId: number;
@@ -80,12 +78,13 @@ type StudyDashboardType = {
     startTime: string;
     endTime: string;
   }[];
-  studyPosts: {
-    id: number;
-    title: string;
-    category: string;
-    content: string;
-    createdDate: string;
-    commentCount: number;
-  }[];
+  noticePosts: DashBoardPostType[];
+  freePosts: DashBoardPostType[];
+};
+
+type DashBoardPostType = {
+  postId: number;
+  category: string;
+  title: string;
+  createdAt: string;
 };
