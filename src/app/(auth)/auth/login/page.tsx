@@ -7,7 +7,7 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import deleteText from '@/assets/images/delete-text.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { login } from '@/lib/api/user';
@@ -175,7 +175,7 @@ export default function Login() {
           </div>
 
           <div className='flex justify-center'>
-            <Link
+            {/* <Link
               href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`}
             >
               <button className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'>
@@ -188,7 +188,25 @@ export default function Login() {
                 />
                 <span className='pl-4'>구글로 시작하기</span>
               </button>
-            </Link>
+            </Link> */}
+
+            <button
+              type='button'
+              className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'
+              onClick={() => {
+                localStorage.setItem('login_status', 'Y');
+                window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`;
+              }}
+            >
+              <Image
+                src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'
+                alt='구글'
+                className='w-5 h-5'
+                width={0}
+                height={0}
+              />
+              <span className='pl-4'>구글로 시작하기</span>
+            </button>
           </div>
         </div>
       </div>
