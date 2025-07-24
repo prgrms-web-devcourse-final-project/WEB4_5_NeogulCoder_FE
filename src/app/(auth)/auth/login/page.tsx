@@ -175,21 +175,6 @@ export default function Login() {
           </div>
 
           <div className='flex justify-center'>
-            {/* <Link
-              href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`}
-            >
-              <button className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'>
-                <Image
-                  src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'
-                  alt='구글'
-                  className='w-5 h-5'
-                  width={0}
-                  height={0}
-                />
-                <span className='pl-4'>구글로 시작하기</span>
-              </button>
-            </Link> */}
-
             <button
               type='button'
               className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'
