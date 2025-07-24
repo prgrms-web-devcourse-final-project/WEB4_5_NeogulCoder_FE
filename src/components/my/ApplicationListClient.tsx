@@ -27,35 +27,35 @@ export default function ApplicationListClient({
   );
 
   const filterList = useCallback(async () => {
-    const finishedValue = filterName[activeIndex];
+    const statusValue = filterName[activeIndex];
 
     const query = {
       page,
       pageSize: 12,
       sort: 'DESC',
-      ...(finishedValue ? { finished: finishedValue } : {}),
+      ...(statusValue ? { status: statusValue } : {}),
     };
 
     const data = await fetchMyApplicationList(query);
-    // setMyApplicationList(data.applications);
-    setMyApplicationList([
-      {
-        applicationId: 1,
-        name: '자바 스터디',
-        leaderNickname: '너굴',
-        capacity: 4,
-        currentCount: 3,
-        startDate: '2025-07-15T00:00:00',
-        imageUrl: 'http://localhost:8083/image.jpg',
-        introduction: '자바 스터디입니다.',
-        category: 'IT',
-        studyType: 'ONLINE',
-        isRead: true,
-        status: 'PENDING',
-      },
-    ]);
-    // setTotalPages(data.totalPage);
-    setTotalPages(2);
+    setMyApplicationList(data.applications);
+    // setMyApplicationList([
+    //   {
+    //     applicationId: 1,
+    //     name: '자바 스터디',
+    //     leaderNickname: '너굴',
+    //     capacity: 4,
+    //     currentCount: 3,
+    //     startDate: '2025-07-15T00:00:00',
+    //     imageUrl: 'http://localhost:8083/image.jpg',
+    //     introduction: '자바 스터디입니다.',
+    //     category: 'IT',
+    //     studyType: 'ONLINE',
+    //     isRead: false,
+    //     status: 'REJECTED',
+    //   },
+    // ]);
+    setTotalPages(data.totalPage);
+    // setTotalPages(2);
   }, [activeIndex, page]);
 
   useEffect(() => {
