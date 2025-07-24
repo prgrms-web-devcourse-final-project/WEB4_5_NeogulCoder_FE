@@ -115,7 +115,11 @@ export default function DashBoard() {
             <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
               {studyData?.noticePosts && studyData?.noticePosts.length > 0 ? (
                 studyData?.noticePosts.map((post) => (
-                  <StudyPostItem key={post.postId} data={post} />
+                  <StudyPostItem
+                    key={post.postId}
+                    data={post}
+                    studyId={studyId}
+                  />
                 ))
               ) : (
                 <div className='flex h-full justify-center flex-col gap-5'>
@@ -153,7 +157,11 @@ export default function DashBoard() {
             <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
               {studyData?.freePosts && studyData?.freePosts.length > 0 ? (
                 studyData?.freePosts.map((post) => (
-                  <StudyPostItem key={post.postId} data={post} />
+                  <StudyPostItem
+                    key={post.postId}
+                    data={post}
+                    studyId={studyId}
+                  />
                 ))
               ) : (
                 <div className='flex h-full justify-center flex-col gap-5'>

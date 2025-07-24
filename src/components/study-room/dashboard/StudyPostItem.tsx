@@ -1,11 +1,17 @@
 import dateFormatting from '@/utils/dateFormatting';
 import Link from 'next/link';
 
-export default function StudyPostItem({ data }: { data: DashBoardPostType }) {
+export default function StudyPostItem({
+  data,
+  studyId,
+}: {
+  data: DashBoardPostType;
+  studyId: number;
+}) {
   return (
     <>
       <Link
-        href={`/study/detail/${data.postId}`}
+        href={`/study/${studyId}/detail/${data.postId}`}
         className='flex justify-between items-center gap-3 group'
       >
         <div className='w-full flex gap-3'>
