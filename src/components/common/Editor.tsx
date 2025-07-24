@@ -15,6 +15,13 @@ export default function MyEditor({ editorRef, content }: Props) {
     }
   }, [editorRef, content]);
 
+  // const handleChange = () => {
+  //   const markdown = editorRef.current?.getInstance().getMarkdown();
+  //   if (markdown !== undefined) {
+  //     onChange(markdown);
+  //   }
+  // };
+
   return (
     <div className='tm3'>
       <ToastEditor
@@ -25,6 +32,7 @@ export default function MyEditor({ editorRef, content }: Props) {
         useCommandShortcut={true}
         hideModeSwitch={true}
         initialValue=''
+        // onChange={handleChange}
       />
     </div>
   );
