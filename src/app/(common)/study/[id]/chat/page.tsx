@@ -68,6 +68,7 @@ export default function Chat() {
       debug: (str) => console.log('[STOMP]', str),
       onConnect: () => {
         console.log('연결 성공');
+        console.log('SUBSCRIBED TO', `/sub/chat/room/${roomId}`);
 
         // 구독
         client.subscribe(`/sub/chat/room/${roomId}`, (message) => {
@@ -121,6 +122,7 @@ export default function Chat() {
         message,
       }),
     });
+
     // setChats((prev) => [...prev, newMessage]);
     console.log('[SENT]', {
       roomId: roomId,
