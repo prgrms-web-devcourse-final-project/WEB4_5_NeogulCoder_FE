@@ -22,7 +22,7 @@ export type StudyListQueryType = {
   page: number;
   pageSize: number;
   category?: string;
-  content?: string;
+  keyword?: string;
   attributeName?: string;
   sort: string;
 };
@@ -45,7 +45,7 @@ export type MyListQueryType = {
   page: number;
   pageSize: number;
   category?: string;
-  content?: string;
+  keyword?: string;
   attributeName?: string;
   sort: string;
 };

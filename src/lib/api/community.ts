@@ -9,7 +9,7 @@ export const fetchStudyCommunityList = async (
     page,
     pageSize = 10,
     category,
-    content,
+    keyword,
     attributeName = 'createDateTime',
     sort = 'DESC',
   } = params;
@@ -18,7 +18,7 @@ export const fetchStudyCommunityList = async (
     page: page.toString(),
     pageSize: pageSize.toString(),
     ...(category ? { category } : {}),
-    ...(content ? { content } : {}),
+    ...(keyword ? { keyword } : {}),
     attributeName,
     sort,
   });
@@ -37,7 +37,7 @@ export const fetchMyCommunityList = async (
     page,
     pageSize = 10,
     category,
-    content,
+    keyword,
     attributeName = 'createDateTime',
     sort = 'DESC',
   } = params;
@@ -46,7 +46,7 @@ export const fetchMyCommunityList = async (
     page: page.toString(),
     pageSize: pageSize.toString(),
     ...(category ? { category } : {}),
-    ...(content ? { content } : {}),
+    ...(keyword ? { keyword } : {}),
     attributeName,
     sort,
   });
