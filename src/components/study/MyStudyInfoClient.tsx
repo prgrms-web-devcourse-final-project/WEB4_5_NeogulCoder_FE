@@ -50,7 +50,7 @@ export default function MyStudyInfoClient({
 
   const [isParticipated, setIsParticipated] = useState(false);
 
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState('카테고리');
   const [selectedSortingType, setSelectedSortingType] = useState('최신순');
   const [keyword, setKeyword] = useState('');
 
@@ -89,7 +89,7 @@ export default function MyStudyInfoClient({
       attributeName: sortingValue,
       sort: 'DESC',
       ...(categoryValue ? { category: categoryValue } : {}),
-      ...(keyword ? { content: keyword } : {}),
+      ...(keyword ? { keyword } : {}),
     };
 
     const data = await fetchMyCommunityList(studyId, query);

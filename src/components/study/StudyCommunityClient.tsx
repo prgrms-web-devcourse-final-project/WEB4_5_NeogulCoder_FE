@@ -28,7 +28,7 @@ export default function StudyCommunityClient({
   const { id } = useParams();
   const studyId = Number(id);
 
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedCategory, setSelectedCategory] = useState('카테고리');
   const [selectedSortingType, setSelectedSortingType] = useState('최신순');
   const [keyword, setKeyword] = useState('');
 
@@ -51,7 +51,7 @@ export default function StudyCommunityClient({
       attributeName: sortingValue,
       sort: 'DESC',
       ...(categoryValue ? { category: categoryValue } : {}),
-      ...(keyword ? { content: keyword } : {}),
+      ...(keyword ? { keyword } : {}),
     };
 
     const data = await fetchStudyCommunityList(studyId, query);

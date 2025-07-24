@@ -45,7 +45,7 @@ export default function ListMenuStudy({
           <button
             type='button'
             className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
-              selectedCategory !== '전체'
+              selectedCategory !== '카테고리'
                 ? 'border-main text-text1 tm4'
                 : 'border-main/10 text-text1/50 tm4'
             }`}
