@@ -1,12 +1,12 @@
 'use client';
 
-import MyEditor from '@/components/common/Editor';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import RegionModal from '@/components/common/RegionModal';
 import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
+import IntroEditor from '@/components/profile/pr/IntroEditor';
 
 export default function EditPr() {
   const router = useRouter();
@@ -25,6 +25,7 @@ export default function EditPr() {
     { urlName: '', prUrl: '' },
     { urlName: '', prUrl: '' },
   ]);
+
   const [introduction, setIntroduction] = useState('');
   const { pr, fetchMyPr } = userPrStore();
 
@@ -78,7 +79,6 @@ export default function EditPr() {
         return;
       }
     }
-
     setUrlErrorMsg('');
 
     try {
@@ -201,7 +201,7 @@ export default function EditPr() {
         </div>
       )}
       {activeTab === '소개글' && (
-        <MyEditor value={introduction} onChange={setIntroduction} />
+        <IntroEditor value={introduction} onChange={setIntroduction} />
       )}
 
       <div className='flex gap-5 mt-10 justify-end'>
