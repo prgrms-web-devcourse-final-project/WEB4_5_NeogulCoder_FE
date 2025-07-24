@@ -1,12 +1,12 @@
 /* 큰 캘린더 */
 .big-calendar .fc-toolbar-title {
-  font-size: 24px;
+  font-size: 26px;
 }
 .big-calendar .fc .fc-toolbar.fc-header-toolbar {
   margin-bottom: 30px;
 }
 .big-calendar .fc .fc-toolbar-title {
-  font-weight: 500;
+  font-weight: 600;
 }
 .big-calendar .fc .fc-button-primary {
   color: #000;
