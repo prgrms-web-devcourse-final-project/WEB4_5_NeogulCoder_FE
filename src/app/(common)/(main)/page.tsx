@@ -24,11 +24,11 @@ export default function Main() {
   const { user, setUser } = userAuthStore();
 
   useEffect(() => {
-    if (!user) {
+    const isLoggedIn = localStorage.getItem('login_status');
+    if (!user && isLoggedIn) {
       getUser()
         .then((res) => {
           setUser(res.data.data);
-          localStorage.setItem('login_status', 'Y');
         })
         .catch((error) => {
           localStorage.removeItem('login_status');
