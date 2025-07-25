@@ -26,8 +26,10 @@ export default function SideMenuMy() {
             <div className='flex items-center gap-[28px] pl-8'>
               <div className='w-[70px] h-[70px] bg-white rounded-full'>
                 <Image
-                  src={me?.profileImgUrl ? me?.profileImgUrl : musicBunny}
+                  src={me?.profileImageUrl ? me?.profileImageUrl : musicBunny}
                   alt='예시 기본 프사'
+                  width={70}
+                  height={70}
                 />
               </div>
               <div>
