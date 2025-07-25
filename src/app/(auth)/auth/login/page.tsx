@@ -11,6 +11,7 @@ import { useRef, useState } from 'react';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { login } from '@/lib/api/user';
+import Link from 'next/link';
 
 export default function Login() {
   const router = useRouter();
@@ -43,7 +44,6 @@ export default function Login() {
     try {
       const res = await login(email, password);
       const user = res.data.data.user;
-      // console.log(user);
 
       userAuthStore.getState().setUser({
         id: user.userId,
@@ -178,23 +178,20 @@ export default function Login() {
           </div>
 
           <div className='flex justify-center'>
-            <button
-              type='button'
-              className='w-[390px] h-[50px] flex items-center justify-center rounded-[10px] bg-[#f1f3f5] shadow-sm hover:bg-[#eef0f1]'
-              onClick={() => {
-                window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`;
-                // localStorage.setItem('login_status', 'Y');
-              }}
+            <Link
+              href={`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`}
             >
-              <Image
-                src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'
-                alt='구글'
-                className='w-5 h-5'
-                width={0}
-                height={0}
-              />
-              <span className='pl-4'>구글로 시작하기</span>
-            </button>
+              <button className='w-[390px] h-[50px] flex items-center justify-center rounded-[10px] bg-[#f1f3f5] shadow-sm hover:bg-[#eef0f1]'>
+                <Image
+                  src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg'
+                  alt='구글'
+                  className='w-5 h-5'
+                  width={0}
+                  height={0}
+                />
+                <span className='pl-4'>구글로 시작하기</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

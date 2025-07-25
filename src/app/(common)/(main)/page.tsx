@@ -21,7 +21,8 @@ export default function Main() {
   const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
-  const { user, setUser } = userAuthStore();
+  const user = userAuthStore((state) => state.user);
+  const setUser = userAuthStore((state) => state.setUser);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('login_status');
@@ -36,31 +37,6 @@ export default function Main() {
         });
     }
   }, [user, setUser]);
-
-  // useEffect(() => {
-  //   const fetchMe = async () => {
-  //     try {
-  //       const res = await getUser();
-  //       const user = res.data.data;
-  //       userAuthStore.getState().setUser({
-  //         id: user.userId,
-  //         email: user.email,
-  //         nickname: user.nickname,
-  //         profileImageUrl: user.profileImgUrl,
-  //         oauth: user.oauth,
-  //         role: user.role,
-  //       });
-  //       localStorage.setItem('login_status', 'Y');
-  //     } catch (error) {
-  //       // 401 에러 등 예외 시
-  //       userAuthStore.getState().clearUser(); // 또는 초기화
-  //       localStorage.removeItem('login_status');
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchMe();
-  // }, []);
 
   const studyList = Array.from({ length: 4 }, () => ({
     studyName: '주말이 이렇게 방가울수가',
