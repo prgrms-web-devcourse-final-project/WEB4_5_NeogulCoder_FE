@@ -57,13 +57,14 @@ export default function EditProfile() {
 
     try {
       const formData = new FormData();
-      formData.append('nickname', nickname);
 
       if (imgFile) {
         formData.append('profileImage', imgFile);
       }
 
-      await axiosInstance.put('/api/users/update/profile', formData);
+      await axiosInstance.put('/api/users/update/profile', formData, {
+        params: nickname !== user?.nickname ? { nickname } : {},
+      });
       await userAuthStore.getState().fetchUser();
 
       const updatedUser = userAuthStore.getState().user;
