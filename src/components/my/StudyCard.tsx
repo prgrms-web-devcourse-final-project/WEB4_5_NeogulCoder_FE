@@ -6,6 +6,7 @@ import studyDefault from '@/assets/images/study-default.svg';
 import { Calendar, Crown, UsersRound } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 import { MyStudyListType } from '@/types/my';
+import { useRouter } from 'next/navigation';
 
 const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
   ONLINE: '온라인',
@@ -14,6 +15,7 @@ const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
 };
 
 export default function StudyCard({
+  studyId,
   name,
   leaderNickname,
   capacity,
@@ -24,8 +26,12 @@ export default function StudyCard({
   category,
   studyType,
 }: MyStudyListType['studies'][0]) {
+  const router = useRouter();
   return (
-    <div className='flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'>
+    <div
+      className='flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
+      onClick={() => router.push(`/study/${studyId}/dashboard`)}
+    >
       <div className='tm3 text-text1 truncate'>{name}</div>
       <div className='flex justify-between mt-5'>
         <div className='flex flex-col gap-[10px]'>
