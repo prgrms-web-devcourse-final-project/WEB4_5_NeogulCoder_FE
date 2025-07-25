@@ -8,10 +8,11 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { ChatGroup, ChatMessageType } from '@/types/chat';
 import { userAuthStore } from '@/stores/userStore';
-import { fetchStudyList } from '@/lib/api/manners';
-// import Image from 'next/image';
+// import { fetchStudyList } from '@/lib/api/manners';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SockJS from 'sockjs-client';
+import { fetchChatMessage } from '@/lib/api/chat';
+// import { useParams } from 'next/navigation';
 
 function groupChatsByDate(chats: ChatMessageType[]): ChatGroup[] {
   const map = new Map<string, ChatMessageType[]>();
@@ -36,36 +37,41 @@ export default function Chat() {
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<ChatMessageType[]>([]);
   const [isInput, setIsInput] = useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [nextPage, setNextPage] = useState<number | null>(null);
   const user = userAuthStore((state) => state.user);
   const clientRef = useRef<Client | null>(null);
-  const [roomId, setRoomId] = useState<number | null>(null);
+  // const [roomId, setRoomId] = useState<number | null>(null);
 
-  // 스터디 ID 가져오기
+  // const params = useParams();
+  // const roomId = Number(params?.id);
+
+  const roomId = 4;
+
+  // 메시지 불러오기 / 웹소켓 연결
   useEffect(() => {
-    const fetchData = async () => {
+    if (!roomId) return;
+
+    const initialMessages = async () => {
       try {
-        const studyInfo = await fetchStudyList();
-        console.log(studyInfo);
-        if (studyInfo?.studies?.length) {
-          setRoomId(studyInfo.studies[0].studyId);
-        }
+        const res = await fetchChatMessage(roomId, 0);
+        setChats(res.content);
+        setCurrentPage(res.currentNumber);
+        setNextPage(res.nextPage);
       } catch (error) {
-        console.error('스터디 정보 불러오기 실패:', error);
+        console.error('초기 메시지 불러오기 실패: ', error);
       }
     };
-    fetchData();
-  }, []);
 
-  // 웹소켓 연결
-  useEffect(() => {
-    // if (!roomId) return;
+    initialMessages();
+
     const socketUrl = process.env.NEXT_PUBLIC_API_URL;
     // console.log(socketUrl);
 
     const client = new Client({
       webSocketFactory: () => new SockJS(`${socketUrl}/ws-stomp`), // 연결
       reconnectDelay: 5000, // 재연결 시도 5초
-      debug: (str) => console.log('[STOMP]', str),
+      debug: (str) => console.log(str),
       onConnect: () => {
         console.log('연결 성공');
         console.log('SUBSCRIBED TO', `/sub/chat/room/${roomId}`);
@@ -73,9 +79,8 @@ export default function Chat() {
         // 구독
         client.subscribe(`/sub/chat/room/${roomId}`, (message) => {
           try {
-            console.log(message);
             const payload = JSON.parse(message.body);
-            console.log(payload);
+            console.log('[RECEIVED]', payload);
             setChats((prev) => [...prev, payload]);
           } catch (error) {
             console.error(error);
@@ -123,7 +128,6 @@ export default function Chat() {
       }),
     });
 
-    // setChats((prev) => [...prev, newMessage]);
     console.log('[SENT]', {
       roomId: roomId,
       senderId: user.id,
