@@ -3,17 +3,14 @@
 import { CircleCheck, CircleX, X } from 'lucide-react';
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
+import { TimeVoteSubmissionsType } from '@/types/schedule';
 
 export default function SubmitScheduleModal({
-  submitUsers,
-  closeHandler,
+  timeVoteSubmissions,
+  onClose,
 }: {
-  submitUsers: {
-    image: string;
-    name: string;
-    submitted: boolean;
-  }[];
-  closeHandler: () => void;
+  timeVoteSubmissions: TimeVoteSubmissionsType;
+  onClose: () => void;
 }) {
   return (
     <>
@@ -21,23 +18,27 @@ export default function SubmitScheduleModal({
         <div className='w-[517px] flex flex-col gap-6 px-9 py-7 rounded-[10px] bg-white drop-shadow-md'>
           <div className='flex justify-between'>
             <span className='tm2'>제출 현황</span>
-            <button onClick={closeHandler}>
+            <button onClick={onClose}>
               <X className='w-8 y-8' />
             </button>
           </div>
           <div className='flex flex-col gap-3 px-1'>
-            {submitUsers.map((user, i) => (
+            {timeVoteSubmissions.map((user) => (
               <div
-                key={i}
+                key={user.studyMemberId}
                 className='w-full flex justify-between items-center px-4 py-2 rounded-[6px] border border-border3'
               >
                 <div className='flex gap-3 items-center'>
                   <Image
-                    src={user.image ? user.image : musicBunny}
+                    src={
+                      user.profileImageUrl ? user.profileImageUrl : musicBunny
+                    }
                     alt='사용자 이미지'
+                    width={34}
+                    height={34}
                     className='w-[34px] h-[34px] rounded-[50%] border border-border1'
                   />
-                  <span className='t4'>{user.name}</span>
+                  <span className='t4'>{user.nickname}</span>
                 </div>
                 {user.submitted ? (
                   <CircleCheck className='text-green' />
