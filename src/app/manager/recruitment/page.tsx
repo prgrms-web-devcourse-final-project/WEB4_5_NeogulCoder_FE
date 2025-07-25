@@ -107,7 +107,7 @@ export default function RecruitPage() {
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={searchSubject}
               className='h-9 t4 px-3 placeholder:text-gray3'
-              placeholder='스터디 이름 검색'
+              placeholder='모집글 제목 검색'
             ></input>
           </div>
 
