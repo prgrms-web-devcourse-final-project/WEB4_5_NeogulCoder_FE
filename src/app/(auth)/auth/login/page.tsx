@@ -96,8 +96,8 @@ export default function Login() {
       </div>
 
       <div className='flex flex-col items-center justify-center'>
-        <p className='mb-[80px] text-[26px] text-center cursor-default leading-[50px]'>
-          모임부터 일정, 협업까지 한 번에.
+        <p className='mb-[80px] text-[23px] text-center cursor-default leading-[50px]'>
+          모임부터 일정 관리, 협업까지 한 번에.
           <br />
           <span className='text-[30px] font-medium'>함께할 사람</span>을 찾고,
           <span className='text-[30px] font-medium'> 함께할 계획</span>을
@@ -163,7 +163,10 @@ export default function Login() {
 
           <div className='flex justify-center space-x-2 mb-[60px] t4'>
             <span className='opacity-50'>회원이 아니신가요?</span>
-            <span className='cursor-pointer' onClick={handleGoToSignUp}>
+            <span
+              className='cursor-pointer underline'
+              onClick={handleGoToSignUp}
+            >
               회원가입
             </span>
           </div>
@@ -177,10 +180,10 @@ export default function Login() {
           <div className='flex justify-center'>
             <button
               type='button'
-              className='w-[390px] h-[50px] border border-border2 rounded-[10px] flex justify-center items-center'
+              className='w-[390px] h-[50px] flex items-center justify-center rounded-[10px] bg-[#f1f3f5] shadow-sm hover:bg-[#eef0f1]'
               onClick={() => {
-                localStorage.setItem('login_status', 'Y');
                 window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/google`;
+                // localStorage.setItem('login_status', 'Y');
               }}
             >
               <Image
