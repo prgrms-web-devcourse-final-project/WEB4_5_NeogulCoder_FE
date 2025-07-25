@@ -1,3 +1,30 @@
-.swiper {
+/* 배너 */
+.main-banner .swiper {
+  border-radius: 10px;
+}
+.main-banner .swiper-pagination-bullet {
+  height: 10px;
+  width: 10px;
+  background-color: #808080;
+  cursor: pointer;
+}
+.main-banner .swiper-pagination-bullet-active {
+  background-color: #90cff1;
+  height: 10px;
+  width: 20px;
+  border-radius: 10px;
+  opacity: 1;
+  transition: all 0.2s ease-in-out;
+}
+.main-banner .swiper-fade .swiper-slide img {
+  transform: scale(1.05);
+  transition: transform 1s ease-in-out !important;
+}
+.main-banner .swiper-fade .swiper-slide-active img {
+  transform: scale(1);
+}
+
+/* 스터디 */
+.main-studies .swiper {
   padding: 30px 0 10px;
 }
