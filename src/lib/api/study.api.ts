@@ -12,9 +12,44 @@ export const getStudyHeaderData = async (studyId: number) => {
   return data;
 };
 
-export const putStudyInfo = (
+// 스터디 정보 수정
+export const putStudyInfo = async (
   studyId: number,
-  updateData: StudyInfoUpdateType
+  updateData: StudyInfoUpdateType | FormData
 ) => {
-  return axiosInstance.put(`/api/studies/${studyId}`, updateData);
+  const { data } = await axiosInstance.put(
+    `/api/studies/${studyId}`,
+    updateData
+  );
+  return data;
+};
+
+// 스터디장 위임
+export const postDelegate = async (studyId: number, newLeaderId: number) => {
+  const { data } = await axiosInstance.post(
+    `/api/studies/${studyId}/delegate`,
+    { newLeaderId: newLeaderId }
+  );
+  return data;
+};
+
+// 스터디 연장 여부
+export const getStudyExtendInfo = async (studyId: number) => {
+  const { data } = await axiosInstance.get(`/api/studies/${studyId}/extension`);
+  return data;
+};
+
+// 스터디 연장하기
+export const postStudyExtend = async (studyId: number, newEndDate: string) => {
+  const { data } = await axiosInstance.post(
+    `/api/studies/${studyId}/extension`,
+    { newEndDate: newEndDate }
+  );
+  return data;
+};
+
+// 스터디 삭제 (팀장만 스터디에 있는 경우)
+export const deleteStudy = async (studyId: number) => {
+  const { data } = await axiosInstance.delete(`/api/studies/${studyId}`);
+  return data;
 };
