@@ -8,7 +8,7 @@ import { formatDate } from '@/utils/formatIsoDate';
 import Image from 'next/image';
 import { updateComments } from '@/lib/api/comment/update';
 import { deleteComments } from '@/lib/api/comment/delete';
-import { userAuthStore } from '@/stores/userStore'; // 로그인 사용자 정보 가져온다고 가정
+import { userAuthStore } from '@/stores/userStore';
 
 type CommentProps = {
   commentId: number;
@@ -17,7 +17,8 @@ type CommentProps = {
   profileImageUrl?: string;
   content: string;
   createdAt?: string;
-  onUpdate?: (commentId: number, updatedContent: string) => void; // 부모로 변경 알림용
+  onUpdate?: (commentId: number, updatedContent: string) => void;
+  target: string;
 };
 
 export default function Comment({
@@ -27,6 +28,7 @@ export default function Comment({
   content,
   createdAt,
   onUpdate,
+  target,
 }: CommentProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -53,7 +55,7 @@ export default function Comment({
 
   const handleUpdate = async () => {
     try {
-      await updateComments(commentId, editedContent);
+      await updateComments(commentId, editedContent, target);
       setIsEditing(false);
       if (onUpdate) {
         onUpdate(commentId, editedContent);
@@ -65,7 +67,7 @@ export default function Comment({
 
   const handleDelete = async () => {
     try {
-      await deleteComments(commentId);
+      await deleteComments(commentId, target);
       if (onUpdate) {
         onUpdate(commentId, '');
       }

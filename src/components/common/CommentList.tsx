@@ -14,12 +14,13 @@ type CommentType = {
 
 type CommentListProps = {
   comments: CommentType[];
-  studyId?: number;
   postId: number;
+  target: string;
 };
 
 export default function CommentList({
   comments: initialComments,
+  target,
 }: CommentListProps) {
   const [comments, setComments] = useState<CommentType[]>([]);
 
@@ -56,6 +57,7 @@ export default function CommentList({
           content={comment.content}
           createdAt={comment.createdAt}
           onUpdate={handleUpdate}
+          target={target}
         />
       ))}
     </div>

@@ -11,6 +11,8 @@ import CommentList from '@/components/common/CommentList';
 import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
 import { userAuthStore } from '@/stores/userStore';
 import { fetchComment } from '@/lib/api/study/fetchComment';
+import { formatDate } from '@/utils/formatDate';
+import ToastViewer from '@/components/common/ToastViewer';
 
 export default function Page() {
   const pathname = usePathname();
@@ -23,7 +25,7 @@ export default function Page() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [createdDate, setCreatedDate] = useState('');
-  const [userName, setUserName] = useState('');
+  const [nickname, setNickname] = useState('');
   const [content, setContent] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -42,18 +44,21 @@ export default function Page() {
   const handleGoToPr = () => {
     router.push('/profile/pr');
   };
+
   const handleCommentAdd = () => {
     setCommentCount((prev) => prev + 1);
   };
+
   const fetchData = useCallback(async () => {
     try {
       const data = await fetchStudyInfo(postId);
-      setCreatedDate(data.createdDate);
-      setCategory(data.category);
-      setUserName(data.username);
-      setTitle(data.title);
-      setContent(data.content);
+      setCreatedDate(data.postInfo.createdDate);
+      setCategory(data.postInfo.category);
+      setNickname(data.postInfo.nickname);
+      setTitle(data.postInfo.title);
+      setContent(data.postInfo.content);
       setCommentCount(data.commentCount);
+      setComments(data.comments);
     } catch (error) {
       console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
@@ -91,7 +96,7 @@ export default function Page() {
       <div className='w-[898px] mx-auto'>
         <div className='flex justify-between'>
           <div className='tag-type3 red tb5'>
-            <span>{category}</span>
+            <span>{category === 'NOTICE' ? '공지' : '자유'}</span>
           </div>
           <div className='relative' ref={menuRef}>
             <button
@@ -123,19 +128,23 @@ export default function Page() {
               onClick={handleGoToPr}
             ></button>
             <button className='tm3 ' onClick={handleGoToPr}>
-              {userName}
+              {nickname}
             </button>
           </div>
 
           <div>
-            <span className='opacity-50 mr-3 tm4'>{createdDate}</span>
+            <span className='opacity-50 mr-3 tm4'>
+              {formatDate(createdDate)}
+            </span>
           </div>
         </div>
         <div
-          className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5'
+          className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5 tm3'
           style={{ borderColor: 'var(--color-border3)' }}
         >
-          {content}
+          {content && (
+            <ToastViewer key={content} height='100%' initialValue={content} />
+          )}
         </div>
         <div className='flex justify-end'>
           <button
@@ -150,12 +159,12 @@ export default function Page() {
             target={target}
             postId={postId}
             commentCount={commentCount}
-            profileImageUrl={me?.profileImgUrl}
+            profileImageUrl={me?.profileImageUrl}
             onCommentAdd={handleCommentAdd}
           />
         </div>
         <div className='w-[898px]'>
-          <CommentList postId={postId} comments={comments} />
+          <CommentList postId={postId} comments={comments} target={target} />
         </div>
         {isOpen && (
           <Modal
@@ -163,9 +172,7 @@ export default function Page() {
             onClose={() => setIsOpen(false)}
             className='w-[680px] h-auto'
           >
-            <AiQuiz
-              postId={1} // 더미 데이터
-            />
+            <AiQuiz postId={postId} />
           </Modal>
         )}
       </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { fetchAiQuiz } from '@/lib/api/study/aiQuiz';
 interface AiQuizProps {
@@ -40,16 +39,7 @@ export default function AiQuiz({ postId }: AiQuizProps) {
             <span>{quizContent}</span>
           </div>
 
-          <div className='flex justify-between py-10'>
-            <button className='flex w-10 h-10 rounded-full justify-center items-center hover:bg-[#f5f5f5]'>
-              <ChevronLeft />
-            </button>
-            <button className='flex w-10 h-10 rounded-full justify-center items-center hover:bg-[#f5f5f5]'>
-              <ChevronRight />
-            </button>
-          </div>
-
-          <div className='flex justify-center items-center mx-auto space-x-5 py-2'>
+          <div className='flex justify-center items-center mx-auto space-x-5 py-10'>
             <button
               className='w-[200px] h-[104px] rounded-[10px] bg-[#EAF2FE] hover:bg-[#D6E6FD]'
               onClick={() => handleAnswer(true)}

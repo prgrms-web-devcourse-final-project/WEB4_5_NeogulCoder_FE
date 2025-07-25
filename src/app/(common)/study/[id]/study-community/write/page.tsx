@@ -47,7 +47,7 @@ export default function Page() {
             게시글 유형을 선택해 주세요
           </option>
           <option value='NOTICE'>공지</option>
-          <option value='FREEDOM'>자유</option>
+          <option value='FREE'>자유</option>
         </select>
 
         <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>

@@ -4,9 +4,9 @@ import { ChevronDown } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
-import { usePathname } from 'next/navigation';
 import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
 import { modifyStudyPost } from '@/lib/api/study/modify';
+import { usePathname } from 'next/navigation';
 
 export default function Page() {
   const pathname = usePathname();
@@ -19,9 +19,9 @@ export default function Page() {
   const fetchData = useCallback(async () => {
     try {
       const data = await fetchStudyInfo(postId);
-      setCategory(data.postDetailsInfo.category);
-      setTitle(data.postDetailsInfo.subject);
-      setContent(data.postDetailsInfo.content);
+      setCategory(data.postInfo.category);
+      setTitle(data.postInfo.title);
+      setContent(data.postInfo.content);
     } catch (error) {
       console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
@@ -58,7 +58,7 @@ export default function Page() {
         <select
           className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
           style={{ borderColor: 'var(--color-border3)' }}
-          name='selectedStudy'
+          name='selectedCategory'
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -66,7 +66,7 @@ export default function Page() {
             게시글 유형을 선택해 주세요
           </option>
           <option value='NOTICE'>공지</option>
-          <option value='FREEDOM'>자유</option>
+          <option value='FREE'>자유</option>
         </select>
 
         <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>

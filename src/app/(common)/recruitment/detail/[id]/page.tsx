@@ -18,6 +18,8 @@ import { studyApplication } from '@/lib/api/recruitment/studyApplication';
 import ToastViewer from '@/components/common/ToastViewer';
 import { studyApplicationApprove } from '@/lib/api/recruitment/studyApplicationApprove';
 import { studyApplicationReject } from '@/lib/api/recruitment/studyApplicationReject';
+import { fetchStudyApplication } from '@/lib/api/recruitment/fetchStudyApplication';
+import Pagination2 from '@/components/common/Pagination2';
 
 export default function Page() {
   const router = useRouter();
@@ -28,7 +30,6 @@ export default function Page() {
   };
   const target = 'recruitment';
   const complete = 'COMPLETE';
-  const applicationId = 1; // 임시값
   const recruitmentPostId = Number(pathname.split('/').pop());
   const [isOpen, setIsOpen] = useState(false);
   const [appIsOpen, setAppIsOpen] = useState(false);
@@ -49,8 +50,11 @@ export default function Page() {
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [expiredDate, setExpiredDate] = useState('');
   const [comments, setComments] = useState<CommentType[]>([]);
-  const [applicationReason, setApplicationReason] = useState('');
-
+  const [writeApplicationReason, setWriteApplicationReason] = useState('');
+  const [page, setPage] = useState(0);
+  const [applications, setApplications] = useState<ApplicationType[]>([]);
+  const [totalElementCount, setTotalElementCount] = useState(0);
+  const totalPages = Math.ceil(totalElementCount / 5);
   const menuRef = useRef<HTMLDivElement>(null);
 
   type CommentType = {
@@ -60,6 +64,14 @@ export default function Page() {
     content: string;
     createdAt: string;
     commentId: number;
+  };
+
+  type ApplicationType = {
+    applicationId: number;
+    nickname: string;
+    buddyEnergy: number;
+    createdDate: string;
+    applicationReason: string;
   };
 
   const fetchData = useCallback(async () => {
@@ -85,11 +97,21 @@ export default function Page() {
     }
   }, [recruitmentPostId]);
 
+  const fetchApplicationData = useCallback(async () => {
+    try {
+      const appData = await fetchStudyApplication(recruitmentPostId, page);
+      setApplications(appData.receivedApplications);
+      setTotalElementCount(appData.totalElementCount);
+    } catch (error) {
+      console.error('데이터 불러오기 실패ㅠㅠ:', error);
+    }
+  }, [recruitmentPostId, page]);
+
   const handleStudyAppSubmit = async () => {
     try {
       const appData = await studyApplication(
         recruitmentPostId,
-        applicationReason
+        writeApplicationReason
       );
       console.log('생성 완료', appData);
     } catch (error) {
@@ -107,19 +129,21 @@ export default function Page() {
     }
   };
 
-  const handleApprove = async () => {
+  const handleApprove = async (applicationId: number) => {
     try {
       await studyApplicationApprove(applicationId);
+      console.log('신청 승인요청 성공!');
     } catch (error) {
-      console.error('신청 승인 실패:', error);
+      console.error('신청 승인요청 실패:', error);
     }
   };
 
-  const handleReject = async () => {
+  const handleReject = async (applicationId: number) => {
     try {
       await studyApplicationReject(applicationId);
+      console.log('신청 거절요청 성공');
     } catch (error) {
-      console.error('신청 승인 실패:', error);
+      console.error('신청 거절요청 실패:', error);
     }
   };
 
@@ -137,8 +161,9 @@ export default function Page() {
   useEffect(() => {
     if (!isNaN(recruitmentPostId)) {
       fetchData();
+      fetchApplicationData();
     }
-  }, [recruitmentPostId, fetchData]);
+  }, [recruitmentPostId, fetchData, fetchApplicationData]);
 
   return (
     <>
@@ -308,74 +333,91 @@ export default function Page() {
             target={target}
             postId={recruitmentPostId}
             commentCount={commentCount}
-            profileImageUrl={me?.profileImgUrl}
+            profileImageUrl={me?.profileImageUrl}
             onCommentAdd={fetchData}
           />
         </div>
         <div className='w-[852px]'>
-          <CommentList postId={recruitmentPostId} comments={comments} />
+          <CommentList postId={recruitmentPostId} comments={comments} target={target}/>
         </div>
+
         {isOpen && (
           <Modal
             title=''
             className='w-[1020px] h-auto'
             onClose={() => setIsOpen(false)}
           >
-            <div className='rounded-[10px] px-10 w-full'>
-              <div className='flex justify-between w-full'>
-                <div className='flex space-x-6 items-center mb-10'>
-                  <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
-                  <div className='flex flex-col'>
-                    <div className='tm3 cursor-pointer ml-3'>닉네임</div>
-                    <div className='flex justify-center items-center'>
+            {applications.map((app) => (
+              <div
+                key={app.applicationId}
+                className='rounded-[10px] px-10 w-full'
+              >
+                <div className='flex justify-between w-full'>
+                  <div className='flex space-x-6 items-center mb-10'>
+                    <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
+                    <div className='flex flex-col'>
+                      <div className='tm3 cursor-pointer ml-3'>
+                        {app.nickname}
+                      </div>
                       <div className='flex justify-center items-center'>
-                        <Image
-                          src={buddyEnergy}
-                          alt='버디 에너지'
-                          className='w-[40px] h-[40px]'
-                        />
-                        <div className='tm4 opacity-50 justify-center items-center'>
-                          60%
+                        <div className='flex justify-center items-center'>
+                          <Image
+                            src={buddyEnergy}
+                            alt='버디 에너지'
+                            className='w-[40px] h-[40px]'
+                          />
+                          <div className='tm4 opacity-50 justify-center items-center'>
+                            {app.buddyEnergy}%
+                          </div>
                         </div>
-                      </div>
 
-                      <div className='tm4 opacity-20 ml-5'>
-                        <Tally1 />
-                      </div>
-                      <div>
-                        <span className='tm4 opacity-50'>2025-07-02</span>
+                        <div className='tm4 opacity-20 ml-5'>
+                          <Tally1 />
+                        </div>
+                        <div>
+                          <span className='tm4 opacity-50'>
+                            {formatDate(app.createdDate)}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div
-                className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
-                style={{ borderColor: 'var(--color-border3)' }}
-              >
-                지원 동기는 어쩌구 저쩌구입니다.
-              </div>
-              <div className='flex space-x-[15px] justify-end'>
-                <button
-                  className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
-                  onClick={handleReject}
+
+                <div
+                  className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
+                  style={{ borderColor: 'var(--color-border3)' }}
                 >
-                  거절
-                </button>
-                <button
-                  className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
-                  onClick={handleApprove}
-                >
-                  승인
-                </button>
-              </div>
-              {/* <hr
+                  {app.applicationReason}
+                </div>
+                <div className='flex space-x-[15px] justify-end mb-10'>
+                  <button
+                    className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
+                    onClick={() => handleReject(app.applicationId)}
+                  >
+                    거절
+                  </button>
+                  <button
+                    className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
+                    onClick={() => handleApprove(app.applicationId)}
+                  >
+                    승인
+                  </button>
+                </div>
+                <Pagination2
+                  page={page}
+                  setPage={setPage}
+                  totalPages={totalPages}
+                />
+                {/* <hr
                 className='h-0.5 my-10'
                 style={{ borderColor: 'var(--color-border2)' }}
               /> */}
-            </div>
+              </div>
+            ))}
           </Modal>
         )}
+
         {appIsOpen && (
           <Modal
             title='모집 신청하기'
@@ -386,8 +428,8 @@ export default function Page() {
               className='w-full h-[440px] border-[1px] p-5  my-6 rounded-[6px]'
               placeholder='지원 동기를 입력해주세요'
               style={{ borderColor: 'var(--color-border3)' }}
-              value={applicationReason}
-              onChange={(e) => setApplicationReason(e.target.value)}
+              value={writeApplicationReason}
+              onChange={(e) => setWriteApplicationReason(e.target.value)}
             ></textarea>
             <div className='flex justify-end '>
               <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>

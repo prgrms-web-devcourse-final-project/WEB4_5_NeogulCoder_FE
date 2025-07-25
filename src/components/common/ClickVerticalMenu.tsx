@@ -29,7 +29,7 @@ export default function ClickVerticalMenu({
     router.push(`/recruitment/modify/${recruitmentPostId}`);
   };
   const handleGoToModifyStudy = () => {
-    router.push(`/study/${studyId}/study-community/modify`);
+    router.push(`/study/${studyId}/study-community/modify/${postId}`);
   };
   return (
     <>
