@@ -1,9 +1,37 @@
 'use client';
+import { axiosInstance } from '@/lib/api/axios';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
 import Link from 'next/link';
+import { userAuthStore } from '@/stores/userStore';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
 export default function ManagerHeader() {
+  const user = userAuthStore((state) => state.user);
+  const router = useRouter();
+
+  // 목록 가져오기
+  useEffect(() => {
+    if (!user) return;
+    if (user.role !== 'ROLE_ADMIN') {
+      router.push('/');
+      return;
+    }
+  }, [user, router]);
+
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/auth/logout');
+      userAuthStore.getState().clearUser();
+      localStorage.removeItem('login_status');
+      router.push('/');
+    } catch (error) {
+      console.error('로그아웃 실패: ', error);
+    }
+  };
+
   return (
     <>
       <header className='py-4 border-b border-border1'>
@@ -22,12 +50,16 @@ export default function ManagerHeader() {
             <Link href={'/manager/recruitment'}>모집글관리</Link>
           </div>
           <div>
-            <Link href={'/auth/login'} className='tm3'>
-              로그인
-            </Link>
-            {/* <p className='t3'>
-            <span className='font-bold mr-1'>관리자</span>님
-          </p> */}
+            {user && (
+              <div className='flex items-center gap-3'>
+                <p className='t3'>
+                  <span className='font-bold mr-1'>{user.nickname}</span>님
+                </p>
+                <button className='flex items-center t5' onClick={handleLogout}>
+                  <LogOut className='w-5 h-5' />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </header>

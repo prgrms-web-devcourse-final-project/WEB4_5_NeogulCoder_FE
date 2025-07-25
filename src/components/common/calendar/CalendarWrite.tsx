@@ -7,19 +7,25 @@ import {
   putStudyEvent,
   putUserEvent,
 } from '@/lib/api/calendar.api';
+import { userAuthStore } from '@/stores/userStore';
+import { ScheduleInputType } from './CalendarBigShell';
 
 export default function CalendarWrite({
   type,
-  writeCloseHandler,
+  categoryId,
   data,
-  studyId,
+  writeCloseHandler,
+  handleEventAdd,
+  handleUpdate,
 }: {
   type: string;
+  categoryId: number;
+  data?: UnionScheduleType;
   writeCloseHandler: () => void;
-  data?: StudyScheduleType;
-  studyId: number;
+  handleEventAdd?: (id: number, data: ScheduleInputType) => void;
+  handleUpdate?: (id: number, data: ScheduleInputType) => void;
 }) {
-  const userId = 12; //로그인 구현되면 가져올 Id값
+  const authId = Number(userAuthStore().user?.id);
   const [title, setTitle] = useState(data ? data.title : '');
   const [content, setContent] = useState(data ? data.description : '');
   const [startDay, setStartDay] = useState(
@@ -39,51 +45,76 @@ export default function CalendarWrite({
 
   const handleAllDay = (e: React.ChangeEvent<HTMLInputElement>) => {
     setAllDay(e.target.checked);
+    if (e.target.checked) {
+      setStartTime('00:00');
+      setEndTime('23:59');
+    } else {
+      setStartTime('');
+      setEndTime('');
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     startTransition(async () => {
-      const start = allDay ? `${startDay}T00:00` : `${startDay}T${startTime}`;
-      const end = allDay ? `${endDay}T23:59` : `${endDay}T${endTime}`;
+      //  날짜 비교를 위해 dayjs 객체로 변환
+      const start = dayjs(`${startDay} ${startTime}`);
+      const end = dayjs(`${endDay} ${endTime}`);
 
-      const date1 = dayjs(start);
-      const date2 = dayjs(end);
+      const event = {
+        title: title,
+        description: content,
+        startTime: start.format('YYYY-MM-DDTHH:mm'),
+        endTime: end.format('YYYY-MM-DDTHH:mm'),
+      };
+
+      let responseId: number;
 
       //시작날짜와 종료날짜  유효성 검사
-      if (date1.isBefore(date2)) {
+      if (start.isBefore(end)) {
         // 개인일정 수정, 개인일정 등록
-        // 팀일정 수정, 팀일정 등록
         if (type === 'personal') {
           const inputData = {
-            userId: studyId,
+            userId: categoryId,
             title: title,
             description: content,
-            startTime: start,
-            endTime: end,
+            startTime: start.format('YYYY-MM-DDTHH:mm'),
+            endTime: end.format('YYYY-MM-DDTHH:mm'),
           };
-          // api 구현후...
-          // if (data) {
-          //   putUserEvent(userId, data.calendarId, inputData);
-          // } else {
-          //   postUserEvent(userId, inputData);
-          // }
+          // api
+          if (data) {
+            await putUserEvent(authId, data.scheduleId, inputData);
+          } else {
+            const { data: id } = await postUserEvent(authId, inputData);
+            // 프론트에서 보이는 변경
+            // 등록 함수가 있으면 등록
+            handleEventAdd?.(id, event);
+          }
         } else {
+          // 팀일정 수정, 팀일정 등록
           const inputData = {
-            teamId: studyId,
+            teamId: categoryId,
             title: title,
             description: content,
-            startTime: start,
-            endTime: end,
+            startTime: start.format('YYYY-MM-DDTHH:mm:ss'),
+            endTime: end.format('YYYY-MM-DDTHH:mm:ss'),
           };
-          // api 구현후...
-          // if (data) {
-          //   putStudyEvent(studyId, data.calendarId, inputData);
-          // } else {
-          //   postStudyEvent(studyId, inputData);
-          // }
+          // api
+          if (data) {
+            await putStudyEvent(categoryId, data.scheduleId, inputData);
+          } else {
+            const { data: id } = await postStudyEvent(categoryId, inputData);
+            // 프론트에서 보이는 변경
+            // 등록 함수가 있으면 등록
+            handleEventAdd?.(id, event);
+          }
         }
 
+        // 프론트에서 보이는 변경
+        // 수정 함수가 있으면 수정
+        if (data) handleUpdate?.(data?.scheduleId, event);
+
+        writeCloseHandler();
         alert('✨데이터가 등록 되었습니다.');
       } else {
         alert('🚫시작날짜가 종료날짜보다 큽니다.');
@@ -209,9 +240,16 @@ export default function CalendarWrite({
                 <button
                   type='submit'
                   className='button-modal1'
-                  disabled={!(title && startDay && endDay)}
+                  disabled={
+                    !title ||
+                    !startDay ||
+                    !endDay ||
+                    !startTime ||
+                    !endTime ||
+                    isPending
+                  }
                 >
-                  등록
+                  {data ? '수정' : '등록'}
                 </button>
               </div>
             </form>

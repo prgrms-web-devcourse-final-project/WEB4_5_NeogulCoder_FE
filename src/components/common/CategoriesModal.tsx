@@ -1,3 +1,5 @@
+import { categoryFormatting } from '@/utils/categoryFormatting';
+
 export default function CategoriesModal({
   onSelect,
   customCss,
@@ -6,18 +8,18 @@ export default function CategoriesModal({
   customCss?: string;
 }) {
   const category = [
-    '어학',
+    'LANGUAGE',
     'IT',
-    '고시/자격증',
-    '금융',
-    '경영',
-    '디자인',
-    '예술',
-    '사진/영상',
-    '뷰티',
-    '스포츠',
-    '취미',
-    '기타',
+    'EXAM',
+    'FINANCE',
+    'MANAGEMENT',
+    'DESIGN',
+    'ART',
+    'PHOTO_VIDEO',
+    'BEAUTY',
+    'SPORTS',
+    'HOBBY',
+    'ETC',
   ];
   return (
     <div
@@ -33,7 +35,7 @@ export default function CategoriesModal({
             className='px-4 py-2 text-tm3 hover:bg-gray4 rounded-[10px]'
             onClick={() => onSelect(category)}
           >
-            {category}
+            {categoryFormatting(category)}
           </button>
         ))}
       </div>

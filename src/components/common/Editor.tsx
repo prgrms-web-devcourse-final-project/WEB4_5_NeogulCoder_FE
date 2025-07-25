@@ -1,41 +1,22 @@
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Editor, Editor as ToastEditor } from '@toast-ui/react-editor';
-import { useEffect, useRef } from 'react';
+import { Editor as ToastEditor } from '@toast-ui/react-editor';
+import { useEffect } from 'react';
 
-// const editorRef = useRef<Editor>(null);
-
-// const handleSave = () => {
-//   const markdown = editorRef.current?.getInstance().getMarkdown();
-//   console.log("작성된 내용:", markdown);
-// };
-// type Props = {
-//   editorRef: React.RefObject<ToastEditor | null>;
-// };
-
-type MyEditorProps = {
-  value: string;
-  onChange: (value: string) => void;
+type Props = {
+  editorRef: React.RefObject<ToastEditor | null>;
+  content?: string;
 };
 
-export default function MyEditor({ value, onChange }: MyEditorProps) {
-  const editorRef = useRef<Editor>(null);
-
+export default function MyEditor({ editorRef, content }: Props) {
   useEffect(() => {
     const instance = editorRef.current?.getInstance();
-    if (instance && value) {
-      instance.setMarkdown(value); // 강제로 빈 내용으로 설정
+    if (instance) {
+      instance.setMarkdown(content);
     }
-  }, []);
-
-  const handleChange = () => {
-    const markdown = editorRef.current?.getInstance().getMarkdown();
-    if (markdown !== undefined) {
-      onChange(markdown);
-    }
-  };
+  }, [editorRef, content]);
 
   return (
-    <div>
+    <div className='tm3'>
       <ToastEditor
         ref={editorRef}
         previewStyle='vertical'
@@ -44,7 +25,6 @@ export default function MyEditor({ value, onChange }: MyEditorProps) {
         useCommandShortcut={true}
         hideModeSwitch={true}
         initialValue=''
-        onChange={handleChange}
       />
     </div>
   );

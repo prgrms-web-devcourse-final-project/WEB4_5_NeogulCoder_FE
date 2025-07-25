@@ -12,12 +12,9 @@ export default function UserInfoModal({
 }) {
   const router = useRouter();
   const me = userAuthStore((state) => state.user);
-  // console.log(me);
 
   const handleGoToPr = () => {
-    if (!me?.id) {
-      return;
-    }
+    if (!me?.id) return;
     router.push(`/profile/pr/${me.id}`);
     onItemClick();
   };
