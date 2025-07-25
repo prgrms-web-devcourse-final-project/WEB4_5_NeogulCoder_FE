@@ -40,7 +40,6 @@ export default function EditProfile() {
       setImgFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log(reader.result);
         setPreviewImg(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -68,7 +67,6 @@ export default function EditProfile() {
       await userAuthStore.getState().fetchUser();
 
       const updatedUser = userAuthStore.getState().user;
-      console.log(updatedUser);
       if (updatedUser) {
         setPreviewImg(updatedUser.profileImageUrl || '');
       }
