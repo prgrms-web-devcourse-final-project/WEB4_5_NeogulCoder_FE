@@ -8,7 +8,6 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { ChatGroup, ChatMessageType } from '@/types/chat';
 import { userAuthStore } from '@/stores/userStore';
-// import { fetchStudyList } from '@/lib/api/manners';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SockJS from 'sockjs-client';
 import { fetchChatMessage } from '@/lib/api/chat';
@@ -41,20 +40,19 @@ export default function Chat() {
   const [nextPage, setNextPage] = useState<number | null>(null);
   const user = userAuthStore((state) => state.user);
   const clientRef = useRef<Client | null>(null);
-  // const [roomId, setRoomId] = useState<number | null>(null);
 
   // const params = useParams();
   // const roomId = Number(params?.id);
 
-  const roomId = 4;
+  const studyId = 7;
 
   // 메시지 불러오기 / 웹소켓 연결
   useEffect(() => {
-    if (!roomId) return;
+    if (!studyId) return;
 
     const initialMessages = async () => {
       try {
-        const res = await fetchChatMessage(roomId, 0);
+        const res = await fetchChatMessage(studyId, 0);
         setChats(res.content);
         setCurrentPage(res.currentNumber);
         setNextPage(res.nextPage);
@@ -63,7 +61,7 @@ export default function Chat() {
       }
     };
 
-    initialMessages();
+    if (studyId) initialMessages();
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL;
     // console.log(socketUrl);
@@ -74,20 +72,17 @@ export default function Chat() {
       debug: (str) => console.log(str),
       onConnect: () => {
         console.log('연결 성공');
-        console.log('SUBSCRIBED TO', `/sub/chat/room/${roomId}`);
+        console.log('SUBSCRIBED TO', `/sub/chat/room/${studyId}`);
 
         // 구독
-        client.subscribe(`/sub/chat/room/${roomId}`, (message) => {
+        client.subscribe(`/sub/chat/study/${studyId}`, (message) => {
           try {
-            const payload = JSON.parse(message.body);
-            console.log('[RECEIVED]', payload);
-            setChats((prev) => [...prev, payload]);
+            const content = JSON.parse(message.body);
+            console.log('수신: ', content);
+            setChats((prev) => [...prev, content]);
           } catch (error) {
             console.error(error);
           }
-          // const payload: ChatMessageType = JSON.parse(message.body);
-          // console.log('[RECEIVED]', payload);
-          // setChats((prev) => [...prev, payload]);
         });
       },
       onDisconnect: () => {
@@ -101,35 +96,25 @@ export default function Chat() {
     return () => {
       client.deactivate(); // 연결 끊기
     };
-  }, [roomId]);
+  }, [studyId]);
 
   // 메시지 전송
   const handleSendMessage = () => {
-    if (!message.trim() || !roomId || !user || !clientRef.current) return;
-    console.log('연결?', clientRef.current?.connected);
-
-    // const newMessage: ChatMessageType = {
-    //   id: Date.now(), // or a uuid
-    //   roomId: roomId,
-    //   senderId: user.id,
-    //   senderNickname: user.nickname,
-    //   profileImageUrl: user.profileImgUrl || musicBunny,
-    //   message,
-    //   sentAt: new Date().toISOString(),
-    // };
+    if (!message.trim() || !studyId || !user || !clientRef.current) return;
+    console.log('연결', clientRef.current?.connected);
 
     // 서버로 전송
     clientRef.current.publish({
       destination: '/pub/chat/message',
       body: JSON.stringify({
-        roomId: roomId,
+        studyId: studyId,
         senderId: user.id,
         message,
       }),
     });
 
-    console.log('[SENT]', {
-      roomId: roomId,
+    console.log('전송 ', {
+      studyId: studyId,
       senderId: user.id,
       message,
     });
@@ -147,7 +132,7 @@ export default function Chat() {
   return (
     <div className='w-full rounded-[10px] border border-border2'>
       <div className='h-[640px] flex flex-col justify-end'>
-        <div className='overflow-auto min-w-0 px-7 flex flex-col'>
+        <div className='overflow-auto min-w-0 px-7 flex flex-col '>
           {groupChatsByDate(chats).map((group, i) => (
             <div key={i}>
               <ChatDate date={group.date} />

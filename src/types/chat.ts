@@ -1,9 +1,9 @@
 export type ChatMessageType = {
   id: number;
+  studyId: number;
   senderId: number;
   senderNickname: string;
   profileImageUrl: string | null;
-  roomId: number;
   message: string;
   sentAt: string;
 };
