@@ -10,8 +10,8 @@ import CategoryModal from '@/components/main/CategoryModal';
 import MeetingTypeModal from '@/components/main/MeetingTypeModal';
 import StudyCard from '@/components/my/StudyCard';
 import RecruitmentCard from '@/components/my/RecruitmentCard';
-import { getUser } from '@/lib/api/user';
 import { userAuthStore } from '@/stores/userStore';
+import { getUser } from '@/lib/api/user';
 
 export default function Main() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -21,14 +21,15 @@ export default function Main() {
   const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
   const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
   const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
-  const { user, setUser } = userAuthStore();
+  const user = userAuthStore((state) => state.user);
+  const setUser = userAuthStore((state) => state.setUser);
 
   useEffect(() => {
-    if (!user) {
+    const isLoggedIn = localStorage.getItem('login_status');
+    if (!user && isLoggedIn) {
       getUser()
         .then((res) => {
           setUser(res.data.data);
-          localStorage.setItem('login_status', 'Y');
         })
         .catch((error) => {
           localStorage.removeItem('login_status');
