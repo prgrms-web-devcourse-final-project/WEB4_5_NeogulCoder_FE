@@ -4,71 +4,28 @@ import dayjs from 'dayjs';
 import { dayFormatting } from '@/utils/day';
 import isBetween from 'dayjs/plugin/isBetween';
 import Link from 'next/link';
+import { useStudyStore } from '@/stores/studyInfoStore';
 dayjs.extend(isBetween);
 
 export default function CalendarSmallDetail({
   date,
   studyId,
+  calendarData,
 }: {
   date: string;
-  studyId: string;
+  studyId: number;
+  calendarData: StudyScheduleType[];
 }) {
+  const studyIsProgress = useStudyStore().isProgress;
   const dateFormat = (date: string) => {
     const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(
       'D'
     )}일 (${dayFormatting(date)})`;
     return dateString;
   };
-  // 더미데이터 (날짜별 api 생기면 삭제할 내용)
-  const results = [
-    {
-      calendarId: 2001,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '14일 일정',
-      description: '기획 회의',
-      startTime: '2025-07-14T02:01:35.969Z',
-      endTime: '2025-07-14T02:01:35.969Z',
-    },
-    {
-      calendarId: 2002,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '24-25',
-      description: '기획 회의',
-      startTime: '2025-07-24T02:01:35.969Z',
-      endTime: '2025-07-25T18:01:35.969Z',
-    },
-    {
-      calendarId: 2003,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '기능개발',
-      description: '기획 회의',
-      startTime: '2025-07-17T02:01:35.969Z',
-      endTime: '2025-07-18T03:01:35.969Z',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-18T02:01:35.969Z',
-      endTime: '2025-07-20T03:18:35.969Z',
-    },
-  ];
 
-  // 더미데이터 날짜 filter (날짜별 api 생기면 대체할 내용)
-  const filterResults = results.filter((result) => {
+  // 날짜 filter
+  const filterResults = calendarData.filter((result) => {
     const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
     const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
     return dayjs(date).isBetween(startDay, endDay, 'day', '[]');
@@ -98,9 +55,17 @@ export default function CalendarSmallDetail({
                   className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
                   strokeWidth={1}
                 />
-                <p className='tm4 text-border2'>
+                <p className='tm4 text-border2  mb-3'>
                   해당 날짜에 등록된 일정이 없습니다.
                 </p>
+                {studyIsProgress && (
+                  <Link
+                    href={`/study/${studyId}/calendar`}
+                    className='button-sm-type1 !text-[12px]'
+                  >
+                    일정등록하러 가기
+                  </Link>
+                )}
               </div>
             </div>
           )}

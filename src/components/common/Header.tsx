@@ -4,19 +4,35 @@ import logoWibby from '@/assets/images/wibby.svg';
 import darkMode from '@/assets/images/dark-mode.svg';
 import { ChevronDown } from 'lucide-react';
 import { Bell } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProfileInfoModal from '../profile/ProfileInfoModal';
 import { useRouter } from 'next/navigation';
 import NotificationModal from './NotificationModal';
 import { userAuthStore } from '@/stores/userStore';
 import Link from 'next/link';
+import { getUser } from '@/lib/api/user';
 
 export default function Header() {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const user = userAuthStore((state) => state.user);
-  // console.log(user);
+  const setUser = userAuthStore((state) => state.setUser);
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('login_status');
+    if (!user && isLoggedIn) {
+      getUser()
+        .then((res) => {
+          const userData = res.data.data;
+          setUser(userData); // 다시 저장
+        })
+        .catch((error) => {
+          localStorage.removeItem('login_status');
+          console.error('사용자 정보 불러오기 실패: ', error);
+        });
+    }
+  }, [user, setUser]);
 
   const handleGoToHome = () => {
     router.push('/');

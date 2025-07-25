@@ -5,114 +5,118 @@ import CalendarBigDetailItem from './CalendarBigDetailItem';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { dayFormatting } from '@/utils/day';
-import { getStudyDayEvents, getUserDayEvents } from '@/lib/api/calendar.api';
+import {
+  deleteStudyEvent,
+  deleteUserEvent,
+  getStudyDayEvents,
+  getUserDayEvents,
+} from '@/lib/api/calendar.api';
 import { useEffect, useState } from 'react';
+import { userAuthStore } from '@/stores/userStore';
+import { ScheduleInputType } from './CalendarBigShell';
+import CalendarBigDetailItemSkeleton from './Skeleton/CalendarBigDetailItemSkeleton';
+import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
 dayjs.extend(isBetween);
 
 export default function CalendarBigDetail({
+  handleEventUpdate,
+  handleEventDelete,
   closeDetailHandler,
   date,
-  studyId,
+  categoryId,
   type,
 }: {
+  handleEventUpdate: (id: number, data: ScheduleInputType) => void;
+  handleEventDelete: (id: number) => void;
   closeDetailHandler: () => void;
   date: string;
-  studyId: number;
+  categoryId: number;
   type: string;
 }) {
-  const authId = 12; // 로그인 기능 구현 되면 로그인사용자 ID
+  const authId = userAuthStore().user?.id;
+
   const dateFormat = (date: string) => {
     const dateString =
-      dayjs(date).get('y') +
+      dayjs(date).format('YYYY') +
       '년 ' +
-      dayjs(date).get('M') +
+      dayjs(date).format('M') +
       '월 ' +
-      dayjs(date).get('D') +
+      dayjs(date).format('D') +
       '일 ' +
       dayFormatting(date);
     return dateString;
   };
 
   // 해당 날짜에 해당하는 개인일정, 스터디일정의 목록을 조회하는 api호출 예정...
-  // const [event, setEvents] = useState([]);
-  // useEffect(() => {
-  //   const fetchDateEvent = async () => {
-  //     if (type === 'personal') {
-  //       const { data } = await getUserDayEvents(authId, date);
-  //       setEvents(data);
-  //     } else {
-  //       const { data } = await getStudyDayEvents(studyId, date);
-  //       setEvents(data);
-  //     }
-  //   };
-  //   fetchDateEvent();
-  // }, [type, studyId, date]);
+  const [events, setEvents] = useState<UnionScheduleType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    if (!authId) return;
+    const fetchDateEvent = async () => {
+      setIsLoading(true);
+      let data;
+      try {
+        if (type === 'personal') {
+          const { data: result } = await getUserDayEvents(authId, date);
+          data = result;
+        } else {
+          const { data: result } = await getStudyDayEvents(categoryId, date);
+          data = result;
+        }
+        setEvents(calendarFormattingResult(data));
+      } catch (error) {
+        console.error('상세일정을 불러오지 못했습니다.', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDateEvent();
+  }, [type, categoryId, date, authId]);
 
-  // 더미데이터 (날짜별 api 생기면 삭제할 내용)
-  const results = [
-    {
-      calendarId: 2001,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '14일 일정',
-      description: '기획 회의',
-      startTime: '2025-07-14T02:01:35',
-      endTime: '2025-07-14T02:01:35',
-    },
-    {
-      calendarId: 2002,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '24-25',
-      description: '기획 회의',
-      startTime: '2025-07-24T02:01:35',
-      endTime: '2025-07-25T18:01:35',
-    },
-    {
-      calendarId: 2003,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '기능개발',
-      description: '기획 회의',
-      startTime: '2025-07-17T02:01:35',
-      endTime: '2025-07-18T03:01:35',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-18T02:01:35',
-      endTime: '2025-07-20T03:18:35',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-16T02:01:35',
-      endTime: '2025-07-16T03:18:35',
-    },
-  ];
+  // 상세일정삭제
+  const handleEventDetailDelete = (scheduleId: number) => {
+    setEvents((prev) => prev.filter((f) => f.scheduleId !== scheduleId));
+  };
 
-  // 더미데이터 날짜 filter (날짜별 api 생기면 대체할 내용)
-  const filterResults = results.filter((result) => {
-    const startDay = dayjs(result.startTime).format('YYYY-MM-DD');
-    const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
-    return dayjs(date).isBetween(startDay, endDay, 'day', '[]');
-  });
+  const handleDelete = async (scheduleId: number) => {
+    try {
+      const deleteFn = type === 'personal' ? deleteUserEvent : deleteStudyEvent;
+      const res = await deleteFn(categoryId, scheduleId);
+
+      if (res) {
+        handleEventDelete(scheduleId); // 전체에서 삭제
+        handleEventDetailDelete(scheduleId); // 상세에서 삭제
+        alert('일정 삭제에 성공했습니다.');
+      } else {
+        alert('일정 삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('일정 삭제 중 오류 발생:', error);
+      alert('일정 삭제 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 상세일정수정
+  const handleDetailUpdate = (
+    scheduleId: number,
+    newData: ScheduleInputType
+  ) => {
+    setEvents((prev) =>
+      prev.map((item) =>
+        item.scheduleId === scheduleId ? { ...item, ...newData } : item
+      )
+    );
+  };
+
+  const handleUpdate = async (
+    scheduleId: number,
+    newData: ScheduleInputType
+  ) => {
+    handleEventUpdate(scheduleId, newData);
+    handleDetailUpdate(scheduleId, newData);
+
+    alert('수정 되었습니다.');
+  };
 
   return (
     <>
@@ -129,12 +133,17 @@ export default function CalendarBigDetail({
             {/* 내용 */}
             <p className='t3 mb-6 px-9 '>{`${dateFormat(date)}요일`}</p>
             <div className='overflow-auto max-h-[calc(90vh-160px)] flex flex-col gap-5 px-9 pb-7'>
-              {filterResults && filterResults.length > 0 ? (
-                filterResults.map((result, i) => (
+              {isLoading ? (
+                <CalendarBigDetailItemSkeleton />
+              ) : events && events.length > 0 ? (
+                events.map((event, i) => (
                   <CalendarBigDetailItem
                     key={`schedule${i}`}
-                    studyId={studyId}
-                    result={result}
+                    categoryId={categoryId}
+                    result={event}
+                    type={type}
+                    handleDelete={handleDelete}
+                    handleUpdate={handleUpdate}
                   />
                 ))
               ) : (
