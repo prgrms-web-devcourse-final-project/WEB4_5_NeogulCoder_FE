@@ -204,6 +204,13 @@ body {
 .scroll-custom::-webkit-scrollbar-thumb {
   background: #939393;
 }
+.scroll-custom-4::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+}
+.scroll-custom-4::-webkit-scrollbar-thumb {
+  background: #939393;
+}
 
 /* 도장 */
 @keyframes stamp {
