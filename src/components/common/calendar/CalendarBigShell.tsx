@@ -8,7 +8,7 @@ import { getStudyEvents, getUserEvents } from '@/lib/api/calendar.api';
 import { UserInfo } from '@/stores/userStore';
 import CalendarBigSkeleton from './Skeleton/CalendarBigSkeleton';
 import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
-import { scheduler } from 'timers/promises';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 export type ScheduleInputType = {
   title: string;
@@ -26,6 +26,7 @@ export default function CalendarBigShell({
   user: UserInfo;
   categories: { name: string; id: number }[];
 }) {
+  const studyIsProgress = useStudyStore().isProgress;
   const selectRef = useRef<HTMLDivElement>(null);
   // 날짜별 상세 팝업
   const [detailOpen, setDetailOpen] = useState(false);
@@ -85,7 +86,7 @@ export default function CalendarBigShell({
       ...newData,
       writerId: user.id,
       writerNickname: user.nickname,
-      writerProfileImageUrl: user.profileImgUrl,
+      writerProfileImageUrl: user.profileImageUrl,
       scheduleId: schedulerId,
     };
     setEvents((prev) => [...prev, newDataFormatting]);
@@ -195,10 +196,14 @@ export default function CalendarBigShell({
             </div>
           </div>
         )}
-
-        <button onClick={writeOpenHandler} className='button-sm-type1 ml-auto'>
-          일정등록
-        </button>
+        {studyIsProgress && (
+          <button
+            onClick={writeOpenHandler}
+            className='button-sm-type1 ml-auto'
+          >
+            일정등록
+          </button>
+        )}
       </div>
       {isLoading ? (
         <CalendarBigSkeleton />

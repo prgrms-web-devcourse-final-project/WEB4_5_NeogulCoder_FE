@@ -33,6 +33,7 @@ export default function SignUp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mailCode, setEmailCode] = useState(false);
   const [timeLeft, setTimeLeft] = useState(300);
+  const [emailVerified, setEmailVerified] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const nicknameRef = useRef<HTMLInputElement>(null);
@@ -111,7 +112,19 @@ export default function SignUp() {
       setTimeLeft(300);
       setIsModalOpen(true);
     } catch (error) {
-      console.error('인증번호 발송 실패: ', error);
+      if (axios.isAxiosError(error)) {
+        const code = error.response?.data?.code;
+        const msg = error.response?.data?.message;
+
+        if (code === 'U004' || msg?.includes('이메일')) {
+          setEmailError(msg);
+          emailRef.current?.focus();
+        } else {
+          console.error('인증번호 발송 실패: ', msg);
+        }
+      } else {
+        console.error('알 수 없는 에러: ', error);
+      }
     }
   };
 
@@ -130,6 +143,13 @@ export default function SignUp() {
       emailRef.current?.focus();
       return;
     }
+
+    if (!emailVerified) {
+      setEmailError('이메일 인증을 완료해주세요.');
+      emailRef.current?.focus();
+      return;
+    }
+
     if (errorMsg.nickname) {
       nicknameRef.current?.focus();
       return;
@@ -190,55 +210,58 @@ export default function SignUp() {
         <div className='z-10'>
           <form onSubmit={handleSignUp}>
             <div className='mb-6'>
-              <p className='pb-2 t4'>
-                이메일{' '}
-                {signupError.email && (
-                  <span className='text-red-500 transition duration-200'>
-                    (필수)
-                  </span>
-                )}
-              </p>
-              <div className='flex gap-2 items-center justify-center'>
-                <div className='relative'>
+              <div className='w-[390px] mx-auto'>
+                <p className='pb-2 t4'>
+                  이메일{' '}
+                  {signupError.email && (
+                    <span className='text-red-500 transition duration-200'>
+                      (필수)
+                    </span>
+                  )}
+                </p>
+              </div>
+              <div className='flex items-center justify-between gap-2'>
+                <div className='relative w-[390px] mx-auto'>
                   <input
                     type='text'
                     value={email}
                     onChange={handleEmailChange}
-                    className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                    className='input-type3 w-full focus:outline-2 focus:outline-main'
                     ref={emailRef}
                   />
 
                   {email && (
-                    <Image
-                      src={deleteText}
-                      alt='전체 삭제'
-                      onClick={() => setEmail('')}
-                      className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
-                    />
+                    <>
+                      {/* 입력 삭제 아이콘 */}
+                      <Image
+                        src={deleteText}
+                        alt='전체 삭제'
+                        onClick={() => setEmail('')}
+                        className='absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer'
+                      />
+                      {/* 인증 버튼 */}
+                      <button
+                        type='button'
+                        className='absolute right-[-90px] top-0 t4 bg-main text-white h-[50px] w-[80px] flex items-center justify-center rounded-[10px]'
+                        onClick={handleSendEmailCode}
+                      >
+                        인증
+                      </button>
+                    </>
                   )}
                 </div>
-                {email ? (
-                  <button
-                    type='button'
-                    className='t4 bg-main text-white h-[50px] w-[80px] flex items-center justify-center rounded-[10px]'
-                    onClick={handleSendEmailCode}
-                  >
-                    인증
-                  </button>
-                ) : (
-                  <div className='w-[80px] h-[50px]'></div>
-                )}
 
                 {isModalOpen && (
                   <div className='fixed inset-0 z-50 flex items-center justify-center'>
                     <div className='absolute inset-0 bg-main opacity-80' />
-
                     <div className='relative z-10'>
                       <VerifyEmailModal
                         onClose={() => setIsModalOpen(false)}
                         timeLeft={timeLeft}
                         setTimeLeft={setTimeLeft}
                         email={email}
+                        setEmailVerified={setEmailVerified}
+                        setEmailError={setEmailError}
                       />
                     </div>
                   </div>
@@ -253,15 +276,18 @@ export default function SignUp() {
               </p>
             </div>
             <div className='mb-6'>
-              <p className='pb-2 t4'>
-                닉네임{' '}
-                {signupError.nickname && (
-                  <span className='text-red-500 transition duration-200'>
-                    (필수)
-                  </span>
-                )}
-              </p>
-              <div className='flex gap-2 items-center justify-center'>
+              <div className='w-[390px] mx-auto'>
+                <p className='pb-2 t4'>
+                  닉네임{' '}
+                  {signupError.nickname && (
+                    <span className='text-red-500 transition duration-200'>
+                      (필수)
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              <div className='flex flex-col justify-center'>
                 <div className='relative'>
                   <input
                     type='text'
@@ -280,27 +306,29 @@ export default function SignUp() {
                     />
                   )}
                 </div>
-                <div className='w-[80px] h-[50px]'></div>
+                <p
+                  className={`t5 ml-1 pt-1 h-5 transition duration-200 ${
+                    nicknameError ? 'text-red-500' : 'invisible'
+                  }`}
+                >
+                  {nicknameError || '\u00A0'}
+                </p>
               </div>
-              <p
-                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
-                  nicknameError ? 'text-red-500' : 'invisible'
-                }`}
-              >
-                {nicknameError || '\u00A0'}
-              </p>
             </div>
 
             <div className='mb-6'>
-              <p className='pb-2 t4'>
-                비밀번호{' '}
-                {signupError.password && (
-                  <span className='text-red-500 transition duration-200'>
-                    (필수)
-                  </span>
-                )}
-              </p>
-              <div className='flex gap-2 items-center justify-center'>
+              <div className='relative w-[390px] mx-auto'>
+                <p className='pb-2 t4'>
+                  비밀번호{' '}
+                  {signupError.password && (
+                    <span className='text-red-500 transition duration-200'>
+                      (필수)
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              <div className='flex flex-col justify-center'>
                 <div className='relative'>
                   <input
                     type='password'
@@ -319,27 +347,28 @@ export default function SignUp() {
                     />
                   )}
                 </div>
-                <div className='w-[80px] h-[50px]'></div>
+                <p
+                  className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
+                    passwordError ? 'text-red-500' : 'invisible'
+                  }`}
+                >
+                  {passwordError || '\u00A0'}
+                </p>
               </div>
-              <p
-                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
-                  passwordError ? 'text-red-500' : 'invisible'
-                }`}
-              >
-                {passwordError || '\u00A0'}
-              </p>
             </div>
             <div className='mb-6'>
-              <p className='pb-2 t4'>
-                비밀번호 확인{' '}
-                {signupError.passwordCheck && (
-                  <span className='text-red-500 transition duration-200'>
-                    (필수)
-                  </span>
-                )}
-              </p>
+              <div className='relative w-[390px] mx-auto'>
+                <p className='pb-2 t4'>
+                  비밀번호 확인{' '}
+                  {signupError.passwordCheck && (
+                    <span className='text-red-500 transition duration-200'>
+                      (필수)
+                    </span>
+                  )}
+                </p>
+              </div>
 
-              <div className='flex gap-2 items-center justify-center'>
+              <div className='flex flex-col justify-center'>
                 <div className='relative'>
                   <input
                     type='password'
@@ -357,16 +386,14 @@ export default function SignUp() {
                     />
                   )}
                 </div>
-                <div className='w-[80px] h-[50px]'></div>
+                <p
+                  className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
+                    passwordCheckError ? 'text-red-500' : 'invisible'
+                  }`}
+                >
+                  {passwordCheckError || '\u00A0'}
+                </p>
               </div>
-
-              <p
-                className={`t5 ml-1 h-5 pt-1 transition duration-200 ${
-                  passwordCheckError ? 'text-red-500' : 'invisible'
-                }`}
-              >
-                {passwordCheckError || '\u00A0'}
-              </p>
             </div>
             <button
               type='submit'

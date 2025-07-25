@@ -4,8 +4,10 @@ import StudyMemberCard from './StudyMemberCard';
 
 export default function MemberList({
   memberInfo,
+  studyId,
 }: {
   memberInfo: StudyMemberType[];
+  studyId: number;
 }) {
   return (
     <>
@@ -16,9 +18,8 @@ export default function MemberList({
         {memberInfo.map((member, i) => (
           <StudyMemberCard
             key={`${member.nickname}${i}`}
-            name={member.nickname}
-            image={member.profileImageUrl}
-            role={i === 0 ? '팀장' : '팀원'}
+            member={member}
+            studyId={studyId}
           />
         ))}
       </div>
