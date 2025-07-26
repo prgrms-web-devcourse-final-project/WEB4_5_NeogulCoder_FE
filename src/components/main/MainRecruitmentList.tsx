@@ -10,8 +10,10 @@ import MainCategoriesModal from './MainCategoriesModal';
 import MainOnlineModal from './MainOnlineModal';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
+import Link from 'next/link';
 
 export type MainPostType = {
+  recruitmentPostId: number;
   subject: string;
   content: string;
   category: string;
@@ -237,18 +239,22 @@ export default function MainRecruitmentList() {
             <RecruitmentCardSkeleton key={`skeleton${i}`} />
           ))
         ) : posts.length > 0 ? (
-          posts.map((recruitment, index) => (
-            <RecruitmentCard
-              key={index}
-              title={recruitment.subject}
-              content={recruitment.content}
-              createdAt={recruitment.createAt}
-              commentCount={recruitment.commentCount}
-              category={recruitment.category}
-              studyWay={recruitment.studyType}
-              status={recruitment.status}
-              type={'my'}
-            />
+          posts.map((recruitment) => (
+            <Link
+              href={`/recruitment/detail/${recruitment.recruitmentPostId}`}
+              key={recruitment.recruitmentPostId}
+            >
+              <RecruitmentCard
+                title={recruitment.subject}
+                content={recruitment.content}
+                createdAt={recruitment.createAt}
+                commentCount={recruitment.commentCount}
+                category={recruitment.category}
+                studyWay={recruitment.studyType}
+                status={recruitment.status}
+                type={'my'}
+              />
+            </Link>
           ))
         ) : (
           <div className='w-full h-[500px] flex items-center justify-center text-gray3'>
