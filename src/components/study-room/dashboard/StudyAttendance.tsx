@@ -80,7 +80,6 @@ export default function StudyAttendance({
     });
   };
 
-  console.log('studyIsProgress', studyIsProgress);
   return (
     <>
       <div className='flex justify-between mb-3'>

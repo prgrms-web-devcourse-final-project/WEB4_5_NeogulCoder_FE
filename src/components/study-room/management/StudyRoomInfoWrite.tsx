@@ -10,6 +10,7 @@ import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
@@ -21,6 +22,7 @@ export default function StudyRoomInfoWrite({
   closeFn: () => void;
 }) {
   const updateStudyInfo = useStudyStore().updateStudyInfo;
+  const updateStudies = useStudiesStore().updateStudy;
 
   const [name, setName] = useState(studyInfoData.name);
   const [capacity, setCapacity] = useState(studyInfoData.capacity);
@@ -127,6 +129,17 @@ export default function StudyRoomInfoWrite({
           imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
           studyType: request.studyType,
           location: request.location,
+          category: request.category,
+          capacity: request.capacity,
+          startDate: formattedStartDate,
+        });
+
+        // 서브헤더 스터디 목록 업데이트를 위한 전역상태 업데이트
+        updateStudies(studyId, {
+          name: request.name,
+          introduction: request.introduction,
+          imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
+          studyType: request.studyType,
           category: request.category,
           capacity: request.capacity,
           startDate: formattedStartDate,

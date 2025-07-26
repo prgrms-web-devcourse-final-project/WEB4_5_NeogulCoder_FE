@@ -4,9 +4,11 @@ import { useState, useTransition } from 'react';
 import StudyDeleteCheckModal from './StudyDeleteCheckModal';
 import { deleteStudy } from '@/lib/api/study.api';
 import { useRouter } from 'next/navigation';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function StudyDelete({ studyId }: { studyId: number }) {
   const router = useRouter();
+  const deleteStudies = useStudiesStore().deleteStudy;
   const [checkModal, setCheckModal] = useState(false);
   const checkModalClose = () => {
     setCheckModal(false);
@@ -25,6 +27,7 @@ export default function StudyDelete({ studyId }: { studyId: number }) {
         console.error('스터디 연장정보를 불러오지 못했습니다', error);
       } finally {
         router.push('/');
+        deleteStudies(studyId);
       }
     });
   };
