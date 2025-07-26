@@ -9,8 +9,7 @@ import {
   LockKeyhole,
 } from 'lucide-react';
 import StudyCard from '../my/StudyCard';
-import { useEffect, useState } from 'react';
-import { getStudiesInfo } from '@/lib/api/study.api';
+import { useState } from 'react';
 import 'swiper/css';
 import '@/styles/swiper/main.css';
 import Link from 'next/link';
@@ -107,20 +106,24 @@ export default function MainStudyList() {
                   <div className='flex shrink-0 gap-10'>
                     {studies &&
                       studies.map((study) => (
-                        <StudyCard
+                        <Link
                           key={`${study.studyId}`}
-                          studyId={study.studyId}
-                          name={study.name}
-                          leaderNickname={study.leaderNickname}
-                          currentCount={study.currentCount}
-                          capacity={study.capacity}
-                          startDate={study.startDate}
-                          category={study.category}
-                          studyType={study.studyType}
-                          introduction={study.introduction}
-                          imageUrl={study.imageUrl}
-                          finished={study.finished}
-                        />
+                          href={`study/${study.studyId}/dashboard`}
+                        >
+                          <StudyCard
+                            studyId={study.studyId}
+                            name={study.name}
+                            leaderNickname={study.leaderNickname}
+                            currentCount={study.currentCount}
+                            capacity={study.capacity}
+                            startDate={study.startDate}
+                            category={study.category}
+                            studyType={study.studyType}
+                            introduction={study.introduction}
+                            imageUrl={study.imageUrl ?? ''}
+                            finished={study.finished}
+                          />
+                        </Link>
                       ))}
                   </div>
                   <div className='w-full h-[310px] flex items-center justify-center text-gray3 bg-gray4/40 rounded-[30px]'>

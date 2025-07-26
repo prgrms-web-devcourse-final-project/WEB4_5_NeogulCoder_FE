@@ -42,7 +42,6 @@ export const useStudiesStore = create<StudyStore>((set) => ({
     set({ loading: true });
     try {
       const { data } = await getStudiesMain();
-      console.log('data', data);
       set({ studies: data });
     } catch (err) {
       console.error('스터디 목록을 불러오지 못했습니다.', err);
