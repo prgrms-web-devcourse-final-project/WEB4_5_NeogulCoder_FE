@@ -33,6 +33,12 @@ export const postDelegate = async (studyId: number, newLeaderId: number) => {
   return data;
 };
 
+// 초대를 위한 회원전체 조회
+export const getAllUser = async () => {
+  const { data } = await axiosInstance.get(`/api/users/all`);
+  return data;
+};
+
 // 스터디 연장 여부
 export const getStudyExtendInfo = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/extension`);

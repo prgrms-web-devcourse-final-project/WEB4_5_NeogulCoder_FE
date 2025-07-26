@@ -70,6 +70,7 @@ export default function StudyRoomInfo({
           width={120}
           height={0}
           alt='스터디이미지'
+          loading='lazy'
         />
       </div>
       <div className='w-full grid grid-cols-2 gap-5'>
