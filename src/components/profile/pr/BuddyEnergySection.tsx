@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { userAuthStore } from '@/stores/userStore';
 import { getBuddyEnergy } from '@/lib/api/pr';
+import BuddyEnergySkeleton from './skeleton/BuddyEnergySkeleton';
 
 export default function BuddyEnergySection() {
   const [energy, setEnergy] = useState<number | null>(null);
@@ -26,7 +27,7 @@ export default function BuddyEnergySection() {
     }
   }, [userId]);
 
-  if (energy === null) return null;
+  if (energy === null) return <BuddyEnergySkeleton />;
 
   const bunnyPosition =
     energy >= 98 ? 'calc(100% - 35px)' : `calc(${energy}% - 35px)`;
