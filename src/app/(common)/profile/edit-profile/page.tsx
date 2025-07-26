@@ -40,7 +40,6 @@ export default function EditProfile() {
       setImgFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log(reader.result);
         setPreviewImg(reader.result as string);
       };
       reader.readAsDataURL(file);
@@ -57,17 +56,17 @@ export default function EditProfile() {
 
     try {
       const formData = new FormData();
-      formData.append('nickname', nickname);
 
       if (imgFile) {
         formData.append('profileImage', imgFile);
       }
 
-      await axiosInstance.put('/api/users/update/profile', formData);
+      await axiosInstance.put('/api/users/update/profile', formData, {
+        params: nickname !== user?.nickname ? { nickname } : {},
+      });
       await userAuthStore.getState().fetchUser();
 
       const updatedUser = userAuthStore.getState().user;
-      console.log(updatedUser);
       if (updatedUser) {
         setPreviewImg(updatedUser.profileImageUrl || '');
       }

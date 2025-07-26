@@ -1,21 +1,20 @@
 'use client';
-
 import { useEffect } from 'react';
-import { getUser } from '@/lib/api/user';
 import { userAuthStore } from '@/stores/userStore';
-import MainStudyList from '@/components/main/MainStudyList';
-import MainRecruitmentList from '@/components/main/MainRecruitmentList';
+import { getUser } from '@/lib/api/user';
 import MainBanner from '@/components/main/MainBanner';
+import MainStudyList from '@/components/main/MainStudyList';
 
 export default function Main() {
-  const { user, setUser } = userAuthStore();
+  const user = userAuthStore((state) => state.user);
+  const setUser = userAuthStore((state) => state.setUser);
 
   useEffect(() => {
-    if (!user) {
+    const isLoggedIn = localStorage.getItem('login_status');
+    if (!user && isLoggedIn) {
       getUser()
         .then((res) => {
           setUser(res.data.data);
-          localStorage.setItem('login_status', 'Y');
         })
         .catch((error) => {
           localStorage.removeItem('login_status');

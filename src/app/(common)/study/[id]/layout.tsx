@@ -1,28 +1,51 @@
+'use client';
+
 import SideMenu from '@/components/study-room/sideMenu/SideMenu';
-import { getStudyHeaderData } from '@/lib/api/study.api';
+import { getStudyInfoData } from '@/lib/api/study.api';
+import { useStudyStore } from '@/stores/studyInfoStore';
+import { userAuthStore } from '@/stores/userStore';
+import axios from 'axios';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
-export default async function layout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  // const { data: StudyHeaderType } = await getStudyHeaderData(Number(id));
+export default function Layout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const params = useParams();
+  const studyId = Number(params.id);
+  // 사이트메뉴의 스터디 정보 관리를 위한 전역상태
+  const setStudyInfo = useStudyStore().setStudyInfo;
+  const setStudyLoading = useStudyStore().setLoading;
+  const user = userAuthStore().user;
 
-  const studyHeaderData = {
-    name: '자바 스터디',
-    introduction: '자바 스터디',
-    imageUrl: 'http://localhost:8083/image.jpg',
-    studyType: 'ONLINE',
-    location: '서울',
-  };
+  useEffect(() => {
+    if (!user) return;
+    // 스터디 정보 가져오기
+    const fetchStudyInfo = async () => {
+      setStudyLoading(true);
+      try {
+        const { data } = await getStudyInfoData(studyId);
+        setStudyInfo(data);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message = error.response?.data?.message;
+          console.error('스터디 정보를 불러오지 못했습니다:', message);
+          router.replace('/');
+          alert(message);
+        } else {
+          console.error('알 수 없는 오류 발생:', error);
+        }
+      } finally {
+        setStudyLoading(false);
+      }
+    };
+    fetchStudyInfo();
+  }, [studyId, user, router, setStudyInfo, setStudyLoading]);
+
   return (
     <>
       <div className='flex'>
         <div className='w-[300px] mr-10 shrink-0'>
-          <SideMenu studyHeaderData={studyHeaderData} />
+          <SideMenu studyId={studyId} />
         </div>
         <div className='w-full'>{children}</div>
       </div>

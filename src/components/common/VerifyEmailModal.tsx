@@ -1,17 +1,15 @@
 import { sendEmailCode, verifyEmailCode } from '@/lib/api/emailAuth';
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { VerifyEmailModalProps } from '@/types/email';
+import { useRef, useState } from 'react';
 
 export default function VerifyEmailModal({
   onClose,
   timeLeft,
   setTimeLeft,
   email,
-}: {
-  onClose: () => void;
-  timeLeft: number;
-  setTimeLeft: Dispatch<SetStateAction<number>>;
-  email: string;
-}) {
+  setEmailVerified,
+  setEmailError,
+}: VerifyEmailModalProps) {
   const inputRef = useRef<HTMLInputElement[]>([]);
   const [code, setCode] = useState('');
 
@@ -64,11 +62,15 @@ export default function VerifyEmailModal({
     try {
       await verifyEmailCode(email, code);
       alert('인증되었습니다.');
+      setEmailVerified(true);
+      setEmailError('');
+
       onClose();
     } catch (error) {
       console.error('이메일 코드 확인 실패: ', error);
     }
   };
+
   return (
     <div className='flex flex-col bg-white w-[440px] h-[360px] rounded-[10px] shadow-sm px-6 py-6 items-center justify-center gap-8'>
       <div>
