@@ -1,3 +1,5 @@
+import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
+
 export default function OnlineModal({
   onSelect,
   customCss,
@@ -5,7 +7,7 @@ export default function OnlineModal({
   onSelect: (online: string) => void;
   customCss?: string;
 }) {
-  const online = ['온라인', '오프라인', '온/오프라인'];
+  const online = ['ONLINE', 'OFFLINE', 'HYBRID'];
   return (
     <div
       className={`w-[200px] border border-main/10 bg-white rounded-[10px] shadow-sm overflow-hidden tm4 p-3 ${
@@ -20,7 +22,7 @@ export default function OnlineModal({
             className='px-4 py-2 text-tm3 hover:bg-gray4 rounded-[10px]'
             onClick={() => onSelect(online)}
           >
-            {online}
+            {studyTypeFormatting(online)}
           </button>
         ))}
       </div>
