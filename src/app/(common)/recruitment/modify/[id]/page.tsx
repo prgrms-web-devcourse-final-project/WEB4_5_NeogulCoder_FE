@@ -4,13 +4,15 @@ import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { fetchInfo } from '@/lib/api/recruitment/fetchInfo';
 import { modifyRecruitmentPost } from '@/lib/api/recruitment/modify';
 import { formatDate } from '@/utils/formatIsoDate';
+import RemainSlotModal from '@/components/study/RemainSlot';
 
 export default function Page() {
   const pathname = usePathname();
+  const router = useRouter();
   const recruitmentPostId = Number(pathname.split('/').pop());
   const [startedDate, setStartedDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -21,7 +23,36 @@ export default function Page() {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [expiredDate, setExpiredDate] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
   const editorRef = useRef<ToastEditor>(null);
+
+  const displayText =
+    recruitmentCount === null
+      ? '1명 ~ 10명 이상'
+      : recruitmentCount === 10
+      ? '10명 이상'
+      : `${recruitmentCount}명`;
+
+  const categoryDisplayNames: Record<string, string> = {
+    LANGUAGE: '어학',
+    IT: 'IT',
+    EXAM: '고시/자격증',
+    FINANCE: '금융',
+    MANAGEMENT: '경영',
+    DESIGN: '디자인',
+    ART: '예술',
+    PHOTO_VIDEO: '사진/영상',
+    BEAUTY: '뷰티',
+    SPORTS: '스포츠',
+    HOBBY: '취미',
+    ETC: '기타',
+  };
+
+  const StudyTypeDisplayNames: Record<string, string> = {
+    ONLINE: '온라인',
+    OFFLINE: '오프라인',
+    HYBRID: '온/오프라인',
+  };
 
   const fetchData = useCallback(async () => {
     try {
@@ -59,9 +90,11 @@ export default function Page() {
 
     try {
       const data = await modifyRecruitmentPost(recruitmentPostId, payload);
-      console.log('생성 완료', data);
+      const postId = data.data;
+      console.log('수정 완료', data);
+      router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
-      console.error('생성 실패', error);
+      console.error('수정 실패', error);
     }
     console.log(
       'Subject:',
@@ -121,40 +154,36 @@ export default function Page() {
         <div className='flex space-x-10'>
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>모집 인원</span>
-            <div className='relative inline-block w-[440px] '>
-              <select
-                className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
-                name='selectedRecruitmentPerson'
-                value={recruitmentCount}
-                onChange={(e) => setRecruitmentCount(Number(e.target.value))}
+            <div className='relative inline-block w-[440px]'>
+              <button
+                type='button'
                 style={{ borderColor: 'var(--color-border3)' }}
+                className={`w-full h-[60px] rounded-[10px] flex items-center justify-between p-3 border mb-6 text-left ${
+                  recruitmentCount !== null ? 'text-black' : 'text-gray-400'
+                }`}
+                onClick={() => setIsOpen((prev) => !prev)}
               >
-                <option value='' disabled hidden>
-                  인원 미정 ~ 10명 이상
-                </option>
-                <option value={0}>인원 미정</option>
-                <option value={1}>1명</option>
-                <option value={2}>2명</option>
-                <option value={3}>3명</option>
-                <option value={4}>4명</option>
-                <option value={5}>5명</option>
-                <option value={6}>6명</option>
-                <option value={7}>7명</option>
-                <option value={8}>8명</option>
-                <option value={9}>9명</option>
-                <option value={10}>10명 이상</option>
-              </select>
+                <span>{displayText}</span>
+                <ChevronDown className='w-4 h-4' />
+              </button>
 
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
-              </div>
+              {isOpen && (
+                <div className='absolute top-[60px] left-0 z-10'>
+                  <RemainSlotModal
+                    onSelect={(value) => {
+                      setRecruitmentCount(value);
+                      setIsOpen(false);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>카테고리</span>
             <div className='relative inline-block w-[440px] '>
               <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                <span>{category ? category : '카테고리'}</span>
+                {category ? categoryDisplayNames[category] : '카테고리'}
               </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
@@ -168,7 +197,7 @@ export default function Page() {
             <span className='tm-0 mb-2.5'>진행 방식</span>
             <div className='relative inline-block w-[440px] '>
               <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                <span>{studyType ? studyType : '진행 방식'}</span>
+                {studyType ? StudyTypeDisplayNames[studyType] : '카테고리'}
               </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>

@@ -8,23 +8,61 @@ import { writeRecruitmentPost } from '@/lib/api/recruitment/write';
 import { fetchStudy } from '@/lib/api/recruitment/fetchStudy';
 import { fetchStudyList } from '@/lib/api/recruitment/fetchStudyList';
 import { formatDate } from '@/utils/formatDate';
+import { title } from 'process';
+import StudyListModal from '@/components/study/StudyListModal';
+import RemainSlotModal from '@/components/study/RemainSlot';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
+  const router = useRouter();
   const [subject, setSubject] = useState('');
   const [studyId, setStudyId] = useState<number | ''>('');
-  const [recruitmentCount, setRecruitmentCount] = useState<number>(0);
+  const [remainSlots, setRemainSlots] = useState<number | null>(null);
   const [expiredDate, setExpiredDate] = useState('');
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [studyType, setStudyType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [content, setContent] = useState('');
+  const [isClick, setIsClick] = useState(false);
+  const [isStudyOpen, setIsStudyOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const displayText =
+    remainSlots === null
+      ? '1명 ~ 10명 이상'
+      : remainSlots === 10
+      ? '10명 이상'
+      : `${remainSlots}명`;
   const [studyList, setStudyList] = useState<
     { studyId: number; name: string }[]
   >([]);
+
   const editorRef = useRef<ToastEditor>(null);
+  const categoryDisplayNames: Record<string, string> = {
+    LANGUAGE: '어학',
+    IT: 'IT',
+    EXAM: '고시/자격증',
+    FINANCE: '금융',
+    MANAGEMENT: '경영',
+    DESIGN: '디자인',
+    ART: '예술',
+    PHOTO_VIDEO: '사진/영상',
+    BEAUTY: '뷰티',
+    SPORTS: '스포츠',
+    HOBBY: '취미',
+    ETC: '기타',
+  };
+
+  const StudyTypeDisplayNames: Record<string, string> = {
+    ONLINE: '온라인',
+    OFFLINE: '오프라인',
+    HYBRID: '온/오프라인',
+  };
 
   const handleFetchData = async () => {
+    setIsClick(true);
     try {
       const data = await fetchStudy(Number(studyId));
       console.log(studyId);
@@ -33,7 +71,7 @@ export default function Page() {
       setStudyType(data.studyType);
       setStartDate(data.startDate);
       setEndDate(data.endDate);
-      setRecruitmentCount(data.recruitmentCount);
+      setRemainSlots(data.remainSlots);
     } catch (error) {
       console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
@@ -60,13 +98,15 @@ export default function Page() {
       studyId: studyId,
       subject: subject,
       content: content,
-      recruitmentCount: recruitmentCount,
+      recruitmentCount: Number(remainSlots),
       expiredDate: new Date(expiredDate).toISOString(),
     };
 
     try {
       const data = await writeRecruitmentPost(payload);
+      const postId = data.data;
       console.log('생성 완료', data);
+      router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
       console.error('생성 실패', error);
     }
@@ -77,8 +117,8 @@ export default function Page() {
       subject,
       'Content:',
       content,
-      'recruitmentCount:',
-      recruitmentCount,
+      'remainSlots:',
+      remainSlots,
       'ExpiredDate:',
       expiredDate
     );
@@ -98,30 +138,47 @@ export default function Page() {
           </div>
           <div>
             <div className='relative inline-block w-[320px] ml-14.5 mr-5'>
-              <select
-                className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
-                style={{ borderColor: 'var(--color-border3)' }}
-                name='selectedStudy'
-                value={studyId}
-                onChange={(e) => setStudyId(Number(e.target.value))}
-              >
-                <option value='' disabled hidden>
-                  스터디를 선택해주세요
-                </option>
-                {studyList.map((study) => (
-                  <option key={study.studyId} value={study.studyId}>
-                    {study.name}
-                  </option>
-                ))}
-              </select>
+              <div className='relative'>
+                <button
+                  type='button'
+                  style={{ borderColor: 'var(--color-border3)' }}
+                  className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-3 border mb-6 ${
+                    studyId
+                      ? 'border-main text-text1 tm4'
+                      : 'border-main/10 text-text1/50 tm4'
+                  }`}
+                  onClick={() => setIsStudyOpen((prev) => !prev)}
+                >
+                  <p
+                    className={`mr-1 ${
+                      !studyId ? 'text-gray-400' : 'text-black'
+                    }`}
+                  >
+                    {studyId
+                      ? studyList.find((study) => study.studyId === studyId)
+                          ?.name
+                      : '스터디를 선택해주세요'}
+                  </p>
+                  <ChevronDown className='w-6 h-6' />
+                </button>
 
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
+                {isStudyOpen && (
+                  <div className='absolute top-10 left-0 z-10'>
+                    <StudyListModal
+                      studyList={studyList}
+                      onSelect={(selectedId) => {
+                        setStudyId(selectedId);
+                        setIsStudyOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
             <button
               className='button-type7 hover:bg-[#292929]'
               onClick={handleFetchData}
+              disabled={studyId === ''}
             >
               가져오기
             </button>
@@ -158,40 +215,38 @@ export default function Page() {
         <div className='flex space-x-10'>
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>모집 인원</span>
-            <div className='relative inline-block w-[440px] '>
-              <select
-                className='w-full h-[60px] border-[1px]  pl-4 pr-10 appearance-none rounded-[10px] '
-                name='selectedRecruitmentPerson'
-                value={recruitmentCount}
-                onChange={(e) => setRecruitmentCount(Number(e.target.value))}
+            <div className='relative inline-block w-[440px]'>
+              <button
+                type='button'
                 style={{ borderColor: 'var(--color-border3)' }}
+                className={`w-full h-[60px] rounded-[10px] flex items-center justify-between p-3 border mb-6 text-left ${
+                  remainSlots !== null ? 'text-black' : 'text-gray-400'
+                }`}
+                onClick={() => setIsOpen((prev) => !prev)}
               >
-                <option value='' disabled hidden>
-                  인원 미정 ~ 10명 이상
-                </option>
-                <option value={0}>인원 미정</option>
-                <option value={1}>1명</option>
-                <option value={2}>2명</option>
-                <option value={3}>3명</option>
-                <option value={4}>4명</option>
-                <option value={5}>5명</option>
-                <option value={6}>6명</option>
-                <option value={7}>7명</option>
-                <option value={8}>8명</option>
-                <option value={9}>9명</option>
-                <option value={10}>10명 이상</option>
-              </select>
+                <span>{displayText}</span>
+                <ChevronDown className='w-4 h-4' />
+              </button>
 
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
-              </div>
+              {isOpen && (
+                <div className='absolute top-[60px] left-0 z-10'>
+                  <RemainSlotModal
+                    onSelect={(value) => {
+                      setRemainSlots(value);
+                      setIsOpen(false);
+                    }}
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className='flex flex-col w-[440px] mb-10'>
             <span className='tm-0 mb-2.5'>카테고리</span>
             <div className='relative inline-block w-[440px] '>
               <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                <span>{category ? category : '카테고리'}</span>
+                <span>
+                  {category ? categoryDisplayNames[category] : '카테고리'}
+                </span>
               </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
@@ -205,7 +260,7 @@ export default function Page() {
             <span className='tm-0 mb-2.5'>진행 방식</span>
             <div className='relative inline-block w-[440px] '>
               <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                <span>{studyType ? studyType : '진행 방식'}</span>
+                {studyType ? StudyTypeDisplayNames[studyType] : '카테고리'}
               </div>
 
               <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
@@ -256,7 +311,7 @@ export default function Page() {
           onChange={(e) => setSubject(e.target.value)}
         ></input>
         <div className='mb-10'>
-          <ClientEditorWrapper editorRef={editorRef} />
+          <ClientEditorWrapper editorRef={editorRef} onChange={setContent} />
         </div>
         <div className='flex justify-end'>
           <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
@@ -265,6 +320,13 @@ export default function Page() {
           <button
             className='button-type5 hover:bg-[#292929]'
             onClick={handleSubmit}
+            disabled={
+              expiredDate === '' ||
+              remainSlots === null ||
+              title === '' ||
+              content.trim() === '' ||
+              !isClick
+            }
           >
             등록
           </button>

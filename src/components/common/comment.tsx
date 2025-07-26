@@ -9,6 +9,7 @@ import Image from 'next/image';
 import { updateComments } from '@/lib/api/comment/update';
 import { deleteComments } from '@/lib/api/comment/delete';
 import { userAuthStore } from '@/stores/userStore';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 
 type CommentProps = {
   commentId: number;
@@ -68,6 +69,7 @@ export default function Comment({
   const handleDelete = async () => {
     try {
       await deleteComments(commentId, target);
+
       if (onUpdate) {
         onUpdate(commentId, '');
       }
@@ -82,14 +84,19 @@ export default function Comment({
     <div className='flex w-full my-3 items-start mb-6'>
       <div>
         <button
-          className='w-[50px] h-[50px] rounded-full overflow-hidden bg-gray-300 mr-5'
+          className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
           onClick={handleGoToPr}
         >
-          {profileImageUrl && (
-            <Image src={profileImageUrl} alt='프로필' width={50} height={50} />
-          )}
+          <Image
+            src={profileImageUrl ?? basicBunny.src}
+            width={50}
+            height={50}
+            alt='예시 기본 프사'
+            className='absolute inset-0 w-full h-full object-cover object-center'
+          />
         </button>
       </div>
+
       <div className='flex flex-col flex-1'>
         <div className='flex justify-between items-start'>
           <div className='flex'>
@@ -102,7 +109,7 @@ export default function Comment({
             </button>
             {createdAt && (
               <div
-                className='tm5 ml-[6px] mt-[4px] opacity-50'
+                className='tm5 ml-[6px] mt-[2px] opacity-50'
                 style={{ color: 'var(--color-text1)' }}
               >
                 {formatDate(createdAt)}
@@ -153,7 +160,7 @@ export default function Comment({
           </div>
         ) : (
           <div
-            className={`tm4 ${isMyComment ? 'mt-[-10px]' : 'mt-[4px]'}`}
+            className={`tm4 ${isMyComment ? 'mt-[-11px]' : 'mt-[4px]'}`}
             style={{ color: 'var(--color-text1)' }}
           >
             {content}

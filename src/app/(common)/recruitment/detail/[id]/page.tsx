@@ -12,7 +12,7 @@ import CommentList from '@/components/common/CommentList';
 import { fetchInfo } from '@/lib/api/recruitment/fetchInfo';
 import { formatDate } from '@/utils/formatIsoDate';
 import { userAuthStore } from '@/stores/userStore';
-
+import basicBunny from '@/assets/images/basic-bunny.svg';
 import { changeStatus } from '@/lib/api/recruitment/changeStatus';
 import { studyApplication } from '@/lib/api/recruitment/studyApplication';
 import ToastViewer from '@/components/common/ToastViewer';
@@ -20,6 +20,7 @@ import { studyApplicationApprove } from '@/lib/api/recruitment/studyApplicationA
 import { studyApplicationReject } from '@/lib/api/recruitment/studyApplicationReject';
 import { fetchStudyApplication } from '@/lib/api/recruitment/fetchStudyApplication';
 import Pagination2 from '@/components/common/Pagination2';
+import { fetchMyStudyApplicationData } from '@/lib/api/recruitment/fetchMyStudyApplicationData';
 
 export default function Page() {
   const router = useRouter();
@@ -53,9 +54,36 @@ export default function Page() {
   const [writeApplicationReason, setWriteApplicationReason] = useState('');
   const [page, setPage] = useState(0);
   const [applications, setApplications] = useState<ApplicationType[]>([]);
+  const [myApplications, setMyApplications] = useState<MyApplicationType[]>([]);
   const [totalElementCount, setTotalElementCount] = useState(0);
   const totalPages = Math.ceil(totalElementCount / 5);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const isApplied = myApplications.some(
+    (app) => app.recruitmentPostId === recruitmentPostId
+  );
+
+  const categoryDisplayNames: Record<string, string> = {
+    LANGUAGE: '어학',
+    IT: 'IT',
+    EXAM: '고시/자격증',
+    FINANCE: '금융',
+    MANAGEMENT: '경영',
+    DESIGN: '디자인',
+    ART: '예술',
+    PHOTO_VIDEO: '사진/영상',
+    BEAUTY: '뷰티',
+    SPORTS: '스포츠',
+    HOBBY: '취미',
+    ETC: '기타',
+  };
+
+  const StudyTypeDisplayNames: Record<string, string> = {
+    ONLINE: '온라인',
+    OFFLINE: '오프라인',
+    HYBRID: '온/오프라인',
+  };
 
   type CommentType = {
     userId: number;
@@ -72,6 +100,10 @@ export default function Page() {
     buddyEnergy: number;
     createdDate: string;
     applicationReason: string;
+  };
+
+  type MyApplicationType = {
+    recruitmentPostId: number;
   };
 
   const fetchData = useCallback(async () => {
@@ -98,14 +130,24 @@ export default function Page() {
   }, [recruitmentPostId]);
 
   const fetchApplicationData = useCallback(async () => {
+    if (!me || me.nickname !== nickname) return;
     try {
       const appData = await fetchStudyApplication(recruitmentPostId, page);
       setApplications(appData.receivedApplications);
       setTotalElementCount(appData.totalElementCount);
     } catch (error) {
-      console.error('데이터 불러오기 실패ㅠㅠ:', error);
+      console.error('신청 내역 불러오기 오류:', error);
     }
-  }, [recruitmentPostId, page]);
+  }, [me, nickname, recruitmentPostId, page]);
+
+  const fetchMyStudyApplication = useCallback(async () => {
+    try {
+      const myAppData = await fetchMyStudyApplicationData(page);
+      setMyApplications(myAppData.applications);
+    } catch (error) {
+      console.error('신청 내역 불러오기 오류:', error);
+    }
+  }, [page]);
 
   const handleStudyAppSubmit = async () => {
     try {
@@ -114,6 +156,7 @@ export default function Page() {
         writeApplicationReason
       );
       console.log('생성 완료', appData);
+      setAppIsOpen(false);
     } catch (error) {
       console.error('생성 실패', error);
     }
@@ -133,6 +176,7 @@ export default function Page() {
     try {
       await studyApplicationApprove(applicationId);
       console.log('신청 승인요청 성공!');
+      await fetchApplicationData();
     } catch (error) {
       console.error('신청 승인요청 실패:', error);
     }
@@ -142,6 +186,7 @@ export default function Page() {
     try {
       await studyApplicationReject(applicationId);
       console.log('신청 거절요청 성공');
+      await fetchApplicationData();
     } catch (error) {
       console.error('신청 거절요청 실패:', error);
     }
@@ -162,8 +207,14 @@ export default function Page() {
     if (!isNaN(recruitmentPostId)) {
       fetchData();
       fetchApplicationData();
+      fetchMyStudyApplication();
     }
-  }, [recruitmentPostId, fetchData, fetchApplicationData]);
+  }, [
+    recruitmentPostId,
+    fetchData,
+    fetchApplicationData,
+    fetchMyStudyApplication,
+  ]);
 
   return (
     <>
@@ -171,7 +222,7 @@ export default function Page() {
         <div className='hidden 2xl:flex flex-col fixed right-[15%] space-y-2.5'>
           <button
             onClick={() => {
-              if (status === '완료') return; // 완료면 클릭 무시
+              if (status === '완료' || isApplied) return;
               if (me?.nickname === nickname) {
                 setStatusModalIsOpen(true);
               } else {
@@ -179,7 +230,7 @@ export default function Page() {
               }
             }}
             className={`w-[118px] h-[44px] tm3 rounded-[10px] text-white ${
-              status === '완료'
+              status === '완료' || isApplied
                 ? 'bg-gray-400 '
                 : 'bg-[#00C471] hover:bg-[#00B261]'
             }`}
@@ -188,6 +239,8 @@ export default function Page() {
               ? '모집 완료'
               : me?.nickname === nickname
               ? '모집 중'
+              : isApplied
+              ? '모집 신청 완료'
               : '모집 신청'}
           </button>
 
@@ -231,12 +284,20 @@ export default function Page() {
 
         <div className='flex space-x-6 items-center my-6 justify-between'>
           <div className='flex justify-center items-center'>
-            <button
-              className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'
-              onClick={handleGoToPr}
-            >
-              {profileImageUrl}
-            </button>
+            <div>
+              <button
+                className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                onClick={handleGoToPr}
+              >
+                <Image
+                  src={profileImageUrl || basicBunny.src}
+                  width={50}
+                  height={50}
+                  alt='예시 기본 프사'
+                  className='absolute inset-0 w-full h-full object-cover object-center'
+                />
+              </button>
+            </div>
             <button className='tm3' onClick={handleGoToPr}>
               {nickname}
             </button>
@@ -266,17 +327,22 @@ export default function Page() {
           <div className='flex space-x-12'>
             <div className='flex w-[400px]'>
               <span className='mr-8 tm3 opacity-50 '>모집 인원</span>
-              <span className='tm3'>{recruitmentCount}</span>
+              <span className='tm3'>{recruitmentCount} 명</span>
             </div>
             <div className='flex w-[400px]'>
               <span className=' mr-8 tm3 opacity-50'>카테고리</span>
-              <div className='tag-type1 tb5'>{category}</div>
+              <div className='tag-type1 tb5'>
+                {' '}
+                {category ? categoryDisplayNames[category] : '카테고리'}
+              </div>
             </div>
           </div>
           <div className='flex space-x-12'>
             <div className='flex w-[400px]'>
               <span className='mr-8 tm3 opacity-50'>진행 방식</span>
-              <span className='tm3'>{studyType}</span>
+              <span className='tm3'>
+                {studyType ? StudyTypeDisplayNames[studyType] : '카테고리'}
+              </span>
             </div>
             <div className='flex w-[400px]'>
               <span className=' mr-8 tm3 opacity-50'>지역</span>
@@ -299,7 +365,7 @@ export default function Page() {
         <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10 '>
           <button
             onClick={() => {
-              if (status === '완료') return;
+              if (status === '완료' || isApplied) return;
               if (me?.nickname === nickname) {
                 setStatusModalIsOpen(true);
               } else {
@@ -307,7 +373,7 @@ export default function Page() {
               }
             }}
             className={`w-full h-[44px] tm3 rounded-[10px] text-white ${
-              status === '완료'
+              status === '완료' || isApplied
                 ? 'bg-gray-400'
                 : 'bg-[#00C471] hover:bg-[#00B261]'
             }`}
@@ -316,6 +382,8 @@ export default function Page() {
               ? '모집 완료'
               : me?.nickname === nickname
               ? '모집 중'
+              : isApplied
+              ? '모집 신청 완료'
               : '모집 신청'}
           </button>
           {me?.nickname === nickname && (
@@ -330,6 +398,7 @@ export default function Page() {
         </div>
         <div className='w-[852px]'>
           <WriteComment
+            key={refreshKey}
             target={target}
             postId={recruitmentPostId}
             commentCount={commentCount}
@@ -338,7 +407,13 @@ export default function Page() {
           />
         </div>
         <div className='w-[852px]'>
-          <CommentList postId={recruitmentPostId} comments={comments} target={target}/>
+          <CommentList
+            postId={recruitmentPostId}
+            comments={comments}
+            target={target}
+            setCommentCount={setCommentCount}
+            setRefreshKey={setRefreshKey}
+          />
         </div>
 
         {isOpen && (
@@ -347,74 +422,75 @@ export default function Page() {
             className='w-[1020px] h-auto'
             onClose={() => setIsOpen(false)}
           >
-            {applications.map((app) => (
-              <div
-                key={app.applicationId}
-                className='rounded-[10px] px-10 w-full'
-              >
-                <div className='flex justify-between w-full'>
-                  <div className='flex space-x-6 items-center mb-10'>
-                    <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
-                    <div className='flex flex-col'>
-                      <div className='tm3 cursor-pointer ml-3'>
-                        {app.nickname}
-                      </div>
-                      <div className='flex justify-center items-center'>
+            {applications.length === 0 ? (
+              <div className='tm3 text-center text-gray-500 py-20'>
+                신청 내역이 없습니다
+              </div>
+            ) : (
+              applications.map((app) => (
+                <div
+                  key={app.applicationId}
+                  className='rounded-[10px] px-10 w-full'
+                >
+                  <div className='flex justify-between w-full'>
+                    <div className='flex space-x-6 items-center mb-10'>
+                      <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
+                      <div className='flex flex-col'>
+                        <div className='tm3 cursor-pointer ml-3'>
+                          {app.nickname}
+                        </div>
                         <div className='flex justify-center items-center'>
-                          <Image
-                            src={buddyEnergy}
-                            alt='버디 에너지'
-                            className='w-[40px] h-[40px]'
-                          />
-                          <div className='tm4 opacity-50 justify-center items-center'>
-                            {app.buddyEnergy}%
+                          <div className='flex justify-center items-center'>
+                            <Image
+                              src={buddyEnergy}
+                              alt='버디 에너지'
+                              className='w-[40px] h-[40px]'
+                            />
+                            <div className='tm4 opacity-50 justify-center items-center'>
+                              {app.buddyEnergy}%
+                            </div>
                           </div>
-                        </div>
-
-                        <div className='tm4 opacity-20 ml-5'>
-                          <Tally1 />
-                        </div>
-                        <div>
-                          <span className='tm4 opacity-50'>
-                            {formatDate(app.createdDate)}
-                          </span>
+                          <div className='tm4 opacity-20 ml-5'>
+                            <Tally1 />
+                          </div>
+                          <div>
+                            <span className='tm4 opacity-50'>
+                              {formatDate(app.createdDate)}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div
-                  className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
-                  style={{ borderColor: 'var(--color-border3)' }}
-                >
-                  {app.applicationReason}
-                </div>
-                <div className='flex space-x-[15px] justify-end mb-10'>
-                  <button
-                    className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
-                    onClick={() => handleReject(app.applicationId)}
+                  <div
+                    className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
+                    style={{ borderColor: 'var(--color-border3)' }}
                   >
-                    거절
-                  </button>
-                  <button
-                    className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
-                    onClick={() => handleApprove(app.applicationId)}
-                  >
-                    승인
-                  </button>
+                    {app.applicationReason}
+                  </div>
+                  <div className='flex space-x-[15px] justify-end mb-10'>
+                    <button
+                      className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
+                      onClick={() => handleReject(app.applicationId)}
+                    >
+                      거절
+                    </button>
+                    <button
+                      className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
+                      onClick={() => handleApprove(app.applicationId)}
+                    >
+                      승인
+                    </button>
+                  </div>
+                  <Pagination2
+                    page={page}
+                    setPage={setPage}
+                    totalPages={totalPages}
+                  />
                 </div>
-                <Pagination2
-                  page={page}
-                  setPage={setPage}
-                  totalPages={totalPages}
-                />
-                {/* <hr
-                className='h-0.5 my-10'
-                style={{ borderColor: 'var(--color-border2)' }}
-              /> */}
-              </div>
-            ))}
+              ))
+            )}
           </Modal>
         )}
 
@@ -432,12 +508,16 @@ export default function Page() {
               onChange={(e) => setWriteApplicationReason(e.target.value)}
             ></textarea>
             <div className='flex justify-end '>
-              <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+              <button
+                className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+                onClick={() => setAppIsOpen(false)}
+              >
                 취소
               </button>
               <button
                 className='button-type5 hover:bg-[#292929]'
                 onClick={handleStudyAppSubmit}
+                disabled={writeApplicationReason.trim() === ''}
               >
                 확인
               </button>

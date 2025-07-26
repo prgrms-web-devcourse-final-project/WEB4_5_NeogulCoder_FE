@@ -10,9 +10,10 @@ import AiQuiz from '@/components/study/AiQuiz';
 import CommentList from '@/components/common/CommentList';
 import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
 import { userAuthStore } from '@/stores/userStore';
-import { fetchComment } from '@/lib/api/study/fetchComment';
 import { formatDate } from '@/utils/formatDate';
 import ToastViewer from '@/components/common/ToastViewer';
+import Image from 'next/image';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 
 export default function Page() {
   const pathname = usePathname();
@@ -27,6 +28,7 @@ export default function Page() {
   const [createdDate, setCreatedDate] = useState('');
   const [nickname, setNickname] = useState('');
   const [content, setContent] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState<CommentType[]>([]);
 
@@ -57,21 +59,13 @@ export default function Page() {
       setNickname(data.postInfo.nickname);
       setTitle(data.postInfo.title);
       setContent(data.postInfo.content);
+      setImageUrl(data.postInfo.imageUrl);
       setCommentCount(data.commentCount);
       setComments(data.comments);
     } catch (error) {
       console.error('데이터 불러오기 실패ㅠㅠ:', error);
     }
   }, [postId]);
-
-  const fetchComments = useCallback(async () => {
-    try {
-      const data = await fetchComment(studyId, postId);
-      setComments(data);
-    } catch (error) {
-      console.error('데이터 불러오기 실패ㅠㅠ:', error);
-    }
-  }, [studyId, postId]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -87,9 +81,8 @@ export default function Page() {
   useEffect(() => {
     if (!isNaN(studyId) && !isNaN(postId)) {
       fetchData();
-      fetchComments();
     }
-  }, [studyId, postId, fetchData, fetchComments]);
+  }, [studyId, postId, fetchData]);
 
   return (
     <>
@@ -123,10 +116,20 @@ export default function Page() {
         </div>
         <div className='flex space-x-6 items-center my-6 justify-between'>
           <div className='flex justify-center items-center'>
-            <button
-              className='w-[50px] h-[50px] rounded-full bg-gray-300 mr-5'
-              onClick={handleGoToPr}
-            ></button>
+            <div>
+              <button
+                className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                onClick={handleGoToPr}
+              >
+                <Image
+                  src={imageUrl || basicBunny.src}
+                  width={50}
+                  height={50}
+                  alt='예시 기본 프사'
+                  className='absolute inset-0 w-full h-full object-cover object-center'
+                />
+              </button>
+            </div>
             <button className='tm3 ' onClick={handleGoToPr}>
               {nickname}
             </button>
@@ -139,21 +142,23 @@ export default function Page() {
           </div>
         </div>
         <div
-          className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5 tm3'
+          className='w-full min-h-[600px] h-auto my-10 border-[1px] rounded-[10px] p-5 tm3'
           style={{ borderColor: 'var(--color-border3)' }}
         >
           {content && (
             <ToastViewer key={content} height='100%' initialValue={content} />
           )}
         </div>
-        <div className='flex justify-end'>
-          <button
-            className='button-type4 mb-10 hover:bg-[#292929] '
-            onClick={() => setIsOpen(true)}
-          >
-            <span className='tm4'>AI 퀴즈 풀기</span>
-          </button>
-        </div>
+        {category === 'FREE' && (
+          <div className='flex justify-end'>
+            <button
+              className='button-type4 mb-10 hover:bg-[#292929] '
+              onClick={() => setIsOpen(true)}
+            >
+              <span className='tm4'>AI 퀴즈 풀기</span>
+            </button>
+          </div>
+        )}
         <div className='w-[898px]'>
           <WriteComment
             target={target}

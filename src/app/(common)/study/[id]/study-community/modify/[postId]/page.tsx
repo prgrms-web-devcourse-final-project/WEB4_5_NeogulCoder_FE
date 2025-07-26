@@ -6,11 +6,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
 import { fetchStudyInfo } from '@/lib/api/study/fetchStudyInfo';
 import { modifyStudyPost } from '@/lib/api/study/modify';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function Page() {
   const pathname = usePathname();
+  const router = useRouter();
   const postId = Number(pathname.split('/').pop());
+  const studyId = Number(pathname.split('/')[2]);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [content, setContent] = useState('');
@@ -45,9 +47,10 @@ export default function Page() {
 
     try {
       const data = await modifyStudyPost(postId, payload);
-      console.log('생성 완료', data);
+      console.log('수정 완료', data);
+      router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
-      console.error('생성 실패', error);
+      console.error('수정 실패', error);
     }
     console.log('Title:', title, 'Content:', content, 'category:', category);
   };

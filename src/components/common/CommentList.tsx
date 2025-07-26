@@ -16,11 +16,15 @@ type CommentListProps = {
   comments: CommentType[];
   postId: number;
   target: string;
+  setCommentCount: React.Dispatch<React.SetStateAction<number>>;
+  setRefreshKey: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function CommentList({
   comments: initialComments,
   target,
+  setCommentCount,
+  setRefreshKey,
 }: CommentListProps) {
   const [comments, setComments] = useState<CommentType[]>([]);
 
@@ -31,6 +35,8 @@ export default function CommentList({
   const handleUpdate = (commentId: number, updatedContent: string) => {
     if (updatedContent === '') {
       setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+      setCommentCount((prev) => prev - 1);
+      setRefreshKey((prev) => prev + 1);
     } else {
       setComments((prev) =>
         prev.map((c) =>
