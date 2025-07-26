@@ -11,11 +11,13 @@ import NotificationModal from './NotificationModal';
 import { userAuthStore } from '@/stores/userStore';
 import Link from 'next/link';
 import { getUser } from '@/lib/api/user';
+import { getUnreadNotifications } from '@/lib/api/notification';
 
 export default function Header() {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
+  const [unreadCounts, setUnreadCounts] = useState(0);
   const user = userAuthStore((state) => state.user);
   const setUser = userAuthStore((state) => state.setUser);
 
@@ -33,6 +35,19 @@ export default function Header() {
         });
     }
   }, [user, setUser]);
+
+  // 읽지 않은 알림
+  useEffect(() => {
+    const fetchUnreadNotifications = async () => {
+      try {
+        const data = await getUnreadNotifications();
+        setUnreadCounts(data.length);
+      } catch (error) {
+        console.error('읽지 않은 알림 조회 실패: ', error);
+      }
+    };
+    fetchUnreadNotifications();
+  }, []);
 
   const handleGoToHome = () => {
     router.push('/');
@@ -53,7 +68,7 @@ export default function Header() {
             <div className='flex items-center justify-center gap-4'>
               <div className='relative z-50'>
                 <div
-                  className='w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 cursor-pointer'
+                  className='w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#eef0f1]'
                   onClick={() => setIsProfileModalOpen((prev) => !prev)}
                 >
                   <span className='tm5'>내 정보</span>
@@ -88,6 +103,10 @@ export default function Header() {
                   className='flex items-center justify-center'
                 >
                   <Bell className='w-[22px] h-6' />
+                  {/* 읽지 않은 알림 표시 */}
+                  {unreadCounts > 0 && (
+                    <span className='absolute -top-0.5 -right-0 bg-[#FF3B30] text-white text-[10px] w-[10px] h-[10px] flex items-center justify-center rounded-full'></span>
+                  )}
                 </button>
               </div>
               {isNotificationModalOpen && (
