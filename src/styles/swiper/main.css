@@ -1,6 +1,37 @@
+/* 서브헤더 */
+.subHeaderSwiper {
+  overflow: visible;
+}
+.subHeaderSwiper .swiper-slide {
+  visibility: hidden;
+}
+.subHeaderSwiper .swiper-slide-prev,
+.subHeaderSwiper .swiper-slide-active,
+.subHeaderSwiper .swiper-slide-next {
+  visibility: visible;
+  transition: all ease 0.3s;
+}
+.subHeaderSwiper .swiper-slide-prev {
+  transform: scale(0.8) translateZ(-10px);
+  z-index: -1;
+}
+.subHeaderSwiper .swiper-slide-next {
+  transform: scale(0.8) translateZ(-10px);
+  z-index: -1;
+}
+
 /* 배너 */
 .main-banner .swiper {
   border-radius: 10px;
+}
+.main-banner
+  .swiper-horizontal
+  > .swiper-pagination-bullets
+  .swiper-pagination-bullet,
+.main-banner
+  .swiper-pagination-horizontal.swiper-pagination-bullets
+  .swiper-pagination-bullet {
+  margin: 0;
 }
 .main-banner .swiper-pagination-bullet {
   height: 10px;

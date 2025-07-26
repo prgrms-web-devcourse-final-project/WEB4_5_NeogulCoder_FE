@@ -4,6 +4,7 @@ import { userAuthStore } from '@/stores/userStore';
 import { getUser } from '@/lib/api/user';
 import MainBanner from '@/components/main/MainBanner';
 import MainStudyList from '@/components/main/MainStudyList';
+import MainRecruitmentList from '@/components/main/MainRecruitmentList';
 
 export default function Main() {
   const user = userAuthStore((state) => state.user);
@@ -35,7 +36,7 @@ export default function Main() {
 
         <div id='recruit' className='pt-[120px]'>
           <p className='text-[22px] font-bold'>모집 중인 스터디</p>
-          {/* <MainRecruitmentList /> */}
+          <MainRecruitmentList />
         </div>
       </div>
     </>

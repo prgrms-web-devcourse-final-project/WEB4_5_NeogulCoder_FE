@@ -80,19 +80,21 @@ export default function MainStudyList() {
                   {studies &&
                     studies.map((study) => (
                       <SwiperSlide key={`${study.studyId}`}>
-                        <StudyCard
-                          studyId={study.studyId}
-                          name={study.name}
-                          leaderNickname={study.leaderNickname}
-                          currentCount={study.currentCount}
-                          capacity={study.capacity}
-                          startDate={study.startDate}
-                          category={study.category}
-                          studyType={study.studyType}
-                          introduction={study.introduction}
-                          imageUrl={study.imageUrl ?? ''}
-                          finished={study.finished}
-                        />
+                        <Link href={`study/${study.studyId}/dashboard`}>
+                          <StudyCard
+                            studyId={study.studyId}
+                            name={study.name}
+                            leaderNickname={study.leaderNickname}
+                            currentCount={study.currentCount}
+                            capacity={study.capacity}
+                            startDate={study.startDate}
+                            category={study.category}
+                            studyType={study.studyType}
+                            introduction={study.introduction}
+                            imageUrl={study.imageUrl ?? ''}
+                            finished={study.finished}
+                          />
+                        </Link>
                       </SwiperSlide>
                     ))}
                 </Swiper>

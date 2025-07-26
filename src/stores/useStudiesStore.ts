@@ -1,13 +1,23 @@
 import { getStudiesMain } from '@/lib/api/study.api';
 import { create } from 'zustand';
 
+type updateStudyType = {
+  name: string;
+  introduction: string;
+  imageUrl: string | null;
+  studyType: string;
+  category: string;
+  capacity: number;
+  startDate: string;
+};
+
 interface StudyStore {
   studies: StudiesMainType[];
   loading: boolean;
   setStudies: (studies: StudiesMainType[]) => void;
   addStudy: (study: StudiesMainType) => void;
-  updateStudy: (studyId: number, newData: StudyInfoUpdateType) => void;
-  removeStudy: (studyId: number) => void;
+  updateStudy: (studyId: number, newData: updateStudyType) => void;
+  deleteStudy: (studyId: number) => void;
   setLoading: (loading: boolean) => void;
   fetchStudies: () => Promise<void>;
 }
@@ -17,11 +27,11 @@ export const useStudiesStore = create<StudyStore>((set) => ({
   loading: true,
   setStudies: (studies) => set({ studies }),
   addStudy: (study) => set((state) => ({ studies: [...state.studies, study] })),
-  removeStudy: (studyId) =>
+  deleteStudy: (studyId) =>
     set((state) => ({
       studies: state.studies.filter((s) => s.studyId !== studyId),
     })),
-  updateStudy: (studyId: number, newData: StudyInfoUpdateType) =>
+  updateStudy: (studyId: number, newData: updateStudyType) =>
     set((state) => ({
       studies: state.studies.map((s) =>
         s.studyId === studyId ? { ...s, ...newData } : s
