@@ -160,7 +160,7 @@ export default function Chat() {
 
   return (
     <div className='w-full rounded-[10px] border border-border2'>
-      <div className='h-[640px] flex flex-col'>
+      <div className='h-[690px] flex flex-col'>
         <div
           className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col scroll-custom-4'
           ref={scrollRef}
@@ -182,24 +182,23 @@ export default function Chat() {
           ))}
           <div ref={textBottomRef}></div>
         </div>
-      </div>
-
-      <div className='px-7 mb-7'>
-        <div className='relative'>
-          <input
-            className='input-type1 w-full focus:outline-none placeholder:opacity-50'
-            type='text'
-            placeholder='내용을 입력해주세요.'
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            onCompositionStart={() => setIsInput(true)}
-            onCompositionEnd={() => setIsInput(false)}
-          />
-          <Send
-            className='w-[18px] h-[18px] text-gray5 absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer'
-            onClick={handleSendMessage}
-          />
+        <div className='px-7 mb-7'>
+          <div className='relative'>
+            <input
+              className='input-type1 w-full focus:outline-none placeholder:opacity-50'
+              type='text'
+              placeholder='내용을 입력해주세요.'
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onCompositionStart={() => setIsInput(true)}
+              onCompositionEnd={() => setIsInput(false)}
+            />
+            <Send
+              className='w-[18px] h-[18px] text-gray5 absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+              onClick={handleSendMessage}
+            />
+          </div>
         </div>
       </div>
     </div>
