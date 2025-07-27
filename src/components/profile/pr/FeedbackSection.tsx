@@ -30,7 +30,7 @@ export default function FeedbackSection() {
           {pr.reviewContents.length > 0 && (
             <button
               type='button'
-              className='text-text1/50 cursor-pointer t5'
+              className='text-text1/30 cursor-pointer t5'
               onClick={() => setIsModalOpen(true)}
             >
               더보기

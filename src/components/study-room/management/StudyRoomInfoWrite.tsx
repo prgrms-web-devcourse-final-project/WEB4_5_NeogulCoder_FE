@@ -1,48 +1,52 @@
 import CategoriesModal from '@/components/common/CategoriesModal';
 import OnlineModal from '@/components/common/OnlineModal';
 import RegionModal from '@/components/common/RegionModal';
+import { putStudyInfo } from '@/lib/api/study.api';
+import { categoryFormatting } from '@/utils/categoryFormatting';
+import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import dayjs from 'dayjs';
+import musicBunny from '@/assets/images/music-bunny.svg';
 import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState, useTransition } from 'react';
+import { useStudyStore } from '@/stores/studyInfoStore';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
+  studyId,
   closeFn,
 }: {
   studyInfoData: StudyInfoType;
+  studyId: number;
   closeFn: () => void;
 }) {
-  const [image, setImage] = useState(studyInfoData.imageUrl);
-  const [name, setName] = useState(studyInfoData.name);
+  const updateStudyInfo = useStudyStore().updateStudyInfo;
+  const updateStudies = useStudiesStore().updateStudy;
 
+  const [name, setName] = useState(studyInfoData.name);
   const [capacity, setCapacity] = useState(studyInfoData.capacity);
-  //  const [category, setCategory] = useState();
-  // const [studyType, setStudyType] = useState();
-  // const [location, setLocation] = useState();
   const [startDate, setStartDate] = useState(studyInfoData.startDate);
   const [introduction, setIntroduction] = useState(studyInfoData.introduction);
-
-  const [capacityCheck, setCapacityCheck] = useState(false);
-  const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(
     studyInfoData.category
   );
-  const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(studyInfoData.location);
-  const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
   const [selectedStudyType, setSelectedStudyType] = useState(
-    studyInfoData.studyType === 'ONLINE'
-      ? '온라인'
-      : studyInfoData.studyType === 'OFFLINE'
-      ? '오프라인'
-      : studyInfoData.studyType === 'HYBRID'
-      ? '온/오프라인'
-      : studyInfoData.studyType
+    studyInfoData.studyType
   );
+  const [capacityCheck, setCapacityCheck] = useState(false);
+  const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
+  const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
+  const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
+
+  const [isPending, startTransition] = useTransition();
 
   const [imageFile, setImageFiles] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState(studyInfoData.imageUrl);
+
+  // 미래에 시작하는 스터디 인지 아닌지
+  const isFutureStartDate = dayjs(startDate).isAfter(dayjs(), 'day');
 
   const onUploadImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -50,18 +54,18 @@ export default function StudyRoomInfoWrite({
     if (file) {
       setImageFiles(file);
 
+      // 이전 미리보기 Blob URL 해제
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+
+      // 새로운 미리보기 URL 생성
       const imagePreviewUrl = URL.createObjectURL(file);
       setImagePreview(imagePreviewUrl);
     }
   };
 
-  // 메모리 누수 방지 - 이미지 업로드 후 Blob URL 해제
-  useEffect(() => {
-    if (imagePreview) {
-      return () => URL.revokeObjectURL(imagePreview);
-    }
-  }, [imagePreview]);
-
+  // 전체 인원수에 작성시 숫자만가능, 현재 스티디원 수보다 적게 지정 할수 없도록 관리
   const handleCapacity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const number = e.target.value.replace(/[^0-9]/g, '');
     if (Number(number) < studyInfoData.members.length) {
@@ -82,44 +86,70 @@ export default function StudyRoomInfoWrite({
 
   const hadleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    let capacityUpdate = studyInfoData.members.length;
-    if (capacity > studyInfoData.members.length) {
-      capacityUpdate = capacity;
-    }
+    startTransition(async () => {
+      // 날짜 형식 맞추기
+      let formattedStartDate;
+      if (isFutureStartDate) {
+        formattedStartDate = dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss');
+      } else {
+        formattedStartDate = startDate;
+      }
 
-    const studyType =
-      selectedStudyType === '온라인'
-        ? 'ONLINE'
-        : selectedStudyType === '오프라인'
-        ? 'OFFLINE'
-        : 'HYBRID';
+      // 현재 가입자 수 보다 작으면 수정 안되도록
+      const capacityUpdate =
+        capacity > studyInfoData.members.length
+          ? capacity
+          : studyInfoData.members.length;
 
-    const formData = new FormData();
-
-    if (imageFile) {
-      formData.append('name', name);
-      formData.append('category', selectedCategory);
-      formData.append('capacity', String(capacityUpdate));
-      formData.append('studyType', studyType);
-      formData.append('location', selectedRegion);
-      formData.append('startDate', startDate);
-      formData.append('introduction', introduction);
-      formData.append('imageUrl', imageFile); // 여기!
-
-      console.log('formData', ...formData);
-    } else {
-      const updateData: StudyInfoUpdateType = {
+      // 이미지 변경없을때 JSON 형식의 데이터
+      const request: StudyInfoUpdateType = {
         name: name,
         category: selectedCategory,
         capacity: capacityUpdate,
-        studyType: studyType,
+        studyType: selectedStudyType,
         location: selectedRegion,
-        startDate: startDate,
         introduction: introduction,
-        imageUrl: image,
+        startDate: formattedStartDate,
       };
-      console.log('updateData', updateData);
-    }
+
+      try {
+        // FormData로 전송
+        const formData = new FormData();
+        formData.append(
+          'request',
+          new Blob([JSON.stringify(request)], { type: 'application/json' })
+        );
+        formData.append('image', imageFile || '');
+        await putStudyInfo(studyId, formData);
+
+        // 사이드메뉴 스터디 정보 관리를 위한 전역상태 업데이트
+        updateStudyInfo({
+          name: request.name,
+          introduction: request.introduction,
+          imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
+          studyType: request.studyType,
+          location: request.location,
+          category: request.category,
+          capacity: request.capacity,
+          startDate: formattedStartDate,
+        });
+
+        // 서브헤더 스터디 목록 업데이트를 위한 전역상태 업데이트
+        updateStudies(studyId, {
+          name: request.name,
+          introduction: request.introduction,
+          imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
+          studyType: request.studyType,
+          category: request.category,
+          capacity: request.capacity,
+          startDate: formattedStartDate,
+        });
+
+        closeFn(); // 모달 닫기
+      } catch (error) {
+        console.error('스터디 정보를 수정 실패:', error);
+      }
+    });
   };
 
   return (
@@ -137,9 +167,9 @@ export default function StudyRoomInfoWrite({
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 {/* 사진 */}
                 <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
-                  <div className='w-full h-full rounded-full border border-border1 bg-gray3 overflow-hidden'>
+                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden'>
                     <Image
-                      src={imagePreview ?? image}
+                      src={imagePreview ?? studyInfoData.imageUrl ?? musicBunny}
                       width='100'
                       height='100'
                       className='w-full h-full object-cover'
@@ -185,7 +215,7 @@ export default function StudyRoomInfoWrite({
                         setIsOpenCategoryModal((prev) => !prev);
                       }}
                     >
-                      {selectedCategory}
+                      {categoryFormatting(selectedCategory)}
                     </button>
                     <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
                     {isOpenCategoryModal && (
@@ -223,7 +253,7 @@ export default function StudyRoomInfoWrite({
                   </div>
                 </div>
                 {/* 시작 날짜 (스터디 시작 전에만 수정 가능) */}
-                {dayjs(startDate).isAfter(dayjs().format('YYYY-MM-DD')) && (
+                {isFutureStartDate && (
                   <div className=' shrink-0'>
                     <p className='t3 mb-3'>
                       시작날짜 <span className='tm5 text-red'>(필수)</span>
@@ -238,6 +268,7 @@ export default function StudyRoomInfoWrite({
                             dayjs(e.target.value).format('YYYY-MM-DD')
                           )
                         }
+                        value={dayjs(startDate).format('YYYY-MM-DD')}
                       />
                       <CalendarDays
                         strokeWidth={1}
@@ -260,7 +291,7 @@ export default function StudyRoomInfoWrite({
                           setIsOpenStudyTypeModal((prev) => !prev);
                         }}
                       >
-                        {selectedStudyType}
+                        {studyTypeFormatting(selectedStudyType)}
                       </button>
                       <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
                       {isOpenStudyTypeModal && (
@@ -275,7 +306,7 @@ export default function StudyRoomInfoWrite({
                         </div>
                       )}
                     </div>
-                    {selectedStudyType !== '온라인' && (
+                    {selectedStudyType !== 'ONLINE' && (
                       <div className='w-full relative input-type2'>
                         <button
                           className='w-full h-full text-left'
@@ -290,10 +321,12 @@ export default function StudyRoomInfoWrite({
                         {isOpenRegionModal && (
                           <div className='absolute top-full w-full left-0 z-1'>
                             <RegionModal
-                              onSelect={(region: string) => {
+                              onSelect={(region: string | null) => {
+                                if (region === null) return;
                                 setSelectedRegion(region);
                                 setIsOpenRegionModal(false);
                               }}
+                              selectedRegion={selectedRegion}
                               customCss='!w-full !h-[120px] !overflow-auto t4'
                             />
                           </div>
@@ -320,7 +353,8 @@ export default function StudyRoomInfoWrite({
                     name === '' ||
                     selectedCategory === '' ||
                     capacityCheck ||
-                    selectedStudyType === ''
+                    selectedStudyType === '' ||
+                    isPending
                   }
                 >
                   등록

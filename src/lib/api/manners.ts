@@ -2,13 +2,16 @@ import axiosInstance from '@/lib/api/axiosInstance';
 
 export const fetchStudyList = async () => {
   const { data } = await axiosInstance.get('/reviews/studies/me');
-  return data.data.studiesInfo;
+  console.log(data.data.studies);
+  return data.data.studies;
 };
 
 export const fetchUserListByStudyId = async (studyId: number) => {
+  if (studyId < 0) return;
   const { data } = await axiosInstance.get(
     `/reviews/studies/${studyId}/targets`
   );
+  console.log(data.data.userInfos);
   return data.data.userInfos;
 };
 

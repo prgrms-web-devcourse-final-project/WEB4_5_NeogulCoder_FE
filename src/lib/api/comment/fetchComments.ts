@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { axiosInstance } from '../axios';
 
 type FetchCommentsProps =
   | { target: 'study'; studyId: number; postId: number }
@@ -14,6 +14,6 @@ export const fetchComments = async (props: FetchCommentsProps) => {
     url = `/api/recruitment-posts/${postId}/comments`;
   }
 
-  const response = await axios.get(url);
-  return response.data.data;
+  const res = await axiosInstance.get(url);
+  return res.data.data;
 };

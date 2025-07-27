@@ -5,67 +5,96 @@ import { ChevronDown } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
 import { writeStudyPost } from '@/lib/api/study/write';
-// import { useParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import CategoryStudyModal2 from '@/components/study/CategoryStudyModal2';
 
 export default function Page() {
+  const pathname = usePathname();
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const studyId = 1; // 더미 데이터
-  // 파라미터로 스터디 아이디 받아오는 코드
-  // const params = useParams();
-  // const studyId = Number(params.studyId);
+  const [content, setContent] = useState('');
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const isSelectedCategory = category !== '카테고리';
+  const studyId = Number(pathname.split('/')[2]);
   const editorRef = useRef<ToastEditor>(null);
+  const router = useRouter();
 
   const handleSubmit = async () => {
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
+    const categoryMap: { [key: string]: string } = {
+      공지: 'NOTICE',
+      자유: 'FREE',
+    };
+
+    const englishCategory = categoryMap[category] || category;
 
     const payload = {
       title: title,
+      category: englishCategory, // 영문으로 보냄
       content: content,
-      category: category,
     };
 
     try {
       const data = await writeStudyPost(studyId, payload);
+      const postId = data.data;
+
       console.log('생성 완료', data);
+      router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
       console.error('생성 실패', error);
     }
-    console.log('Title:', title, 'Content:', content, 'Category:', category);
+
+    console.log(
+      'Title:',
+      title,
+      'Content:',
+      content,
+      'Category:',
+      englishCategory
+    );
   };
 
   return (
     <>
-      <div className='relative inline-block w-[320px] mb-6'>
-        <select
-          className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
+      <div className='relative '>
+        <button
+          type='button'
           style={{ borderColor: 'var(--color-border3)' }}
-          name='selectedStudy'
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border mb-6  ${
+            isSelectedCategory
+              ? 'border-main text-text1 tm4'
+              : 'border-main/10 text-text1/50 tm4'
+          } `}
+          onClick={() => setIsCategoryOpen((prev) => !prev)}
         >
-          <option value='' disabled hidden>
-            게시글 유형을 선택해 주세요
-          </option>
-          <option value='notification'>공지</option>
-          <option value='free'>자유</option>
-        </select>
+          <p className={`mr-1 ${!category ? 'text-gray-400' : 'text-black'}`}>
+            {category ? category : '게시글 유형을 선택해 주세요'}
+          </p>
+          <ChevronDown className='w-4 h-4' />
+        </button>
 
-        <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-          <ChevronDown />
-        </div>
+        {isCategoryOpen && (
+          <div className='absolute top-15 left-0 z-10'>
+            <CategoryStudyModal2
+              onSelect={(category: string) => {
+                setCategory(category);
+                setIsCategoryOpen(false);
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <input
-        className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10'
+        className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10 tm4  placeholder-gray-400'
         style={{ borderColor: 'var(--color-border3)' }}
         placeholder='제목을 입력해주세요'
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <div className='mb-10'>
-        <ClientEditorWrapper editorRef={editorRef} />
+        <ClientEditorWrapper editorRef={editorRef} onChange={setContent} />
       </div>
       <div className='flex justify-end'>
         <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
@@ -74,6 +103,7 @@ export default function Page() {
         <button
           className='button-type5 hover:bg-[#292929]'
           onClick={handleSubmit}
+          disabled={category === '' || title === '' || content.trim() === ''}
         >
           등록
         </button>
