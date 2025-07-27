@@ -37,11 +37,11 @@ export default function Chat() {
   const [chats, setChats] = useState<ChatMessageType[]>([]);
   const [isInput, setIsInput] = useState(false);
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [nextPage, setNextPage] = useState<number | null>(null);
   const user = userAuthStore((state) => state.user);
   const clientRef = useRef<Client | null>(null);
   const textBottomRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [scrollToBottom, setScrollToBottom] = useState(true);
   const params = useParams();
   const studyId = Number(params?.id);
 
@@ -51,12 +51,12 @@ export default function Chat() {
 
     const initialMessages = async () => {
       try {
-        const initialPage = 0;
-        const res = await fetchChatMessage(studyId, initialPage);
+        const temp = await fetchChatMessage(studyId, 0);
+        const last = temp.totalPages > 0 ? temp.totalPages - 1 : 0;
+
+        const res = await fetchChatMessage(studyId, last);
         setChats(res.content);
-        setCurrentPage(res.currentNumber);
-        setNextPage(res.nextPage);
-        console.log(res.content.map((msg) => `${msg.id}: ${msg.message}`));
+        setCurrentPage(last);
       } catch (error) {
         console.error('초기 메시지 불러오기 실패: ', error);
       }
@@ -65,7 +65,6 @@ export default function Chat() {
     if (studyId) initialMessages();
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL;
-
     const client = new Client({
       webSocketFactory: () => new SockJS(`${socketUrl}/ws-stomp`), // 연결
       reconnectDelay: 5000, // 재연결 시도 5초
@@ -78,7 +77,7 @@ export default function Chat() {
         client.subscribe(`/sub/chat/study/${studyId}`, (message) => {
           try {
             const content = JSON.parse(message.body);
-            console.log('수신: ', content);
+            // console.log('수신: ', content);
             setChats((prev) => [...prev, content]);
           } catch (error) {
             console.error(error);
@@ -96,13 +95,17 @@ export default function Chat() {
     return () => {
       client.deactivate(); // 연결 끊기
     };
-  }, [setCurrentPage, setNextPage, studyId]);
+  }, [studyId]);
 
   useEffect(() => {
-    if (chats.length > 0) {
-      textBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (scrollToBottom && chats.length > 0) {
+      const timeout = setTimeout(() => {
+        textBottomRef.current?.scrollIntoView({ behavior: 'auto' });
+      }, 0);
+
+      return () => clearTimeout(timeout);
     }
-  }, [chats]);
+  }, [chats, scrollToBottom]);
 
   // 메시지 전송
   const handleSendMessage = () => {
@@ -119,13 +122,14 @@ export default function Chat() {
       }),
     });
 
-    console.log('전송 ', {
-      studyId: studyId,
-      senderId: user.id,
-      message,
-    });
+    // console.log('전송 ', {
+    //   studyId: studyId,
+    //   senderId: user.id,
+    //   message,
+    // });
 
     setMessage('');
+    setScrollToBottom(true);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -137,13 +141,18 @@ export default function Chat() {
 
   const handleScroll = async () => {
     const scrollText = scrollRef.current;
-    if (!scrollText || scrollText.scrollTop !== 0 || nextPage === null) return;
+    if (!scrollText || scrollText.scrollTop > 0 || currentPage <= 0) return;
+
+    const prevPage = currentPage - 1;
 
     try {
-      const res = await fetchChatMessage(studyId, currentPage + 1);
-      setChats((prev) => [...res.content, ...prev]);
-      setCurrentPage(res.currentNumber);
-      setNextPage(res.nextPage);
+      const res = await fetchChatMessage(studyId, prevPage);
+      setChats((prev) => {
+        const messageId = new Set(prev.map((msg) => msg.id));
+        const newMessages = res.content.filter((msg) => !messageId.has(msg.id));
+        return [...newMessages, ...prev];
+      });
+      setCurrentPage(prevPage);
     } catch (error) {
       console.error('과거 메시지 불러오기 실패: ', error);
     }
@@ -153,7 +162,7 @@ export default function Chat() {
     <div className='w-full rounded-[10px] border border-border2'>
       <div className='h-[640px] flex flex-col'>
         <div
-          className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col'
+          className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col scroll-custom-4'
           ref={scrollRef}
           onScroll={handleScroll}
         >

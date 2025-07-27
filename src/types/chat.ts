@@ -15,9 +15,11 @@ export type ChatGroup = {
 
 export type PageResponse<T> = {
   content: T[];
-  currentNumber: number;
-  nextPage: number | null;
-  prevPage: number | null;
+  currentPage: number;
+  size: number;
+  totalPages: number;
+  totalElements: number;
+  hasNext: boolean;
 };
 
 export type ApiResponse<T> = {
