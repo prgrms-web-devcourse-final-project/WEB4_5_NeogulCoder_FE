@@ -122,7 +122,9 @@ body {
   .button-type7 {
     @apply bg-main inline-flex h-15 w-[100px] items-center justify-center rounded-[10px] text-center text-xs text-white md:text-sm;
   }
-
+  .button-type7:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
+  }
   .button-sm-type1 {
     @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
   }

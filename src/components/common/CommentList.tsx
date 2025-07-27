@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Comment from '@/components/common/Comment';
-import { fetchComments } from '@/lib/api/comment/fetchComments';
+import { useState, useEffect } from 'react';
 
 type CommentType = {
-  id: number;
+  commentId: number;
+  userId: number;
   nickname: string;
   profileImageUrl?: string;
   content: string;
@@ -13,48 +13,57 @@ type CommentType = {
 };
 
 type CommentListProps = {
-  target: 'study' | 'recruitment';
-  studyId: number;
+  comments: CommentType[];
   postId: number;
+  target: string;
+  setCommentCount?: React.Dispatch<React.SetStateAction<number>>;
+  setRefreshKey?: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export default function CommentList({
+  comments: initialComments,
   target,
-  studyId,
-  postId,
+  setCommentCount,
+  setRefreshKey,
 }: CommentListProps) {
   const [comments, setComments] = useState<CommentType[]>([]);
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        let data;
+    setComments(initialComments);
+  }, [initialComments]);
 
-        if (target === 'study' && studyId !== undefined) {
-          data = await fetchComments({ target: 'study', studyId, postId });
-        } else if (target === 'recruitment') {
-          data = await fetchComments({ target: 'recruitment', postId });
-        }
+  const handleUpdate = (commentId: number, updatedContent: string) => {
+    if (updatedContent === '') {
+      setComments((prev) => prev.filter((c) => c.commentId !== commentId));
+      setCommentCount?.((prev) => prev - 1);
+      setRefreshKey?.((prev) => prev + 1);
+    } else {
+      setComments((prev) =>
+        prev.map((c) =>
+          c.commentId === commentId ? { ...c, content: updatedContent } : c
+        )
+      );
+    }
+  };
 
-        if (data) setComments(data);
-      } catch (err) {
-        console.error('댓글 조회 실패:', err);
-      }
-    };
-
-    load();
-  }, [target, studyId, postId]);
+  // 이 메세지는 보여줄 지 말지 고민
+  // if (!comments || comments.length === 0) {
+  //   return <p className='text-gray-500'>아직 댓글이 없습니다.</p>;
+  // }
 
   return (
-    // comment가 없을 때의 코드 추가하기
     <div className='space-y-4'>
       {comments.map((comment) => (
         <Comment
-          key={comment.id}
+          key={comment.commentId}
+          commentId={comment.commentId}
+          userId={comment.userId}
           nickname={comment.nickname}
           profileImageUrl={comment.profileImageUrl}
           content={comment.content}
           createdAt={comment.createdAt}
+          onUpdate={handleUpdate}
+          target={target}
         />
       ))}
     </div>

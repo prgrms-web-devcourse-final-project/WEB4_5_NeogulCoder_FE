@@ -1,17 +1,15 @@
 import { axiosInstance } from '../axios';
 
-export const writeStudyPost = async (
-  studyId: number,
-  payload: {
-    title: string;
-    category: string;
-    content: string;
-  }
+export const studyApplication = async (
+  recruitmentPostId: number,
+  applicationReason: string
 ) => {
   try {
     const res = await axiosInstance.post(
-      `/api/studies/${studyId}/posts`,
-      payload
+      `/api/recruitment-posts/${recruitmentPostId}/applications`,
+      {
+        applicationReason,
+      }
     );
     return res.data;
   } catch (error) {
