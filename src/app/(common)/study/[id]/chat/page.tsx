@@ -10,7 +10,7 @@ import { ChatGroup, ChatMessageType } from '@/types/chat';
 import { userAuthStore } from '@/stores/userStore';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SockJS from 'sockjs-client';
-import { fetchChatMessage } from '@/lib/api/chat';
+// import { fetchChatMessage } from '@/lib/api/chat';
 // import { useParams } from 'next/navigation';
 
 function groupChatsByDate(chats: ChatMessageType[]): ChatGroup[] {
@@ -36,35 +36,34 @@ export default function Chat() {
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<ChatMessageType[]>([]);
   const [isInput, setIsInput] = useState(false);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [nextPage, setNextPage] = useState<number | null>(null);
+  // const [currentPage, setCurrentPage] = useState<number>(0);
+  // const [nextPage, setNextPage] = useState<number | null>(null);
   const user = userAuthStore((state) => state.user);
   const clientRef = useRef<Client | null>(null);
 
   // const params = useParams();
   // const roomId = Number(params?.id);
 
-  const studyId = 7;
+  const studyId = 11;
 
   // 메시지 불러오기 / 웹소켓 연결
   useEffect(() => {
     if (!studyId) return;
 
-    const initialMessages = async () => {
-      try {
-        const res = await fetchChatMessage(studyId, 0);
-        setChats(res.content);
-        setCurrentPage(res.currentNumber);
-        setNextPage(res.nextPage);
-      } catch (error) {
-        console.error('초기 메시지 불러오기 실패: ', error);
-      }
-    };
+    // const initialMessages = async () => {
+    //   try {
+    //     const res = await fetchChatMessage(studyId, 0);
+    //     setChats(res.content);
+    //     setCurrentPage(res.currentNumber);
+    //     setNextPage(res.nextPage);
+    //   } catch (error) {
+    //     console.error('초기 메시지 불러오기 실패: ', error);
+    //   }
+    // };
 
-    if (studyId) initialMessages();
+    // if (studyId) initialMessages();
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL;
-    // console.log(socketUrl);
 
     const client = new Client({
       webSocketFactory: () => new SockJS(`${socketUrl}/ws-stomp`), // 연결
