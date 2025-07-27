@@ -36,6 +36,7 @@ export default function SubmitScheduleModal({
                     alt='사용자 이미지'
                     width={34}
                     height={34}
+                    priority
                     className='w-[34px] h-[34px] rounded-[50%] border border-border1'
                   />
                   <span className='t4'>{user.nickname}</span>
