@@ -6,37 +6,41 @@ import StudyCard from '@/components/my/StudyCard';
 import SubMenuItem from '@/components/my/SubMenuItem';
 import { MyStudyListType } from '@/types/my';
 import { fetchMyStudyList } from '@/lib/api/my';
+import StudyCardSkeleton from './StudyCardSkeleton';
 
 const menuName = ['전체', '진행 중', '종료'];
 const filterName = ['', 'false', 'true'];
 
-export default function StudyListClient({
-  initialStudyListData,
-}: {
-  initialStudyListData: MyStudyListType;
-}) {
+export default function StudyListClient() {
   const [activeIndex, setActiveIndex] = useState(0);
-
   const [myStudyList, setMyStudyList] = useState<MyStudyListType['studies']>(
-    initialStudyListData.studies
+    []
   );
+  const [isLoading, setIsLoading] = useState(true);
 
   const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(initialStudyListData.totalPage);
+  const [totalPages, setTotalPages] = useState(0);
 
   const filterList = useCallback(async () => {
-    const finishedValue = filterName[activeIndex];
+    setIsLoading(true);
+    try {
+      const finishedValue = filterName[activeIndex];
 
-    const query = {
-      page,
-      pageSize: 12,
-      sort: 'DESC',
-      ...(finishedValue ? { finished: finishedValue } : {}),
-    };
+      const query = {
+        page,
+        pageSize: 12,
+        sort: 'DESC',
+        ...(finishedValue ? { finished: finishedValue } : {}),
+      };
 
-    const data = await fetchMyStudyList(query);
-    setMyStudyList(data.studies);
-    setTotalPages(data.totalPage);
+      const data = await fetchMyStudyList(query);
+      setMyStudyList(data.studies);
+      setTotalPages(data.totalPage);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   }, [activeIndex, page]);
 
   useEffect(() => {
@@ -58,22 +62,34 @@ export default function StudyListClient({
           </SubMenuItem>
         ))}
       </div>
-      {myStudyList.length === 0 && (
-        <div
-          className='flex flex-col gap-[30px] mt-[30px] relative 
-            h-[calc(100vh-105px-113px-198px)]'
-        >
-          <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-            스터디가 없습니다.
+      {isLoading ? (
+        <>
+          <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <StudyCardSkeleton key={i} />
+            ))}
           </div>
-        </div>
-      )}
-      {myStudyList.length !== 0 && (
-        <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
-          {myStudyList.map((study) => (
-            <StudyCard key={study.studyId} {...study} />
-          ))}
-        </div>
+        </>
+      ) : (
+        <>
+          {myStudyList.length === 0 && (
+            <div
+              className='flex flex-col gap-[30px] mt-[30px] relative 
+            h-[calc(100vh-105px-113px-198px)]'
+            >
+              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+                스터디가 없습니다.
+              </div>
+            </div>
+          )}
+          {myStudyList.length !== 0 && (
+            <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+              {myStudyList.map((study) => (
+                <StudyCard key={study.studyId} {...study} />
+              ))}
+            </div>
+          )}
+        </>
       )}
       <div className='mt-[30px]'>
         <Pagination

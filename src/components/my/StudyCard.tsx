@@ -58,6 +58,7 @@ export default function StudyCard({
               src={imageUrl ? imageUrl : studyDefault}
               alt='스터디 대표 이미지'
               fill
+              priority
             />
           </div>
         </div>

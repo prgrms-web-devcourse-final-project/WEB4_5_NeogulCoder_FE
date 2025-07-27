@@ -6,6 +6,7 @@ import RecruitmentCard from '@/components/my/RecruitmentCard';
 import { fetchMyRecruitmentList } from '@/lib/api/my';
 import { MyRecruitmentListType } from '@/types/my';
 import { useCallback, useEffect, useState } from 'react';
+import RecruitmentCardSkeleton from './RecruitmentCardSkeleton';
 
 const categoryMap: Record<string, string> = {
   전체: '',
@@ -30,40 +31,42 @@ const studyTypeMap: Record<string, '' | 'ONLINE' | 'OFFLINE' | 'HYBRID'> = {
   병행: 'HYBRID',
 };
 
-export default function RecruitmentListClient({
-  initialMyRecruitmentListData,
-}: {
-  initialMyRecruitmentListData: MyRecruitmentListType;
-}) {
+export default function RecruitmentListClient() {
   const [selectedCategory, setSelectedCategory] = useState('카테고리');
   const [selectedStudyType, setSelectedStudyType] = useState('진행 방식');
   const [keyword, setKeyword] = useState('');
 
   const [myRecruitmentList, setMyRecruitmentList] = useState<
     MyRecruitmentListType['postInfos']
-  >(initialMyRecruitmentListData.postInfos);
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [page, setPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(
-    initialMyRecruitmentListData.totalPage
-  );
+  const [totalPages, setTotalPages] = useState(0);
 
   const filterList = useCallback(async () => {
-    const categoryValue = categoryMap[selectedCategory];
-    const studyTypeValue = studyTypeMap[selectedStudyType];
+    setIsLoading(true);
+    try {
+      const categoryValue = categoryMap[selectedCategory];
+      const studyTypeValue = studyTypeMap[selectedStudyType];
 
-    const query = {
-      page,
-      pageSize: 10,
-      sort: 'DESC',
-      ...(categoryValue ? { category: categoryValue } : {}),
-      ...(studyTypeValue ? { studyType: studyTypeValue } : {}),
-      ...(keyword ? { keyword } : {}),
-    };
+      const query = {
+        page,
+        pageSize: 10,
+        sort: 'DESC',
+        ...(categoryValue ? { category: categoryValue } : {}),
+        ...(studyTypeValue ? { studyType: studyTypeValue } : {}),
+        ...(keyword ? { keyword } : {}),
+      };
 
-    const data = await fetchMyRecruitmentList(query);
-    setMyRecruitmentList(data.postInfos);
-    setTotalPages(data.totalPage);
+      const data = await fetchMyRecruitmentList(query);
+      setMyRecruitmentList(data.postInfos);
+      setTotalPages(data.totalPage);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   }, [selectedCategory, selectedStudyType, keyword, page]);
 
   useEffect(() => {
@@ -83,21 +86,38 @@ export default function RecruitmentListClient({
           setPage={setPage}
         />
       </div>
-      <div
-        className={`flex flex-col gap-[30px] mt-[30px] relative ${
-          myRecruitmentList.length === 0 && 'h-[calc(100vh-105px-113px-198px)]'
-        }`}
-      >
-        {myRecruitmentList.length === 0 && (
-          <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-            내가 작성한 모집 글이 없습니다.
+      {isLoading ? (
+        <>
+          <div className='flex flex-col gap-[30px] mt-[30px]'>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <RecruitmentCardSkeleton key={i} />
+            ))}
           </div>
-        )}
-        {myRecruitmentList.length !== 0 &&
-          myRecruitmentList.map((post) => (
-            <RecruitmentCard key={post.recruitmentPostId} type='my' {...post} />
-          ))}
-      </div>
+        </>
+      ) : (
+        <>
+          <div
+            className={`flex flex-col gap-[30px] mt-[30px] relative ${
+              myRecruitmentList.length === 0 &&
+              'h-[calc(100vh-105px-113px-198px)]'
+            }`}
+          >
+            {myRecruitmentList.length === 0 && (
+              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+                내가 작성한 모집 글이 없습니다.
+              </div>
+            )}
+            {myRecruitmentList.length !== 0 &&
+              myRecruitmentList.map((post) => (
+                <RecruitmentCard
+                  key={post.recruitmentPostId}
+                  type='my'
+                  {...post}
+                />
+              ))}
+          </div>
+        </>
+      )}
       <div className='mt-[30px]'>
         <Pagination
           totalPages={totalPages}
