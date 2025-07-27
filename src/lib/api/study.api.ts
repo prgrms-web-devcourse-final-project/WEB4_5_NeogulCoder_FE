@@ -74,3 +74,9 @@ export const getStudyDashboard = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}`);
   return data;
 };
+
+// 가입한 스터디 목록 (메인에 사용됨)
+export const getStudiesMain = async () => {
+  const { data } = await axiosInstance.get(`/api/studies/main`);
+  return data;
+};

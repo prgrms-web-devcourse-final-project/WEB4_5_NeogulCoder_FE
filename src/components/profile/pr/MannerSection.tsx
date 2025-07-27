@@ -32,7 +32,7 @@ export default function MannerSection() {
           <p className='tm3'>매너 평가</p>
           <button
             type='button'
-            className='text-text1/50 cursor-pointer t5'
+            className='text-text1/30 cursor-pointer t5'
             onClick={() => setIsModalOpen(true)}
           >
             더보기
@@ -45,7 +45,7 @@ export default function MannerSection() {
             <p>
               <span className='tm2'>
                 {pr.reviewTags?.[0]?.reviewCount ?? 0}
-              </span>
+              </span>{' '}
               <span className='t4'>명</span>
             </p>
           </div>
@@ -55,7 +55,7 @@ export default function MannerSection() {
             <p>
               <span className='tm2'>
                 {pr.reviewTags?.[0]?.reviewCount ?? 0}
-              </span>
+              </span>{' '}
               <span className='t4'>명</span>
             </p>
           </div>
