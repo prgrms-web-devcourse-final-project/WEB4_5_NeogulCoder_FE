@@ -87,6 +87,7 @@ export default function MainStudyList() {
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}
+                            endDate={study.endDate}
                             category={study.category}
                             studyType={study.studyType}
                             introduction={study.introduction}
@@ -117,6 +118,7 @@ export default function MainStudyList() {
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}
+                            endDate={study.endDate}
                             category={study.category}
                             studyType={study.studyType}
                             introduction={study.introduction}

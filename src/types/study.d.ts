@@ -10,6 +10,13 @@ type StudyHeaderType = {
   startDate?: string;
 };
 
+type StudyMyDataType = {
+  userId: number;
+  studyId: number;
+  role: string;
+  nickname: string;
+};
+
 type StudyInfoType = {
   imageUrl: string | null;
   name: string;
