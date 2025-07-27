@@ -182,7 +182,7 @@ export default function MyStudyInfoClient({
           <div className='tm2 text-text1'>스터디 연장 참여</div>
           <hr className='mt-4 text-border2' />
           <div className='flex justify-between items-center mt-6 t3'>
-            <span className='text-main'>
+            <span className='text-green'>
               아직 스터디가 연장되지 않았습니다.
             </span>
             <button
