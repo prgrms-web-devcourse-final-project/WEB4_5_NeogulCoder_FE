@@ -167,6 +167,7 @@ export default function TimeGrid({
     try {
       const { timeSlots } = await fetchMyTimeVote(Number(id));
       setMyTimeVoteStats(timeSlots);
+      console.log('myTimeVoteStats:', myTimeVoteStats);
       return timeSlots;
     } catch (e) {
       console.error(e);
