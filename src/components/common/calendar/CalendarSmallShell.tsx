@@ -16,7 +16,6 @@ export default function CalendarSmallShell({
     setClickDate(date);
   };
 
-  console.log('calendarData', calendarData);
   return (
     <>
       <div>

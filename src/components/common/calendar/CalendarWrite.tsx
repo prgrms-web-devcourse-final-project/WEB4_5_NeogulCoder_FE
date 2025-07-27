@@ -68,8 +68,6 @@ export default function CalendarWrite({
         endTime: end.format('YYYY-MM-DDTHH:mm'),
       };
 
-      let responseId: number;
-
       //시작날짜와 종료날짜  유효성 검사
       if (start.isBefore(end)) {
         // 개인일정 수정, 개인일정 등록

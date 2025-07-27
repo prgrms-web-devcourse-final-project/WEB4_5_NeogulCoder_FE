@@ -1,3 +1,4 @@
+// 스터디공간 사이드 메뉴 스터디 정보
 type StudyHeaderType = {
   name: string;
   introduction: string;
@@ -7,6 +8,13 @@ type StudyHeaderType = {
   category: string;
   capacity: number;
   startDate?: string;
+};
+
+type StudyMyDataType = {
+  userId: number;
+  studyId: number;
+  role: string;
+  nickname: string;
 };
 
 type StudyInfoType = {
@@ -87,4 +95,27 @@ type DashBoardPostType = {
   category: string;
   title: string;
   createdAt: string;
+};
+
+// 서브헤더 스터디 목록
+type HeaderStudiesType = {
+  studyId: number;
+  imageUrl: string;
+  name?: string;
+};
+
+// 메인 내 스터디 목록 (서브헤더에서도 사용 됨)
+type StudiesMainType = {
+  studyId: number;
+  name: string;
+  leaderNickname: string;
+  capacity: number;
+  currentCount: number;
+  startDate: string;
+  endDate: string;
+  imageUrl: string | null;
+  introduction: string;
+  category: string;
+  studyType: string;
+  finished: boolean;
 };

@@ -1,50 +1,102 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Pagination from '@/components/common/Pagination';
 import StudyCard from '@/components/my/StudyCard';
 import SubMenuItem from '@/components/my/SubMenuItem';
-import { StudyList } from '@/types/my';
+import { MyStudyListType } from '@/types/my';
+import { fetchMyStudyList } from '@/lib/api/my';
+import StudyCardSkeleton from './StudyCardSkeleton';
 
-export default function StudyListClient({
-  studyList,
-}: {
-  studyList: StudyList;
-}) {
+const menuName = ['전체', '진행 중', '종료'];
+const filterName = ['', 'false', 'true'];
+
+export default function StudyListClient() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [myStudyList, setMyStudyList] = useState<MyStudyListType['studies']>(
+    []
+  );
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filterStatus = () => {
-    if (activeIndex === 0) {
-      return studyList.studies.filter((study) => !study.finished);
-    } else {
-      return studyList.studies.filter((study) => study.finished);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const filterList = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const finishedValue = filterName[activeIndex];
+
+      const query = {
+        page,
+        pageSize: 12,
+        sort: 'DESC',
+        ...(finishedValue ? { finished: finishedValue } : {}),
+      };
+
+      const data = await fetchMyStudyList(query);
+      setMyStudyList(data.studies);
+      setTotalPages(data.totalPage);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [activeIndex, page]);
+
+  useEffect(() => {
+    filterList();
+  }, [page, filterList]);
 
   return (
     <div className='w-full'>
       <div className='tb3'>전체 스터디</div>
+      {/* border-b border-b-[#e5e5e5] */}
       <div className='mt-6'>
-        <SubMenuItem
-          isActive={activeIndex === 0}
-          onClick={() => setActiveIndex(0)}
-        >
-          진행 중
-        </SubMenuItem>
-        <SubMenuItem
-          isActive={activeIndex === 1}
-          onClick={() => setActiveIndex(1)}
-        >
-          종료
-        </SubMenuItem>
-      </div>
-      <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
-        {filterStatus().map((study) => (
-          <StudyCard key={study.studyId} {...study} />
+        {[...Array(3)].map((_, i) => (
+          <SubMenuItem
+            key={i}
+            isActive={activeIndex === i}
+            onClick={() => setActiveIndex(i)}
+          >
+            {menuName[i]}
+          </SubMenuItem>
         ))}
       </div>
+      {isLoading ? (
+        <>
+          <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <StudyCardSkeleton key={i} />
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          {myStudyList.length === 0 && (
+            <div
+              className='flex flex-col gap-[30px] mt-[30px] relative 
+            h-[calc(100vh-105px-113px-198px)]'
+            >
+              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+                스터디가 없습니다.
+              </div>
+            </div>
+          )}
+          {myStudyList.length !== 0 && (
+            <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+              {myStudyList.map((study) => (
+                <StudyCard key={study.studyId} {...study} />
+              ))}
+            </div>
+          )}
+        </>
+      )}
       <div className='mt-[30px]'>
-        <Pagination />
+        <Pagination
+          totalPages={totalPages}
+          currentPage={page}
+          onPageChange={setPage}
+        />
       </div>
     </div>
   );

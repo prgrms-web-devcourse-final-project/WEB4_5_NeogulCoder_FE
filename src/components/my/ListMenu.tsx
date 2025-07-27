@@ -1,67 +1,93 @@
 'use client';
 
 import { ChevronDown, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import CategoryModal from '../main/CategoryModal';
-import MeetingTypeModal from '../main/MeetingTypeModal';
+import StudyTypeModal from '../main/StudyTypeModal';
 
-export default function ListMenu() {
+export default function ListMenu({
+  selectedCategory,
+  setSelectedCategory,
+  selectedStudyType,
+  setSelectedStudyType,
+  setKeyword,
+  setPage,
+}: {
+  selectedCategory: string;
+  setSelectedCategory: (v: string) => void;
+  selectedStudyType: string;
+  setSelectedStudyType: (v: string) => void;
+  setKeyword: (v: string) => void;
+  setPage: (page: number) => void;
+}) {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('카테고리');
-  const isSelectedCategory = selectedCategory !== '카테고리';
+  const [isStudyTypeOpen, setStudyTypeOpen] = useState(false);
 
-  const [isMeetingTypeOpen, setMeetingTypeOpen] = useState(false);
-  const [selectedMeetingType, setSelectedMeetingType] = useState('진행 방식');
-  const isSelectedMeetingType = selectedMeetingType !== '진행 방식';
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleKeywordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      setKeyword(value);
+      setPage(0);
+    }, 300);
+  };
 
   return (
-    <div className="flex justify-between mt-8">
-      <div className="flex gap-4 relative">
-        <div className="relative">
+    <div className='flex justify-between mt-8'>
+      <div className='flex gap-4 relative'>
+        <div className='relative'>
           <button
-            type="button"
+            type='button'
             className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
-              isSelectedCategory
+              selectedCategory !== '카테고리'
                 ? 'border-main text-text1 tm4'
                 : 'border-main/10 text-text1/50 tm4'
             }`}
             onClick={() => setIsCategoryOpen((prev) => !prev)}
           >
-            <p className="mr-1">{selectedCategory}</p>
-            <ChevronDown className="w-4 h-4" />
+            <p className='mr-1'>{selectedCategory}</p>
+            <ChevronDown className='w-4 h-4' />
           </button>
 
           {isCategoryOpen && (
-            <div className="absolute top-10 left-0 z-10">
+            <div className='absolute top-10 left-0 z-10'>
               <CategoryModal
                 onSelect={(category: string) => {
                   setSelectedCategory(category);
                   setIsCategoryOpen(false);
+                  setPage(0);
                 }}
               />
             </div>
           )}
         </div>
 
-        <div className="relative">
+        <div className='relative'>
           <button
             className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
-              isSelectedMeetingType
+              selectedStudyType !== '진행 방식'
                 ? 'border-main text-text1 tm4'
                 : 'border-main/10 text-text1/50 tm4'
             }`}
-            onClick={() => setMeetingTypeOpen((prev) => !prev)}
+            onClick={() => setStudyTypeOpen((prev) => !prev)}
           >
-            <p className="mr-1">{selectedMeetingType}</p>
-            <ChevronDown className="w-4 h-4" />
+            <p className='mr-1'>{selectedStudyType}</p>
+            <ChevronDown className='w-4 h-4' />
           </button>
 
-          {isMeetingTypeOpen && (
-            <div className="absolute top-10 left-0 z-10">
-              <MeetingTypeModal
-                onSelect={(meeting: string) => {
-                  setSelectedMeetingType(meeting);
-                  setMeetingTypeOpen(false);
+          {isStudyTypeOpen && (
+            <div className='absolute top-10 left-0 z-10'>
+              <StudyTypeModal
+                onSelect={(studyType: string) => {
+                  setSelectedStudyType(studyType);
+                  setStudyTypeOpen(false);
+                  setPage(0);
                 }}
               />
             </div>
@@ -69,12 +95,13 @@ export default function ListMenu() {
         </div>
       </div>
 
-      <div className="w-[260px] h-[34px] bg-gray4 rounded-[50px] flex items-center gap-4 px-4 mr-4 tm4 text-text1/50">
-        <Search className="w-4 h-4" />
+      <div className='w-[260px] h-[34px] bg-gray4 rounded-[50px] flex items-center gap-4 px-4 mr-4 tm4 text-text1/50'>
+        <Search className='w-4 h-4' />
         <input
-          type="text"
-          placeholder="검색어를 입력해주세요."
-          className="focus:outline-none"
+          type='text'
+          placeholder='검색어를 입력해주세요.'
+          className='focus:outline-none'
+          onChange={handleKeywordInput}
         />
       </div>
     </div>

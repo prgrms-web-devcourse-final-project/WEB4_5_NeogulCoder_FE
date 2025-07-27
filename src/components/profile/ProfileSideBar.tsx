@@ -6,9 +6,11 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { userAuthStore, UserInfo } from '@/stores/userStore';
 import { getUserById } from '@/lib/api/user';
+import ProfileSideBarSkeleton from './ProfileSideBarSkeleton';
 
 export default function SideBar() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   // 사이드 메뉴
   const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴' | ''>(
     'pr'
@@ -36,7 +38,13 @@ export default function SideBar() {
   useEffect(() => {
     if (isMyPage) {
       // 내 페이지면 항상 최신 정보 가져오기
-      fetchUser();
+      fetchUser()
+        .catch((error) => {
+          console.error('내 정보 가져오기 실패: ', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else if (userId) {
       // 다른 사람 페이지면 그 사람 정보 가져오기
       getUserById(userId)
@@ -45,6 +53,9 @@ export default function SideBar() {
         })
         .catch((error) => {
           console.error('다른 사용자 정보 가져오기 실패: ', error);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   }, [userId, isMyPage, fetchUser]);
@@ -81,70 +92,80 @@ export default function SideBar() {
   };
 
   return (
-    <div className='w-full flex justify-center text-text1'>
-      <div className='w-full max-w-[1248px] flex flex-col'>
-        <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
-          <div className='flex items-center gap-[28px] pl-8'>
-            <div className='w-[70px] h-[70px] bg-black rounded-full overflow-hidden'>
-              <img
-                src={userData?.profileImageUrl ?? basicBunny.src}
-                alt='예시 기본 프사'
-                className='w-full h-20 object-cover object-center rounded-full'
-              />
+    <>
+      {isLoading ? (
+        <ProfileSideBarSkeleton />
+      ) : (
+        <div className='w-full flex justify-center text-text1'>
+          <div className='w-full max-w-[1248px] flex flex-col'>
+            <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
+              <div className='flex items-center gap-[28px] pl-8'>
+                <div className='w-[70px] h-[70px] bg-black rounded-full overflow-hidden'>
+                  <img
+                    src={userData?.profileImageUrl ?? basicBunny.src}
+                    alt='예시 기본 프사'
+                    className='w-full h-20 object-cover object-center rounded-full'
+                  />
+                </div>
+                <div className='flex flex-col justify-center items-start'>
+                  <span className='tm2 cursor-default'>
+                    {userData?.nickname}
+                  </span>
+                  {isMyPage && (
+                    <button
+                      type='button'
+                      className='t5 opacity-50 mt-[5px]'
+                      onClick={handleEditProfile}
+                    >
+                      프로필 수정
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
-            <div className='flex flex-col justify-center items-start'>
-              <span className='tm2 cursor-default'>{userData?.nickname}</span>
+            <div className='flex gap-5 mt-4'>
               {isMyPage && (
                 <button
                   type='button'
-                  className='t5 opacity-50 mt-[5px]'
-                  onClick={handleEditProfile}
+                  className='w-full h-10 bg-gray4 rounded-[10px] tm4'
+                  onClick={handleMyPage}
                 >
-                  프로필 수정
+                  개인 일정
                 </button>
               )}
             </div>
-          </div>
-        </div>
-        <div className='flex gap-5 mt-4'>
-          {isMyPage && (
-            <button
-              type='button'
-              className='w-full h-10 bg-gray4 rounded-[10px] tm4'
-              onClick={handleMyPage}
-            >
-              개인 일정
-            </button>
-          )}
-        </div>
-        {isMyPage && (
-          <div className='flex flex-col gap-[30px] tm4 mt-[35px]'>
-            <div
-              className={`flex justify-between items-center cursor-pointer ${
-                selectedMenu === 'pr' ? 'opacity-100' : 'opacity-30'
-              }`}
-              onClick={handlePr}
-            >
-              <span>PR</span>
-              <ChevronRight className='w-[22px] h-[22px]' />
-            </div>
+            {isMyPage && (
+              <div className='flex flex-col gap-[30px] tm4 mt-[35px]'>
+                <div
+                  className={`flex justify-between items-center cursor-pointer ${
+                    selectedMenu === 'pr' ? 'opacity-100' : 'opacity-30'
+                  }`}
+                  onClick={handlePr}
+                >
+                  <span>PR</span>
+                  <ChevronRight className='w-[22px] h-[22px]' />
+                </div>
 
-            {me?.oauth === 'Google' ? (
-              ''
-            ) : (
-              <div
-                className={`flex justify-between items-center cursor-pointer ${
-                  selectedMenu === '회원 탈퇴' ? 'opacity-100' : 'opacity-30'
-                }`}
-                onClick={handleWithdrawal}
-              >
-                <span>회원 탈퇴</span>
-                <ChevronRight className='w-[22px] h-[22px]' />
+                {me?.oauth === 'Google' ? (
+                  ''
+                ) : (
+                  <div
+                    className={`flex justify-between items-center cursor-pointer ${
+                      selectedMenu === '회원 탈퇴'
+                        ? 'opacity-100'
+                        : 'opacity-30'
+                    }`}
+                    onClick={handleWithdrawal}
+                  >
+                    <span>회원 탈퇴</span>
+                    <ChevronRight className='w-[22px] h-[22px]' />
+                  </div>
+                )}
               </div>
             )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

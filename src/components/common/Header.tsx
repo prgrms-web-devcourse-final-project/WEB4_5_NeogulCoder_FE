@@ -1,7 +1,6 @@
 'use client';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
-import darkMode from '@/assets/images/dark-mode.svg';
 import { ChevronDown } from 'lucide-react';
 import { Bell } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -18,12 +17,13 @@ export default function Header() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [unreadCounts, setUnreadCounts] = useState(0);
+  const [isNotificationClick, setIsNotificationClick] = useState(false);
   const user = userAuthStore((state) => state.user);
   const setUser = userAuthStore((state) => state.setUser);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('login_status');
-    if (!user && isLoggedIn) {
+    if (user === undefined && isLoggedIn) {
       getUser()
         .then((res) => {
           const userData = res.data.data;
@@ -53,6 +53,10 @@ export default function Header() {
     router.push('/');
   };
 
+  const handleNotificationClick = () => {
+    setIsNotificationClick(!isNotificationClick);
+  };
+
   return (
     <div className='w-full flex justify-center pt-2.5 text-text1'>
       <div className='w-full max-w-[1280px] flex items-center justify-between px-4'>
@@ -64,11 +68,33 @@ export default function Header() {
           priority
         />
         <div className='flex items-center gap-[18px]'>
-          {user ? (
+          {user === undefined ? null : user ? (
             <div className='flex items-center justify-center gap-4'>
+              <div
+                className='relative'
+                onClick={() => setIsNotificationModalOpen(true)}
+              >
+                <button
+                  type='button'
+                  className='flex items-center justify-center'
+                >
+                  <Bell className='w-[22px] h-6' />
+                  {/* 읽지 않은 알림 표시 */}
+                  {unreadCounts > 0 && (
+                    <span className='absolute -top-0.5 -right-0 bg-[#FF3B30] text-white text-[10px] w-[10px] h-[10px] flex items-center justify-center rounded-full'></span>
+                  )}
+                </button>
+              </div>
+              {isNotificationModalOpen && (
+                <div className='fixed bottom-5 right-5 z-50'>
+                  <NotificationModal
+                    onClose={() => setIsNotificationModalOpen(false)}
+                  />
+                </div>
+              )}
               <div className='relative z-50'>
                 <div
-                  className='w-[90px] h-[34px] rounded-[5px] bg-gray4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#eef0f1]'
+                  className='w-[90px] h-[34px] rounded-[4px] bg-gray4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#EEEEEE]'
                   onClick={() => setIsProfileModalOpen((prev) => !prev)}
                 >
                   <span className='tm5'>내 정보</span>
@@ -93,44 +119,11 @@ export default function Header() {
                   </>
                 )}
               </div>
-
-              <div
-                className='relative'
-                onClick={() => setIsNotificationModalOpen(true)}
-              >
-                <button
-                  type='button'
-                  className='flex items-center justify-center'
-                >
-                  <Bell className='w-[22px] h-6' />
-                  {/* 읽지 않은 알림 표시 */}
-                  {unreadCounts > 0 && (
-                    <span className='absolute -top-0.5 -right-0 bg-[#FF3B30] text-white text-[10px] w-[10px] h-[10px] flex items-center justify-center rounded-full'></span>
-                  )}
-                </button>
-              </div>
-              {isNotificationModalOpen && (
-                <div className='fixed bottom-5 right-5 z-50'>
-                  <NotificationModal
-                    onClose={() => setIsNotificationModalOpen(false)}
-                  />
-                </div>
-              )}
-              <div>
-                <button
-                  type='button'
-                  className='flex items-center justify-center'
-                >
-                  <Image
-                    src={darkMode}
-                    className='w-[26px] h-[26px]'
-                    alt='다크모드'
-                  />
-                </button>
-              </div>
             </div>
           ) : (
-            <Link href='/auth/login'>로그인</Link>
+            <Link href='/auth/login' className='t4'>
+              로그인
+            </Link>
           )}
         </div>
       </div>

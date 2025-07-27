@@ -1,14 +1,20 @@
 import { axiosInstance } from './axios';
 
-// 내 스터디 목록
+// 스터디 정보 목록
 export const getStudyInfoData = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/info`);
   return data;
 };
 
-// 특정 스터디 조회
+// 스터디 헤더 조회
 export const getStudyHeaderData = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/header`);
+  return data;
+};
+
+// 스터디의 내정보
+export const getStudyMeData = async (studyId: number) => {
+  const { data } = await axiosInstance.get(`/api/studies/${studyId}/me`);
   return data;
 };
 
@@ -30,6 +36,12 @@ export const postDelegate = async (studyId: number, newLeaderId: number) => {
     `/api/studies/${studyId}/delegate`,
     { newLeaderId: newLeaderId }
   );
+  return data;
+};
+
+// 초대를 위한 회원전체 조회
+export const getAllUser = async () => {
+  const { data } = await axiosInstance.get(`/api/users/all`);
   return data;
 };
 
@@ -72,5 +84,11 @@ export const postStudyAttendance = async (studyId: number) => {
 // 스터디 대시보드 정보 조회
 export const getStudyDashboard = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}`);
+  return data;
+};
+
+// 가입한 스터디 목록 (메인에 사용됨)
+export const getStudiesMain = async () => {
+  const { data } = await axiosInstance.get(`/api/studies/main`);
   return data;
 };

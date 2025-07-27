@@ -2,11 +2,20 @@
 
 import Image from 'next/image';
 import studyDefault from '@/assets/images/study-default.svg';
+// import sunBunny from '@/assets/images/sun-bunny.svg';
 import { Calendar, Crown, UsersRound } from 'lucide-react';
-import { ApplicationList } from '@/types/my';
 import { formatDate } from '@/utils/formatDate';
+import { MyApplicationListType } from '@/types/my';
+import { useRouter } from 'next/navigation';
+
+const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
+  ONLINE: '온라인',
+  OFFLINE: '오프라인',
+  HYBRID: '병행',
+};
 
 export default function ApplyingStudyCard({
+  applicationId,
   name,
   leaderNickname,
   capacity,
@@ -16,11 +25,15 @@ export default function ApplyingStudyCard({
   introduction,
   category,
   studyType,
+  isRead,
   status,
-  read,
-}: ApplicationList['applications'][0]) {
+}: MyApplicationListType['applications'][0]) {
+  const router = useRouter();
   return (
-    <div className='flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'>
+    <div
+      className='flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
+      onClick={() => router.push(`/recruitment/detail/${applicationId}`)}
+    >
       <div className='tm3 text-text1 truncate'>{name}</div>
       <div className='flex justify-between mt-5'>
         <div className='flex flex-col gap-[10px]'>
@@ -57,7 +70,8 @@ export default function ApplyingStudyCard({
         </div>
         <div className='tag-type1'>
           <span className='tb5'>
-            {studyType === 'ONLINE' ? '온라인' : '오프라인'}
+            {/* {studyType === 'ONLINE' ? '온라인' : '오프라인'} */}
+            {studyTypeMap[studyType]}
           </span>
         </div>
       </div>
@@ -68,19 +82,19 @@ export default function ApplyingStudyCard({
       </div>
       <div className='flex justify-between items-center mt-[18px]'>
         <div className='tag-type5 px-3 py-[11px]'>
-          {read ? '프로필 열람 완료' : '프로필 미열람'}
+          {isRead ? '신청내역 열람 완료' : '신청내역 미열람'}
         </div>
-        {status === 'PENDING' && (
+        {status === 'APPLYING' && (
           <div className='tag-type4 red py-3'>
             <span className='tb5'>미완료</span>
           </div>
         )}
-        {status === 'ACCEPT' && (
+        {status === 'APPROVED' && (
           <div className='tag-type4 blue py-3'>
             <span className='tb5'>승인</span>
           </div>
         )}
-        {status === 'DENY' && (
+        {status === 'REJECTED' && (
           <div className='tag-type4 py-3'>
             <span className='tb5'>거절</span>
           </div>
