@@ -1,0 +1,141 @@
+.attendance .fc .fc-toolbar-title {
+  font-size: 16px;
+}
+.attendance .fc .fc-button-primary {
+  background-color: #fff;
+  color: #111;
+  border: 0;
+}
+
+.attendance .fc .fc-button-primary:not(:disabled).fc-button-active:focus,
+.fc .fc-button-primary:not(:disabled):active:focus {
+  box-shadow: none;
+}
+
+.attendance .fc .fc-button-primary:not(:disabled).fc-button-active:focus,
+.fc .fc-button-primary:not(:disabled):active:focus {
+  box-shadow: none;
+}
+
+.attendance .fc .fc-button-primary:focus {
+  box-shadow: none;
+}
+
+.attendance .fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+  background-color: #fff;
+  border-color: #fff;
+  color: #111;
+}
+
+.attendance .fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):hover {
+  background-color: var(--fc-button-active-bg-color);
+  border-color: var(--fc-button-active-border-color);
+  color: var(--fc-button-text-color);
+}
+.attendance .fc .fc-col-header-cell-cushion {
+  font-size: 14px;
+}
+.attendance .fc-day.fc-daygrid-day {
+  width: 64px;
+  height: 64px;
+  padding: 10px;
+}
+.attendance .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  display: grid;
+  grid-row: 1;
+  border-radius: 50%;
+  background-color: #dbdbdb;
+}
+.attendance .fc-col-header-cell.fc-day {
+  color: #b7b7b7;
+  font-weight: 400;
+}
+.attendance .fc-col-header-cell.fc-day.fc-day-fri.fc-day-today {
+  color: #111;
+}
+.attendance .fc .fc-daygrid-day.fc-day-today {
+  background-color: transparent;
+  padding: 4px;
+}
+.attendance
+  .fc
+  .fc-daygrid-day.fc-day-today
+  .fc-daygrid-day-frame.fc-scrollgrid-sync-inner {
+  background-color: #fff;
+  border: 1px solid #b7b7b7;
+}
+
+.attendance .fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0;
+  max-height: 100%;
+}
+
+.attendance .fc-daygrid-day-events {
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+}
+
+.attendance .fc-event.fc-daygrid-event.fc-daygrid-block-event.fc-h-event {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 0px;
+  background: url(../../assets/images/circle-check.svg) center / cover !important;
+  border: 0;
+  border-radius: 50%;
+  box-sizing: border-box;
+  opacity: 0.7;
+}
+/* .attendance .fc-event-title {
+  color: #00c471 !important;
+} */
+.attendance .fc-event-main {
+  display: none;
+}
+.attendance .fc-daygrid-day-bg {
+  display: none;
+}
+.attendance .fc-daygrid-day-events::after,
+.attendance .fc-daygrid-day-events::before,
+.attendance .fc-daygrid-day-frame::after,
+.attendance .fc-daygrid-day-frame::before,
+.attendance .fc-daygrid-event-harness::after,
+.attendance .fc-daygrid-event-harness::before {
+  display: none;
+}
+.attendance .fc-daygrid-day-events * {
+  margin: 0;
+}
+.attendance .fc-direction-ltr .fc-daygrid-event.fc-event-end,
+.fc-direction-rtl .fc-daygrid-event.fc-event-start {
+  margin: 0;
+}
+
+.attendance .fc .fc-daygrid-event-harness {
+  position: static;
+}
+.attendance .fc-theme-standard .fc-scrollgrid {
+  border: 0;
+}
+.attendance .fc-theme-standard td,
+.attendance .fc-theme-standard th {
+  border: 0;
+}
+
+.attendance .fc .fc-day-disabled {
+  background: transparent;
+  opacity: 0.5;
+  transform: scale(0.4);
+}
+.attendance .fc .fc-button:disabled {
+  opacity: 0.2;
+}
