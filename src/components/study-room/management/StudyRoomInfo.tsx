@@ -13,9 +13,11 @@ import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 export default function StudyRoomInfo({
   studyInfoData,
   studyId,
+  handleUpdate,
 }: {
   studyInfoData: StudyInfoType;
   studyId: number;
+  handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
   const [infoModal, setInfoModal] = useState(false);
   const infoModalOpen = () => {
@@ -87,6 +89,7 @@ export default function StudyRoomInfo({
           studyId={studyId}
           studyInfoData={studyInfoData}
           closeFn={infoModalClose}
+          handleUpdate={handleUpdate}
         />
       )}
     </>

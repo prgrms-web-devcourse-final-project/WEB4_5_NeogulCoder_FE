@@ -16,10 +16,12 @@ export default function StudyRoomInfoWrite({
   studyInfoData,
   studyId,
   closeFn,
+  handleUpdate,
 }: {
   studyInfoData: StudyInfoType;
   studyId: number;
   closeFn: () => void;
+  handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
   const updateStudyInfo = useStudyStore().updateStudyInfo;
   const updateStudies = useStudiesStore().updateStudy;
@@ -143,6 +145,11 @@ export default function StudyRoomInfoWrite({
           category: request.category,
           capacity: request.capacity,
           startDate: formattedStartDate,
+        });
+
+        handleUpdate({
+          ...request,
+          imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
         });
 
         closeFn(); // 모달 닫기
