@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
       new URL('https://dummyimage.com/**'),
       new URL('http://localhost:8083/**'),
       new URL('https://wibby.com/profile/**'),
+      new URL('https://storage.googleapis.com/neogulcoder-wibby/**'),
+      new URL('https://example.com/**'),
     ],
   },
 };

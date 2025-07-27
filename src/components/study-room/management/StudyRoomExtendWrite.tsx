@@ -1,10 +1,59 @@
+import { postStudyExtend } from '@/lib/api/study.api';
+import { useStudiesStore } from '@/stores/useStudiesStore';
+import dayjs from 'dayjs';
 import { CalendarDays, X } from 'lucide-react';
+import { useState, useTransition } from 'react';
 
 export default function StudyRoomExtendWrite({
   closeFn,
+  handleExtend,
+  endDate,
+  studyId,
 }: {
   closeFn: () => void;
+  handleExtend: () => void;
+  endDate: string;
+  studyId: number;
 }) {
+  const [extendDate, setExtendDate] = useState('');
+  const [isPending, startTransition] = useTransition();
+  const study = useStudiesStore().studies.find((f) => f.studyId === studyId);
+  const addStudies = useStudiesStore().addStudy;
+
+  const hadleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    startTransition(async () => {
+      try {
+        const { data } = await postStudyExtend(studyId, extendDate);
+        handleExtend();
+        if (study)
+          addStudies({
+            studyId: data,
+            name: study?.name,
+            leaderNickname: study?.leaderNickname,
+            capacity: study?.capacity,
+            currentCount: study?.currentCount,
+            startDate: dayjs(endDate)
+              .add(1, 'day')
+              .format('YYYY-MM-DDTHH:mm:ss'),
+            endDate: extendDate,
+            imageUrl: study?.imageUrl,
+            introduction: study?.introduction,
+            category: study?.category,
+            studyType: study?.studyType,
+            finished: false,
+          });
+        closeFn(); // 모달 닫기
+      } catch (error) {
+        console.error('스터디 연장에 실패했습니다', error);
+      }
+    });
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value) return;
+    const date = dayjs(e.target.value).endOf('day');
+    setExtendDate(dayjs(date).format('YYYY-MM-DDTHH:mm:ss'));
+  };
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
@@ -28,17 +77,26 @@ export default function StudyRoomExtendWrite({
                       <input
                         type='date'
                         className='w-[300px] date-custom input-type2 tm3 pr-9!'
+                        min={dayjs(endDate).add(1, 'day').format('YYYY-MM-DD')}
+                        onChange={handleChange}
                       />
                       <CalendarDays
                         strokeWidth={1}
-                        className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2'
+                        values={extendDate}
+                        className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2 -z-1'
                       />
                     </label>
                   </div>
                 </div>
               </div>
               <div className='px-9'>
-                <button className='button-modal1'>연장하기</button>
+                <button
+                  className='button-modal1'
+                  onClick={hadleSubmit}
+                  disabled={isPending}
+                >
+                  연장하기
+                </button>
               </div>
             </form>
           </div>

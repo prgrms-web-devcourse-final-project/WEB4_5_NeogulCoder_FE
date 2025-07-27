@@ -5,17 +5,29 @@ import CalendarBigDetail from './CalendarBigDetail';
 import CalendarWrite from './CalendarWrite';
 import { ChevronDown } from 'lucide-react';
 import { getStudyEvents, getUserEvents } from '@/lib/api/calendar.api';
+import { UserInfo } from '@/stores/userStore';
+import CalendarBigSkeleton from './Skeleton/CalendarBigSkeleton';
+import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
+import { useStudyStore } from '@/stores/studyInfoStore';
+
+export type ScheduleInputType = {
+  title: string;
+  description: string;
+  startTime: string;
+  endTime: string;
+};
 
 export default function CalendarBigShell({
   type,
-  defaultEvents,
+  user,
   categories,
 }: {
   type: string;
-  defaultEvents: StudyScheduleType[];
+  user: UserInfo;
   categories: { name: string; id: number }[];
 }) {
-  const first = useRef(false);
+  const studyIsProgress = useStudyStore().isProgress;
+  const selectRef = useRef<HTMLDivElement>(null);
   // 날짜별 상세 팝업
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailDate, setDetailDate] = useState(''); // 상세 날짜
@@ -36,39 +48,78 @@ export default function CalendarBigShell({
     setWriteOpen(false);
   };
 
-  // 카테고리 등록 팝업
+  // 카테고리
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const [colorNumber, setColorNumber] = useState(0);
 
-  const [events, setEvent] = useState<StudyScheduleType[]>(defaultEvents);
-  console.log(events);
-  // 카테고리가 변경 되면 각 카테고리에 맞는 api일정을 가져오도록.. api 개발이 덜 돼서 막아놓음
-  // useEffect(() => {
-  //   if (!first.current) {
-  //     first.current = true;
-  //     return;
-  //   }
-  //   if (type !== 'my') return;
-  //   const fetchEvents = async () => {
-  //     if (selectedCategory.name === '내 일정') {
-  //       const { data }: { data: UserScheduleType[] } = await getUserEvents(
-  //         selectedCategory.id
-  //       );
-  //       // userId -> writerId
-  //       const updatedEvents = data.map(({ userId, ...rest }) => ({
-  //         ...rest,
-  //         writerId: userId,
-  //       }));
-  //       setEvent(updatedEvents);
-  //     } else {
-  //       const { data } = await getStudyEvents(selectedCategory.id);
-  //       setEvent(data);
-  //     }
-  //   };
+  const [events, setEvents] = useState<UnionScheduleType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  //   fetchEvents();
-  // }, [selectedCategory, type]);
+  // 카테고리가 변경 되면 각 카테고리에 맞는 api일정을 가져오도록..
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setIsLoading(true);
+      let data;
+      try {
+        if (selectedCategory.name === '내 일정') {
+          const { data: result } = await getUserEvents(selectedCategory.id);
+          data = result;
+        } else {
+          const { data: result } = await getStudyEvents(selectedCategory.id);
+          data = result;
+        }
+        setEvents(calendarFormattingResult(data));
+      } catch (error) {
+        console.error('일정을 불러오지 못했습니다.', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, [selectedCategory, type]);
+
+  // 일정등록
+  const handleEventAdd = (schedulerId: number, newData: ScheduleInputType) => {
+    const newDataFormatting = {
+      ...newData,
+      writerId: user.id,
+      writerNickname: user.nickname,
+      writerProfileImageUrl: user.profileImageUrl,
+      scheduleId: schedulerId,
+    };
+    setEvents((prev) => [...prev, newDataFormatting]);
+  };
+
+  // 일정수정
+  const handleEventUpdate = (
+    scheduleId: number,
+    newData: ScheduleInputType
+  ) => {
+    setEvents((prev) =>
+      prev.map((item) =>
+        item.scheduleId === scheduleId ? { ...item, ...newData } : item
+      )
+    );
+  };
+
+  // 일정삭제
+  const handleEventDelete = (scheduleId: number) => {
+    setEvents((prev) => prev.filter((f) => f.scheduleId !== scheduleId));
+  };
+
+  // 카테고리 외부 클릭시 닫힘
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
+        setIsCategoryOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // 캘린더 컬러값
   const colors = [
@@ -120,7 +171,10 @@ export default function CalendarBigShell({
                 <ChevronDown className='w-5 h-5 ml-3' />
               </button>
               {isCategoryOpen && (
-                <div className='absolute w-[132px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3 z-10'>
+                <div
+                  ref={selectRef}
+                  className='absolute w-[132px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3 z-10'
+                >
                   <div className='flex flex-col'>
                     {categories?.map((category, i) => (
                       <button
@@ -142,12 +196,18 @@ export default function CalendarBigShell({
             </div>
           </div>
         )}
-
-        <button onClick={writeOpenHandler} className='button-sm-type1 ml-auto'>
-          일정등록
-        </button>
+        {studyIsProgress && (
+          <button
+            onClick={writeOpenHandler}
+            className='button-sm-type1 ml-auto'
+          >
+            일정등록
+          </button>
+        )}
       </div>
-      {type === 'my' ? (
+      {isLoading ? (
+        <CalendarBigSkeleton />
+      ) : type === 'my' ? (
         <CalendarBig
           openDetailHandler={openDetailHandler}
           events={events}
@@ -165,8 +225,10 @@ export default function CalendarBigShell({
               : 'study'
           } // 개인일정, 스터디 일정 api가 다르기 때문에 어떤 카테고리인지 분류해야 하기때문에 type으로 전달
           closeDetailHandler={closeDetailHandler}
+          handleEventDelete={handleEventDelete}
+          handleEventUpdate={handleEventUpdate}
           date={detailDate}
-          studyId={type === 'my' ? selectedCategory.id : categories[0].id} //마이페이지 캘린더면 선택된 카테고리의 id값, 스터디 캘린더면 카테고리 첫번째 id 값
+          categoryId={type === 'my' ? selectedCategory.id : categories[0].id} //마이페이지 캘린더면 선택된 카테고리의 id값, 스터디 캘린더면 카테고리 첫번째 id 값
         />
       )}
       {writeOpen && categories && (
@@ -176,8 +238,9 @@ export default function CalendarBigShell({
               ? 'personal'
               : 'study'
           } // 개인일정, 스터디 일정 api가 다르기 때문에 어떤 카테고리인지 분류해야 하기때문에 type으로 전달
-          studyId={type === 'my' ? selectedCategory.id : categories[0].id} //마이페이지 캘린더면 선택된 카테고리의 id값, 스터디 캘린더면 카테고리 첫번째 id 값
+          categoryId={type === 'my' ? selectedCategory.id : categories[0].id} //마이페이지 캘린더면 선택된 카테고리의 id값, 스터디 캘린더면 카테고리 첫번째 id 값
           writeCloseHandler={writeCloseHandler}
+          handleEventAdd={handleEventAdd}
         />
       )}
     </>
