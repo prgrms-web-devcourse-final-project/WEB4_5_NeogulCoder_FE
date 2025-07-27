@@ -9,15 +9,18 @@ interface StudyStore {
   study: StudyInfoType | null;
   isProgress: boolean;
   isLoading: boolean;
+  leader: boolean;
   setStudyInfo: (info: StudyInfoType) => void;
   updateStudyInfo: (info: StudyHeaderType) => void;
   setLoading: (isLoading: boolean) => void;
+  setLeader: (leader: boolean) => void;
 }
 
 export const useStudyStore = create<StudyStore>((set, get) => ({
   study: null,
   isLoading: true,
   isProgress: false,
+  leader: false,
   setStudyInfo: (info: StudyInfoType) => {
     const today = dayjs();
     const start = dayjs(info.startDate);
@@ -38,4 +41,5 @@ export const useStudyStore = create<StudyStore>((set, get) => ({
     });
   },
   setLoading: (isLoading: boolean) => set({ isLoading: isLoading }),
+  setLeader: (leader: boolean) => set({ leader: leader }),
 }));

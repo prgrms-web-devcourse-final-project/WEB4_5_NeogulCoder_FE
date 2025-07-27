@@ -6,6 +6,8 @@ import { Crown } from 'lucide-react';
 import Image from 'next/image';
 import { useTransition } from 'react';
 import musicBunny from '@/assets/images/music-bunny.svg';
+import { useRouter } from 'next/navigation';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 export default function MemberCard({
   member,
@@ -14,12 +16,16 @@ export default function MemberCard({
   member: StudyMemberType;
   studyId: number;
 }) {
+  const router = useRouter();
   const authId = userAuthStore().user?.id;
+  const setLeader = useStudyStore().setLeader;
   const [isPending, startTransition] = useTransition();
   const handleDelegate = (newLeaderId: number) => {
     startTransition(async () => {
       try {
         await postDelegate(studyId, newLeaderId);
+        setLeader(false);
+        router.push(`/study/${studyId}/dashboard`);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const message =
@@ -60,12 +66,6 @@ export default function MemberCard({
               disabled={isPending}
             >
               스터디장 위임
-            </button>
-            <button
-              disabled={isPending}
-              className='inline-flex items-center justify-center t5 px-1.5 py-1 text-red border border-red rounded-md'
-            >
-              강퇴
             </button>
           </div>
         )}
