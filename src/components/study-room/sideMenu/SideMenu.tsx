@@ -3,8 +3,7 @@
 import { useRouter } from 'next/navigation';
 import SideMenuItem from './SideMenuItem';
 import SideStudyInfo from './SideStudyInfo';
-import { useEffect, useMemo, useState } from 'react';
-import { userAuthStore } from '@/stores/userStore';
+import { useMemo } from 'react';
 import SideMenuSkeleton from './SideMenuSkeleton';
 import { useStudyStore } from '@/stores/studyInfoStore';
 
@@ -14,13 +13,18 @@ type rawMenuItemsType = {
   onlyLeader?: boolean;
 };
 
-export default function SideMenu({ studyId }: { studyId: number }) {
-  const user = userAuthStore().user;
+export default function SideMenu({
+  studyId,
+  my,
+}: {
+  studyId: number;
+  my?: StudyMyDataType;
+}) {
   // 사이트메뉴의 스터디 정보 관리를 위한 전역상태
   const studyInfo = useStudyStore().study;
   const isLoading = useStudyStore().isLoading;
   const router = useRouter();
-  const [leader, setLeader] = useState(false);
+  const leader = my?.role === 'LEADER';
 
   // 가지고 있는 사이드 메뉴
   const menuItems = useMemo(() => {
@@ -39,17 +43,6 @@ export default function SideMenu({ studyId }: { studyId: number }) {
     return rawMenuItems.filter((item) => !item.onlyLeader || leader);
   }, [leader, studyId]);
 
-  useEffect(() => {
-    if (!user?.id) return;
-    if (studyInfo) {
-      const me = studyInfo.members.find(
-        (member: StudyMemberType) => member.userId === user.id
-      );
-      setLeader(me?.role === 'LEADER');
-    }
-  }, [studyId, user, studyInfo]);
-
-  // 추후에 실제 study/1 을 실제 study/id로 수정해주세요!
   return (
     <>
       <div>
@@ -65,13 +58,12 @@ export default function SideMenu({ studyId }: { studyId: number }) {
             >
               스터디의 My 정보
             </button>
-            {leader && (
-              <div className='flex flex-col gap-[30px] mt-[35px]'>
-                {menuItems.map((item) => (
-                  <SideMenuItem key={item.to} name={item.name} to={item.to} />
-                ))}
-              </div>
-            )}
+
+            <div className='flex flex-col gap-[30px] mt-[35px]'>
+              {menuItems.map((item) => (
+                <SideMenuItem key={item.to} name={item.name} to={item.to} />
+              ))}
+            </div>
           </>
         )}
       </div>

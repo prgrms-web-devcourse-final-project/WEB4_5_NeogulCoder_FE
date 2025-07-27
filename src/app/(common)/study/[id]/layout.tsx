@@ -1,12 +1,12 @@
 'use client';
 
 import SideMenu from '@/components/study-room/sideMenu/SideMenu';
-import { getStudyInfoData } from '@/lib/api/study.api';
+import { getStudyHeaderData, getStudyMeData } from '@/lib/api/study.api';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -16,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const setStudyInfo = useStudyStore().setStudyInfo;
   const setStudyLoading = useStudyStore().setLoading;
   const user = userAuthStore().user;
+  const [my, setMy] = useState<StudyMyDataType>();
 
   useEffect(() => {
     if (!user) return;
@@ -23,8 +24,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const fetchStudyInfo = async () => {
       setStudyLoading(true);
       try {
-        const { data } = await getStudyInfoData(studyId);
-        setStudyInfo(data);
+        const { data: headerData } = await getStudyHeaderData(studyId);
+        setStudyInfo(headerData);
+
+        const { data: myData } = await getStudyMeData(studyId);
+        setMy(myData);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const message = error.response?.data?.message;
@@ -45,7 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className='flex'>
         <div className='w-[300px] mr-10 shrink-0'>
-          <SideMenu studyId={studyId} />
+          <SideMenu studyId={studyId} my={my} />
         </div>
         <div className='w-full'>{children}</div>
       </div>

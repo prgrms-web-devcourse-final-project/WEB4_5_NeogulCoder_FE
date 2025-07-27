@@ -1,14 +1,20 @@
 import { axiosInstance } from './axios';
 
-// 내 스터디 목록
+// 스터디 정보 목록
 export const getStudyInfoData = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/info`);
   return data;
 };
 
-// 특정 스터디 조회
+// 스터디 헤더 조회
 export const getStudyHeaderData = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/header`);
+  return data;
+};
+
+// 스터디의 내정보
+export const getStudyMeData = async (studyId: number) => {
+  const { data } = await axiosInstance.get(`/api/studies/${studyId}/me`);
   return data;
 };
 
