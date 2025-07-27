@@ -1,41 +1,69 @@
 'use client';
+import { postDelegate } from '@/lib/api/study.api';
+import { userAuthStore } from '@/stores/userStore';
+import axios from 'axios';
 import { Crown } from 'lucide-react';
 import Image from 'next/image';
+import { useTransition } from 'react';
+import musicBunny from '@/assets/images/music-bunny.svg';
 
 export default function MemberCard({
-  name,
-  image,
-  role,
+  member,
+  studyId,
 }: {
-  name: string;
-  image: string;
-  role: string;
+  member: StudyMemberType;
+  studyId: number;
 }) {
+  const authId = userAuthStore().user?.id;
+  const [isPending, startTransition] = useTransition();
+  const handleDelegate = (newLeaderId: number) => {
+    startTransition(async () => {
+      try {
+        await postDelegate(studyId, newLeaderId);
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          const message =
+            error.response?.data?.message ?? '알 수 없는 오류가 발생했습니다.';
+          alert(message);
+        }
+      }
+    });
+  };
+
+  if (!authId) return;
+
   return (
     <>
       <div className='w-full flex items-center justify-between border border-border1 rounded-[10px] px-4 py-3'>
         <div className='flex items-center gap-3'>
           <div className='w-10 h-10 overflow-hidden rounded-full border border-border1 shrink-0'>
             <Image
-              src={image}
+              src={member.profileImageUrl ?? musicBunny}
               width={40}
               height={0}
-              alt={`${name} 프로필 이미지`}
+              alt={`${member.nickname} 프로필 이미지`}
             />
           </div>
-          <div className='leading-none mt-1'>{name}</div>
+          <div className='leading-none mt-1'>{member.nickname}</div>
         </div>
-        {role === '팀장' ? (
+        {member.userId === authId ? (
           <div className=' flex items-center gap-2 t5 text-gray5'>
             나
             <Crown className='text-[#FBE175] w-5 h-5' />
           </div>
         ) : (
           <div className='flex gap-x-1.5 shrink-0'>
-            <button className='inline-flex items-center justify-center t5 px-1.5 py-1 text-gray1 border border-gray1 rounded-md'>
+            <button
+              className='inline-flex items-center justify-center t5 px-1.5 py-1 text-gray1 border border-gray1 rounded-md'
+              onClick={() => handleDelegate(member.userId)}
+              disabled={isPending}
+            >
               스터디장 위임
             </button>
-            <button className='inline-flex items-center justify-center t5 px-1.5 py-1 text-red border border-red rounded-md'>
+            <button
+              disabled={isPending}
+              className='inline-flex items-center justify-center t5 px-1.5 py-1 text-red border border-red rounded-md'
+            >
               강퇴
             </button>
           </div>

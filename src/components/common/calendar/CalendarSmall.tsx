@@ -8,57 +8,12 @@ import dayjs from 'dayjs';
 
 export default function CalendarSmall({
   handleClickDate,
+  calendarData,
 }: {
   handleClickDate: (date: string) => void;
+  calendarData: StudyScheduleType[];
 }) {
   const calendarRef = useRef(null);
-  // 더미데이터
-  const results = [
-    {
-      calendarId: 2001,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '14일 일정',
-      description: '기획 회의',
-      startTime: '2025-07-14T02:01:35.969Z',
-      endTime: '2025-07-14T02:01:35.969Z',
-    },
-    {
-      calendarId: 2002,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '24-25',
-      description: '기획 회의',
-      startTime: '2025-07-24T02:01:35.969Z',
-      endTime: '2025-07-25T18:01:35.969Z',
-    },
-    {
-      calendarId: 2003,
-      writerId: 12,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '기능개발',
-      description: '기획 회의',
-      startTime: '2025-07-17T02:01:35.969Z',
-      endTime: '2025-07-18T03:01:35.969Z',
-    },
-    {
-      calendarId: 2004,
-      writerId: 123,
-      writerNickname: '유강현',
-      writerProfileImageUrl: 'https://wibby.com/profile/유강현.jpg',
-      teamId: 101,
-      title: '달력 기능 개발',
-      description: '기획 회의',
-      startTime: '2025-07-18T02:01:35.969Z',
-      endTime: '2025-07-20T03:18:35.969Z',
-    },
-  ];
   // 캘린더 컬러팔렛트
   const colors = [
     '#CAF1FF',
@@ -91,7 +46,7 @@ export default function CalendarSmall({
     color: string;
   };
   // event에 들어갈 데이터
-  const userColors = results.reduce<UserColor[]>((acc, crr) => {
+  const userColors = calendarData.reduce<UserColor[]>((acc, crr) => {
     const x = acc.find((item) => item.id === crr.writerId);
     if (!x) {
       acc.push({ id: crr.writerId, color: colors[acc.length % colors.length] });
@@ -100,7 +55,7 @@ export default function CalendarSmall({
   }, []);
 
   // 달력 라이브러리에 넘겨줄 값으로 변경
-  const formating = results.map((result) => {
+  const formating = calendarData.map((result) => {
     const color = userColors.find((item) => item.id === result.writerId);
     const startDate = dayjs(result.startTime).format('YYYY-MM-DD');
     const endDate = dayjs(result.endTime).format('YYYY-MM-DD');
@@ -146,7 +101,6 @@ export default function CalendarSmall({
           }}
           events={formating}
           dateClick={(e) => handleClickDate(e.dateStr)}
-          eventClick={(e) => e.jsEvent.preventDefault()}
           expandRows={true}
           dayMaxEventRows={0}
           fixedWeekCount={false}

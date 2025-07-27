@@ -1,55 +1,42 @@
+'use client';
+import StudyDelete from '@/components/study-room/management/StudyDelete';
 import StudyExtend from '@/components/study-room/management/StudyExtend';
+import StudyMamagementSkeleton from '@/components/study-room/management/StudyMamagementSkeleton';
 import StudyMemberList from '@/components/study-room/management/StudyMemberList';
 import StudyRoomInfo from '@/components/study-room/management/StudyRoomInfo';
-import { getStudyInfoData } from '@/lib/api/study.api';
+import { useStudyStore } from '@/stores/studyInfoStore';
+import { useParams } from 'next/navigation';
 
-export default async function Management({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  // const { data: studyInfoData } = await getStudyInfoData(Number(id));
-  const studyInfoData: StudyInfoType = {
-    imageUrl: 'http://localhost:8083/image.jpg',
-    name: '자바 스터디',
-    category: 'IT',
-    capacity: 6,
-    studyType: 'OFFLINE',
-    location: '서울',
-    startDate: '2025-07-15',
-    endDate: '2025-07-28',
-    introduction: '자바 스터디입니다.',
-    members: [
-      {
-        userId: 1,
-        nickname: '너굴',
-        profileImageUrl: 'http://localhost:8083/image.jpg',
-      },
-      {
-        userId: 2,
-        nickname: '코더',
-        profileImageUrl: 'http://localhost:8083/image.jpg',
-      },
-      {
-        userId: 3,
-        nickname: '바보',
-        profileImageUrl: 'http://localhost:8083/image.jpg',
-      },
-    ],
-  };
-  const memberInfo: StudyMemberType[] = studyInfoData.members;
+export default function Management() {
+  const params = useParams();
+  const studyId = Number(params.id);
+  const studyInfo = useStudyStore().study;
+  const isLoading = useStudyStore().isLoading;
+
   return (
     <>
-      <div className='mb-24'>
-        <StudyRoomInfo studyInfoData={studyInfoData} />
-      </div>
-      <div className='mb-24'>
-        <StudyMemberList memberInfo={memberInfo} />
-      </div>
-      <div>
-        <StudyExtend />
-      </div>
+      {isLoading ? (
+        <StudyMamagementSkeleton />
+      ) : (
+        studyInfo && (
+          <>
+            <div className='mb-24'>
+              <StudyRoomInfo studyInfoData={studyInfo} studyId={studyId} />
+            </div>
+            <div className='mb-24'>
+              <StudyMemberList
+                memberInfo={studyInfo.members}
+                studyId={studyId}
+              />
+            </div>
+
+            <StudyExtend endDate={studyInfo.endDate} studyId={studyId} />
+
+            {/* 스터디에 팀장만 있을경우 스터디 삭제 할 수 있게 */}
+            {studyInfo.members.length <= 1 && <StudyDelete studyId={studyId} />}
+          </>
+        )
+      )}
     </>
   );
 }

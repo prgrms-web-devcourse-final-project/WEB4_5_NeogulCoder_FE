@@ -38,6 +38,9 @@
 button {
   cursor: pointer;
 }
+button:disabled {
+  cursor: default;
+}
 
 html,
 body {
@@ -111,6 +114,9 @@ body {
   }
   .button-type6:hover {
     @apply bg-[#f5f5f5] transition-colors duration-300;
+  }
+  .button-type6:disabled {
+    @apply bg-[#c9c9c9] border-[#c9c9c9] text-white transition-colors duration-300;
   }
 
   .button-type7 {
