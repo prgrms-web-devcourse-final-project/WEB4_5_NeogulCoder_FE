@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import CreateStudyModal from '../study/CreateStudyModal';
 import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
-import Modal from '@/components/common/modal';
+import Modal from '@/components/common/Modal';
 import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function SubHeader() {
