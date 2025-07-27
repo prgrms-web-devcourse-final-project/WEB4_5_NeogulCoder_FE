@@ -5,21 +5,31 @@ import { MessageSquareMore } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function RecruitmentCard({
+  studyId,
+  id,
+  recruitmentPostId,
   title,
+  subject,
   content,
   createdDate,
+  createAt,
   commentCount,
   category,
-  studyWay,
+  studyType,
   status,
   type,
 }: {
-  title: string;
+  studyId?: number;
+  id?: number;
+  recruitmentPostId?: number;
+  title?: string;
+  subject?: string;
   content: string;
-  createdDate: string;
+  createdDate?: string;
+  createAt?: string;
   commentCount: number;
   category?: string;
-  studyWay?: string;
+  studyType?: string;
   status?: string;
   type: string;
 }) {
@@ -28,16 +38,20 @@ export default function RecruitmentCard({
   return (
     <div
       className='flex flex-col justify-center w-full px-[24px] py-[24px] bg-white border-2 border-border1 rounded-[10px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
-      onClick={() => router.push('/recruitment/detail/1')}
+      onClick={() => {
+        if (type === 'my')
+          router.push(`/recruitment/detail/${recruitmentPostId}`);
+        else router.push(`/study/${studyId}/study-community/detail/${id}`);
+      }}
     >
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
-          {type === 'my' && status === '모집 중' && (
+          {type === 'my' && status === '모집중' && (
             <div className='tag-type2 green py-3'>
               <span className='tb5'>모집 중</span>
             </div>
           )}
-          {type === 'my' && status === '모집 완료' && (
+          {type === 'my' && status === '모집완료' && (
             <div className='tag-type2 py-3'>
               <span className='tb5 text-white'>모집 완료</span>
             </div>
@@ -52,10 +66,14 @@ export default function RecruitmentCard({
               <span className='tb5'>자유</span>
             </div>
           )}
-          <div className='tm3 text-text1 w-[460px] truncate'>{title}</div>
+          <div className='tm3 text-text1 w-[460px] truncate'>
+            {type === 'study' ? title : subject}
+          </div>
         </div>
         <div className='t4 text-text1 opacity-30'>
-          {formatDate(createdDate, 'YYYY.MM.DD')}
+          {type === 'study'
+            ? formatDate(createdDate!, 'YYYY.MM.DD')
+            : formatDate(createAt!, 'YYYY.MM.DD')}
         </div>
       </div>
       {type === 'my' && (
@@ -69,7 +87,7 @@ export default function RecruitmentCard({
                 <span className='tb5'>{category}</span>
               </div>
               <div className='tag-type1'>
-                <span className='tb5'>{studyWay}</span>
+                <span className='tb5'>{studyType}</span>
               </div>
             </div>
             <div className='flex justify-center items-center gap-[5px]'>

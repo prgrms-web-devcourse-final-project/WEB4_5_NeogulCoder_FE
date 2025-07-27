@@ -125,7 +125,12 @@ export default function StudyCommunityClient() {
             )}
             {studyCommunityList.length !== 0 &&
               studyCommunityList.map((post) => (
-                <RecruitmentCard key={post.id} type='study' {...post} />
+                <RecruitmentCard
+                  key={post.id}
+                  type='study'
+                  studyId={studyId}
+                  {...post}
+                />
               ))}
           </>
         )}

@@ -132,7 +132,12 @@ export default function MyStudyInfoClient({
         )}
         {myCommunityList.length !== 0 &&
           myCommunityList.map((post) => (
-            <RecruitmentCard key={post.id} type='study' {...post} />
+            <RecruitmentCard
+              key={post.id}
+              type='study'
+              studyId={studyId}
+              {...post}
+            />
           ))}
       </div>
       <div className='mt-[45px]'>
