@@ -27,7 +27,13 @@ export default function MannerStudyItem({
           isActive && 'border-2 border-main'
         }`}
       >
-        <Image src={imageUrl ? imageUrl : mannerDefault} alt='스터디 이미지' />
+        <div className='relative w-[40px] h-[40px]'>
+          <Image
+            src={imageUrl ? imageUrl : mannerDefault}
+            alt='스터디 이미지'
+            fill
+          />
+        </div>
       </div>
       {isHover && (
         <div className='absolute -top-3 right-4 translate-x-full -translate-y-1 px-3 py-1 tm5 text-text1 bg-white rounded-[6px] border border-border1 whitespace-nowrap pointer-events-none z-10'>
