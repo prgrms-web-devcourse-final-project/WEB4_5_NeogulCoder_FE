@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
       new URL('http://localhost:8083/**'),
       new URL('https://wibby.com/profile/**'),
       new URL('https://storage.googleapis.com/neogulcoder-wibby/**'),
+      new URL('https://placekitten.com/**'),
       new URL('https://example.com/**'),
     ],
   },
