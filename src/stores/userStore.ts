@@ -18,7 +18,7 @@ export interface UserStore {
 }
 
 export const userAuthStore = create<UserStore>((set) => ({
-  user: null, // 로그인 전 null
+  user: null,
 
   setUser: (user) => {
     // 로그인 하고 나서 저장

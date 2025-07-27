@@ -1,8 +1,13 @@
-import axios from 'axios';
+import { axiosInstance } from '../axios';
 
 export const fetchInfo = async (recruitmentPostId: number) => {
-  const res = await axios.get(
-    `https://wibby.cedartodo.uk/recruitment-posts/${recruitmentPostId}`
-  );
-  return res.data.data;
+  try {
+    const res = await axiosInstance.get(
+      `/recruitment-posts/${recruitmentPostId}`
+    );
+    return res.data.data;
+  } catch (error) {
+    console.error('fetchInfo error:', error);
+    throw error;
+  }
 };
