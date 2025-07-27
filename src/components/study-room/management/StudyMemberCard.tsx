@@ -42,6 +42,7 @@ export default function MemberCard({
               width={40}
               height={0}
               alt={`${member.nickname} 프로필 이미지`}
+              loading='lazy'
             />
           </div>
           <div className='leading-none mt-1'>{member.nickname}</div>

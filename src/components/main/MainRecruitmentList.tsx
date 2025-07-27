@@ -27,7 +27,7 @@ export default function MainRecruitmentList() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParams = useMemo(
-    () => Number(searchParams.get('page')) || 0,
+    () => Number(searchParams.get('page')) || 1,
     [searchParams]
   );
   const categoryParams = useMemo(
