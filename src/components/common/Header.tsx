@@ -21,7 +21,7 @@ export default function Header() {
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('login_status');
-    if (!user && isLoggedIn) {
+    if (user === undefined && isLoggedIn) {
       getUser()
         .then((res) => {
           const userData = res.data.data;
@@ -53,7 +53,7 @@ export default function Header() {
           priority
         />
         <div className='flex items-center gap-[18px]'>
-          {user ? (
+          {user === undefined ? null : user ? (
             <div className='flex items-center justify-center gap-4'>
               <div
                 className='relative'
@@ -105,7 +105,9 @@ export default function Header() {
               </div>
             </div>
           ) : (
-            <Link href='/auth/login'>로그인</Link>
+            <Link href='/auth/login' className='t4'>
+              로그인
+            </Link>
           )}
         </div>
       </div>
