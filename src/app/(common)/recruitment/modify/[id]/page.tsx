@@ -9,6 +9,7 @@ import { fetchInfo } from '@/lib/api/recruitment/fetchInfo';
 import { modifyRecruitmentPost } from '@/lib/api/recruitment/modify';
 import { formatDate } from '@/utils/formatIsoDate';
 import RemainSlotModal from '@/components/study/RemainSlot';
+import RecruitmentModifySkeleton from '@/components/recruitment/RecruitmentModifySkeleton';
 
 export default function Page() {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ export default function Page() {
   const [expiredDate, setExpiredDate] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const editorRef = useRef<ToastEditor>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const displayText =
     recruitmentCount === null
@@ -72,8 +74,14 @@ export default function Page() {
   }, [recruitmentPostId]);
 
   useEffect(() => {
-    if (!isNaN(recruitmentPostId)) {
-      fetchData();
+    try {
+      if (!isNaN(recruitmentPostId)) {
+        fetchData();
+      }
+    } catch (error) {
+      console.error('데이터 불러오기 실패:', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [recruitmentPostId, fetchData]);
 
@@ -110,159 +118,163 @@ export default function Page() {
 
   return (
     <>
-      <div className='w-[920px] mx-auto'>
-        <div className='flex items-center justify-between'>
-          <div className='flex justify-center items-center'>
-            <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
-              <span className='text-white tb2'>1</span>
-            </div>
-            <span className='tb2 mx-[25px] '>
-              스터디 기본 정보를 입력해주세요
-            </span>
-          </div>
-        </div>
-        <hr
-          className='h-0.5 my-10'
-          style={{ borderColor: 'var(--color-border2)' }}
-        />
-        <div className='flex space-x-10'>
-          <div className='flex flex-col w-[440px]  '>
-            <span className='tm-0 mb-2.5'>시작 날짜</span>
-            <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
-              <div>
-                <span>
-                  {startedDate ? formatDate(startedDate) : '연도-월-일'}
-                </span>
+      {isLoading ? (
+        <RecruitmentModifySkeleton />
+      ) : (
+        <div className='w-[920px] mx-auto'>
+          <div className='flex items-center justify-between'>
+            <div className='flex justify-center items-center'>
+              <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
+                <span className='text-white tb2'>1</span>
               </div>
-              <div>
-                <Calendar className='w-4 h-4' />
-              </div>
+              <span className='tb2 mx-[25px] '>
+                스터디 기본 정보를 입력해주세요
+              </span>
             </div>
           </div>
-          <div className='flex flex-col w-[440px]  '>
-            <span className='tm-0 mb-2.5'>종료 날짜</span>
-            <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
-              <div>
-                <span>{endDate ? formatDate(endDate) : '연도-월-일'}</span>
-              </div>
-              <div>
-                <Calendar className='w-4 h-4' />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='flex space-x-10'>
-          <div className='flex flex-col w-[440px] mb-10'>
-            <span className='tm-0 mb-2.5'>모집 인원</span>
-            <div className='relative inline-block w-[440px]'>
-              <button
-                type='button'
-                style={{ borderColor: 'var(--color-border3)' }}
-                className={`w-full h-[60px] rounded-[10px] flex items-center justify-between p-3 border mb-6 text-left ${
-                  recruitmentCount !== null ? 'text-black' : 'text-gray-400'
-                }`}
-                onClick={() => setIsOpen((prev) => !prev)}
-              >
-                <span>{displayText}</span>
-                <ChevronDown className='w-4 h-4' />
-              </button>
-
-              {isOpen && (
-                <div className='absolute top-[60px] left-0 z-10'>
-                  <RemainSlotModal
-                    onSelect={(value) => {
-                      setRecruitmentCount(value);
-                      setIsOpen(false);
-                    }}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-          <div className='flex flex-col w-[440px] mb-10'>
-            <span className='tm-0 mb-2.5'>카테고리</span>
-            <div className='relative inline-block w-[440px] '>
-              <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                {category ? categoryDisplayNames[category] : '카테고리'}
-              </div>
-
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className='flex space-x-10 '>
-          <div className='flex flex-col w-[440px] mb-10'>
-            <span className='tm-0 mb-2.5'>진행 방식</span>
-            <div className='relative inline-block w-[440px] '>
-              <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                {studyType ? StudyTypeDisplayNames[studyType] : '카테고리'}
-              </div>
-
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
-              </div>
-            </div>
-          </div>
-          <div className='flex flex-col w-[440px] mb-10'>
-            <span className='tm-0 mb-2.5'>지역</span>
-            <div className='relative inline-block w-[440px] '>
-              <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                <span>{location ? location : '지역'}</span>
-              </div>
-
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className='flex flex-col w-[440px]'>
-          <span className='tm-0 mb-2.5'>모집 마감일</span>
-          <input
-            type='date'
-            className='border-[1px] h-15 rounded-[10px] p-5 mb-10'
-            style={{ borderColor: 'var(--color-border3)' }}
-            value={formatDate(expiredDate)}
-            onChange={(e) => setExpiredDate(e.target.value)}
-            min={new Date().toISOString().split('T')[0]} // 선택 가능한 최소 날짜를 오늘로 지정
+          <hr
+            className='h-0.5 my-10'
+            style={{ borderColor: 'var(--color-border2)' }}
           />
-        </div>
-        <div className='flex items-center  mt-10'>
-          <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
-            <span className='text-white tb2'>2</span>
+          <div className='flex space-x-10'>
+            <div className='flex flex-col w-[440px]  '>
+              <span className='tm-0 mb-2.5'>시작 날짜</span>
+              <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
+                <div>
+                  <span>
+                    {startedDate ? formatDate(startedDate) : '연도-월-일'}
+                  </span>
+                </div>
+                <div>
+                  <Calendar className='w-4 h-4' />
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-col w-[440px]  '>
+              <span className='tm-0 mb-2.5'>종료 날짜</span>
+              <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
+                <div>
+                  <span>{endDate ? formatDate(endDate) : '연도-월-일'}</span>
+                </div>
+                <div>
+                  <Calendar className='w-4 h-4' />
+                </div>
+              </div>
+            </div>
           </div>
-          <span className='tb2 mx-[25px]'>스터디에 대해 소개해주세요</span>
-        </div>
-        <hr
-          className='h-0.5 my-10'
-          style={{ borderColor: 'var(--color-border2)' }}
-        />
-        <input
-          className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10'
-          style={{ borderColor: 'var(--color-border3)' }}
-          placeholder='제목을 입력해주세요'
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-        />
+          <div className='flex space-x-10'>
+            <div className='flex flex-col w-[440px] mb-10'>
+              <span className='tm-0 mb-2.5'>모집 인원</span>
+              <div className='relative inline-block w-[440px]'>
+                <button
+                  type='button'
+                  style={{ borderColor: 'var(--color-border3)' }}
+                  className={`w-full h-[60px] rounded-[10px] flex items-center justify-between p-5 border mb-6 text-left ${
+                    recruitmentCount !== null ? 'text-black' : 'text-gray-400'
+                  }`}
+                  onClick={() => setIsOpen((prev) => !prev)}
+                >
+                  <span>{displayText}</span>
+                  <ChevronDown className='w-4 h-4' />
+                </button>
 
-        <div className='mb-10'>
-          <ClientEditorWrapper editorRef={editorRef} content={content} />
+                {isOpen && (
+                  <div className='absolute top-[60px] left-0 z-10'>
+                    <RemainSlotModal
+                      onSelect={(value) => {
+                        setRecruitmentCount(value);
+                        setIsOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className='flex flex-col w-[440px] mb-10'>
+              <span className='tm-0 mb-2.5'>카테고리</span>
+              <div className='relative inline-block w-[440px] '>
+                <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
+                  {category ? categoryDisplayNames[category] : '카테고리'}
+                </div>
+
+                <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
+                  <ChevronDown />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className='flex space-x-10 '>
+            <div className='flex flex-col w-[440px] mb-10'>
+              <span className='tm-0 mb-2.5'>진행 방식</span>
+              <div className='relative inline-block w-[440px] '>
+                <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
+                  {studyType ? StudyTypeDisplayNames[studyType] : '카테고리'}
+                </div>
+
+                <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
+                  <ChevronDown />
+                </div>
+              </div>
+            </div>
+            <div className='flex flex-col w-[440px] mb-10'>
+              <span className='tm-0 mb-2.5'>지역</span>
+              <div className='relative inline-block w-[440px] '>
+                <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
+                  <span>{location ? location : '지역'}</span>
+                </div>
+
+                <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
+                  <ChevronDown />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className='flex flex-col w-[440px]'>
+            <span className='tm-0 mb-2.5'>모집 마감일</span>
+            <input
+              type='date'
+              className='border-[1px] h-15 rounded-[10px] p-5 mb-10'
+              style={{ borderColor: 'var(--color-border3)' }}
+              value={formatDate(expiredDate)}
+              onChange={(e) => setExpiredDate(e.target.value)}
+              min={new Date().toISOString().split('T')[0]} // 선택 가능한 최소 날짜를 오늘로 지정
+            />
+          </div>
+          <div className='flex items-center  mt-10'>
+            <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
+              <span className='text-white tb2'>2</span>
+            </div>
+            <span className='tb2 mx-[25px]'>스터디에 대해 소개해주세요</span>
+          </div>
+          <hr
+            className='h-0.5 my-10'
+            style={{ borderColor: 'var(--color-border2)' }}
+          />
+          <input
+            className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10'
+            style={{ borderColor: 'var(--color-border3)' }}
+            placeholder='제목을 입력해주세요'
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          />
+
+          <div className='mb-10'>
+            <ClientEditorWrapper editorRef={editorRef} content={content} />
+          </div>
+          <div className='flex justify-end'>
+            <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+              취소
+            </button>
+            <button
+              className='button-type5 hover:bg-[#292929]'
+              onClick={handleSubmit}
+            >
+              수정
+            </button>
+          </div>
         </div>
-        <div className='flex justify-end'>
-          <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
-            취소
-          </button>
-          <button
-            className='button-type5 hover:bg-[#292929]'
-            onClick={handleSubmit}
-          >
-            수정
-          </button>
-        </div>
-      </div>
+      )}
     </>
   );
 }

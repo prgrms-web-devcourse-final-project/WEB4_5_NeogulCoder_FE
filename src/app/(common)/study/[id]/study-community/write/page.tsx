@@ -57,31 +57,11 @@ export default function Page() {
 
   return (
     <>
-      {/* <div className='relative inline-block w-[320px] mb-6'>
-        <select
-          className='w-full h-[60px] border-[1px] rounded-[10px] pl-4 pr-10 appearance-none'
-          style={{ borderColor: 'var(--color-border3)' }}
-          name='selectedStudy'
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value='' disabled hidden>
-            게시글 유형을 선택해 주세요
-          </option>
-          <option value='NOTICE'>공지</option>
-          <option value='FREE'>자유</option>
-        </select>
-
-        <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-          <ChevronDown />
-        </div>
-      </div> */}
-
       <div className='relative '>
         <button
           type='button'
           style={{ borderColor: 'var(--color-border3)' }}
-          className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-3 border mb-6  ${
+          className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border mb-6  ${
             isSelectedCategory
               ? 'border-main text-text1 tm4'
               : 'border-main/10 text-text1/50 tm4'
@@ -89,13 +69,13 @@ export default function Page() {
           onClick={() => setIsCategoryOpen((prev) => !prev)}
         >
           <p className={`mr-1 ${!category ? 'text-gray-400' : 'text-black'}`}>
-            {category ? category : '카테고리를 선택해 주세요'}
+            {category ? category : '게시글 유형을 선택해 주세요'}
           </p>
           <ChevronDown className='w-4 h-4' />
         </button>
 
         {isCategoryOpen && (
-          <div className='absolute top-10 left-0 z-10'>
+          <div className='absolute top-15 left-0 z-10'>
             <CategoryStudyModal2
               onSelect={(category: string) => {
                 setCategory(category);
@@ -107,7 +87,7 @@ export default function Page() {
       </div>
 
       <input
-        className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10'
+        className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10 tm4  placeholder-gray-400'
         style={{ borderColor: 'var(--color-border3)' }}
         placeholder='제목을 입력해주세요'
         value={title}

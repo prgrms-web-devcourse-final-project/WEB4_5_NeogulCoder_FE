@@ -10,7 +10,11 @@ import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import OnlineModal from '../common/OnlineModal';
 import RegionModal from '../common/RegionModal';
 
-export default function CreateStudyModal() {
+type CreateStudyModalProps = {
+  onClose: () => void;
+};
+
+export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
   // const [personCount, setPersonCount] = useState<number | ''>('');
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
@@ -58,6 +62,7 @@ export default function CreateStudyModal() {
     try {
       const data = await createStudy(formData);
       console.log('생성 완료', data);
+      onClose();
     } catch (error) {
       console.error('응답 에러:', error);
     }
@@ -113,12 +118,12 @@ export default function CreateStudyModal() {
 
         <div className='flex flex-col w-full max-w-[650px] min-w-[580px]'>
           <div>
-            <span className='t3 mb-2.5'>이름 </span>
+            <span className='t3 mb-2.5'>스터디명 </span>
             <span className='tm5 text-red'>(필수)</span>
           </div>
           <input
             className='w-full input-type2 mt-3'
-            placeholder='이름을 입력해 주세요'
+            placeholder='스터디명을 입력해 주세요'
             style={{ borderColor: 'var(--color-border3)' }}
             value={name}
             onChange={(e) => setName(e.target.value)}

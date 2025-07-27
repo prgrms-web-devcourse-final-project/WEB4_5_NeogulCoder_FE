@@ -14,6 +14,7 @@ import { formatDate } from '@/utils/formatDate';
 import ToastViewer from '@/components/common/ToastViewer';
 import Image from 'next/image';
 import basicBunny from '@/assets/images/basic-bunny.svg';
+import StudyPostDetailSkeleton from '@/components/study/StudyPostDetailSkeleton';
 
 export default function Page() {
   const pathname = usePathname();
@@ -31,6 +32,7 @@ export default function Page() {
   const [imageUrl, setImageUrl] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState<CommentType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   type CommentType = {
     commentId: number;
@@ -79,108 +81,118 @@ export default function Page() {
   }, []);
 
   useEffect(() => {
-    if (!isNaN(studyId) && !isNaN(postId)) {
-      fetchData();
+    try {
+      if (!isNaN(studyId) && !isNaN(postId)) {
+        fetchData();
+      }
+    } catch (error) {
+      console.error('데이터 받아오기 에러', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [studyId, postId, fetchData]);
 
   return (
     <>
-      <div className='w-[898px] mx-auto'>
-        <div className='flex justify-between'>
-          <div className='tag-type3 red tb5'>
-            <span>{category === 'NOTICE' ? '공지' : '자유'}</span>
-          </div>
-          <div className='relative' ref={menuRef}>
-            <button
-              className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
-                menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
-              }`}
-              onClick={() => menuSetIsOpen((prev) => !prev)}
-            >
-              <EllipsisVertical />
-            </button>
-            {menuIsOpen && (
-              <ClickVerticalMenu
-                title='내 게시물'
-                studyId={studyId}
-                postId={postId}
-                target={target}
-              />
-            )}
-          </div>
-        </div>
-
-        <div className='tb2'>
-          <span>{title}</span>
-        </div>
-        <div className='flex space-x-6 items-center my-6 justify-between'>
-          <div className='flex justify-center items-center'>
-            <div>
+      {isLoading ? (
+        <StudyPostDetailSkeleton />
+      ) : (
+        <div className='w-[898px] mx-auto'>
+          <div className='flex justify-between'>
+            <div className='tag-type3 red tb5'>
+              <span>{category === 'NOTICE' ? '공지' : '자유'}</span>
+            </div>
+            <div className='relative' ref={menuRef}>
               <button
-                className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
-                onClick={handleGoToPr}
+                className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
+                  menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
+                }`}
+                onClick={() => menuSetIsOpen((prev) => !prev)}
               >
-                <Image
-                  src={imageUrl || basicBunny.src}
-                  width={50}
-                  height={50}
-                  alt='예시 기본 프사'
-                  className='absolute inset-0 w-full h-full object-cover object-center'
+                <EllipsisVertical />
+              </button>
+              {menuIsOpen && (
+                <ClickVerticalMenu
+                  title='내 게시물'
+                  studyId={studyId}
+                  postId={postId}
+                  target={target}
                 />
+              )}
+            </div>
+          </div>
+
+          <div className='tb2'>
+            <span>{title}</span>
+          </div>
+          <div className='flex space-x-6 items-center my-6 justify-between'>
+            <div className='flex justify-center items-center'>
+              <div>
+                <button
+                  className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                  onClick={handleGoToPr}
+                >
+                  <Image
+                    src={imageUrl || basicBunny.src}
+                    width={50}
+                    height={50}
+                    alt='예시 기본 프사'
+                    className='absolute inset-0 w-full h-full object-cover object-center'
+                  />
+                </button>
+              </div>
+              <button className='tm3 ' onClick={handleGoToPr}>
+                {nickname}
               </button>
             </div>
-            <button className='tm3 ' onClick={handleGoToPr}>
-              {nickname}
-            </button>
-          </div>
 
-          <div>
-            <span className='opacity-50 mr-3 tm4'>
-              {formatDate(createdDate)}
-            </span>
+            <div>
+              <span className='opacity-50 mr-3 tm4'>
+                {formatDate(createdDate)}
+              </span>
+            </div>
           </div>
-        </div>
-        <div
-          className='w-full min-h-[600px] h-auto my-10 border-[1px] rounded-[10px] p-5 tm3'
-          style={{ borderColor: 'var(--color-border3)' }}
-        >
-          {content && (
-            <ToastViewer key={content} height='100%' initialValue={content} />
+          <div
+            className='w-full min-h-[600px] h-auto my-10 border-[1px] rounded-[10px] p-5 tm3'
+            style={{ borderColor: 'var(--color-border3)' }}
+          >
+            {content && (
+              <ToastViewer key={content} height='100%' initialValue={content} />
+            )}
+          </div>
+          {category === 'FREE' && (
+            <div className='flex justify-end'>
+              <button
+                className='button-type4 mb-10 hover:bg-[#292929] '
+                onClick={() => setIsOpen(true)}
+              >
+                <span className='tm4'>AI 퀴즈 풀기</span>
+              </button>
+            </div>
+          )}
+          <div className='w-[898px]'>
+            <WriteComment
+              target={target}
+              postId={postId}
+              commentCount={commentCount}
+              profileImageUrl={me?.profileImageUrl}
+              onCommentAdd={handleCommentAdd}
+            />
+          </div>
+          <div className='w-[898px]'>
+            <CommentList postId={postId} comments={comments} target={target} />
+          </div>
+          {isOpen && (
+            <Modal
+              title=''
+              onClose={() => setIsOpen(false)}
+              className='w-[680px] h-auto'
+            >
+              <AiQuiz postId={postId} />
+            </Modal>
           )}
         </div>
-        {category === 'FREE' && (
-          <div className='flex justify-end'>
-            <button
-              className='button-type4 mb-10 hover:bg-[#292929] '
-              onClick={() => setIsOpen(true)}
-            >
-              <span className='tm4'>AI 퀴즈 풀기</span>
-            </button>
-          </div>
-        )}
-        <div className='w-[898px]'>
-          <WriteComment
-            target={target}
-            postId={postId}
-            commentCount={commentCount}
-            profileImageUrl={me?.profileImageUrl}
-            onCommentAdd={handleCommentAdd}
-          />
-        </div>
-        <div className='w-[898px]'>
-          <CommentList postId={postId} comments={comments} target={target} />
-        </div>
-        {isOpen && (
-          <Modal
-            title=''
-            onClose={() => setIsOpen(false)}
-            className='w-[680px] h-auto'
-          >
-            <AiQuiz postId={postId} />
-          </Modal>
-        )}
-      </div>
+      )}
     </>
   );
 }

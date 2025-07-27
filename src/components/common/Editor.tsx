@@ -4,6 +4,7 @@ import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
 import { useEffect } from 'react';
 import { uploadImage } from '@/lib/api/study/uploadImage';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   editorRef: React.RefObject<ToastEditor | null>;
@@ -12,6 +13,22 @@ type Props = {
 };
 
 export default function MyEditor({ editorRef, content, onChange }: Props) {
+  const pathname = usePathname();
+  const showImageButton =
+    pathname.includes('/study') && pathname.includes('/study-community/write');
+  const toolbarItems = showImageButton
+    ? [
+        ['heading', 'bold', 'italic'],
+        ['link', 'image'],
+        ['ul', 'ol', 'task'],
+        ['code', 'codeblock'],
+      ]
+    : [
+        ['heading', 'bold', 'italic'],
+        ['ul', 'ol', 'task'],
+        ['code', 'codeblock'],
+      ];
+
   const handleImageUpload = async (
     blob: Blob,
     callback: (url: string, alt?: string) => void
@@ -45,6 +62,7 @@ export default function MyEditor({ editorRef, content, onChange }: Props) {
         initialEditType='wysiwyg'
         useCommandShortcut={false}
         hideModeSwitch={true}
+        toolbarItems={toolbarItems}
         hooks={{
           addImageBlobHook: handleImageUpload,
         }}
