@@ -10,8 +10,8 @@ import { ChatGroup, ChatMessageType } from '@/types/chat';
 import { userAuthStore } from '@/stores/userStore';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import SockJS from 'sockjs-client';
-// import { fetchChatMessage } from '@/lib/api/chat';
-// import { useParams } from 'next/navigation';
+import { fetchChatMessage } from '@/lib/api/chat';
+import { useParams } from 'next/navigation';
 
 function groupChatsByDate(chats: ChatMessageType[]): ChatGroup[] {
   const map = new Map<string, ChatMessageType[]>();
@@ -36,32 +36,32 @@ export default function Chat() {
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<ChatMessageType[]>([]);
   const [isInput, setIsInput] = useState(false);
-  // const [currentPage, setCurrentPage] = useState<number>(0);
-  // const [nextPage, setNextPage] = useState<number | null>(null);
+  const setCurrentPage = useState<number>(0)[1];
+  const setNextPage = useState<number | null>(null)[1];
   const user = userAuthStore((state) => state.user);
   const clientRef = useRef<Client | null>(null);
+  const textBottomRef = useRef<HTMLDivElement | null>(null);
 
-  // const params = useParams();
-  // const roomId = Number(params?.id);
+  const params = useParams();
+  const studyId = Number(params?.id);
 
-  const studyId = 11;
-
-  // 메시지 불러오기 / 웹소켓 연결
+  // 메시지 불러오기 + 웹소켓 연결
   useEffect(() => {
     if (!studyId) return;
 
-    // const initialMessages = async () => {
-    //   try {
-    //     const res = await fetchChatMessage(studyId, 0);
-    //     setChats(res.content);
-    //     setCurrentPage(res.currentNumber);
-    //     setNextPage(res.nextPage);
-    //   } catch (error) {
-    //     console.error('초기 메시지 불러오기 실패: ', error);
-    //   }
-    // };
+    const initialMessages = async () => {
+      try {
+        const res = await fetchChatMessage(studyId, 0);
+        setChats(res.content);
+        setCurrentPage(res.currentNumber);
+        setNextPage(res.nextPage);
+        console.log(res.content.map((msg) => `${msg.id}: ${msg.message}`));
+      } catch (error) {
+        console.error('초기 메시지 불러오기 실패: ', error);
+      }
+    };
 
-    // if (studyId) initialMessages();
+    if (studyId) initialMessages();
 
     const socketUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -95,12 +95,18 @@ export default function Chat() {
     return () => {
       client.deactivate(); // 연결 끊기
     };
-  }, [studyId]);
+  }, [setCurrentPage, setNextPage, studyId]);
+
+  useEffect(() => {
+    if (chats.length > 0) {
+      textBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chats]);
 
   // 메시지 전송
   const handleSendMessage = () => {
     if (!message.trim() || !studyId || !user || !clientRef.current) return;
-    console.log('연결', clientRef.current?.connected);
+    // console.log('연결', clientRef.current?.connected);
 
     // 서버로 전송
     clientRef.current.publish({
@@ -130,8 +136,8 @@ export default function Chat() {
 
   return (
     <div className='w-full rounded-[10px] border border-border2'>
-      <div className='h-[640px] flex flex-col justify-end'>
-        <div className='overflow-auto min-w-0 px-7 flex flex-col '>
+      <div className='h-[640px] flex flex-col'>
+        <div className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col'>
           {groupChatsByDate(chats).map((group, i) => (
             <div key={i}>
               <ChatDate date={group.date} />
@@ -146,6 +152,7 @@ export default function Chat() {
               ))}
             </div>
           ))}
+          <div ref={textBottomRef}></div>
         </div>
       </div>
 
