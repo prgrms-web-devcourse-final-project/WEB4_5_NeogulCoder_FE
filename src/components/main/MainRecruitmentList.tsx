@@ -245,12 +245,12 @@ export default function MainRecruitmentList() {
               key={recruitment.recruitmentPostId}
             >
               <RecruitmentCard
-                title={recruitment.subject}
+                subject={recruitment.subject}
                 content={recruitment.content}
-                createdAt={recruitment.createAt}
+                createAt={recruitment.createAt}
                 commentCount={recruitment.commentCount}
                 category={recruitment.category}
-                studyWay={recruitment.studyType}
+                studyType={recruitment.studyType}
                 status={recruitment.status}
                 type={'my'}
               />

@@ -46,12 +46,12 @@ export default function RecruitmentCard({
     >
       <div className='flex justify-between items-center'>
         <div className='flex gap-3 items-center'>
-          {type === 'my' && status === '모집중' && (
+          {type === 'my' && status === 'IN_PROGRESS' && (
             <div className='tag-type2 green py-3'>
               <span className='tb5'>모집 중</span>
             </div>
           )}
-          {type === 'my' && status === '모집완료' && (
+          {type === 'my' && status === 'COMPLETE' && (
             <div className='tag-type2 py-3'>
               <span className='tb5 text-white'>모집 완료</span>
             </div>
