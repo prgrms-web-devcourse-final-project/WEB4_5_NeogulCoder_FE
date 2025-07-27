@@ -122,7 +122,9 @@ body {
   .button-type7 {
     @apply bg-main inline-flex h-15 w-[100px] items-center justify-center rounded-[10px] text-center text-xs text-white md:text-sm;
   }
-
+  .button-type7:disabled {
+    @apply bg-[#c9c9c9] transition-colors duration-300;
+  }
   .button-sm-type1 {
     @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
   }
@@ -204,6 +206,13 @@ body {
 .scroll-custom::-webkit-scrollbar-thumb {
   background: #939393;
 }
+.scroll-custom-4::-webkit-scrollbar {
+  width: 4px;
+  height: 0px;
+}
+.scroll-custom-4::-webkit-scrollbar-thumb {
+  background: #939393;
+}
 
 /* 도장 */
 @keyframes stamp {
@@ -223,4 +232,25 @@ body {
 
 .animate-stamp {
   animation: stamp 0.4s ease-out forwards;
+}
+
+/* 로그인 */
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #fff;
+  border-bottom-color: #ff7a21;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

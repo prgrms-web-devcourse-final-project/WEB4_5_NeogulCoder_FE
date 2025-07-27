@@ -11,14 +11,14 @@ export interface UserInfo {
 }
 
 export interface UserStore {
-  user: UserInfo | null;
+  user: UserInfo | null | undefined;
   setUser: (user: UserInfo) => void; // 사용자 정보 저장
   clearUser: () => void; // 사용자 상태 초기화
   fetchUser: () => Promise<void>; // 사용자 정보 가져오기
 }
 
 export const userAuthStore = create<UserStore>((set) => ({
-  user: null, // 로그인 전 null
+  user: undefined,
 
   setUser: (user) => {
     // 로그인 하고 나서 저장

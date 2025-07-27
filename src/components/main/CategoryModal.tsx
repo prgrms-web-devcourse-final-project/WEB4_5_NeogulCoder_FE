@@ -4,6 +4,7 @@ export default function CategoryModal({
   onSelect: (category: string) => void;
 }) {
   const category = [
+    '전체',
     '어학',
     'IT',
     '고시/자격증',

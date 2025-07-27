@@ -1,28 +1,14 @@
 'use client';
-import { useEffect } from 'react';
+
 import { userAuthStore } from '@/stores/userStore';
-import { getUser } from '@/lib/api/user';
 import MainBanner from '@/components/main/MainBanner';
 import MainStudyList from '@/components/main/MainStudyList';
 import MainRecruitmentList from '@/components/main/MainRecruitmentList';
 
 export default function Main() {
   const user = userAuthStore((state) => state.user);
-  const setUser = userAuthStore((state) => state.setUser);
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem('login_status');
-    if (!user && isLoggedIn) {
-      getUser()
-        .then((res) => {
-          setUser(res.data.data);
-        })
-        .catch((error) => {
-          localStorage.removeItem('login_status');
-          console.error('사용자 정보 불러오기 실패: ', error);
-        });
-    }
-  }, [user, setUser]);
+  if (user === undefined) return null;
 
   return (
     <>

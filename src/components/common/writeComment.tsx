@@ -1,12 +1,16 @@
 import { writeComment } from '@/lib/api/comment/write';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 
 type CommentWriteProps = {
   target: 'recruitment' | 'study';
   postId: number;
-  profileImageUrl: string;
+  // studyId?: number;
+  profileImageUrl: string | null | undefined;
   commentCount: number;
+  onCommentAdd?: () => void;
 };
 
 export default function WriteComment({
@@ -14,6 +18,7 @@ export default function WriteComment({
   profileImageUrl,
   commentCount,
   postId,
+  onCommentAdd,
 }: CommentWriteProps) {
   const [comment, setComment] = useState('');
   const router = useRouter();
@@ -27,8 +32,8 @@ export default function WriteComment({
         postId,
         content: comment,
       });
+      onCommentAdd?.();
       setComment('');
-      router.refresh(); // 댓글 새로고침
     } catch (error) {
       console.error('댓글 등록 실패:', error);
     }
@@ -52,15 +57,23 @@ export default function WriteComment({
           <div className='w-full flex my-8'>
             <div>
               <button
-                className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0'
+                className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden'
                 onClick={handleGoToPr}
               >
-                {profileImageUrl}
+                <Image
+                  src={profileImageUrl ?? basicBunny.src}
+                  width={50}
+                  height={50}
+                  alt='예시 기본 프사'
+                  className='absolute inset-0 w-full h-full object-cover object-center'
+                />
               </button>
             </div>
+
             <input
               className='w-full h-[50px]  rounded-xl border-[1px] p-5 ml-5 border-[#B8B8B8] tb-4'
               placeholder='댓글을 입력해주세요'
+              value={comment}
               onChange={(e) => setComment(e.target.value)}
               style={{
                 color: 'var(--color-text1)',

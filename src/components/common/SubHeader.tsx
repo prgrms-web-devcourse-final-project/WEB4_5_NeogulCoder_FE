@@ -124,7 +124,7 @@ export default function SubHeader() {
           className='w-[680px] h-[700px]'
           title='스터디 생성'
         >
-          <CreateStudyModal />
+          <CreateStudyModal onClose={() => setIsOpen(false)} />
         </Modal>
       )}
       <hr className='mt-[10px] border-main/10' />
