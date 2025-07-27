@@ -36,12 +36,12 @@ export default function Chat() {
   const [message, setMessage] = useState('');
   const [chats, setChats] = useState<ChatMessageType[]>([]);
   const [isInput, setIsInput] = useState(false);
-  const setCurrentPage = useState<number>(0)[1];
-  const setNextPage = useState<number | null>(null)[1];
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [nextPage, setNextPage] = useState<number | null>(null);
   const user = userAuthStore((state) => state.user);
   const clientRef = useRef<Client | null>(null);
   const textBottomRef = useRef<HTMLDivElement | null>(null);
-
+  const scrollRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const studyId = Number(params?.id);
 
@@ -51,7 +51,8 @@ export default function Chat() {
 
     const initialMessages = async () => {
       try {
-        const res = await fetchChatMessage(studyId, 0);
+        const initialPage = 0;
+        const res = await fetchChatMessage(studyId, initialPage);
         setChats(res.content);
         setCurrentPage(res.currentNumber);
         setNextPage(res.nextPage);
@@ -134,10 +135,28 @@ export default function Chat() {
     }
   };
 
+  const handleScroll = async () => {
+    const scrollText = scrollRef.current;
+    if (!scrollText || scrollText.scrollTop !== 0 || nextPage === null) return;
+
+    try {
+      const res = await fetchChatMessage(studyId, currentPage + 1);
+      setChats((prev) => [...res.content, ...prev]);
+      setCurrentPage(res.currentNumber);
+      setNextPage(res.nextPage);
+    } catch (error) {
+      console.error('과거 메시지 불러오기 실패: ', error);
+    }
+  };
+
   return (
     <div className='w-full rounded-[10px] border border-border2'>
       <div className='h-[640px] flex flex-col'>
-        <div className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col'>
+        <div
+          className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col'
+          ref={scrollRef}
+          onScroll={handleScroll}
+        >
           {groupChatsByDate(chats).map((group, i) => (
             <div key={i}>
               <ChatDate date={group.date} />
