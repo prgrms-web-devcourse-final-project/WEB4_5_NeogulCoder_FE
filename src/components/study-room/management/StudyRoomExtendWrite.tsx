@@ -1,4 +1,5 @@
 import { postStudyExtend } from '@/lib/api/study.api';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 import dayjs from 'dayjs';
 import { CalendarDays, X } from 'lucide-react';
 import { useState, useTransition } from 'react';
@@ -16,20 +17,38 @@ export default function StudyRoomExtendWrite({
 }) {
   const [extendDate, setExtendDate] = useState('');
   const [isPending, startTransition] = useTransition();
+  const study = useStudiesStore().studies.find((f) => f.studyId === studyId);
+  const addStudies = useStudiesStore().addStudy;
 
   const hadleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
       try {
-        await postStudyExtend(studyId, extendDate);
+        const { data } = await postStudyExtend(studyId, extendDate);
         handleExtend();
+        if (study)
+          addStudies({
+            studyId: data,
+            name: study?.name,
+            leaderNickname: study?.leaderNickname,
+            capacity: study?.capacity,
+            currentCount: study?.currentCount,
+            startDate: dayjs(endDate)
+              .add(1, 'day')
+              .format('YYYY-MM-DDTHH:mm:ss'),
+            endDate: extendDate,
+            imageUrl: study?.imageUrl,
+            introduction: study?.introduction,
+            category: study?.category,
+            studyType: study?.studyType,
+            finished: false,
+          });
         closeFn(); // 모달 닫기
       } catch (error) {
         console.error('스터디 연장에 실패했습니다', error);
       }
     });
   };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.value) return;
     const date = dayjs(e.target.value).endOf('day');
