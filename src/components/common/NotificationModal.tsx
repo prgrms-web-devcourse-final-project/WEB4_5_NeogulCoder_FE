@@ -13,6 +13,9 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import NotificationModalSkeleton from './NotificationModalSkeleton';
+import { useStudiesStore } from '@/stores/useStudiesStore';
+import { toast } from 'react-toastify';
+import { userAuthStore } from '@/stores/userStore';
 
 export default function NotificationModal({
   onClose,
@@ -23,11 +26,11 @@ export default function NotificationModal({
   const router = useRouter();
   const { setUnReadCounts } = countNotificationStore();
   const [isLoading, setIsLoading] = useState(true);
+  const { fetchStudies } = useStudiesStore();
+  const { fetchUser } = userAuthStore();
 
   const getRoute = (domainType: string, domainId: number) => {
     switch (domainType) {
-      // case 'STUDY':
-      //   return `/study/${domainId}/dashboard`;
       case 'RECRUITMENT_POST':
         return `/recruitment/detail/${domainId}`;
       default:
@@ -68,15 +71,20 @@ export default function NotificationModal({
     alarmId: number,
     domainType: string | null,
     domainId: number,
-    alarmType: string
+    alarmType: string,
+    accepted: boolean
   ) => {
     try {
-      await readNotifications(alarmId, true);
+      const res = await readNotifications(alarmId, accepted);
+      await fetchUser();
+      await fetchStudies();
       setNotification((prev) => prev.filter((item) => item.id !== alarmId));
       setUnReadCounts(0);
 
       if (alarmType === 'INVITE') {
-        alert('완료');
+        toast.success(
+          res?.message || (accepted ? '수락되었습니다' : '거절되었습니다.')
+        );
       }
 
       if (!domainType) return;
@@ -112,17 +120,7 @@ export default function NotificationModal({
               key={item.id}
               className='t4 text-text1 hover:bg-gray4 p-3 rounded-[6px] transition flex flex-col gap-2'
             >
-              <div
-                className='flex items-start gap-4 cursor-pointer'
-                onClick={() =>
-                  handleReadNotifications(
-                    item.id,
-                    item.domainType,
-                    item.domainId,
-                    item.alarmType
-                  )
-                }
-              >
+              <div className='flex items-start gap-4 cursor-pointer'>
                 <div
                   className={`w-6 h-6 flex items-center justify-center rounded-full shrink-0 ${
                     item.checked ? 'bg-gray4' : 'bg-[#90CFF1]'
@@ -153,7 +151,8 @@ export default function NotificationModal({
                         item.id,
                         item.domainType,
                         item.domainId,
-                        item.alarmType
+                        item.alarmType,
+                        true
                       );
                     }}
                   >
@@ -167,7 +166,8 @@ export default function NotificationModal({
                         item.id,
                         item.domainType,
                         item.domainId,
-                        item.alarmType
+                        item.alarmType,
+                        false
                       );
                     }}
                   >

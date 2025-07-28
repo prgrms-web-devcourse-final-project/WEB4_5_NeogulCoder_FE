@@ -9,6 +9,7 @@ export type NotificationItem = {
   message: string;
   checked: boolean;
   createdDate: string;
+  accpeted: boolean;
 };
 
 type NotificationCount = {

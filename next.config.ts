@@ -23,6 +23,11 @@ module.exports = {
         hostname: 'placekitten.com',
         pathname: '**', // 모든 경로 허용
       },
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+        pathname: '**',
+      },
     ],
   },
 };
