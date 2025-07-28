@@ -7,7 +7,6 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import deleteText from '@/assets/images/delete-text.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-// import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { login } from '@/lib/api/user';
@@ -54,7 +53,6 @@ export default function LoginClient() {
         role: user.role,
       });
       localStorage.setItem('login_status', 'Y');
-      alert('로그인 성공');
       router.push('/');
     } catch (error) {
       if (axios.isAxiosError(error)) {

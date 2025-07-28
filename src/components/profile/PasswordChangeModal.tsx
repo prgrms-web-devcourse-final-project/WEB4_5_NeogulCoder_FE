@@ -3,6 +3,7 @@ import { useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export default function PasswordChangeModal({
   onClose,
@@ -66,7 +67,7 @@ export default function PasswordChangeModal({
         newPassword,
         newPasswordCheck,
       });
-      alert('비밀번호가 변경되었습니다.');
+      toast.success('비밀번호가 변경되었습니다.');
       onClose();
     } catch (error) {
       console.error('비밀번호 변경 실패: ', error);

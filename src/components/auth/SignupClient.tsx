@@ -12,6 +12,7 @@ import axios from 'axios';
 import { signup } from '@/lib/api/user';
 import VerifyEmailModal from '@/components/common/VerifyEmailModal';
 import { sendEmailCode } from '@/lib/api/emailAuth';
+import { toast } from 'react-toastify';
 
 export default function SignUpClient() {
   const router = useRouter();
@@ -165,7 +166,7 @@ export default function SignUpClient() {
     }
     try {
       await signup(email, nickname, password, passwordCheck);
-      alert('회원가입 성공');
+      toast.success('회원가입이 완료되었습니다.');
       router.push('/auth/login');
     } catch (error) {
       if (axios.isAxiosError(error)) {

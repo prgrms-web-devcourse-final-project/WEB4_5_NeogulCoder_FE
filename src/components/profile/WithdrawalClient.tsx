@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
+import { toast } from 'react-toastify';
 
 export default function WithdrawalClient() {
   const router = useRouter();
@@ -58,7 +59,7 @@ export default function WithdrawalClient() {
   const handleDeleteUser = async () => {
     try {
       await deleteUser(password);
-      alert('탈퇴가 완료되었습니다.');
+      toast.success('탈퇴가 완료되었습니다.');
       setIsModalOpen(false);
       router.push('/auth/login');
     } catch (error) {

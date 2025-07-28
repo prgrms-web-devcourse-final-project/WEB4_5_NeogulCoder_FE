@@ -8,6 +8,7 @@ import { axiosInstance } from '@/lib/api/axios';
 import { userAuthStore } from '@/stores/userStore';
 import { nicknameRegex } from '@/lib/auth/regex';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export default function EditProfileClient() {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
@@ -71,7 +72,7 @@ export default function EditProfileClient() {
         setPreviewImg(updatedUser.profileImageUrl || '');
       }
 
-      alert('프로필 수정 완료');
+      toast.success('프로필 수정이 완료되었습니다.');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const msg = error.response?.data?.message;
@@ -90,6 +91,7 @@ export default function EditProfileClient() {
       <div className='mt-[60px] flex flex-col items-center justify-center'>
         <div className='relative'>
           <div className='w-[140px] h-[140px] rounded-full relative bg-black overflow-hidden'>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={
                 previewImg && previewImg.trim() !== ''

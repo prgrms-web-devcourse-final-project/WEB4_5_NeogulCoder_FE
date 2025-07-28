@@ -7,6 +7,7 @@ import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
 import IntroEditor from '@/components/profile/pr/IntroEditor';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 const ChevronDown = dynamic(
   () => import('lucide-react').then((m) => m.ChevronDown),
@@ -42,7 +43,6 @@ export default function EditPrClient() {
   useEffect(() => {
     if (pr && !initialized) {
       setSelectedRegion(pr.userLocationAndLinks?.[0]?.location || null);
-      // console.log(pr.userLocationAndLinks);
 
       const links =
         pr.userLocationAndLinks?.[0]?.links.map((link) => ({
@@ -100,7 +100,7 @@ export default function EditPrClient() {
       await axiosInstance.put('/api/template/update/introduction', {
         introduction,
       });
-      alert('저장 완료');
+      toast.success('저장이 완료되었습니다.');
       router.back();
     } catch (error) {
       console.error('저장 실패: ', error);
