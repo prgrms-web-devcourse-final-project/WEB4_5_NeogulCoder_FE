@@ -1,6 +1,5 @@
 'use client';
 
-import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -10,8 +9,21 @@ import { modifyRecruitmentPost } from '@/lib/api/recruitment/modify';
 import { formatDate } from '@/utils/formatIsoDate';
 import RemainSlotModal from '@/components/study/RemainSlot';
 import RecruitmentModifySkeleton from '@/components/recruitment/RecruitmentModifySkeleton';
+import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function RecruitmentModifyPage() {
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    { ssr: false }
+  );
+
+  const Calendar = dynamic(
+    () => import('lucide-react').then((m) => m.Calendar),
+    {
+      ssr: false,
+    }
+  );
   const pathname = usePathname();
   const router = useRouter();
   const recruitmentPostId = Number(pathname.split('/').pop());
@@ -100,9 +112,11 @@ export default function RecruitmentModifyPage() {
       const data = await modifyRecruitmentPost(recruitmentPostId, payload);
       const postId = data.data;
       console.log('수정 완료', data);
+      toast.success('게시글 수정이 완료되었습니다!');
       router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
       console.error('수정 실패', error);
+      toast.error('게시글 수정 중 오류가 발생하였습니다.');
     }
     console.log(
       'Subject:',
@@ -263,7 +277,12 @@ export default function RecruitmentModifyPage() {
             <ClientEditorWrapper editorRef={editorRef} content={content} />
           </div>
           <div className='flex justify-end'>
-            <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+            <button
+              className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+              onClick={() =>
+                router.push(`/recruitment/detail/${recruitmentPostId}`)
+              }
+            >
               취소
             </button>
             <button

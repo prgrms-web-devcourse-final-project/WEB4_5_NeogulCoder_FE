@@ -7,7 +7,7 @@ import basicBunny from '@/assets/images/basic-bunny.svg';
 type CommentWriteProps = {
   target: 'recruitment' | 'study';
   postId: number;
-  // studyId?: number;
+  userId: number | undefined;
   profileImageUrl: string | null | undefined;
   commentCount: number;
   onCommentAdd?: () => void;
@@ -15,6 +15,7 @@ type CommentWriteProps = {
 
 export default function WriteComment({
   target,
+  userId,
   profileImageUrl,
   commentCount,
   postId,
@@ -23,7 +24,7 @@ export default function WriteComment({
   const [comment, setComment] = useState('');
   const router = useRouter();
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
 
   const handleSubmit = async () => {

@@ -1,11 +1,11 @@
 'use client';
 // import musicBunny from '@/assets/images/music-bunny.svg';
 import { useEffect, useState } from 'react';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { ReviewContent } from '@/types/pr';
 import { getReviewContents } from '@/lib/api/pr';
 import FeedbackModalSkeleton from './skeleton/FeedbackModalSkeleton';
+import dynamic from 'next/dynamic';
 
 export default function FeedbackModal({ onClose }: { onClose: () => void }) {
   const [totalPages, setTotalPages] = useState(1);
@@ -13,6 +13,20 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
   const [visibleReviews, setVisibleReviews] = useState<ReviewContent[]>([]);
   const [page, setPage] = useState(0);
   const perPage = 5;
+
+  const ChevronLeft = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronLeft),
+    { ssr: false }
+  );
+
+  const ChevronRight = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronRight),
+    { ssr: false }
+  );
+
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
 
   useEffect(() => {
     const fetchReviwes = async () => {

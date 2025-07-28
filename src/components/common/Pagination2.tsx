@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
 type PaginationProps = {
   page: number;
@@ -11,6 +11,17 @@ export default function Pagination2({
   setPage,
   totalPages,
 }: PaginationProps) {
+  const ChevronLeft = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronLeft),
+    { ssr: false }
+  );
+
+  const ChevronRight = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronRight),
+    {
+      ssr: false,
+    }
+  );
   const handleClick = (p: number) => {
     if (p >= 0 && p < totalPages) {
       setPage(p);
