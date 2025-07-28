@@ -3,8 +3,14 @@
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { formatDate } from '@/utils/formatDate';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
-import { MessageSquareMore } from 'lucide-react';
+// import { MessageSquareMore } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const MessageSquareMore = dynamic(
+  () => import('lucide-react').then((m) => m.MessageSquareMore),
+  { ssr: false }
+);
 
 export default function RecruitmentCard({
   studyId,
