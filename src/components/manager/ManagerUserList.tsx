@@ -1,5 +1,3 @@
-import { AdminUserType } from '@/app/manager/(user)/page';
-
 export default function ManagerUserList({
   user,
   handleDelete,
