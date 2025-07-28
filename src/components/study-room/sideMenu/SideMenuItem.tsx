@@ -18,7 +18,7 @@ export default function SideMenuItem({
   );
 
   const pathname = usePathname();
-  const isActive = pathname === to;
+  const isActive = pathname === to || pathname.startsWith(to + '/');
 
   return (
     <>

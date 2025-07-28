@@ -17,7 +17,6 @@ export default function StudyCommunityWritePage() {
   const pathname = usePathname();
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
-  const [content, setContent] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const isSelectedCategory = category !== '카테고리';
   const studyId = Number(pathname.split('/')[2]);
@@ -27,6 +26,22 @@ export default function StudyCommunityWritePage() {
   const handleSubmit = async () => {
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
+
+    if (!category) {
+      toast.warning('카테고리 선택해주세요.');
+      return;
+    }
+
+    if (!title) {
+      toast.warning('제목을 입력해주세요.');
+      return;
+    }
+
+    if (!content.trim()) {
+      toast.warning('내용을 입력해주세요.');
+      return;
+    }
+
     const categoryMap: { [key: string]: string } = {
       공지: 'NOTICE',
       자유: 'FREE',
@@ -101,16 +116,18 @@ export default function StudyCommunityWritePage() {
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <div className='mb-10'>
-        <ClientEditorWrapper editorRef={editorRef} onChange={setContent} />
+        <ClientEditorWrapper editorRef={editorRef} />
       </div>
       <div className='flex justify-end'>
-        <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+        <button
+          className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+          onClick={() => router.push(`/study/${studyId}/study-community`)}
+        >
           취소
         </button>
         <button
           className='button-type5 hover:bg-[#292929]'
           onClick={handleSubmit}
-          disabled={category === '' || title === '' || content.trim() === ''}
         >
           등록
         </button>
