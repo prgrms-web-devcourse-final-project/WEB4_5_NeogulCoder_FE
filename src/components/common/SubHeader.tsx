@@ -1,6 +1,8 @@
 'use client';
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
+import logoWibby from '@/assets/images/logo-wibby.svg';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CreateStudyModal from '../study/CreateStudyModal';
@@ -98,13 +100,13 @@ export default function SubHeader() {
                     key={study.studyId}
                     href={`/study/${study.studyId}/dashboard`}
                     type='button'
-                    className='group w-8 h-8 rounded-[12px] relative bg-gray3 flex items-center justify-center 
-             shadow-[0_1px_4px_rgba(0,0,0,0.12)]'
+                    className='group w-8 h-8 rounded-[12px] relative bg-white flex items-center justify-center 
+             shadow-[0_1px_4px_rgba(0,0,0,0.18)]'
                   >
                     <Image
-                      src={study.imageUrl ?? musicBunny}
+                      src={study.imageUrl ?? logoWibby}
                       alt={study.name}
-                      className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
+                      className='w-5 h-5 rounded-[12px] group-hover:drop-shadow'
                       width={38}
                       height={38}
                     />
