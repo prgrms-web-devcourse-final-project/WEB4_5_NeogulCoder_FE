@@ -1,4 +1,3 @@
-import { AdminPostType } from '@/app/manager/recruitment/page';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 

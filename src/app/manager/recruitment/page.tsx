@@ -8,13 +8,6 @@ import { Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
-export type AdminPostType = {
-  id: number;
-  subject: string;
-  expiredDate: string;
-  activated: boolean;
-};
-
 export default function RecruitPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

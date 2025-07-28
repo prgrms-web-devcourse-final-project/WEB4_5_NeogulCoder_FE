@@ -9,13 +9,6 @@ import { Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
-export type AdminUserType = {
-  id: number;
-  email: string;
-  nickname: string;
-  activated: null | boolean;
-};
-
 export default function UserPage() {
   const router = useRouter();
   const searchParams = useSearchParams();

@@ -10,14 +10,6 @@ import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
-export type AdminStudyType = {
-  id: number;
-  name: string;
-  category: string;
-  finished: boolean;
-  activated: boolean;
-};
-
 export default function StudyPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
