@@ -9,6 +9,7 @@ import { modifyStudyPost } from '@/lib/api/study/modify';
 import { usePathname, useRouter } from 'next/navigation';
 import CategoryStudyModal2 from '@/components/study/CategoryStudyModal2';
 import StudyPostModifySkeleton from '@/components/study/StudyPostModifySkeleton';
+import { toast } from 'react-toastify';
 
 export default function StudyCommunityModifyPage() {
   const pathname = usePathname();
@@ -64,9 +65,11 @@ export default function StudyCommunityModifyPage() {
     try {
       const data = await modifyStudyPost(postId, payload);
       console.log('수정 완료', data);
+      toast.success('게시글 수정이 완료되었습니다!');
       router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
       console.error('수정 실패', error);
+      toast.error('게시글 수정 중 오류가 발생하였습니다.');
     }
     console.log('Title:', title, 'Content:', content, 'category:', category);
   };

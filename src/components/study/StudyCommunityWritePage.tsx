@@ -7,6 +7,7 @@ import { Editor as ToastEditor } from '@toast-ui/react-editor';
 import { writeStudyPost } from '@/lib/api/study/write';
 import { usePathname, useRouter } from 'next/navigation';
 import CategoryStudyModal2 from '@/components/study/CategoryStudyModal2';
+import { toast } from 'react-toastify';
 
 export default function StudyCommunityWritePage() {
   const pathname = usePathname();
@@ -39,10 +40,12 @@ export default function StudyCommunityWritePage() {
       const data = await writeStudyPost(studyId, payload);
       const postId = data.data;
 
-      console.log('생성 완료', data);
+      console.log('작성 완료', data);
+      toast.success('게시글 작성이 완료되었습니다!');
       router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
-      console.error('생성 실패', error);
+      console.error('작성 실패', error);
+      toast.error('게시글 작성 중 오류가 발생하였습니다.');
     }
 
     console.log(

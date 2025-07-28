@@ -13,6 +13,7 @@ import StudyListModal from '@/components/study/StudyListModal';
 import RemainSlotModal from '@/components/study/RemainSlot';
 import { useRouter } from 'next/navigation';
 import RecruitmentFormSkeleton from '@/components/recruitment/RecruitmentFormSkeleton';
+import { toast } from 'react-toastify';
 
 export default function RecruitmentWritePage() {
   const router = useRouter();
@@ -109,10 +110,12 @@ export default function RecruitmentWritePage() {
     try {
       const data = await writeRecruitmentPost(payload);
       const postId = data.data;
-      console.log('생성 완료', data);
+      console.log('작성 완료', data);
+      toast.success('게시글 작성이 완료되었습니다!');
       router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
-      console.error('생성 실패', error);
+      console.error('작성 실패', error);
+      toast.error('게시글 작성 중 오류가 발생하였습니다.');
     }
     console.log(
       'StudyId:',

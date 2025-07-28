@@ -29,6 +29,7 @@ export default function StudyCommunityDetailPage() {
   const [createdDate, setCreatedDate] = useState('');
   const [nickname, setNickname] = useState('');
   const [content, setContent] = useState('');
+  const [userId, setUserId] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -46,7 +47,7 @@ export default function StudyCommunityDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
 
   const handleCommentAdd = () => {
@@ -62,6 +63,7 @@ export default function StudyCommunityDetailPage() {
       setTitle(data.postInfo.title);
       setContent(data.postInfo.content);
       setImageUrl(data.postInfo.imageUrl);
+      setUserId(data.postInfo.userId);
       setCommentCount(data.commentCount);
       setComments(data.comments);
     } catch (error) {
@@ -177,6 +179,7 @@ export default function StudyCommunityDetailPage() {
               commentCount={commentCount}
               profileImageUrl={me?.profileImageUrl}
               onCommentAdd={handleCommentAdd}
+              userId={me?.id}
             />
           </div>
           <div className='w-[898px]'>

@@ -24,6 +24,7 @@ type CommentProps = {
 
 export default function Comment({
   commentId,
+  userId,
   nickname,
   profileImageUrl,
   content,
@@ -40,7 +41,7 @@ export default function Comment({
   const me = userAuthStore((state) => state.user);
 
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
 
   useEffect(() => {
