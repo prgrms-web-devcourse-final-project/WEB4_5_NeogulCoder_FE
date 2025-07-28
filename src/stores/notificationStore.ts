@@ -6,4 +6,5 @@ export type NotificationItem = {
   domainId: number;
   message: string;
   checked: boolean;
+  createdDate: string;
 };

@@ -17,7 +17,6 @@ export default function Header() {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const [unreadCounts, setUnreadCounts] = useState(0);
-  const [isNotificationClick, setIsNotificationClick] = useState(false);
   const user = userAuthStore((state) => state.user);
   const setUser = userAuthStore((state) => state.setUser);
 
@@ -53,10 +52,6 @@ export default function Header() {
     router.push('/');
   };
 
-  const handleNotificationClick = () => {
-    setIsNotificationClick(!isNotificationClick);
-  };
-
   return (
     <div className='w-full flex justify-center pt-2.5 text-text1'>
       <div className='w-full max-w-[1280px] flex items-center justify-between px-4'>
@@ -72,11 +67,11 @@ export default function Header() {
             <div className='flex items-center justify-center gap-4'>
               <div
                 className='relative'
-                onClick={() => setIsNotificationModalOpen(true)}
+                onClick={() => setIsNotificationModalOpen((prev) => !prev)}
               >
                 <button
                   type='button'
-                  className='flex items-center justify-center'
+                  className='flex items-center justify-center w-[38px] h-[38px] rounded-full hover:bg-[#EEEEEE] transition-colors'
                 >
                   <Bell className='w-[22px] h-6' />
                   {/* 읽지 않은 알림 표시 */}
