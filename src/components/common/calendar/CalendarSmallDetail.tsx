@@ -1,10 +1,10 @@
-import { CalendarDays, ChevronRight } from 'lucide-react';
 import CalendarSmallDetailItem from './CalendarSmallDetailItem';
 import dayjs from 'dayjs';
 import { dayFormatting } from '@/utils/day';
 import isBetween from 'dayjs/plugin/isBetween';
 import Link from 'next/link';
 import { useStudyStore } from '@/stores/studyInfoStore';
+import dynamic from 'next/dynamic';
 dayjs.extend(isBetween);
 
 export default function CalendarSmallDetail({
@@ -16,6 +16,19 @@ export default function CalendarSmallDetail({
   studyId: number;
   calendarData: StudyScheduleType[];
 }) {
+  const CalendarDays = dynamic(
+    () => import('lucide-react').then((m) => m.CalendarDays),
+    {
+      ssr: false,
+    }
+  );
+  const ChevronRight = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronRight),
+    {
+      ssr: false,
+    }
+  );
+
   const studyIsProgress = useStudyStore().isProgress;
   const dateFormat = (date: string) => {
     const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(

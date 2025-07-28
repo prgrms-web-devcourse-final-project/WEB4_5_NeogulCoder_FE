@@ -1,8 +1,8 @@
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { getAllUser } from '@/lib/api/study.api';
-import { Search, X } from 'lucide-react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 type AllUserType = {
   id: number;
@@ -20,6 +20,13 @@ export default function StudyRoomInfoWrite({
   memberInfo: StudyMemberType[];
   closeFn: () => void;
 }) {
+  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
+    ssr: false,
+  });
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
+
   const [allUser, setAllUser] = useState<AllUserType[]>([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);

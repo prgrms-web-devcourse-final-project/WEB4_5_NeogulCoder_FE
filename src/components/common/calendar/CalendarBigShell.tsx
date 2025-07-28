@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import CalendarBig from './CalendarBig';
 import CalendarBigDetail from './CalendarBigDetail';
 import CalendarWrite from './CalendarWrite';
-import { ChevronDown } from 'lucide-react';
 import { getStudyEvents, getUserEvents } from '@/lib/api/calendar.api';
 import { UserInfo } from '@/stores/userStore';
 import CalendarBigSkeleton from './Skeleton/CalendarBigSkeleton';
 import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
 import { useStudyStore } from '@/stores/studyInfoStore';
+import dynamic from 'next/dynamic';
 
 export type ScheduleInputType = {
   title: string;
@@ -26,6 +26,13 @@ export default function CalendarBigShell({
   user: UserInfo;
   categories: { name: string; id: number }[];
 }) {
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    {
+      ssr: false,
+    }
+  );
+
   const studyIsProgress = useStudyStore().isProgress;
   const selectRef = useRef<HTMLDivElement>(null);
   // 날짜별 상세 팝업

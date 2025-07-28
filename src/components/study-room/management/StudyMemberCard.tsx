@@ -2,12 +2,12 @@
 import { postDelegate } from '@/lib/api/study.api';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
-import { Crown } from 'lucide-react';
 import Image from 'next/image';
 import { useTransition } from 'react';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { useRouter } from 'next/navigation';
 import { useStudyStore } from '@/stores/studyInfoStore';
+import dynamic from 'next/dynamic';
 
 export default function MemberCard({
   member,
@@ -16,6 +16,10 @@ export default function MemberCard({
   member: StudyMemberType;
   studyId: number;
 }) {
+  const Crown = dynamic(() => import('lucide-react').then((m) => m.Crown), {
+    ssr: false,
+  });
+
   const router = useRouter();
   const authId = userAuthStore().user?.id;
   const setLeader = useStudyStore().setLeader;
