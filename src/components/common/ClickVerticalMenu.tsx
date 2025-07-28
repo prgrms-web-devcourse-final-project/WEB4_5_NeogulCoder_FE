@@ -1,9 +1,9 @@
-import { PencilLine, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { deleteRecruitmentPost } from '@/lib/api/recruitment/delete';
 import { deleteStudyPost } from '@/lib/api/study/delete';
 import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 type MenuProps = {
   title?: string;
@@ -26,6 +26,14 @@ export default function ClickVerticalMenu({
 }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const PencilLine = dynamic(
+    () => import('lucide-react').then((m) => m.PencilLine),
+    { ssr: false }
+  );
+
+  const Trash2 = dynamic(() => import('lucide-react').then((m) => m.Trash2), {
+    ssr: false,
+  });
   const handleGoToModify = () => {
     router.push(`/recruitment/modify/${recruitmentPostId}`);
   };

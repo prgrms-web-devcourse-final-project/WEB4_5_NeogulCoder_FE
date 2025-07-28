@@ -1,6 +1,5 @@
 'use client';
 
-import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -8,14 +7,26 @@ import { writeRecruitmentPost } from '@/lib/api/recruitment/write';
 import { fetchStudy } from '@/lib/api/recruitment/fetchStudy';
 import { fetchStudyList } from '@/lib/api/recruitment/fetchStudyList';
 import { formatDate } from '@/utils/formatDate';
-import { title } from 'process';
 import StudyListModal from '@/components/study/StudyListModal';
 import RemainSlotModal from '@/components/study/RemainSlot';
 import { useRouter } from 'next/navigation';
 import RecruitmentFormSkeleton from '@/components/recruitment/RecruitmentFormSkeleton';
 import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function RecruitmentWritePage() {
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    { ssr: false }
+  );
+
+  const Calendar = dynamic(
+    () => import('lucide-react').then((m) => m.Calendar),
+    {
+      ssr: false,
+    }
+  );
+
   const router = useRouter();
   const [subject, setSubject] = useState('');
   const [studyId, setStudyId] = useState<number | ''>('');
@@ -31,6 +42,7 @@ export default function RecruitmentWritePage() {
   const [isStudyOpen, setIsStudyOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  console.log(content);
   const displayText =
     remainSlots === null
       ? '1명 ~ 10명 이상'
@@ -96,9 +108,35 @@ export default function RecruitmentWritePage() {
   }, []);
 
   const handleSubmit = async () => {
+    if (!isClick) {
+      toast.warning('스터디를 먼저 선택하고 정보를 가져와주세요.');
+      return;
+    }
+
+    if (!expiredDate) {
+      toast.warning('모집 마감일을 입력해주세요.');
+      return;
+    }
+
+    if (remainSlots === null) {
+      toast.warning('모집 인원을 선택해주세요.');
+      return;
+    }
+
+    if (!subject.trim()) {
+      toast.warning('제목을 입력해주세요.');
+      return;
+    }
+
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
 
+    if (!content.trim()) {
+      toast.warning('본문 내용을 입력해주세요.');
+      return;
+    }
+
+    // 모든 조건 충족 시, API 호출
     const payload = {
       studyId: studyId,
       subject: subject,
@@ -110,25 +148,12 @@ export default function RecruitmentWritePage() {
     try {
       const data = await writeRecruitmentPost(payload);
       const postId = data.data;
-      console.log('작성 완료', data);
       toast.success('게시글 작성이 완료되었습니다!');
       router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
       console.error('작성 실패', error);
       toast.error('게시글 작성 중 오류가 발생하였습니다.');
     }
-    console.log(
-      'StudyId:',
-      studyId,
-      'Subject:',
-      subject,
-      'Content:',
-      content,
-      'remainSlots:',
-      remainSlots,
-      'ExpiredDate:',
-      expiredDate
-    );
   };
 
   return (
@@ -332,13 +357,6 @@ export default function RecruitmentWritePage() {
             <button
               className='button-type5 hover:bg-[#292929]'
               onClick={handleSubmit}
-              disabled={
-                expiredDate === '' ||
-                remainSlots === null ||
-                title === '' ||
-                content.trim() === '' ||
-                !isClick
-              }
             >
               등록
             </button>

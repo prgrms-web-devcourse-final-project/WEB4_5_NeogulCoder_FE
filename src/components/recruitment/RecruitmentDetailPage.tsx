@@ -1,6 +1,5 @@
 'use client';
 
-import { EllipsisVertical, Tally1 } from 'lucide-react';
 import WriteComment from '@/components/common/WriteComment';
 import Modal from '@/components/common/Modal';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,8 +22,18 @@ import Pagination2 from '@/components/common/Pagination2';
 import { fetchMyStudyApplicationData } from '@/lib/api/recruitment/fetchMyStudyApplicationData';
 import RecruitmentDetailSkeleton from '@/components/recruitment/RecruitmentDetailSkeleton';
 import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function RecruitmentDetailPage() {
+  const EllipsisVertical = dynamic(
+    () => import('lucide-react').then((m) => m.EllipsisVertical),
+    { ssr: false }
+  );
+
+  const Tally1 = dynamic(() => import('lucide-react').then((m) => m.Tally1), {
+    ssr: false,
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const me = userAuthStore((state) => state.user);

@@ -1,6 +1,5 @@
 'use client';
 
-import { ChevronDown } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -10,8 +9,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import CategoryStudyModal2 from '@/components/study/CategoryStudyModal2';
 import StudyPostModifySkeleton from '@/components/study/StudyPostModifySkeleton';
 import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function StudyCommunityModifyPage() {
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    { ssr: false }
+  );
   const pathname = usePathname();
   const router = useRouter();
   const postId = Number(pathname.split('/').pop());
