@@ -6,89 +6,178 @@ import TimeGrid from '@/components/study/TimeGrid';
 import { TimeVoteStatsType, TimeVoteSubmissionsType } from '@/types/schedule';
 import { formatDate } from '@/utils/formatDate';
 import { BadgeQuestionMark } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DeleteScheduleModal from './DeleteScheduleModal';
 import { useParams } from 'next/navigation';
+import { fetchTimeVoteStats } from '@/lib/api/schedule';
+import ScheduleSkeleton from './ScheduleSkeleton';
+import SetPeriodModal from './SetPeriodModal';
+import { checkMyRoleInStudy } from '@/lib/api/community';
 
-export default function StudyScheduleClient({
-  initialTimeVoteStats,
-  initialTimeVoteSubmissions,
-  isLeader,
-}: {
-  initialTimeVoteStats: TimeVoteStatsType;
-  initialTimeVoteSubmissions: TimeVoteSubmissionsType;
-  isLeader: boolean;
-}) {
+export default function StudyScheduleClient() {
   const { id } = useParams();
 
   const [isShown, setIsShown] = useState(false);
   const [isOpenSubmitModal, setIsOpenSubmitModal] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+  const [isOpenPeriodModal, setIsOpenPeriodModal] = useState(false);
 
-  const [timeVoteSubmissions, setTimeVoteSubmissions] = useState(
-    initialTimeVoteSubmissions
-  );
+  const [initialTimeVoteStats, setInitialTimeVoteStats] =
+    useState<TimeVoteStatsType>();
+  const [timeVoteSubmissions, setTimeVoteSubmissions] =
+    useState<TimeVoteSubmissionsType>([]);
+  const [isLeader, setIsLeader] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleCloseSubmitModal = () => setIsOpenSubmitModal(false);
   const handleCloseDeleteModal = () => setIsOpenDeleteModal(false);
+  const handleClosePeriodModal = () => setIsOpenPeriodModal(false);
+
+  const initVoteStats = async () => {
+    setIsLoading(true);
+    // try {
+    const data = await fetchTimeVoteStats(Number(id));
+    setInitialTimeVoteStats(data);
+    // } catch (e) {
+    //   console.error(e);
+    // } finally {
+    setIsLoading(false);
+    // }
+  };
+
+  const checkMyRole = async () => {
+    setIsLoading(true);
+    try {
+      const roleData = await checkMyRoleInStudy(Number(id));
+      setIsLeader(roleData.role === 'LEADER');
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    initVoteStats();
+    checkMyRole();
+  }, []);
 
   return (
     <>
-      <div className='w-full relative'>
-        {isShown && (
-          <div className='absolute top-13 right-6 z-10'>
-            <ScheduleTooltip />
-          </div>
-        )}
-        <div className='flex justify-between items-center'>
-          <div className='tb2 text-text1'>모임 일정 조율</div>
-          <BadgeQuestionMark
-            className='w-6 h-6 text-main opacity-70 hover:opacity-100'
-            onMouseEnter={() => setIsShown(true)}
-            onMouseLeave={() => setIsShown(false)}
-          />
-        </div>
-        <div className='flex justify-between items-center mt-6'>
-          <span className='tm3'>
-            {formatDate(initialTimeVoteStats.startDate, 'YYYY년 M월 D일 dddd')}{' '}
-            ~ {formatDate(initialTimeVoteStats.endDate, 'YYYY년 M월 D일 dddd')}
-          </span>
-          <div className='flex items-center gap-3 tm4 text-white'>
-            <button
-              className='w-[90px] h-[30px] bg-main rounded-[10px] hover:bg-[#292929]'
-              onClick={() => setIsOpenSubmitModal(true)}
-            >
-              제출 현황
-            </button>
-            <button
-              className='w-[90px] h-[30px] bg-main rounded-[10px] hover:bg-[#292929]'
-              onClick={() => setIsOpenDeleteModal(true)}
-            >
-              전체 지우기
-            </button>
-          </div>
-        </div>
-        <div className='mt-[60px]'>
-          <TimeGrid
-            initialTimeVoteStats={initialTimeVoteStats}
-            isLeader={isLeader}
-            isOpenDeleteModal={isOpenDeleteModal}
-            setTimeVoteSubmissions={setTimeVoteSubmissions}
-          />
-        </div>
-      </div>
+      {isLoading ? (
+        <ScheduleSkeleton />
+      ) : (
+        <>
+          {!isLoading && initialTimeVoteStats ? (
+            <>
+              <div className='w-full relative'>
+                {isShown && (
+                  <div className='absolute top-13 right-6 z-10'>
+                    <ScheduleTooltip />
+                  </div>
+                )}
+                <div className='flex justify-between items-center'>
+                  <div className='tb2 text-text1'>모임 일정 조율</div>
+                  <BadgeQuestionMark
+                    className='w-6 h-6 text-main opacity-70 hover:opacity-100'
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}
+                  />
+                </div>
+                <div className='flex justify-between items-center mt-6'>
+                  <span className='tm3'>
+                    {formatDate(
+                      initialTimeVoteStats.startDate,
+                      'YYYY년 M월 D일 dddd'
+                    )}{' '}
+                    ~{' '}
+                    {formatDate(
+                      initialTimeVoteStats.endDate,
+                      'YYYY년 M월 D일 dddd'
+                    )}
+                  </span>
+                  <div className='flex items-center gap-3 tm4 text-white'>
+                    <button
+                      className='w-[90px] h-[30px] bg-main rounded-[10px] hover:bg-[#292929]'
+                      onClick={() => setIsOpenSubmitModal(true)}
+                    >
+                      제출 현황
+                    </button>
+                    <button
+                      className='w-[90px] h-[30px] bg-main rounded-[10px] hover:bg-[#292929]'
+                      onClick={() => setIsOpenDeleteModal(true)}
+                    >
+                      전체 지우기
+                    </button>
+                  </div>
+                </div>
+                <div className='mt-[60px]'>
+                  <TimeGrid
+                    isLeader={isLeader}
+                    isOpenDeleteModal={isOpenDeleteModal}
+                    initialTimeVoteStats={initialTimeVoteStats}
+                    // setInitialTimeVoteStats={setInitialTimeVoteStats}
+                    setTimeVoteSubmissions={setTimeVoteSubmissions}
+                  />
+                </div>
+              </div>
 
-      {isOpenDeleteModal && (
-        <DeleteScheduleModal
-          studyId={Number(id)}
-          onClose={handleCloseDeleteModal}
-        />
-      )}
-      {isOpenSubmitModal && (
-        <SubmitScheduleModal
-          timeVoteSubmissions={timeVoteSubmissions}
-          onClose={handleCloseSubmitModal}
-        />
+              {isOpenDeleteModal && (
+                <DeleteScheduleModal
+                  studyId={Number(id)}
+                  onClose={handleCloseDeleteModal}
+                />
+              )}
+              {isOpenSubmitModal && (
+                <SubmitScheduleModal
+                  timeVoteSubmissions={timeVoteSubmissions}
+                  onClose={handleCloseSubmitModal}
+                />
+              )}
+            </>
+          ) : (
+            <>
+              {!isLoading && !initialTimeVoteStats && (
+                // 84px ?
+                <div
+                  className='w-full relative h-[calc(100vh-105px-113px)]
+          '
+                >
+                  {isShown && (
+                    <div className='absolute top-13 right-6 z-10'>
+                      <ScheduleTooltip />
+                    </div>
+                  )}
+                  <div className='flex justify-between items-center'>
+                    <div className='tb2 text-text1'>모임 일정 조율</div>
+                    <BadgeQuestionMark
+                      className='w-6 h-6 text-main opacity-70 hover:opacity-100'
+                      onMouseEnter={() => setIsShown(true)}
+                      onMouseLeave={() => setIsShown(false)}
+                    />
+                  </div>
+                  <div className='flex flex-col gap-10 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+                    <span>스터디장이 아직 기간 설정을 하지 않았습니다.</span>
+                    {isLeader && (
+                      <button
+                        className='w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]'
+                        onClick={() => setIsOpenPeriodModal(true)}
+                      >
+                        가능 시간 요청
+                      </button>
+                    )}
+                  </div>
+                  {isOpenPeriodModal && (
+                    <SetPeriodModal
+                      studyId={Number(id)}
+                      onClose={handleClosePeriodModal}
+                    />
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </>
       )}
     </>
   );
