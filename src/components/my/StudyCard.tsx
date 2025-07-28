@@ -3,10 +3,22 @@
 import Image from 'next/image';
 import studyDefault from '@/assets/images/study-default.svg';
 // import sunBunny from '@/assets/images/sun-bunny.svg';
-import { Calendar, Crown, UsersRound } from 'lucide-react';
+// import { Calendar, Crown, UsersRound } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 import { MyStudyListType } from '@/types/my';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const Calendar = dynamic(() => import('lucide-react').then((m) => m.Calendar), {
+  ssr: false,
+});
+const Crown = dynamic(() => import('lucide-react').then((m) => m.Crown), {
+  ssr: false,
+});
+const UsersRound = dynamic(
+  () => import('lucide-react').then((m) => m.UsersRound),
+  { ssr: false }
+);
 
 const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
   ONLINE: '온라인',
@@ -52,13 +64,13 @@ export default function StudyCard({
             </span>
           </div>
         </div>
-        <div className='flex justify-center items-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%]'>
-          <div className='relative w-[40px] h-[40px]'>
+        <div className='flex justify-center items-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%] overflow-hidden'>
+          <div className='relative w-full h-full'>
             <Image
               src={imageUrl ? imageUrl : studyDefault}
               alt='스터디 대표 이미지'
-              fill
               priority
+              fill
             />
           </div>
         </div>

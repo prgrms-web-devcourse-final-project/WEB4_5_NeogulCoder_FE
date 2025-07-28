@@ -1,7 +1,7 @@
 'use client';
-import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import dynamic from 'next/dynamic';
 
 export default function SideMenuItem({
   name,
@@ -10,6 +10,13 @@ export default function SideMenuItem({
   name: string;
   to: string;
 }) {
+  const ChevronRight = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronRight),
+    {
+      ssr: false,
+    }
+  );
+
   const pathname = usePathname();
   const isActive = pathname === to;
 

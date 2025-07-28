@@ -25,7 +25,7 @@ export default function ChatItem({
           />
         </div>
         <div className='pt-1.5'>
-          <div className='flex items-end gap-2 mb-0.5'>
+          <div className='flex items-end gap-2 mb-1'>
             <div className='tm3 leading-none'>{name}</div>
             <div className='tl6 leading-tight text-gray5'>{time}</div>
           </div>

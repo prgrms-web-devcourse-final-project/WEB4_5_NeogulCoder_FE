@@ -5,12 +5,18 @@ import MannerStudyItem from '@/components/my/MannerStudyItem';
 import MannerTooltip from '@/components/my/MannerTooltip';
 import SubMenuItem from '@/components/my/SubMenuItem';
 import { fetchStudyList, fetchUserListByStudyId } from '@/lib/api/manners';
-import { BadgeQuestionMark } from 'lucide-react';
+// import { BadgeQuestionMark } from 'lucide-react';
 import Image from 'next/image';
 import completeStamp from '@/assets/images/complete-stamp.svg';
 import { useEffect, useState } from 'react';
 import { Study, User } from '@/types/manners';
 import MannerSkeleton from './MannerSkeleton';
+import dynamic from 'next/dynamic';
+
+const BadgeQuestionMark = dynamic(
+  () => import('lucide-react').then((m) => m.BadgeQuestionMark),
+  { ssr: false }
+);
 
 export default function MannersClient() {
   const [isShown, setIsShown] = useState(false);

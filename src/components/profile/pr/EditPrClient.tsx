@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
 import RegionModal from '@/components/common/RegionModal';
 import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
 import IntroEditor from '@/components/profile/pr/IntroEditor';
+import dynamic from 'next/dynamic';
 
 export default function EditPrClient() {
   const router = useRouter();
@@ -16,6 +16,11 @@ export default function EditPrClient() {
   const isSelectedRegion = !!selectedRegion;
   const [urlErrorMsg, setUrlErrorMsg] = useState('');
   const [initialized, setInitialized] = useState(false);
+
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    { ssr: false }
+  );
 
   const urlInputRefs = [
     useRef<HTMLInputElement>(null),
