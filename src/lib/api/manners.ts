@@ -2,6 +2,7 @@ import axiosInstance from '@/lib/api/axiosInstance';
 
 export const fetchStudyList = async () => {
   const { data } = await axiosInstance.get('/reviews/studies/me');
+
   console.log(data.data.studies);
   return data.data.studies;
 };
