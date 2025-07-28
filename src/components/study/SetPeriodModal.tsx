@@ -3,8 +3,17 @@
 import { setTimeVotePeriods } from '@/lib/api/schedule';
 import { formatDate } from '@/utils/formatDate';
 import dayjs from 'dayjs';
-import { CalendarDays, X } from 'lucide-react';
+// import { CalendarDays, X } from 'lucide-react';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const CalendarDays = dynamic(
+  () => import('lucide-react').then((m) => m.CalendarDays),
+  { ssr: false }
+);
+const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+  ssr: false,
+});
 
 export default function SetPeriodModal({
   studyId,
