@@ -1,6 +1,12 @@
 import Image from 'next/image';
 import studyDefault from '@/assets/images/manner-default.svg';
-import { BadgeAlert } from 'lucide-react';
+// import { BadgeAlert } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const BadgeAlert = dynamic(
+  () => import('lucide-react').then((m) => m.BadgeAlert),
+  { ssr: false }
+);
 
 export default function MannerTooltip() {
   return (

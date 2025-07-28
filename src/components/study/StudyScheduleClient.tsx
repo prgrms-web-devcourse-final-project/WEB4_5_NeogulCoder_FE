@@ -5,7 +5,7 @@ import SubmitScheduleModal from '@/components/study/SubmitScheduleModal';
 import TimeGrid from '@/components/study/TimeGrid';
 import { TimeVoteStatsType, TimeVoteSubmissionsType } from '@/types/schedule';
 import { formatDate } from '@/utils/formatDate';
-import { BadgeQuestionMark } from 'lucide-react';
+// import { BadgeQuestionMark } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import DeleteScheduleModal from './DeleteScheduleModal';
 import { useParams } from 'next/navigation';
@@ -13,6 +13,12 @@ import { fetchTimeVoteStats } from '@/lib/api/schedule';
 import ScheduleSkeleton from './ScheduleSkeleton';
 import SetPeriodModal from './SetPeriodModal';
 import { checkMyRoleInStudy } from '@/lib/api/community';
+import dynamic from 'next/dynamic';
+
+const BadgeQuestionMark = dynamic(
+  () => import('lucide-react').then((m) => m.BadgeQuestionMark),
+  { ssr: false }
+);
 
 export default function StudyScheduleClient() {
   const { id } = useParams();
