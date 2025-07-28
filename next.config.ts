@@ -8,6 +8,21 @@ module.exports = {
         hostname: 'storage.googleapis.com',
         pathname: '**', // 모든 경로 허용
       },
+      {
+        protocol: 'https',
+        hostname: 'www.lorempixel.com',
+        pathname: '**', // 모든 경로 허용
+      },
+      {
+        protocol: 'https',
+        hostname: 'placeimg.com',
+        pathname: '**', // 모든 경로 허용
+      },
+      {
+        protocol: 'https',
+        hostname: 'placekitten.com',
+        pathname: '**', // 모든 경로 허용
+      },
     ],
   },
 };

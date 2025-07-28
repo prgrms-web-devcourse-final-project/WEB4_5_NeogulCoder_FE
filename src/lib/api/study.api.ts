@@ -45,6 +45,14 @@ export const getAllUser = async () => {
   return data;
 };
 
+// 스터디 초대
+export const postStudyInvite = async (studyId: number, name: string) => {
+  const { data } = await axiosInstance.post(
+    `/api/studies/${studyId}/invite/user?targetUserNickname=${name}`
+  );
+  return data;
+};
+
 // 스터디 연장 여부
 export const getStudyExtendInfo = async (studyId: number) => {
   const { data } = await axiosInstance.get(`/api/studies/${studyId}/extension`);
