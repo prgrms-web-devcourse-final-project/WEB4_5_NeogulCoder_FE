@@ -1,6 +1,5 @@
 'use client';
 
-import { CalendarDays, X } from 'lucide-react';
 import CalendarBigDetailItem from './CalendarBigDetailItem';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
@@ -16,6 +15,8 @@ import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
 import CalendarBigDetailItemSkeleton from './Skeleton/CalendarBigDetailItemSkeleton';
 import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
+import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 dayjs.extend(isBetween);
 
 export default function CalendarBigDetail({
@@ -33,6 +34,16 @@ export default function CalendarBigDetail({
   categoryId: number;
   type: string;
 }) {
+  const CalendarDays = dynamic(
+    () => import('lucide-react').then((m) => m.CalendarDays),
+    {
+      ssr: false,
+    }
+  );
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
+
   const authId = userAuthStore().user?.id;
 
   const dateFormat = (date: string) => {
@@ -86,13 +97,12 @@ export default function CalendarBigDetail({
       if (res) {
         handleEventDelete(scheduleId); // 전체에서 삭제
         handleEventDetailDelete(scheduleId); // 상세에서 삭제
-        alert('일정 삭제에 성공했습니다.');
+        toast.success('일정 삭제가 완료되었습니다.');
       } else {
-        alert('일정 삭제에 실패했습니다.');
+        toast.error('일정 삭제에 실패했습니다.');
       }
     } catch (error) {
-      console.error('일정 삭제 중 오류 발생:', error);
-      alert('일정 삭제 중 오류가 발생했습니다.');
+      toast.error('일정 삭제 중 오류 발생: ' + error);
     }
   };
 
@@ -114,8 +124,6 @@ export default function CalendarBigDetail({
   ) => {
     handleEventUpdate(scheduleId, newData);
     handleDetailUpdate(scheduleId, newData);
-
-    alert('수정 되었습니다.');
   };
 
   return (

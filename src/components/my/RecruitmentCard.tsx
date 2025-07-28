@@ -1,8 +1,16 @@
 'use client';
 
+import { categoryFormatting } from '@/utils/categoryFormatting';
 import { formatDate } from '@/utils/formatDate';
-import { MessageSquareMore } from 'lucide-react';
+import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
+// import { MessageSquareMore } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const MessageSquareMore = dynamic(
+  () => import('lucide-react').then((m) => m.MessageSquareMore),
+  { ssr: false }
+);
 
 export default function RecruitmentCard({
   studyId,
@@ -84,10 +92,14 @@ export default function RecruitmentCard({
           <div className='flex justify-between items-end'>
             <div className='flex gap-2 items-center mt-[18px]'>
               <div className='tag-type1'>
-                <span className='tb5'>{category}</span>
+                <span className='tb5'>
+                  {categoryFormatting(category ?? '')}
+                </span>
               </div>
               <div className='tag-type1'>
-                <span className='tb5'>{studyType}</span>
+                <span className='tb5'>
+                  {studyTypeFormatting(studyType ?? '')}
+                </span>
               </div>
             </div>
             <div className='flex justify-center items-center gap-[5px]'>

@@ -1,4 +1,4 @@
-import { Calendar1, NotepadText, UserRound } from 'lucide-react';
+import dynamic from 'next/dynamic';
 
 export default function StudyInfoCard({
   title,
@@ -11,6 +11,24 @@ export default function StudyInfoCard({
   data: string;
   subData?: string;
 }) {
+  const Calendar1 = dynamic(
+    () => import('lucide-react').then((m) => m.Calendar1),
+    {
+      ssr: false,
+    }
+  );
+  const NotepadText = dynamic(
+    () => import('lucide-react').then((m) => m.NotepadText),
+    {
+      ssr: false,
+    }
+  );
+  const UserRound = dynamic(
+    () => import('lucide-react').then((m) => m.UserRound),
+    {
+      ssr: false,
+    }
+  );
   return (
     <>
       <div className='border border-border1 rounded-[10px] p-6 text-gray5'>

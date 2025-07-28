@@ -1,13 +1,23 @@
-import { Backpack, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
+import dynamic from 'next/dynamic';
 
 export default function SideStudyInfo({
   studyInfo,
 }: {
   studyInfo: StudyHeaderType;
 }) {
+  const Backpack = dynamic(
+    () => import('lucide-react').then((m) => m.Backpack),
+    {
+      ssr: false,
+    }
+  );
+  const MapPin = dynamic(() => import('lucide-react').then((m) => m.MapPin), {
+    ssr: false,
+  });
+
   return (
     <>
       <div className='px-5 py-5 bg-gray4 rounded-[10px] mb-3'>

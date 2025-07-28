@@ -1,0 +1,48 @@
+import React from 'react';
+
+export default function TimeGridSkeleton() {
+  return (
+    <div className='select-none flex flex-col gap-[30px] animate-pulse'>
+      <div className='grid grid-cols-[6px_repeat(7,minmax(0,1fr))] place-items-center gap-x-4 gap-y-0 px-20'>
+        <div></div>
+        {[...Array(7)].map((_, i) => (
+          <div
+            key={`day-${i}`}
+            className='w-6 h-6 bg-gray-200 rounded mb-1'
+          ></div>
+        ))}
+
+        <div></div>
+        {[...Array(7)].map((_, i) => (
+          <div
+            key={`date-${i}`}
+            className='w-16 h-6 bg-gray-100 rounded mb-1'
+          ></div>
+        ))}
+
+        {[...Array(24)].map((_, hour) => (
+          <React.Fragment key={`hour-${hour}`}>
+            <div className='relative w-[18px] h-9'>
+              <span className='absolute right-0 top-0 w-4 h-3 bg-gray-200 rounded'></span>
+            </div>
+            {[...Array(7)].map((_, col) => (
+              <div
+                key={`cell-${hour}-${col}`}
+                className='w-20 h-9 bg-gray-100 border-b border-border1 rounded-sm'
+              ></div>
+            ))}
+          </React.Fragment>
+        ))}
+      </div>
+
+      <div className='flex justify-end gap-[10px] px-20'>
+        {[...Array(2)].map((_, i) => (
+          <div
+            key={`button-${i}`}
+            className='w-[235px] h-[48px] bg-gray-300 rounded-[10px]'
+          ></div>
+        ))}
+      </div>
+    </div>
+  );
+}

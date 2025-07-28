@@ -13,18 +13,12 @@ type rawMenuItemsType = {
   onlyLeader?: boolean;
 };
 
-export default function SideMenu({
-  studyId,
-  my,
-}: {
-  studyId: number;
-  my?: StudyMyDataType;
-}) {
+export default function SideMenu({ studyId }: { studyId: number }) {
   // 사이트메뉴의 스터디 정보 관리를 위한 전역상태
   const studyInfo = useStudyStore().study;
   const isLoading = useStudyStore().isLoading;
+  const leader = useStudyStore().leader;
   const router = useRouter();
-  const leader = my?.role === 'LEADER';
 
   // 가지고 있는 사이드 메뉴
   const menuItems = useMemo(() => {

@@ -9,6 +9,7 @@ import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import OnlineModal from '../common/OnlineModal';
 import RegionModal from '../common/RegionModal';
+import { toast } from 'react-toastify';
 
 type CreateStudyModalProps = {
   onClose: () => void;
@@ -62,9 +63,11 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
     try {
       const data = await createStudy(formData);
       console.log('생성 완료', data);
+      toast.success('스터디 생성이 완료되었습니다!');
       onClose();
     } catch (error) {
       console.error('응답 에러:', error);
+      toast.error('스터디 생성 중 오류가 발생하였습니다.');
     }
   };
 

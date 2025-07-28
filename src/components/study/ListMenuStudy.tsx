@@ -1,9 +1,18 @@
 'use client';
 
-import { ChevronDown, Search } from 'lucide-react';
+// import { ChevronDown, Search } from 'lucide-react';
 import { useRef, useState } from 'react';
 import CategoryStudyModal from './CategoryStudyModal';
 import SortingTypeModal from './SortingTypeModal';
+import dynamic from 'next/dynamic';
+
+const ChevronDown = dynamic(
+  () => import('lucide-react').then((m) => m.ChevronDown),
+  { ssr: false }
+);
+const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
+  ssr: false,
+});
 
 export default function ListMenuStudy({
   selectedCategory,

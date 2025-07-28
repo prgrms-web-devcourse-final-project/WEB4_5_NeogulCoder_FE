@@ -1,11 +1,30 @@
 'use client';
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from 'lucide-react';
+// import {
+//   ChevronLeft,
+//   ChevronRight,
+//   ChevronsLeft,
+//   ChevronsRight,
+// } from 'lucide-react';
+
+import dynamic from 'next/dynamic';
+
+const ChevronLeft = dynamic(
+  () => import('lucide-react').then((m) => m.ChevronLeft),
+  { ssr: false }
+);
+const ChevronRight = dynamic(
+  () => import('lucide-react').then((m) => m.ChevronRight),
+  { ssr: false }
+);
+const ChevronsLeft = dynamic(
+  () => import('lucide-react').then((m) => m.ChevronsLeft),
+  { ssr: false }
+);
+const ChevronsRight = dynamic(
+  () => import('lucide-react').then((m) => m.ChevronsRight),
+  { ssr: false }
+);
 
 export default function Pagination({
   totalPages,
