@@ -13,18 +13,21 @@ import {
   fetchTimeVoteSubmissions,
 } from '@/lib/api/schedule';
 import { useParams } from 'next/navigation';
+import TimeGridSkeleton from './TimeGridSkeleton';
 
 type Cell = { day: number; hour: number };
 
 export default function TimeGrid({
-  initialTimeVoteStats,
   isLeader,
   isOpenDeleteModal,
+  initialTimeVoteStats,
+  // setInitialTimeVoteStats,
   setTimeVoteSubmissions,
 }: {
-  initialTimeVoteStats: TimeVoteStatsType;
   isLeader: boolean;
   isOpenDeleteModal: boolean;
+  initialTimeVoteStats: TimeVoteStatsType;
+  // setInitialTimeVoteStats: (v: TimeVoteStatsType) => void;
   setTimeVoteSubmissions: (v: TimeVoteSubmissionsType) => void;
 }) {
   const { id } = useParams();
@@ -38,6 +41,9 @@ export default function TimeGrid({
 
   const [nullDataIndex, setNullDataIndex] = useState<number[]>([]);
 
+  // const [isLeader, setIsLeader] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const [isEditing, setIsEditing] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [buttonState, setButtonState] = useState<
@@ -47,9 +53,9 @@ export default function TimeGrid({
   const [isOpenPeriodModal, setIsOpenPeriodModal] = useState(false);
 
   const [selectedCells, setSelectedCells] = useState<Cell[]>([]);
-  const [totalTimeVoteStats, setTotalTimeVoteStats] = useState(
-    initialTimeVoteStats.stats
-  );
+  const [totalTimeVoteStats, setTotalTimeVoteStats] = useState<
+    TimeVoteStatsType['stats']
+  >([]);
   const [myTimeVoteStats, setMyTimeVoteStats] = useState([]);
   const [anchorCell, setAnchorCell] = useState<Cell | null>(null);
   const isDragging = useRef(false);
@@ -146,7 +152,20 @@ export default function TimeGrid({
     setNullDataIndex(indexArr);
   };
 
+  // const checkMyRole = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const roleData = await checkMyRoleInStudy(Number(id));
+  //     setIsLeader(roleData.role === 'LEADER');
+  //   } catch (e) {
+  //     console.error(e);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
   const checkSubmitted = async () => {
+    setIsLoading(true);
     try {
       const { timeSlots } = await fetchMyTimeVote(Number(id));
       const hasSubmitted = timeSlots.length !== 0 ? true : false;
@@ -155,15 +174,25 @@ export default function TimeGrid({
       else setButtonState('완료');
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const getSubmissions = async () => {
-    const data = await fetchTimeVoteSubmissions(Number(id));
-    setTimeVoteSubmissions(data);
+    setIsLoading(true);
+    try {
+      const data = await fetchTimeVoteSubmissions(Number(id));
+      setTimeVoteSubmissions(data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getMyVotes = async () => {
+    setIsLoading(true);
     try {
       const { timeSlots } = await fetchMyTimeVote(Number(id));
       setMyTimeVoteStats(timeSlots);
@@ -172,6 +201,8 @@ export default function TimeGrid({
     } catch (e) {
       console.error(e);
       return [];
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -226,24 +257,26 @@ export default function TimeGrid({
     return timeSlots;
   };
 
-  const initVoteStats = async () => {
-    const newMap = new Map<string, number>();
-    totalTimeVoteStats.forEach((item) => {
-      const start = dayjs(item.timeSlot);
-      const dateKey = start.format('MM.DD');
-      const hour = start.hour();
-      newMap.set(`${dateKey}-${hour}`, item.voteCount);
-    });
-    setVoteMap(newMap);
-  };
+  // const initVoteStats = async () => {
+  //   const newMap = new Map<string, number>();
+  //   totalTimeVoteStats.forEach((item) => {
+  //     const start = dayjs(item.timeSlot);
+  //     const dateKey = start.format('MM.DD');
+  //     const hour = start.hour();
+  //     newMap.set(`${dateKey}-${hour}`, item.voteCount);
+  //   });
+  //   setVoteMap(newMap);
+  // };
 
   const refreshVoteStats = async () => {
+    setIsLoading(true);
     try {
-      const { stats } = await fetchTimeVoteStats(Number(id));
-      setTotalTimeVoteStats(stats);
+      const data = await fetchTimeVoteStats(Number(id));
+      setTotalTimeVoteStats(data.stats);
+      // setInitialTimeVoteStats(data);
 
       const newMap = new Map<string, number>();
-      stats.forEach((item: { timeSlot: string; voteCount: number }) => {
+      data.stats.forEach((item: { timeSlot: string; voteCount: number }) => {
         const start = dayjs(item.timeSlot);
         const dateKey = start.format('MM.DD');
         const hour = start.hour();
@@ -252,11 +285,14 @@ export default function TimeGrid({
       setVoteMap(newMap);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleMainButtonClick = async () => {
     if (buttonState === '시간 제출' || buttonState === '시간 수정') {
+      setIsLoading(true);
       try {
         const timeSlots = await getMyVotes();
         console.log('timeSlots:', timeSlots);
@@ -266,6 +302,8 @@ export default function TimeGrid({
         setButtonState('완료');
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsLoading(false);
       }
     } else if (buttonState === '완료') {
       const times = convertSelectedCellsToTime(
@@ -273,6 +311,7 @@ export default function TimeGrid({
         date,
         initialTimeVoteStats.startDate
       );
+      setIsLoading(true);
       try {
         if (selectedCells.length !== 0) {
           if (hasSubmitted) await putMyTimeVote(Number(id), times);
@@ -288,11 +327,14 @@ export default function TimeGrid({
         }
       } catch (e) {
         console.error(e);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
 
   const handleCancelButtonClick = async () => {
+    setIsLoading(true);
     try {
       await refreshVoteStats();
       setIsEditing(false);
@@ -302,13 +344,18 @@ export default function TimeGrid({
       getSubmissions();
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    // checkMyRole();
     getNullDataIndex();
-    initVoteStats();
+    refreshVoteStats();
     checkSubmitted();
+    getSubmissions();
+    console.log('totalTimeVoteStats:', totalTimeVoteStats);
   }, []);
 
   useEffect(() => {
@@ -345,114 +392,123 @@ export default function TimeGrid({
 
   return (
     <>
-      <div className='select-none flex flex-col gap-[30px] '>
-        <div className='grid grid-cols-[6px_repeat(7,minmax(0,1fr))] place-items-center gap-x-4 gap-y-0 px-20'>
-          <div></div>
-          {day.map((d, i) => (
-            <div
-              key={d}
-              className={`text-center tm3 bg-white ${
-                nullDataIndex[i] !== -1
-                  ? 'text-border1'
-                  : 'text-text1 opacity-50'
-              }`}
-            >
-              {d}
-            </div>
-          ))}
-          <div></div>
-          {date.map((d, i) => (
-            <div
-              key={d}
-              className={`text-center tm3 py-2 bg-white ${
-                nullDataIndex[i] !== -1
-                  ? 'text-border1'
-                  : 'text-text1 opacity-50'
-              }`}
-            >
-              {nullDataIndex[i] !== -1 ? d.slice(1) : d}
-            </div>
-          ))}
-          {[...Array(24)].map((_, hour) => (
-            <React.Fragment key={hour}>
-              <div className='relative w-[18px] h-9'>
-                <span className='absolute right-0 top-0 transform -translate-y-1/2 text-sm text-text1 opacity-50'>
-                  {hour}
-                </span>
-              </div>
-              {date.map((dateStr, dayIdx) => {
-                const cell = { day: dayIdx, hour };
-                const selected = isCellSelected(cell);
-                const key = `${dateStr}-${hour}`;
-                const count = voteMap.get(key) || 0;
-
-                if (nullDataIndex[dayIdx] !== -1) {
-                  return (
-                    <div
-                      key={`${dayIdx}-${hour}`}
-                      className={`w-20 h-9 border-b border-b-border1 bg-border1 cursor-default relative ${
-                        hour === 0 ? 'rounded-t-xl' : ''
-                      } ${hour === 23 ? 'rounded-b-xl border-none' : ''}`}
-                    ></div>
-                  );
-                }
-
-                return (
-                  <div
-                    key={`${dayIdx}-${hour}`}
-                    onMouseDown={() => handleMouseDown(cell)}
-                    onMouseEnter={() => handleMouseEnter(cell)}
-                    onMouseUp={() => handleMouseUp(cell)}
-                    className={`w-20 h-9 border-b border-b-border1 ${
-                      selected
-                        ? 'bg-gray1 text-white'
-                        : isEditing
-                        ? 'bg-[#fafafa] hover:bg-[#f1f1f1]'
-                        : getBgClass(count)
-                    } ${hour === 0 ? 'rounded-t-xl' : ''} ${
-                      hour === 23 ? 'rounded-b-xl border-none' : ''
-                    } cursor-pointer relative`}
-                  >
-                    {!isEditing && count > 0 && (
-                      <span className='absolute right-1 bottom-0 text-xs text-black opacity-60'>
-                        {count}
-                      </span>
-                    )}
+      {isLoading ? (
+        <TimeGridSkeleton />
+      ) : (
+        <>
+          <div className='select-none flex flex-col gap-[30px] '>
+            <div className='grid grid-cols-[6px_repeat(7,minmax(0,1fr))] place-items-center gap-x-4 gap-y-0 px-20'>
+              <div></div>
+              {day.map((d, i) => (
+                <div
+                  key={d}
+                  className={`text-center tm3 bg-white ${
+                    nullDataIndex[i] !== -1
+                      ? 'text-border1'
+                      : 'text-text1 opacity-50'
+                  }`}
+                >
+                  {d}
+                </div>
+              ))}
+              <div></div>
+              {date.map((d, i) => (
+                <div
+                  key={d}
+                  className={`text-center tm3 py-2 bg-white ${
+                    nullDataIndex[i] !== -1
+                      ? 'text-border1'
+                      : 'text-text1 opacity-50'
+                  }`}
+                >
+                  {nullDataIndex[i] !== -1 ? d.slice(1) : d}
+                </div>
+              ))}
+              {[...Array(24)].map((_, hour) => (
+                <React.Fragment key={hour}>
+                  <div className='relative w-[18px] h-9'>
+                    <span className='absolute right-0 top-0 transform -translate-y-1/2 text-sm text-text1 opacity-50'>
+                      {hour}
+                    </span>
                   </div>
-                );
-              })}
-            </React.Fragment>
-          ))}
-        </div>
+                  {date.map((dateStr, dayIdx) => {
+                    const cell = { day: dayIdx, hour };
+                    const selected = isCellSelected(cell);
+                    const key = `${dateStr}-${hour}`;
+                    const count = voteMap.get(key) || 0;
 
-        <div className='flex justify-end gap-[10px] px-20'>
-          {isLeader && !isEditing && (
-            <button
-              className='w-[235px] h-[48px] bg-white border border-main rounded-[10px] tm3 text-text1 hover:bg-gray4'
-              onClick={() => setIsOpenPeriodModal(true)}
-            >
-              가능 시간 요청
-            </button>
-          )}
-          {isEditing && (
-            <button
-              className='w-[235px] h-[48px] bg-white border border-main rounded-[10px] tm3 text-text1 hover:bg-gray4'
-              onClick={handleCancelButtonClick}
-            >
-              취소
-            </button>
-          )}
-          <button
-            className='w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]'
-            onClick={handleMainButtonClick}
-          >
-            {buttonState}
-          </button>
-        </div>
-      </div>
+                    if (nullDataIndex[dayIdx] !== -1) {
+                      return (
+                        <div
+                          key={`${dayIdx}-${hour}`}
+                          className={`w-20 h-9 border-b border-b-border1 bg-border1 cursor-default relative ${
+                            hour === 0 ? 'rounded-t-xl' : ''
+                          } ${hour === 23 ? 'rounded-b-xl border-none' : ''}`}
+                        ></div>
+                      );
+                    }
 
-      {isOpenPeriodModal && (
-        <SetPeriodModal studyId={Number(id)} onClose={handleClosePeriodModal} />
+                    return (
+                      <div
+                        key={`${dayIdx}-${hour}`}
+                        onMouseDown={() => handleMouseDown(cell)}
+                        onMouseEnter={() => handleMouseEnter(cell)}
+                        onMouseUp={() => handleMouseUp(cell)}
+                        className={`w-20 h-9 border-b border-b-border1 ${
+                          selected
+                            ? 'bg-gray1 text-white'
+                            : isEditing
+                            ? 'bg-[#fafafa] hover:bg-[#f1f1f1]'
+                            : getBgClass(count)
+                        } ${hour === 0 ? 'rounded-t-xl' : ''} ${
+                          hour === 23 ? 'rounded-b-xl border-none' : ''
+                        } cursor-pointer relative`}
+                      >
+                        {!isEditing && count > 0 && (
+                          <span className='absolute right-1 bottom-0 text-xs text-black opacity-60'>
+                            {count}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </React.Fragment>
+              ))}
+            </div>
+
+            <div className='flex justify-end gap-[10px] px-20'>
+              {isLeader && !isEditing && (
+                <button
+                  className='w-[235px] h-[48px] bg-white border border-main rounded-[10px] tm3 text-text1 hover:bg-gray4'
+                  onClick={() => setIsOpenPeriodModal(true)}
+                >
+                  가능 시간 요청
+                </button>
+              )}
+              {isEditing && (
+                <button
+                  className='w-[235px] h-[48px] bg-white border border-main rounded-[10px] tm3 text-text1 hover:bg-gray4'
+                  onClick={handleCancelButtonClick}
+                >
+                  취소
+                </button>
+              )}
+              <button
+                className='w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]'
+                onClick={handleMainButtonClick}
+              >
+                {buttonState}
+              </button>
+            </div>
+          </div>
+
+          {isOpenPeriodModal && (
+            <SetPeriodModal
+              studyId={Number(id)}
+              onClose={handleClosePeriodModal}
+            />
+          )}
+        </>
       )}
     </>
   );
