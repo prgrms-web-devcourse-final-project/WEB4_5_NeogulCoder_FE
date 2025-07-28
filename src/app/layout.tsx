@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import '../styles/globals.css';
 import UserStore from './user-store';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: 'Wibby',
@@ -31,6 +31,7 @@ export default function RootLayout({
           pauseOnHover
           draggable
           theme='light'
+          transition={Bounce}
         />
       </body>
     </html>

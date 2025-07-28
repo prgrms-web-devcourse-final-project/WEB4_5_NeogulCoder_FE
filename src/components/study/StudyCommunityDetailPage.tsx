@@ -1,6 +1,5 @@
 'use client';
 
-import { EllipsisVertical } from 'lucide-react';
 import WriteComment from '@/components/common/WriteComment';
 import Modal from '@/components/common/Modal';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -15,8 +14,13 @@ import ToastViewer from '@/components/common/ToastViewer';
 import Image from 'next/image';
 import basicBunny from '@/assets/images/basic-bunny.svg';
 import StudyPostDetailSkeleton from '@/components/study/StudyPostDetailSkeleton';
+import dynamic from 'next/dynamic';
 
 export default function StudyCommunityDetailPage() {
+  const EllipsisVertical = dynamic(
+    () => import('lucide-react').then((m) => m.EllipsisVertical),
+    { ssr: false }
+  );
   const pathname = usePathname();
   const me = userAuthStore((state) => state.user);
   const studyId = Number(pathname.split('/')[2]);
@@ -29,6 +33,7 @@ export default function StudyCommunityDetailPage() {
   const [createdDate, setCreatedDate] = useState('');
   const [nickname, setNickname] = useState('');
   const [content, setContent] = useState('');
+  const [userId, setUserId] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState<CommentType[]>([]);
@@ -46,7 +51,7 @@ export default function StudyCommunityDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
 
   const handleCommentAdd = () => {
@@ -62,6 +67,7 @@ export default function StudyCommunityDetailPage() {
       setTitle(data.postInfo.title);
       setContent(data.postInfo.content);
       setImageUrl(data.postInfo.imageUrl);
+      setUserId(data.postInfo.userId);
       setCommentCount(data.commentCount);
       setComments(data.comments);
     } catch (error) {
@@ -177,6 +183,7 @@ export default function StudyCommunityDetailPage() {
               commentCount={commentCount}
               profileImageUrl={me?.profileImageUrl}
               onCommentAdd={handleCommentAdd}
+              userId={me?.id}
             />
           </div>
           <div className='w-[898px]'>

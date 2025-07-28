@@ -1,6 +1,5 @@
 'use client';
 
-import { ChevronDown } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -9,8 +8,14 @@ import { modifyStudyPost } from '@/lib/api/study/modify';
 import { usePathname, useRouter } from 'next/navigation';
 import CategoryStudyModal2 from '@/components/study/CategoryStudyModal2';
 import StudyPostModifySkeleton from '@/components/study/StudyPostModifySkeleton';
+import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function StudyCommunityModifyPage() {
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    { ssr: false }
+  );
   const pathname = usePathname();
   const router = useRouter();
   const postId = Number(pathname.split('/').pop());
@@ -64,9 +69,11 @@ export default function StudyCommunityModifyPage() {
     try {
       const data = await modifyStudyPost(postId, payload);
       console.log('수정 완료', data);
+      toast.success('게시글 수정이 완료되었습니다!');
       router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
       console.error('수정 실패', error);
+      toast.error('게시글 수정 중 오류가 발생하였습니다.');
     }
     console.log('Title:', title, 'Content:', content, 'category:', category);
   };

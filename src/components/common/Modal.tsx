@@ -1,5 +1,5 @@
-import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 
 type ModalProps = {
   onClose: () => void;
@@ -14,6 +14,9 @@ export default function Modal({
   title,
   children,
 }: ModalProps) {
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
   useEffect(() => {
     document.body.style.overflow = 'hidden';
 

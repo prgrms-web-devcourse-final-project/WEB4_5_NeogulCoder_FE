@@ -1,6 +1,5 @@
 'use client';
 
-import { EllipsisVertical, Tally1 } from 'lucide-react';
 import WriteComment from '@/components/common/WriteComment';
 import Modal from '@/components/common/Modal';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -23,13 +22,23 @@ import Pagination2 from '@/components/common/Pagination2';
 import { fetchMyStudyApplicationData } from '@/lib/api/recruitment/fetchMyStudyApplicationData';
 import RecruitmentDetailSkeleton from '@/components/recruitment/RecruitmentDetailSkeleton';
 import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function RecruitmentDetailPage() {
+  const EllipsisVertical = dynamic(
+    () => import('lucide-react').then((m) => m.EllipsisVertical),
+    { ssr: false }
+  );
+
+  const Tally1 = dynamic(() => import('lucide-react').then((m) => m.Tally1), {
+    ssr: false,
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const me = userAuthStore((state) => state.user);
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
   const target = 'recruitment';
   const complete = 'COMPLETE';
@@ -49,6 +58,7 @@ export default function RecruitmentDetailPage() {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState('');
+  const [userId, setUserId] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [expiredDate, setExpiredDate] = useState('');
@@ -122,9 +132,10 @@ export default function RecruitmentDetailPage() {
       setNickname(data.postDetailsInfo.nickname);
       setSubject(data.postDetailsInfo.subject);
       setContent(data.postDetailsInfo.content);
-      setProfileImageUrl(data.postDetailsInfo.profileImageUrl);
+      setProfileImageUrl(data.postDetailsInfo.imageUrl);
       setExpiredDate(data.postDetailsInfo.expiredDate);
       setStatus(data.postDetailsInfo.status);
+      setUserId(data.postDetailsInfo.userId);
       setCommentCount(data.commentCount);
       setComments(data.commentsWithWriterInfos);
     } catch (error) {
@@ -385,14 +396,21 @@ export default function RecruitmentDetailPage() {
                 </span>
               </div>
               <div className='flex w-[400px]'>
-                <span className=' mr-8 tm3 opacity-50'>지역</span>
-                <span className='tm3'>{location}</span>
+                <span className='mr-8 tm3 opacity-50'>
+                  {location ? '지역' : '모집 마감일'}
+                </span>
+                <span className='tm3'>
+                  {location ? location : formatDate(expiredDate)}
+                </span>
               </div>
             </div>
-            <div className='flex w-[400px]'>
-              <span className='mr-8 tm3 opacity-50'>모집 마감일</span>
-              <span className='tm3'>{formatDate(expiredDate)}</span>
-            </div>
+
+            {location && (
+              <div className='flex w-[400px]'>
+                <span className='mr-8 tm3 opacity-50'>모집 마감일</span>
+                <span className='tm3'>{formatDate(expiredDate)}</span>
+              </div>
+            )}
           </div>
           <div
             className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5 tm3'
@@ -439,6 +457,7 @@ export default function RecruitmentDetailPage() {
           <div className='w-[852px]'>
             <WriteComment
               key={refreshKey}
+              userId={me?.id}
               target={target}
               postId={recruitmentPostId}
               commentCount={commentCount}
