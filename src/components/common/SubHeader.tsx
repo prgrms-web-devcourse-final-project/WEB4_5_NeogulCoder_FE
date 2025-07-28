@@ -36,9 +36,15 @@ export default function SubHeader() {
               홈
             </button>
             <Link href={`/#recruit`}>모집</Link>
-            <button type='button' onClick={() => setIsOpen(true)}>
-              스터디 생성
-            </button>
+
+            {user && (
+              <>
+                <Link href={`/recruitment/write`}>모집글 작성</Link>
+                <button type='button' onClick={() => setIsOpen(true)}>
+                  스터디 생성
+                </button>
+              </>
+            )}
             {user && user.role === 'ROLE_ADMIN' && (
               <Link href={`/manager`}>관리자</Link>
             )}
