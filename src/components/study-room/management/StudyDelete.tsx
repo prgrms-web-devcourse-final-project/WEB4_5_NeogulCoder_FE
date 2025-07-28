@@ -5,6 +5,7 @@ import StudyDeleteCheckModal from './StudyDeleteCheckModal';
 import { deleteStudy } from '@/lib/api/study.api';
 import { useRouter } from 'next/navigation';
 import { useStudiesStore } from '@/stores/useStudiesStore';
+import { toast } from 'react-toastify';
 
 export default function StudyDelete({ studyId }: { studyId: number }) {
   const router = useRouter();
@@ -23,11 +24,12 @@ export default function StudyDelete({ studyId }: { studyId: number }) {
     startTransition(async () => {
       try {
         await deleteStudy(studyId);
-      } catch (error) {
-        console.error('스터디 연장정보를 불러오지 못했습니다', error);
-      } finally {
+        toast.success('스터디를 삭제 했습니다.');
         router.push('/');
         deleteStudies(studyId);
+      } catch (error) {
+        toast.error(`스터디 삭제 실패 ${error}`);
+        console.error('스터디 삭제 실패', error);
       }
     });
   };
