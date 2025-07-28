@@ -12,6 +12,7 @@ import { Bell } from 'lucide-react';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import NotificationModalSkeleton from './NotificationModalSkeleton';
 
 export default function NotificationModal({
   onClose,
@@ -21,6 +22,7 @@ export default function NotificationModal({
   const [notification, setNotification] = useState<NotificationItem[]>([]);
   const router = useRouter();
   const { setUnReadCounts } = countNotificationStore();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getRoute = (domainType: string, domainId: number) => {
     switch (domainType) {
@@ -40,7 +42,13 @@ export default function NotificationModal({
   };
 
   useEffect(() => {
-    fetchUnreadNotifications();
+    try {
+      fetchUnreadNotifications();
+    } catch (error) {
+      console.error('알림 불러오기 실패: ', error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   // 내 알림 전체 읽음 처리
@@ -90,7 +98,9 @@ export default function NotificationModal({
       </div>
 
       <ul className='flex flex-col cursor-pointer'>
-        {notification.length > 0 ? (
+        {isLoading ? (
+          <NotificationModalSkeleton />
+        ) : notification.length > 0 ? (
           notification.map((item) => (
             <li
               key={item.id}
