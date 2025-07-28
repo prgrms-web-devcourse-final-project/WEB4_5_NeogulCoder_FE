@@ -26,8 +26,8 @@ export default function NotificationModal({
 
   const getRoute = (domainType: string, domainId: number) => {
     switch (domainType) {
-      case 'STUDY':
-        return `/study/${domainId}/dashboard`;
+      // case 'STUDY':
+      //   return `/study/${domainId}/dashboard`;
       case 'RECRUITMENT_POST':
         return `/recruitment/detail/${domainId}`;
       default:
@@ -37,18 +37,19 @@ export default function NotificationModal({
 
   // 읽음 여부 관련 없이 내 전체 알림 목록 조회
   const fetchUnreadNotifications = async () => {
-    const data = await getUnreadNotifications();
-    if (data) setNotification(data);
-  };
-
-  useEffect(() => {
     try {
-      fetchUnreadNotifications();
+      setIsLoading(true);
+      const data = await getUnreadNotifications();
+      if (data) setNotification(data);
     } catch (error) {
       console.error('알림 불러오기 실패: ', error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchUnreadNotifications();
   }, []);
 
   // 내 알림 전체 읽음 처리
@@ -66,12 +67,17 @@ export default function NotificationModal({
   const handleReadNotifications = async (
     alarmId: number,
     domainType: string | null,
-    domainId: number
+    domainId: number,
+    alarmType: string
   ) => {
     try {
       await readNotifications(alarmId, true);
       setNotification((prev) => prev.filter((item) => item.id !== alarmId));
       setUnReadCounts(0);
+
+      if (alarmType === 'INVITE') {
+        alert('완료');
+      }
 
       if (!domainType) return;
 
@@ -100,7 +106,7 @@ export default function NotificationModal({
       <ul className='flex flex-col cursor-pointer'>
         {isLoading ? (
           <NotificationModalSkeleton />
-        ) : notification.length > 0 ? (
+        ) : !isLoading && notification.length > 0 ? (
           notification.map((item) => (
             <li
               key={item.id}
@@ -112,7 +118,8 @@ export default function NotificationModal({
                   handleReadNotifications(
                     item.id,
                     item.domainType,
-                    item.domainId
+                    item.domainId,
+                    item.alarmType
                   )
                 }
               >
@@ -145,7 +152,8 @@ export default function NotificationModal({
                       handleReadNotifications(
                         item.id,
                         item.domainType,
-                        item.domainId
+                        item.domainId,
+                        item.alarmType
                       );
                     }}
                   >
@@ -158,7 +166,8 @@ export default function NotificationModal({
                       handleReadNotifications(
                         item.id,
                         item.domainType,
-                        item.domainId
+                        item.domainId,
+                        item.alarmType
                       );
                     }}
                   >
