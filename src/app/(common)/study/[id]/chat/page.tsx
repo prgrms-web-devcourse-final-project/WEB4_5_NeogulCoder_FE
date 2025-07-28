@@ -44,6 +44,7 @@ export default function Chat() {
   const [scrollToBottom, setScrollToBottom] = useState(true);
   const params = useParams();
   const studyId = Number(params?.id);
+  const me = userAuthStore((state) => state.user);
 
   // 메시지 불러오기 + 웹소켓 연결
   useEffect(() => {
@@ -57,6 +58,7 @@ export default function Chat() {
         const res = await fetchChatMessage(studyId, last);
         setChats(res.content);
         setCurrentPage(last);
+        setScrollToBottom(true);
       } catch (error) {
         console.error('초기 메시지 불러오기 실패: ', error);
       }
@@ -100,7 +102,10 @@ export default function Chat() {
   useEffect(() => {
     if (scrollToBottom && chats.length > 0) {
       const timeout = setTimeout(() => {
-        textBottomRef.current?.scrollIntoView({ behavior: 'auto' });
+        textBottomRef.current?.scrollIntoView({
+          behavior: 'auto',
+        });
+        // setScrollToBottom(false);
       }, 0);
 
       return () => clearTimeout(timeout);
@@ -122,11 +127,11 @@ export default function Chat() {
       }),
     });
 
-    // console.log('전송 ', {
-    //   studyId: studyId,
-    //   senderId: user.id,
-    //   message,
-    // });
+    console.log('전송 ', {
+      studyId: studyId,
+      senderId: user.id,
+      message,
+    });
 
     setMessage('');
     setScrollToBottom(true);
@@ -172,9 +177,16 @@ export default function Chat() {
               {group.messages.map((chat) => (
                 <ChatItem
                   key={chat.id}
-                  name={chat.senderNickname}
+                  name={
+                    chat.senderNickname === me?.nickname
+                      ? `${chat.senderNickname} (나)`
+                      : chat.senderNickname
+                  }
                   content={chat.message}
-                  time={new Date(chat.sentAt).toLocaleTimeString()}
+                  time={new Date(chat.sentAt).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                   image={chat.profileImageUrl ?? musicBunny}
                 />
               ))}
