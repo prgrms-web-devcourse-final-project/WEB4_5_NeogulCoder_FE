@@ -1,17 +1,17 @@
-// import { getNotifications } from '@/lib/api/notification';
 import {
-  getNotifications,
-  // getUnreadNotifications,
+  getUnreadNotifications,
   readAllNotifications,
   readNotifications,
 } from '@/lib/api/notification';
-import { NotificationItem } from '@/stores/notificationStore';
+import {
+  countNotificationStore,
+  NotificationItem,
+} from '@/stores/notificationStore';
 import dateFormat from '@/utils/dateFormatting';
 import { Bell } from 'lucide-react';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-// import { useEffect, useState } from 'react';
 
 export default function NotificationModal({
   onClose,
@@ -20,32 +20,35 @@ export default function NotificationModal({
 }) {
   const [notification, setNotification] = useState<NotificationItem[]>([]);
   const router = useRouter();
+  const { setUnReadCounts } = countNotificationStore();
 
-  // // 읽음 여부 관련 없이 내 전체 알림 목록 조회
-  // const fetchUnreadNotifications = async () => {
-  //   const data = await getUnreadNotifications();
-  //   if (data) setNotification(data);
-  // };
-
-  // useEffect(() => {
-  //   fetchUnreadNotifications();
-  // }, []);
+  const getRoute = (domainType: string, domainId: number) => {
+    switch (domainType) {
+      case 'STUDY':
+        return `/study/${domainId}/dashboard`;
+      case 'RECRUITMENT_POST':
+        return `/recruitment/detail/${domainId}`;
+      default:
+        return '/';
+    }
+  };
 
   // 읽음 여부 관련 없이 내 전체 알림 목록 조회
-  const fetchReadNotifications = async () => {
-    const data = await getNotifications();
+  const fetchUnreadNotifications = async () => {
+    const data = await getUnreadNotifications();
     if (data) setNotification(data);
   };
 
   useEffect(() => {
-    fetchReadNotifications();
+    fetchUnreadNotifications();
   }, []);
 
   // 내 알림 전체 읽음 처리
   const handleReadAllNotifications = async () => {
     try {
       await readAllNotifications();
-      await fetchReadNotifications();
+      await fetchUnreadNotifications();
+      setUnReadCounts(0);
     } catch (error) {
       console.error('전체 읽음 처리 실패:', error);
     }
@@ -54,12 +57,18 @@ export default function NotificationModal({
   // 알림 개별 읽음 처리
   const handleReadNotifications = async (
     alarmId: number,
-    domainType: string,
+    domainType: string | null,
     domainId: number
   ) => {
     try {
       await readNotifications(alarmId, true);
-      router.push(`/${domainType.toLowerCase()}/${domainId}`);
+      setNotification((prev) => prev.filter((item) => item.id !== alarmId));
+      setUnReadCounts(0);
+
+      if (!domainType) return;
+
+      const route = getRoute(domainType, domainId);
+      router.push(route);
     } catch (error) {
       console.error('개별 읽음 처리 실패: ', error);
     }
@@ -81,65 +90,79 @@ export default function NotificationModal({
       </div>
 
       <ul className='flex flex-col cursor-pointer'>
-        {notification.map((item) => (
-          <li
-            key={item.id}
-            className='t4 text-text1 hover:bg-gray4 p-3 rounded-[6px] transition flex items-center justify-between'
-            onClick={() =>
-              handleReadNotifications(item.id, item.domainType, item.domainId)
-            }
-          >
-            <div className='flex items-start gap-4'>
+        {notification.length > 0 ? (
+          notification.map((item) => (
+            <li
+              key={item.id}
+              className='t4 text-text1 hover:bg-gray4 p-3 rounded-[6px] transition flex flex-col gap-2'
+            >
               <div
-                className={`w-6 h-6 flex items-center justify-center rounded-full shrink-0 ${
-                  item.checked ? 'bg-gray4' : 'bg-[#90CFF1]'
-                }`}
+                className='flex items-start gap-4 cursor-pointer'
+                onClick={() =>
+                  handleReadNotifications(
+                    item.id,
+                    item.domainType,
+                    item.domainId
+                  )
+                }
               >
-                <Bell
-                  className={`w-4 h-4 ${
-                    item.checked ? 'text-gray3' : 'text-white'
+                <div
+                  className={`w-6 h-6 flex items-center justify-center rounded-full shrink-0 ${
+                    item.checked ? 'bg-gray4' : 'bg-[#90CFF1]'
                   }`}
-                />
+                >
+                  <Bell
+                    className={`w-4 h-4 ${
+                      item.checked ? 'text-gray3' : 'text-white'
+                    }`}
+                  />
+                </div>
+
+                <div className='flex flex-col'>
+                  <span className='t4 text-text1'>{item.message}</span>
+                  <span className='t5 text-gray5 mt-1'>
+                    {dateFormat(item.createdDate)}
+                  </span>
+                </div>
               </div>
 
-              <div className='flex flex-col'>
-                <span className='t4 text-text1'>{item.message}</span>
-                <span className='t5 text-gray5 mt-1'>
-                  {dateFormat(item.createdDate)}
-                </span>
-
-                {item.alarmType === 'INVITE' && !item.checked && (
-                  <div className='flex gap-2 mt-2'>
-                    <button
-                      className='px-2 py-1 bg-main text-white rounded t5 hover:bg-[#292929]'
-                      onClick={() =>
-                        handleReadNotifications(
-                          item.id,
-                          item.domainType,
-                          item.domainId
-                        )
-                      }
-                    >
-                      수락
-                    </button>
-                    <button
-                      className='px-2 py-1 bg-gray3 text-white rounded t5 hover:bg-[#bfbfbf]'
-                      onClick={() =>
-                        handleReadNotifications(
-                          item.id,
-                          item.domainType,
-                          item.domainId
-                        )
-                      }
-                    >
-                      거절
-                    </button>
-                  </div>
-                )}
-              </div>
-            </div>
-          </li>
-        ))}
+              {item.alarmType === 'INVITE' && !item.checked && (
+                <div className='flex gap-2 ml-10'>
+                  <button
+                    className='px-2 py-1 bg-main text-white rounded t5 hover:bg-[#292929]'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleReadNotifications(
+                        item.id,
+                        item.domainType,
+                        item.domainId
+                      );
+                    }}
+                  >
+                    수락
+                  </button>
+                  <button
+                    className='px-2 py-1 bg-gray3 text-white rounded t5 hover:bg-[#bfbfbf]'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleReadNotifications(
+                        item.id,
+                        item.domainType,
+                        item.domainId
+                      );
+                    }}
+                  >
+                    거절
+                  </button>
+                </div>
+              )}
+            </li>
+          ))
+        ) : (
+          <div className='flex items-center justify-center py-50'>
+            <span className='t4 text-gray3'>알림이 없습니다.</span>
+          </div>
+        )}
       </ul>
     </div>
   );
