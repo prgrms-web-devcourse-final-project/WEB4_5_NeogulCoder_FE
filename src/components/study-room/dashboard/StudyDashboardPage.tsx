@@ -1,7 +1,6 @@
 'use client';
 import StudyAttendance from '@/components/study-room/dashboard/StudyAttendance';
 import StudyInfoCard from '@/components/study-room/dashboard/StudyInfoCard';
-import { ChevronRight, MessageCircleDashed } from 'lucide-react';
 import StudyPostItem from '@/components/study-room/dashboard/StudyPostItem';
 
 import Link from 'next/link';
@@ -11,8 +10,22 @@ import { useStudyStore } from '@/stores/studyInfoStore';
 import { useEffect, useState } from 'react';
 import { getStudyDashboard } from '@/lib/api/study.api';
 import StudyDashboardSkeleton from '@/components/study-room/dashboard/StudyDashboardSkeleton';
+import dynamic from 'next/dynamic';
 
 export default function StudyDashboardPage() {
+  const ChevronRight = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronRight),
+    {
+      ssr: false,
+    }
+  );
+  const MessageCircleDashed = dynamic(
+    () => import('lucide-react').then((m) => m.MessageCircleDashed),
+    {
+      ssr: false,
+    }
+  );
+
   const params = useParams();
   const studyId = Number(params.id);
   const studyInfo = useStudyStore().study;
