@@ -5,12 +5,22 @@ import { useEffect, useRef, useState } from 'react';
 import RegionModal from '@/components/common/RegionModal';
 import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
-import IntroEditor from '@/components/profile/pr/IntroEditor';
+// import IntroEditor from '@/components/profile/pr/IntroEditor';
 import dynamic from 'next/dynamic';
+import { ChevronDown } from 'lucide-react';
 
-const ChevronDown = dynamic(
-  () => import('lucide-react').then((m) => m.ChevronDown),
-  { ssr: false }
+// const ChevronDown = dynamic(
+//   () => import('lucide-react').then((m) => m.ChevronDown),
+//   { ssr: false }
+// );
+
+// import dynamic from "next/dynamic";
+
+const IntroductionEditor = dynamic(
+  () => import('@/components/profile/pr/IntroEditor'),
+  {
+    ssr: false,
+  }
 );
 
 export default function EditPrClient() {
@@ -206,7 +216,7 @@ export default function EditPrClient() {
         </div>
       )}
       {activeTab === '소개글' && (
-        <IntroEditor value={introduction} onChange={setIntroduction} />
+        <IntroductionEditor value={introduction} onChange={setIntroduction} />
       )}
 
       <div className='flex gap-5 mt-10 justify-end'>

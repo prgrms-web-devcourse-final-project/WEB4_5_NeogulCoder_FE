@@ -1,4 +1,7 @@
+'use client';
+
 import { deleteMeByStudy } from '@/lib/api/community';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function StudyOutCheckModal({
   studyId,
@@ -7,8 +10,11 @@ export default function StudyOutCheckModal({
   studyId: number;
   onClose: () => void;
 }) {
+  const { deleteStudy } = useStudiesStore();
+
   const handleClickOut = async () => {
     await deleteMeByStudy(studyId);
+    deleteStudy(studyId);
     onClose();
     // 메인으로 리다이렉트 ?
     // toast message
