@@ -273,6 +273,11 @@ export default function MainRecruitmentList() {
             </div>
           </div>
         )}
+        <div className='text-right'>
+          <Link href={`/recruitment/write`} className='button-type4'>
+            모집글 작성하기
+          </Link>
+        </div>
       </div>
 
       <MainPagination page={page} handlePage={handlePage} total={totalPage} />
