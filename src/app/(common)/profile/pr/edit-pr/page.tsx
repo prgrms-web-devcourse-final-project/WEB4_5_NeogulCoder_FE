@@ -1,12 +1,4 @@
-// import EditPrClient from '@/components/profile/pr/EditPrClient';
-import dynamic from 'next/dynamic';
-
-const EditPrClient = dynamic(
-  () => import('@/components/profile/pr/EditPrClient'),
-  {
-    ssr: false,
-  }
-);
+import EditPrClient from '@/components/profile/pr/EditPrClient';
 
 export default function page() {
   return (

@@ -8,6 +8,11 @@ import { userPrStore } from '@/stores/prStore';
 import IntroEditor from '@/components/profile/pr/IntroEditor';
 import dynamic from 'next/dynamic';
 
+const ChevronDown = dynamic(
+  () => import('lucide-react').then((m) => m.ChevronDown),
+  { ssr: false }
+);
+
 export default function EditPrClient() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'정보' | '소개글'>('정보');
@@ -16,11 +21,6 @@ export default function EditPrClient() {
   const isSelectedRegion = !!selectedRegion;
   const [urlErrorMsg, setUrlErrorMsg] = useState('');
   const [initialized, setInitialized] = useState(false);
-
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    { ssr: false }
-  );
 
   const urlInputRefs = [
     useRef<HTMLInputElement>(null),
