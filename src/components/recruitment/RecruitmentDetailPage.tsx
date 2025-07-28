@@ -22,6 +22,7 @@ import { fetchStudyApplication } from '@/lib/api/recruitment/fetchStudyApplicati
 import Pagination2 from '@/components/common/Pagination2';
 import { fetchMyStudyApplicationData } from '@/lib/api/recruitment/fetchMyStudyApplicationData';
 import RecruitmentDetailSkeleton from '@/components/recruitment/RecruitmentDetailSkeleton';
+import { toast } from 'react-toastify';
 
 export default function RecruitmentDetailPage() {
   const router = useRouter();
@@ -158,17 +159,20 @@ export default function RecruitmentDetailPage() {
         writeApplicationReason
       );
       console.log('생성 완료', appData);
+      toast.success('모집 신청이 완료되었습니다!');
+      await fetchMyStudyApplication();
       setAppIsOpen(false);
     } catch (error) {
       console.error('생성 실패', error);
+      toast.error('모집 신청 중 오류가 발생했습니다.');
     }
   };
 
   const handleChangeStatus = async () => {
     try {
-      await changeStatus(recruitmentPostId, complete); // complete = 'COMPLETE'
+      await changeStatus(recruitmentPostId, complete);
       await fetchData();
-      setStatusModalIsOpen(false); // 모달 닫기
+      setStatusModalIsOpen(false);
     } catch (error) {
       console.error('상태 변경 실패:', error);
     }
