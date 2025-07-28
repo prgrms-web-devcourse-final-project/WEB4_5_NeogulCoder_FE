@@ -12,11 +12,11 @@ type AllUserType = {
 };
 
 export default function StudyRoomInfoWrite({
-  studyId,
+  // studyId,
   memberInfo,
   closeFn,
 }: {
-  studyId: number;
+  // studyId: number;
   memberInfo: StudyMemberType[];
   closeFn: () => void;
 }) {
