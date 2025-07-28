@@ -1,8 +1,9 @@
 import musicBunny from '@/assets/images/music-bunny.svg';
-import { getAllUser } from '@/lib/api/study.api';
+import { getAllUser, postStudyInvite } from '@/lib/api/study.api';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 type AllUserType = {
   id: number;
@@ -12,11 +13,11 @@ type AllUserType = {
 };
 
 export default function StudyRoomInfoWrite({
-  // studyId,
+  studyId,
   memberInfo,
   closeFn,
 }: {
-  // studyId: number;
+  studyId: number;
   memberInfo: StudyMemberType[];
   closeFn: () => void;
 }) {
@@ -30,6 +31,8 @@ export default function StudyRoomInfoWrite({
   const [allUser, setAllUser] = useState<AllUserType[]>([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isPending, startTransition] = useTransition();
+
   useEffect(() => {
     const fetchAllUser = async () => {
       setIsLoading(true);
@@ -58,6 +61,19 @@ export default function StudyRoomInfoWrite({
     );
 
     return searchUser;
+  };
+
+  const handleInvite = (name: string) => {
+    startTransition(async () => {
+      try {
+        await postStudyInvite(studyId, name);
+        toast.success(`${name} 님을 초대했습니다.`);
+        closeFn(); // 모달 닫기
+      } catch (error) {
+        console.error(`error : ${error}`);
+        toast.error(`${name} 초대에 실패했습니다.`);
+      }
+    });
   };
   return (
     <>
@@ -110,7 +126,11 @@ export default function StudyRoomInfoWrite({
                       <p className='t4'>{user.email}</p>
                     </div>
                   </div>
-                  <button className='button-sm-type1 !text-[12px]'>
+                  <button
+                    onClick={() => handleInvite(user.nickname)}
+                    className='button-sm-type1 !text-[12px]'
+                    disabled={isPending}
+                  >
                     초대하기
                   </button>
                 </div>
