@@ -34,9 +34,11 @@ export default function StudyInfoCard({
       <div className='border border-border1 rounded-[10px] p-6 text-gray5'>
         <p className='tm4 mb-4'>{title}</p>
         <div className='flex justify-between items-end'>
-          {type === 'day' && <Calendar1 strokeWidth={1} />}
-          {type === 'personnel' && <UserRound strokeWidth={1} />}
-          {type === 'post' && <NotepadText strokeWidth={1} />}
+          <div>
+            {type === 'day' && <Calendar1 strokeWidth={1} />}
+            {type === 'personnel' && <UserRound strokeWidth={1} />}
+            {type === 'post' && <NotepadText strokeWidth={1} />}
+          </div>
           <p className='tm1 flex items-end leading-none text-text1 gap-1'>
             {data}
             {type === 'day' && <span className='tm4'>일</span>}

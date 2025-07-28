@@ -31,7 +31,7 @@ export default function MemberList({
       </div>
       {inviteOpen && (
         <StudyRoomInviteModal
-          // studyId={studyId}
+          studyId={studyId}
           memberInfo={memberInfo}
           closeFn={() => steInviteOpen(false)}
         />
