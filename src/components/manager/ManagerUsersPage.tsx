@@ -5,9 +5,9 @@ import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
 import ManagerUserList from '@/components/manager/ManagerUserList';
 import { deleteAdminUser, getAdminUser } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
-import { Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 export type AdminUserType = {
   id: number;
@@ -17,6 +17,16 @@ export type AdminUserType = {
 };
 
 export default function ManagerUsersPage() {
+  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
+    ssr: false,
+  });
+  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
+    ssr: false,
+  });
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchKeyword = useMemo(

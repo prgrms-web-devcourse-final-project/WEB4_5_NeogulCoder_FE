@@ -1,4 +1,3 @@
-import { CalendarDays, Clock, X } from 'lucide-react';
 import { useState, useTransition } from 'react';
 import dayjs from 'dayjs';
 import {
@@ -9,6 +8,8 @@ import {
 } from '@/lib/api/calendar.api';
 import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
+import { toast } from 'react-toastify';
+import dynamic from 'next/dynamic';
 
 export default function CalendarWrite({
   type,
@@ -25,6 +26,17 @@ export default function CalendarWrite({
   handleEventAdd?: (id: number, data: ScheduleInputType) => void;
   handleUpdate?: (id: number, data: ScheduleInputType) => void;
 }) {
+  const CalendarDays = dynamic(
+    () => import('lucide-react').then((m) => m.CalendarDays),
+    { ssr: false }
+  );
+  const Clock = dynamic(() => import('lucide-react').then((m) => m.Clock), {
+    ssr: false,
+  });
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
+
   const authId = Number(userAuthStore().user?.id);
   const [title, setTitle] = useState(data ? data.title : '');
   const [content, setContent] = useState(data ? data.description : '');
@@ -82,11 +94,16 @@ export default function CalendarWrite({
           // api
           if (data) {
             await putUserEvent(authId, data.scheduleId, inputData);
+            // 프론트에서 보이는 변경
+            // 수정 함수가 있으면 수정
+            handleUpdate?.(data?.scheduleId, event);
+            toast.success('일정 수정이 완료되었습니다.');
           } else {
             const { data: id } = await postUserEvent(authId, inputData);
             // 프론트에서 보이는 변경
             // 등록 함수가 있으면 등록
             handleEventAdd?.(id, event);
+            toast.success('일정 등록이 완료되었습니다.');
           }
         } else {
           // 팀일정 수정, 팀일정 등록
@@ -100,22 +117,22 @@ export default function CalendarWrite({
           // api
           if (data) {
             await putStudyEvent(categoryId, data.scheduleId, inputData);
+            // 프론트에서 보이는 변경
+            // 수정 함수가 있으면 수정
+            handleUpdate?.(data?.scheduleId, event);
+            toast.success('일정 수정이 완료되었습니다.');
           } else {
             const { data: id } = await postStudyEvent(categoryId, inputData);
             // 프론트에서 보이는 변경
             // 등록 함수가 있으면 등록
             handleEventAdd?.(id, event);
+            toast.success('일정 등록이 완료되었습니다.');
           }
         }
 
-        // 프론트에서 보이는 변경
-        // 수정 함수가 있으면 수정
-        if (data) handleUpdate?.(data?.scheduleId, event);
-
         writeCloseHandler();
-        alert('✨데이터가 등록 되었습니다.');
       } else {
-        alert('🚫시작날짜가 종료날짜보다 큽니다.');
+        toast.error('일정의 시작날짜가 종료날짜보다 큽니다.');
       }
     });
   };

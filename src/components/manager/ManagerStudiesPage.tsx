@@ -6,9 +6,9 @@ import ManagerStudyList from '@/components/manager/ManagerStudyList';
 import { deleteAdminStudy, getAdminStudies } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { categoryFormatting } from '@/utils/categoryFormatting';
-import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 
 export type AdminStudyType = {
   id: number;
@@ -18,6 +18,22 @@ export type AdminStudyType = {
   activated: boolean;
 };
 export default function ManagerStudiesPage() {
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    {
+      ssr: false,
+    }
+  );
+  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
+    ssr: false,
+  });
+  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
+    ssr: false,
+  });
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParams = useMemo(
