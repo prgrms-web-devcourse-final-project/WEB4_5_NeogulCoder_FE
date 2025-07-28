@@ -141,7 +141,7 @@ body {
   }
 
   .tag-type2 {
-    @apply bg-gray1 inline-flex h-5 min-w-[72px] items-center justify-center rounded-3xl text-center text-xs text-white;
+    @apply bg-gray1 inline-flex h-5 min-w-[72px] items-center justify-center rounded-3xl text-center text-xs text-white leading-none;
   }
   .tag-type2.green {
     @apply bg-green;

@@ -1,4 +1,3 @@
-import { AdminStudyType } from '@/app/manager/study/page';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 
 export default function ManagerStudyList({

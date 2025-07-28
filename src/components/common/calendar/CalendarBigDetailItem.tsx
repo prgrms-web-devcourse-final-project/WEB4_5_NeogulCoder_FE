@@ -1,13 +1,6 @@
 'use client';
 
 import { dayFormatting } from '@/utils/day';
-import {
-  Clock,
-  EllipsisVertical,
-  PencilLine,
-  Trash2,
-  UserRound,
-} from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import CalendarWrite from './CalendarWrite';
@@ -16,6 +9,7 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
 import CalendarDeleteCheckModal from './CalendarDeleteCheckModal';
+import dynamic from 'next/dynamic';
 
 export default function CalendarBigDetailItem({
   type,
@@ -30,6 +24,31 @@ export default function CalendarBigDetailItem({
   handleDelete: (calendarId: number) => void;
   handleUpdate: (id: number, data: ScheduleInputType) => void;
 }) {
+  const Clock = dynamic(() => import('lucide-react').then((m) => m.Clock), {
+    ssr: false,
+  });
+  const EllipsisVertical = dynamic(
+    () => import('lucide-react').then((m) => m.EllipsisVertical),
+    {
+      ssr: false,
+    }
+  );
+  const PencilLine = dynamic(
+    () => import('lucide-react').then((m) => m.PencilLine),
+    {
+      ssr: false,
+    }
+  );
+  const Trash2 = dynamic(() => import('lucide-react').then((m) => m.Trash2), {
+    ssr: false,
+  });
+  const UserRound = dynamic(
+    () => import('lucide-react').then((m) => m.UserRound),
+    {
+      ssr: false,
+    }
+  );
+
   const authId = userAuthStore().user?.id;
   const [open, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);

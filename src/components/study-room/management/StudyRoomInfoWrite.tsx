@@ -6,21 +6,42 @@ import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import dayjs from 'dayjs';
 import musicBunny from '@/assets/images/music-bunny.svg';
-import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 import Image from 'next/image';
 import React, { useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import { useStudiesStore } from '@/stores/useStudiesStore';
+import dynamic from 'next/dynamic';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
   studyId,
   closeFn,
+  handleUpdate,
 }: {
   studyInfoData: StudyInfoType;
   studyId: number;
   closeFn: () => void;
+  handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
+  const CalendarDays = dynamic(
+    () => import('lucide-react').then((m) => m.CalendarDays),
+    {
+      ssr: false,
+    }
+  );
+  const Camera = dynamic(() => import('lucide-react').then((m) => m.Camera), {
+    ssr: false,
+  });
+  const ChevronDown = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronDown),
+    {
+      ssr: false,
+    }
+  );
+  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
+    ssr: false,
+  });
+
   const updateStudyInfo = useStudyStore().updateStudyInfo;
   const updateStudies = useStudiesStore().updateStudy;
 
@@ -143,6 +164,11 @@ export default function StudyRoomInfoWrite({
           category: request.category,
           capacity: request.capacity,
           startDate: formattedStartDate,
+        });
+
+        handleUpdate({
+          ...request,
+          imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
         });
 
         closeFn(); // 모달 닫기

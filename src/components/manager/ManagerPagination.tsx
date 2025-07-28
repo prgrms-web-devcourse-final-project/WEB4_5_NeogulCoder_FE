@@ -1,5 +1,5 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 
 export default function ManagerPagination({
   page,
@@ -10,6 +10,18 @@ export default function ManagerPagination({
   handlePage: (num: number) => void;
   total: number;
 }) {
+  const ChevronLeft = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronLeft),
+    {
+      ssr: false,
+    }
+  );
+  const ChevronRight = dynamic(
+    () => import('lucide-react').then((m) => m.ChevronRight),
+    {
+      ssr: false,
+    }
+  );
   const itemCountPerPage = 5; // 페이지 숫자 보이는 갯수
   const [start, setStart] = useState(1);
 

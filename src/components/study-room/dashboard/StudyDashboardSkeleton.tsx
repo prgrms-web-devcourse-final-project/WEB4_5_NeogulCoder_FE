@@ -26,7 +26,7 @@ export default function StudyDashboardSkeleton() {
         <div className='w-[200px] h-[30px] bg-gray-100 animate-pulse rounded-md mb-4'></div>
         <div className='flex gap-8 h-[360px] border border-gray-100 animate-pulse rounded-md p-7'>
           <div className='w-full bg-gray-100 animate-pulse rounded-md'></div>
-          <div className='w-full flex flex-col gap-4 gap-3'>
+          <div className='w-full flex flex-col gap-3'>
             <div className='w-full h-[50px] bg-gray-100 animate-pulse rounded-md'></div>
             <div className='w-full h-[50px] bg-gray-100 animate-pulse rounded-md'></div>
             <div className='w-full h-[50px] bg-gray-100 animate-pulse rounded-md '></div>

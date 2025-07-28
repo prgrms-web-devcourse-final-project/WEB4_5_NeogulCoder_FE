@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import '../styles/globals.css';
 import UserStore from './user-store';
+import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: 'Wibby',
@@ -20,6 +22,17 @@ export default function RootLayout({
       <body>
         <UserStore />
         {children}
+        <ToastContainer
+          toastClassName='tm3'
+          position='top-center'
+          autoClose={3000}
+          hideProgressBar={false}
+          closeOnClick
+          pauseOnHover
+          draggable
+          theme='light'
+          transition={Bounce}
+        />
       </body>
     </html>
   );

@@ -2,21 +2,27 @@
 
 import Image from 'next/image';
 import StudyRoomInfoCard from './StudyRoomInfoCard';
-import { PenLine } from 'lucide-react';
 import StudyRoomInfoWrite from './StudyRoomInfoWrite';
 import musicBunny from '@/assets/images/music-bunny.svg';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
+import dynamic from 'next/dynamic';
 
 export default function StudyRoomInfo({
   studyInfoData,
   studyId,
+  handleUpdate,
 }: {
   studyInfoData: StudyInfoType;
   studyId: number;
+  handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
+  const PenLine = dynamic(() => import('lucide-react').then((m) => m.PenLine), {
+    ssr: false,
+  });
+
   const [infoModal, setInfoModal] = useState(false);
   const infoModalOpen = () => {
     setInfoModal(true);
@@ -87,6 +93,7 @@ export default function StudyRoomInfo({
           studyId={studyId}
           studyInfoData={studyInfoData}
           closeFn={infoModalClose}
+          handleUpdate={handleUpdate}
         />
       )}
     </>
