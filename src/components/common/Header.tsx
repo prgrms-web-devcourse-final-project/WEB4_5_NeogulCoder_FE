@@ -31,6 +31,7 @@ export default function Header() {
         })
         .catch((error) => {
           localStorage.removeItem('login_status');
+          document.cookie = 'login_status=; path=/';
           console.error('사용자 정보 불러오기 실패: ', error);
         });
     }
