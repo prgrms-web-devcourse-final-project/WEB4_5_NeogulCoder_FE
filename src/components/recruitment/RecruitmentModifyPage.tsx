@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -10,20 +11,8 @@ import { formatDate } from '@/utils/formatIsoDate';
 import RemainSlotModal from '@/components/study/RemainSlot';
 import RecruitmentModifySkeleton from '@/components/recruitment/RecruitmentModifySkeleton';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
 
 export default function RecruitmentModifyPage() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    { ssr: false }
-  );
-
-  const Calendar = dynamic(
-    () => import('lucide-react').then((m) => m.Calendar),
-    {
-      ssr: false,
-    }
-  );
   const pathname = usePathname();
   const router = useRouter();
   const recruitmentPostId = Number(pathname.split('/').pop());

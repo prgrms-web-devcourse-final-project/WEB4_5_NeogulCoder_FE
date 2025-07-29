@@ -1,5 +1,6 @@
 'use client';
 
+import { EllipsisVertical } from 'lucide-react';
 import WriteComment from '@/components/common/WriteComment';
 import Modal from '@/components/common/Modal';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -14,13 +15,8 @@ import ToastViewer from '@/components/common/ToastViewer';
 import Image from 'next/image';
 import basicBunny from '@/assets/images/basic-bunny.svg';
 import StudyPostDetailSkeleton from '@/components/study/StudyPostDetailSkeleton';
-import dynamic from 'next/dynamic';
 
 export default function StudyCommunityDetailPage() {
-  const EllipsisVertical = dynamic(
-    () => import('lucide-react').then((m) => m.EllipsisVertical),
-    { ssr: false }
-  );
   const pathname = usePathname();
   const me = userAuthStore((state) => state.user);
   const studyId = Number(pathname.split('/')[2]);
