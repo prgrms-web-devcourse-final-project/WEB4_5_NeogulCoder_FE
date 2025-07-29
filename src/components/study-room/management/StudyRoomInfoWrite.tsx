@@ -177,14 +177,13 @@ export default function StudyRoomInfoWrite({
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 {/* 사진 */}
                 <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
-                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden'>
+                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden flex item-center justify-center'>
                     <Image
                       src={
                         imagePreview ?? studyInfoData.imageUrl ?? studyDefault
                       }
-                      width='100'
-                      height='100'
-                      className='w-full h-full object-cover'
+                      width={100}
+                      height={0}
                       alt={`${studyInfoData.name} 프로필 사진`}
                     />
                   </div>

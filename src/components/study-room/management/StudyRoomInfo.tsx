@@ -66,7 +66,7 @@ export default function StudyRoomInfo({
           <PenLine className='w-5 h-5' />
         </button>
       </div>
-      <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto'>
+      <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto flex item-center justify-center'>
         <Image
           src={studyInfoData.imageUrl ?? studyDefault}
           width={120}
