@@ -55,6 +55,7 @@ export default function LoginClient() {
       });
       localStorage.setItem('login_status', 'Y');
 
+      document.cookie = 'login_status=true; path=/';
       toast.success('로그인 되었습니다!');
       router.push('/');
     } catch (error) {
