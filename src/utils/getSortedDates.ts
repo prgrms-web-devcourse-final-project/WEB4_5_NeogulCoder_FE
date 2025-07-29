@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 type WeekData = {
   weekdays: string[];
   dates: string[];
+  startWeekday: boolean[];
 };
 
 export function getSortedDates(
@@ -39,8 +40,13 @@ export function getSortedDates(
 
   const dates = weekdays.map((_, index) => weekdayToDate.get(index)!);
 
+  const startWeekdayIndex = start.day();
+  const startWeekday = Array(7).fill(false);
+  startWeekday[startWeekdayIndex] = true;
+
   return {
     weekdays,
     dates,
+    startWeekday,
   };
 }

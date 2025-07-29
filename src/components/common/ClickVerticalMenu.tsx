@@ -25,6 +25,7 @@ export default function ClickVerticalMenu({
   onDeleteClick,
 }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
   const handleGoToModify = () => {
     router.push(`/recruitment/modify/${recruitmentPostId}`);
@@ -32,6 +33,31 @@ export default function ClickVerticalMenu({
   const handleGoToModifyStudy = () => {
     router.push(`/study/${studyId}/study-community/modify/${postId}`);
   };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+
+    setIsDeleting(true);
+    try {
+      if (target === 'recruitment') {
+        await deleteRecruitmentPost(recruitmentPostId);
+        toast.success('게시글 삭제가 완료되었습니다!');
+        router.push('/');
+      } else if (target === 'study') {
+        await deleteStudyPost(postId);
+        toast.success('게시글 삭제가 완료되었습니다!');
+        router.push(`/study/${studyId}/study-community`);
+      } else {
+        console.log('target error');
+      }
+    } catch (error) {
+      console.error('삭제 중 오류 발생', error);
+      toast.error('삭제 중 오류가 발생했습니다');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <>
       <div className='absolute right-0 mt-2 w-[160px] border border-main/10 bg-white rounded-md shadow-lg overflow-hidden tm3 z-3'>
@@ -81,19 +107,8 @@ export default function ClickVerticalMenu({
               </button>
               <button
                 className='button-type5 w-[120px]! bg-red! text-white!'
-                onClick={async () => {
-                  if (target === 'recruitment') {
-                    await deleteRecruitmentPost(recruitmentPostId);
-                    toast.success('게시글 삭제가 완료되었습니다!');
-                    router.push('/');
-                  } else if (target === 'study') {
-                    await deleteStudyPost(postId);
-                    toast.success('게시글 삭제가 완료되었습니다!');
-                    router.push(`/study/${studyId}/study-community`);
-                  } else {
-                    console.log('target error');
-                  }
-                }}
+                onClick={handleDelete}
+                disabled={isDeleting}
               >
                 삭제
               </button>

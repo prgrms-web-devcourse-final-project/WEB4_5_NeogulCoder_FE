@@ -30,6 +30,7 @@ export default function RecruitmentWritePage() {
   const [isStudyOpen, setIsStudyOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const displayText =
     remainSlots === null
@@ -96,6 +97,9 @@ export default function RecruitmentWritePage() {
   }, []);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     if (!isClick) {
       toast.warning('스터디를 선택해주세요.');
       return;
@@ -141,6 +145,8 @@ export default function RecruitmentWritePage() {
     } catch (error) {
       console.error('작성 실패', error);
       toast.error('게시글 작성 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -316,6 +322,7 @@ export default function RecruitmentWritePage() {
               value={expiredDate}
               onChange={(e) => setExpiredDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]} // 선택 가능한 최소 날짜를 오늘로 지정
+              max={endDate.split('T')[0]}
             />
           </div>
           <div className='flex items-center  mt-10'>
@@ -348,6 +355,7 @@ export default function RecruitmentWritePage() {
             <button
               className='button-type5 hover:bg-[#292929]'
               onClick={handleSubmit}
+              disabled={isSubmitting}
             >
               등록
             </button>

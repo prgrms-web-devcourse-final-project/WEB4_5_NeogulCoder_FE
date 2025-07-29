@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import { Backpack, MapPin } from 'lucide-react';
 
@@ -12,11 +12,11 @@ export default function SideStudyInfo({
     <>
       <div className='px-5 py-5 bg-gray4 rounded-[10px] mb-3'>
         <div className='flex gap-3 mb-3 items-center'>
-          <div className='w-[70px] h-[70px] bg-white rounded-full shrink-0 overflow-hidden'>
+          <div className='w-[70px] h-[70px] bg-white rounded-full shrink-0 overflow-hidden flex items-center justify-center'>
             <Image
               width={70}
-              height={70}
-              src={studyInfo.imageUrl ?? musicBunny}
+              height={0}
+              src={studyInfo.imageUrl ?? studyDefault}
               alt='예시 기본 프사'
             />
           </div>

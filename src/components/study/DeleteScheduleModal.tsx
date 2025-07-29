@@ -1,4 +1,5 @@
 import { deleteMyTimeVote } from '@/lib/api/schedule';
+import axios from 'axios';
 import { toast } from 'react-toastify';
 
 export default function DeleteScheduleModal({
@@ -10,15 +11,21 @@ export default function DeleteScheduleModal({
 }) {
   const handleClickOut = async () => {
     try {
-      const data = await deleteMyTimeVote(studyId);
-      if (data.code === 'TVS_003') {
-        throw new Error('통계 처리 중 에러 발생');
-      }
+      await deleteMyTimeVote(studyId);
       toast.success('삭제되었습니다.');
       onClose();
     } catch (e) {
-      console.error(e);
-      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+      if (axios.isAxiosError(e)) {
+        const code = e.response?.data?.code;
+        if (code === 'TVS_003') {
+          toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+        } else {
+          console.error(e);
+          toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+        }
+      } else {
+        console.error('Axios 외의 오류: ', e);
+      }
     }
   };
 

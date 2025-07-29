@@ -14,12 +14,17 @@ export default function StudyCommunityWritePage() {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const isSelectedCategory = category !== '카테고리';
   const studyId = Number(pathname.split('/')[2]);
   const editorRef = useRef<ToastEditor>(null);
   const router = useRouter();
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
 
@@ -61,6 +66,8 @@ export default function StudyCommunityWritePage() {
     } catch (error) {
       console.error('작성 실패', error);
       toast.error('게시글 작성 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
 
     console.log(
@@ -124,6 +131,7 @@ export default function StudyCommunityWritePage() {
         <button
           className='button-type5 hover:bg-[#292929]'
           onClick={handleSubmit}
+          disabled={isSubmitting}
         >
           등록
         </button>

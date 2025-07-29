@@ -138,6 +138,10 @@ export default function MyStudyInfoClient() {
     }
   }, [isOpenExtendModal]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <>
       {isLoading ? (

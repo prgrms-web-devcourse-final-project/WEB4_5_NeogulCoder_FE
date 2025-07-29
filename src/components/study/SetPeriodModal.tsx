@@ -2,6 +2,7 @@
 
 import { setTimeVotePeriods } from '@/lib/api/schedule';
 import { formatDate } from '@/utils/formatDate';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { CalendarDays, X } from 'lucide-react';
 import { useState } from 'react';
@@ -27,18 +28,21 @@ export default function SetPeriodModal({
       const start = formatDate(startDate, 'YYYY-MM-DDT00:00:00');
       const end = formatDate(endDate, 'YYYY-MM-DDT23:59:59');
 
-      const data = await setTimeVotePeriods(studyId, start, end);
-      console.log('기간 설정 api 호출');
-      console.log('data:', data);
-      if (data.code === 'TVP_004')
-        toast.error('시작 날짜는 오늘 날짜보다 이후여야 합니다.');
-      // else if (data.code === '2000')
-      //   toast.success('기간 설정이 완료되었습니다.');
+      await setTimeVotePeriods(studyId, start, end);
       onClose();
       window.location.reload();
-      // toast message
     } catch (e) {
-      console.error(e);
+      if (axios.isAxiosError(e)) {
+        const code = e.response?.data?.code;
+        if (code === 'TVP_004') {
+          toast.error('시작 날짜는 오늘 날짜보다 이후여야 합니다.');
+        } else {
+          console.error(e);
+          toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+        }
+      } else {
+        console.error('Axios 외의 오류: ', e);
+      }
     }
   };
 

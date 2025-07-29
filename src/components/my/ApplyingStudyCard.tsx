@@ -25,7 +25,7 @@ export default function ApplyingStudyCard({
   introduction,
   category,
   studyType,
-  isRead,
+  read,
   status,
 }: MyApplicationListType['applications'][0]) {
   const router = useRouter();
@@ -82,7 +82,7 @@ export default function ApplyingStudyCard({
       </div>
       <div className='flex justify-between items-center mt-[18px]'>
         <div className='tag-type5 px-3 py-[11px]'>
-          {isRead ? '신청내역 열람 완료' : '신청내역 미열람'}
+          {read ? '신청내역 열람 완료' : '신청내역 미열람'}
         </div>
         {status === 'APPLYING' && (
           <div className='tag-type4 red py-3'>
