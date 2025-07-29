@@ -1,4 +1,4 @@
-import { axiosInstance } from '../axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export const updateComments = async (
   commentId: number,
