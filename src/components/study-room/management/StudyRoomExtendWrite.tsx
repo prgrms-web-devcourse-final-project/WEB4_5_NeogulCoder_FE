@@ -1,8 +1,8 @@
 import { postStudyExtend } from '@/lib/api/study.api';
 import { useStudiesStore } from '@/stores/useStudiesStore';
 import dayjs from 'dayjs';
+import { CalendarDays, X } from 'lucide-react';
 import { useState, useTransition } from 'react';
-import dynamic from 'next/dynamic';
 import { toast } from 'react-toastify';
 
 export default function StudyRoomExtendWrite({
@@ -16,16 +16,6 @@ export default function StudyRoomExtendWrite({
   endDate: string;
   studyId: number;
 }) {
-  const CalendarDays = dynamic(
-    () => import('lucide-react').then((m) => m.CalendarDays),
-    {
-      ssr: false,
-    }
-  );
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const [extendDate, setExtendDate] = useState('');
   const [isPending, startTransition] = useTransition();
   const study = useStudiesStore().studies.find((f) => f.studyId === studyId);

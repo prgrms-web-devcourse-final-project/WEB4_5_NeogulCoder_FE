@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CalendarWrite from './CalendarWrite';
 import dayjs from 'dayjs';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import defaultUserProfileImage from '@/assets/images/basic-bunny.svg';
 import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
 import CalendarDeleteCheckModal from './CalendarDeleteCheckModal';
@@ -83,9 +83,11 @@ export default function CalendarBigDetailItem({
               <div>
                 <div className='w-12 h-12 rounded-full overflow-hidden border border-border1'>
                   <Image
-                    src={result.writerProfileImageUrl ?? musicBunny}
+                    src={
+                      result.writerProfileImageUrl ?? defaultUserProfileImage
+                    }
                     width={48}
-                    height={0}
+                    height={48}
                     alt='작성자 프로필'
                   />
                 </div>
