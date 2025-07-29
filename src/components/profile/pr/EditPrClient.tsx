@@ -200,16 +200,9 @@ export default function EditPrClient() {
           </div>
         </div>
       )}
-
-      <div
-        className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5 tm3'
-        style={{ borderColor: 'var(--color-border3)' }}
-      >
-        {activeTab === '소개글' && (
-          <IntroEditor value={introduction} onChange={setIntroduction} />
-        )}
-      </div>
-
+      {activeTab === '소개글' && (
+        <IntroEditor value={introduction} onChange={setIntroduction} />
+      )}
       <div className='flex gap-5 mt-10 justify-end'>
         <button
           type='button'

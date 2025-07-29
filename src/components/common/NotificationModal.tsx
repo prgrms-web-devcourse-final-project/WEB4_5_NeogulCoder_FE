@@ -29,12 +29,12 @@ export default function NotificationModal({
   const { fetchStudies } = useStudiesStore();
   const { fetchUser } = userAuthStore();
 
-  const getRoute = (domainType: string, domainId: number) => {
-    switch (domainType) {
+  const getRoute = (domainType: string | null, domainId: number) => {
+    switch (domainType?.toUpperCase()) {
       case 'RECRUITMENT_POST':
         return `/recruitment/detail/${domainId}`;
       default:
-        return '/';
+        return null;
     }
   };
 
@@ -82,15 +82,13 @@ export default function NotificationModal({
       setUnReadCounts(0);
 
       if (alarmType === 'INVITE') {
-        toast.success(
-          res?.message || (accepted ? '수락되었습니다' : '거절되었습니다.')
-        );
+        toast.success(res?.message);
       }
 
-      if (!domainType) return;
-
       const route = getRoute(domainType, domainId);
-      router.push(route);
+      if (route) {
+        router.push(route);
+      }
     } catch (error) {
       console.error('개별 읽음 처리 실패: ', error);
     }
@@ -114,11 +112,26 @@ export default function NotificationModal({
       <ul className='flex flex-col cursor-pointer'>
         {isLoading ? (
           <NotificationModalSkeleton />
-        ) : !isLoading && notification.length > 0 ? (
+        ) : notification.length === 0 ? (
+          <div className='flex items-center justify-center py-50'>
+            <span className='t4 text-gray3'>알림이 없습니다.</span>
+          </div>
+        ) : (
           notification.map((item) => (
             <li
               key={item.id}
               className='t4 text-text1 hover:bg-gray4 p-3 rounded-[6px] transition flex flex-col gap-2'
+              onClick={() => {
+                if (item.alarmType !== 'INVITE') {
+                  handleReadNotifications(
+                    item.id,
+                    item.domainType,
+                    item.domainId,
+                    item.alarmType,
+                    true
+                  );
+                }
+              }}
             >
               <div className='flex items-start gap-4 cursor-pointer'>
                 <div
@@ -177,10 +190,6 @@ export default function NotificationModal({
               )}
             </li>
           ))
-        ) : (
-          <div className='flex items-center justify-center py-50'>
-            <span className='t4 text-gray3'>알림이 없습니다.</span>
-          </div>
         )}
       </ul>
     </div>
