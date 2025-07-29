@@ -26,6 +26,7 @@ module.exports = {
       },
       {
         protocol: 'https',
+
         hostname: 'i.pinimg.com',
         pathname: '**', // 모든 경로 허용
       },

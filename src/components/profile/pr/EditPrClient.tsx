@@ -4,10 +4,11 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import RegionModal from '@/components/common/RegionModal';
 import { userPrStore } from '@/stores/prStore';
-// import IntroEditor from '@/components/profile/pr/IntroEditor';
-import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 import { ChevronDown } from 'lucide-react';
+
 import axiosInstance from '@/lib/api/axiosInstance';
+import dynamic from 'next/dynamic';
 const IntroductionEditor = dynamic(
   () => import('@/components/profile/pr/IntroEditor'),
   {
@@ -23,6 +24,7 @@ export default function EditPrClient() {
   const isSelectedRegion = !!selectedRegion;
   const [urlErrorMsg, setUrlErrorMsg] = useState('');
   const [initialized, setInitialized] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const urlInputRefs = [
     useRef<HTMLInputElement>(null),
@@ -44,7 +46,6 @@ export default function EditPrClient() {
   useEffect(() => {
     if (pr && !initialized) {
       setSelectedRegion(pr.userLocationAndLinks?.[0]?.location || null);
-      // console.log(pr.userLocationAndLinks);
 
       const links =
         pr.userLocationAndLinks?.[0]?.links.map((link) => ({
@@ -88,6 +89,9 @@ export default function EditPrClient() {
     }
     setUrlErrorMsg('');
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const filteredUrls = [...prUrls];
 
@@ -102,7 +106,7 @@ export default function EditPrClient() {
       await axiosInstance.put('/api/template/update/introduction', {
         introduction,
       });
-      alert('저장 완료');
+      toast.success('저장이 완료되었습니다.');
       router.back();
     } catch (error) {
       console.error('저장 실패: ', error);
@@ -210,7 +214,6 @@ export default function EditPrClient() {
       {activeTab === '소개글' && (
         <IntroductionEditor value={introduction} onChange={setIntroduction} />
       )}
-
       <div className='flex gap-5 mt-10 justify-end'>
         <button
           type='button'

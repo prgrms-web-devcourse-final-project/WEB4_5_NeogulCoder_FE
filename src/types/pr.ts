@@ -11,7 +11,7 @@ export type UserLocationAndLinks = {
   }[];
 };
 
-export type ReviewTag = {
+export type ReviewType = {
   reviewType: string;
   reviewCount: number;
 };
@@ -28,7 +28,7 @@ export type PrData = {
   userProfiles: UserProfiles[];
   userLocationAndLinks: UserLocationAndLinks[];
   buddyEnergy: number;
-  reviewTags: ReviewTag[];
+  reviewTypes: ReviewType[];
   reviewContents: ReviewContents[];
   introduction: string;
 };
@@ -53,13 +53,13 @@ export type ReviewContentResponse = {
   hasNext: boolean;
 };
 
-export type ReviewTags = {
+export type ReviewTag = {
   reviewTag: string;
-  reviewTagContent: number;
+  reviewTagCount: number;
 };
 
 export type ReviewTagResponse = {
-  GOOD: ReviewTags[];
-  BAD: ReviewTags[];
-  EXCELLENT: ReviewTags[];
+  GOOD?: ReviewTag[];
+  BAD?: ReviewTag[];
+  EXCELLENT?: ReviewTag[];
 };

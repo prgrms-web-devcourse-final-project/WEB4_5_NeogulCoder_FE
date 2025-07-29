@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
+import { toast } from 'react-toastify';
 import axiosInstance from '@/lib/api/axiosInstance';
 import { X } from 'lucide-react';
 
@@ -13,6 +14,7 @@ export default function PasswordChangeModal({
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordCheck, setNewPasswordCheck] = useState('');
   const [newPasswordError, setNewPasswordError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const newPasswordRef = useRef<HTMLInputElement>(null);
@@ -56,13 +58,16 @@ export default function PasswordChangeModal({
       return;
     }
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       await axiosInstance.put('/api/users/update/password', {
         password,
         newPassword,
         newPasswordCheck,
       });
-      alert('비밀번호가 변경되었습니다.');
+      toast.success('비밀번호가 변경되었습니다.');
       onClose();
     } catch (error) {
       console.error('비밀번호 변경 실패: ', error);
