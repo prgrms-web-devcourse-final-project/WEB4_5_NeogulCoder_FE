@@ -158,7 +158,7 @@ export default function MainRecruitmentList() {
     <>
       <div className='flex justify-between'>
         <div className='flex gap-4 mt-[35px] relative'>
-          <div className='relative'>
+          <div ref={categorySelectRef} className='relative'>
             <button
               type='button'
               className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
@@ -175,10 +175,7 @@ export default function MainRecruitmentList() {
             </button>
 
             {isCategoryOpen && (
-              <div
-                ref={categorySelectRef}
-                className='absolute top-10 left-0 z-10'
-              >
+              <div className='absolute top-10 left-0 z-10'>
                 <MainCategoriesModal
                   onSelect={(category: string) => handleCategory(category)}
                 />
@@ -186,7 +183,7 @@ export default function MainRecruitmentList() {
             )}
           </div>
 
-          <div className='relative'>
+          <div ref={studyTypeSelectRef} className='relative'>
             <button
               className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
                 isSelectedStudyType
@@ -202,10 +199,7 @@ export default function MainRecruitmentList() {
             </button>
 
             {isStudyTypeOpen && (
-              <div
-                ref={studyTypeSelectRef}
-                className='absolute top-10 left-0 z-10'
-              >
+              <div className='absolute top-10 left-0 z-10'>
                 <MainOnlineModal
                   onSelect={(studyType: string) => handleStudyType(studyType)}
                 />
