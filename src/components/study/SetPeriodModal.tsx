@@ -44,7 +44,7 @@ export default function SetPeriodModal({
 
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='w-[580px] flex flex-col gap-12 px-9 py-7 rounded-[10px] bg-white drop-shadow-md'>
           <div className='flex justify-between'>
             <span className='tm2'>기간 설정</span>

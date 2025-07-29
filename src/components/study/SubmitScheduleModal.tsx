@@ -27,7 +27,7 @@ export default function SubmitScheduleModal({
 }) {
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='w-[517px] flex flex-col gap-6 px-9 py-7 rounded-[10px] bg-white drop-shadow-md'>
           <div className='flex justify-between'>
             <span className='tm2'>제출 현황</span>

@@ -1,5 +1,6 @@
 'use client';
 import CalendarBigShell from '@/components/common/calendar/CalendarBigShell';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 import { userAuthStore } from '@/stores/userStore';
 import { useParams } from 'next/navigation';
@@ -8,10 +9,11 @@ export default function StudyCalendarPage() {
   const params = useParams();
   const studyId = Number(params.id);
   const user = userAuthStore().user;
+  const isProgress = useStudyStore().isProgress;
 
   if (!user) return;
 
-  const categories = [{ name: '스터디', id: studyId }]; // 스터디 캘린더에서는 해당 스터디만 보임
+  const categories = [{ name: '스터디', id: studyId, isProgress: isProgress }]; // 스터디 캘린더에서는 해당 스터디만 보임
   return (
     <>
       <CalendarBigShell type='study' user={user} categories={categories} />
