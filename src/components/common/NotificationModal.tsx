@@ -13,9 +13,9 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import NotificationModalSkeleton from './NotificationModalSkeleton';
-import { useStudiesStore } from '@/stores/useStudiesStore';
+// import { useStudiesStore } from '@/stores/useStudiesStore';
 import { toast } from 'react-toastify';
-import { userAuthStore } from '@/stores/userStore';
+// import { userAuthStore } from '@/stores/userStore';
 
 export default function NotificationModal({
   onClose,
@@ -26,13 +26,15 @@ export default function NotificationModal({
   const router = useRouter();
   const { setUnReadCounts } = countNotificationStore();
   const [isLoading, setIsLoading] = useState(true);
-  const { fetchStudies } = useStudiesStore();
-  const { fetchUser } = userAuthStore();
+  // const { fetchStudies } = useStudiesStore();
+  // const { fetchUser } = userAuthStore();
 
   const getRoute = (domainType: string | null, domainId: number) => {
     switch (domainType?.toUpperCase()) {
       case 'RECRUITMENT_POST':
         return `/recruitment/detail/${domainId}`;
+      case 'TIME_VOTE':
+        return `/study/${domainId}/study-schedule`;
       default:
         return null;
     }
@@ -76,8 +78,8 @@ export default function NotificationModal({
   ) => {
     try {
       const res = await readNotifications(alarmId, accepted);
-      await fetchUser();
-      await fetchStudies();
+      // await fetchUser();
+      // await fetchStudies();
       setNotification((prev) => prev.filter((item) => item.id !== alarmId));
       setUnReadCounts(0);
 
