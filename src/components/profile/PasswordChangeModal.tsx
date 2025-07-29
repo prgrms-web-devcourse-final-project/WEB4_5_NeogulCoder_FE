@@ -14,6 +14,7 @@ export default function PasswordChangeModal({
   const [newPassword, setNewPassword] = useState('');
   const [newPasswordCheck, setNewPasswordCheck] = useState('');
   const [newPasswordError, setNewPasswordError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const newPasswordRef = useRef<HTMLInputElement>(null);
@@ -56,6 +57,9 @@ export default function PasswordChangeModal({
       setNewPasswordError('새 비밀번호가 일치하지 않습니다.');
       return;
     }
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
       await axiosInstance.put('/api/users/update/password', {

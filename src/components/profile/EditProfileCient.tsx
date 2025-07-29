@@ -17,6 +17,7 @@ export default function EditProfileClient() {
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
   const user = userAuthStore((state) => state.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const initUserProfile = async () => {
@@ -55,6 +56,8 @@ export default function EditProfileClient() {
       setNicknameError('');
     }
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const formData = new FormData();
 

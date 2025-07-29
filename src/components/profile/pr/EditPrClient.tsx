@@ -24,6 +24,7 @@ export default function EditPrClient() {
   const isSelectedRegion = !!selectedRegion;
   const [urlErrorMsg, setUrlErrorMsg] = useState('');
   const [initialized, setInitialized] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const urlInputRefs = [
     useRef<HTMLInputElement>(null),
@@ -87,6 +88,9 @@ export default function EditPrClient() {
       }
     }
     setUrlErrorMsg('');
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
 
     try {
       const filteredUrls = [...prUrls];

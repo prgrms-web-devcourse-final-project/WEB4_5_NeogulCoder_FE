@@ -13,11 +13,10 @@ export default function WithdrawalClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordCheckRef = useRef<HTMLInputElement>(null);
-
   const user = userAuthStore((state) => state.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -57,6 +56,9 @@ export default function WithdrawalClient() {
   };
 
   const handleDeleteUser = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       await deleteUser(password);
       toast.success('탈퇴가 완료되었습니다.');
