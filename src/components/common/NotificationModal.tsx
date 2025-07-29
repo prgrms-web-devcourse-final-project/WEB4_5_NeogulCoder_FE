@@ -8,14 +8,12 @@ import {
   NotificationItem,
 } from '@/stores/notificationStore';
 import dateFormat from '@/utils/dateFormatting';
-import { Bell } from 'lucide-react';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import NotificationModalSkeleton from './NotificationModalSkeleton';
-// import { useStudiesStore } from '@/stores/useStudiesStore';
 import { toast } from 'react-toastify';
-// import { userAuthStore } from '@/stores/userStore';
+import axios from 'axios';
 
 export default function NotificationModal({
   onClose,
@@ -26,8 +24,7 @@ export default function NotificationModal({
   const router = useRouter();
   const { setUnReadCounts } = countNotificationStore();
   const [isLoading, setIsLoading] = useState(true);
-  // const { fetchStudies } = useStudiesStore();
-  // const { fetchUser } = userAuthStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const getRoute = (domainType: string | null, domainId: number) => {
     switch (domainType?.toUpperCase()) {
@@ -68,31 +65,29 @@ export default function NotificationModal({
     }
   };
 
-  // 알림 개별 읽음 처리
+  // 알림 개별 읽음 처리 - 수락/거절
   const handleReadNotifications = async (
     alarmId: number,
-    domainType: string | null,
-    domainId: number,
-    alarmType: string,
     accepted: boolean
   ) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const res = await readNotifications(alarmId, accepted);
-      // await fetchUser();
-      // await fetchStudies();
-      setNotification((prev) => prev.filter((item) => item.id !== alarmId));
       setUnReadCounts(0);
-
-      if (alarmType === 'INVITE') {
-        toast.success(res?.message);
-      }
-
-      const route = getRoute(domainType, domainId);
-      if (route) {
-        router.push(route);
-      }
+      toast.success(res?.message);
+      setNotification((prev) => prev.filter((item) => item.id !== alarmId));
     } catch (error) {
-      console.error('개별 읽음 처리 실패: ', error);
+      if (axios.isAxiosError(error)) {
+        const code = error.response?.data?.code;
+        const msg = error.response?.data?.message;
+        if (code === 'SA006' || msg?.includes('10개의 스터디')) {
+          toast.success(msg);
+        }
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -119,79 +114,53 @@ export default function NotificationModal({
             <span className='t4 text-gray3'>알림이 없습니다.</span>
           </div>
         ) : (
-          notification.map((item) => (
-            <li
-              key={item.id}
-              className='t4 text-text1 hover:bg-gray4 p-3 rounded-[6px] transition flex flex-col gap-2'
-              onClick={() => {
-                if (item.alarmType !== 'INVITE') {
-                  handleReadNotifications(
-                    item.id,
-                    item.domainType,
-                    item.domainId,
-                    item.alarmType,
-                    true
-                  );
-                }
-              }}
-            >
-              <div className='flex items-start gap-4 cursor-pointer'>
-                <div
-                  className={`w-6 h-6 flex items-center justify-center rounded-full shrink-0 ${
-                    item.checked ? 'bg-gray4' : 'bg-[#90CFF1]'
-                  }`}
-                >
-                  <Bell
-                    className={`w-4 h-4 ${
-                      item.checked ? 'text-gray3' : 'text-white'
-                    }`}
-                  />
+          notification.map((item) => {
+            const route = getRoute(item.domainType, item.domainId);
+            return (
+              <li
+                key={item.id}
+                className='t4 text-text1 hover:bg-gray4 p-3 rounded-[6px] transition flex flex-col gap-2'
+                onClick={() => {
+                  if (item.alarmType !== 'INVITE' && route) {
+                    router.push(route);
+                    onClose();
+                  }
+                }}
+              >
+                <div className='flex items-start gap-4 cursor-pointer'>
+                  <div className='flex flex-col'>
+                    <span className='t4 text-text1'>{item.message}</span>
+                    <span className='t5 text-gray5 mt-1'>
+                      {dateFormat(item.createdDate)}
+                    </span>
+                  </div>
                 </div>
 
-                <div className='flex flex-col'>
-                  <span className='t4 text-text1'>{item.message}</span>
-                  <span className='t5 text-gray5 mt-1'>
-                    {dateFormat(item.createdDate)}
-                  </span>
-                </div>
-              </div>
-
-              {item.alarmType === 'INVITE' && !item.checked && (
-                <div className='flex gap-2 ml-10'>
-                  <button
-                    className='px-2 py-1 bg-main text-white rounded t5 hover:bg-[#292929]'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleReadNotifications(
-                        item.id,
-                        item.domainType,
-                        item.domainId,
-                        item.alarmType,
-                        true
-                      );
-                    }}
-                  >
-                    수락
-                  </button>
-                  <button
-                    className='px-2 py-1 bg-gray3 text-white rounded t5 hover:bg-[#bfbfbf]'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleReadNotifications(
-                        item.id,
-                        item.domainType,
-                        item.domainId,
-                        item.alarmType,
-                        false
-                      );
-                    }}
-                  >
-                    거절
-                  </button>
-                </div>
-              )}
-            </li>
-          ))
+                {item.alarmType === 'STUDY_INVITE' && !item.checked && (
+                  <div className='flex gap-2'>
+                    <button
+                      className='px-2 py-1 bg-main text-white rounded t5 hover:bg-[#292929]'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleReadNotifications(item.id, true);
+                      }}
+                    >
+                      수락
+                    </button>
+                    <button
+                      className='px-2 py-1 bg-gray3 text-white rounded t5 hover:bg-[#bfbfbf]'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleReadNotifications(item.id, false);
+                      }}
+                    >
+                      거절
+                    </button>
+                  </div>
+                )}
+              </li>
+            );
+          })
         )}
       </ul>
     </div>
