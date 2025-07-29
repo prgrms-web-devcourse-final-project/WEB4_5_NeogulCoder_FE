@@ -23,6 +23,7 @@ export default function StudyCommunityModifyPage() {
   const isSelectedCategory = category !== '카테고리';
   const editorRef = useRef<ToastEditor>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const categoryMap: { [key: string]: string } = {
     NOTICE: '공지',
@@ -53,6 +54,9 @@ export default function StudyCommunityModifyPage() {
   }, [postId, fetchData]);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
 
@@ -70,7 +74,10 @@ export default function StudyCommunityModifyPage() {
     } catch (error) {
       console.error('수정 실패', error);
       toast.error('게시글 수정 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
+
     console.log('Title:', title, 'Content:', content, 'category:', category);
   };
 
@@ -129,6 +136,7 @@ export default function StudyCommunityModifyPage() {
             <button
               className='button-type5 hover:bg-[#292929]'
               onClick={handleSubmit}
+              disabled={isSubmitting}
             >
               수정
             </button>

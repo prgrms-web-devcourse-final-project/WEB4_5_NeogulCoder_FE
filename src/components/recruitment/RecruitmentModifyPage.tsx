@@ -28,6 +28,7 @@ export default function RecruitmentModifyPage() {
   const [isOpen, setIsOpen] = useState(false);
   const editorRef = useRef<ToastEditor>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const displayText =
     recruitmentCount === null
@@ -87,6 +88,9 @@ export default function RecruitmentModifyPage() {
   }, [recruitmentPostId, fetchData]);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
 
@@ -106,7 +110,10 @@ export default function RecruitmentModifyPage() {
     } catch (error) {
       console.error('수정 실패', error);
       toast.error('게시글 수정 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
+
     console.log(
       'Subject:',
       subject,
@@ -242,6 +249,7 @@ export default function RecruitmentModifyPage() {
               value={formatDate(expiredDate)}
               onChange={(e) => setExpiredDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]} // 선택 가능한 최소 날짜를 오늘로 지정
+              max={endDate.split('T')[0]}
             />
           </div>
           <div className='flex items-center  mt-10'>
@@ -277,6 +285,7 @@ export default function RecruitmentModifyPage() {
             <button
               className='button-type5 hover:bg-[#292929]'
               onClick={handleSubmit}
+              disabled={isSubmitting}
             >
               수정
             </button>
