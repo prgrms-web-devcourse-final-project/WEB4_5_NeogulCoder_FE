@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import { Backpack, MapPin } from 'lucide-react';
 
@@ -16,7 +16,7 @@ export default function SideStudyInfo({
             <Image
               width={70}
               height={70}
-              src={studyInfo.imageUrl ?? musicBunny}
+              src={studyInfo.imageUrl ?? studyDefault}
               alt='예시 기본 프사'
             />
           </div>

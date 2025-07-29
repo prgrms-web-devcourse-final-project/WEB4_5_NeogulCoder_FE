@@ -5,7 +5,7 @@ import { putStudyInfo } from '@/lib/api/study.api';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import dayjs from 'dayjs';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import Image from 'next/image';
 import React, { useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
@@ -179,7 +179,9 @@ export default function StudyRoomInfoWrite({
                 <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
                   <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden'>
                     <Image
-                      src={imagePreview ?? studyInfoData.imageUrl ?? musicBunny}
+                      src={
+                        imagePreview ?? studyInfoData.imageUrl ?? studyDefault
+                      }
                       width='100'
                       height='100'
                       className='w-full h-full object-cover'

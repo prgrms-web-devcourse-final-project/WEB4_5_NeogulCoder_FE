@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import StudyRoomInfoCard from './StudyRoomInfoCard';
 import StudyRoomInfoWrite from './StudyRoomInfoWrite';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { categoryFormatting } from '@/utils/categoryFormatting';
@@ -68,7 +68,7 @@ export default function StudyRoomInfo({
       </div>
       <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto'>
         <Image
-          src={studyInfoData.imageUrl ?? musicBunny}
+          src={studyInfoData.imageUrl ?? studyDefault}
           width={120}
           height={0}
           alt='스터디이미지'
