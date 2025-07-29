@@ -91,8 +91,7 @@ export default function EditProfileClient() {
       <div className='mt-[60px] flex flex-col items-center justify-center'>
         <div className='relative'>
           <div className='w-[140px] h-[140px] rounded-full relative bg-black overflow-hidden'>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={
                 previewImg && previewImg.trim() !== ''
                   ? previewImg
