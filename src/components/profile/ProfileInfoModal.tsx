@@ -29,6 +29,7 @@ export default function UserInfoModal({
       onItemClick();
       userAuthStore.getState().clearUser();
       localStorage.removeItem('login_status');
+      document.cookie = 'login_status=; path=/';
       router.push('/');
     } catch (error) {
       console.error('로그아웃 실패: ', error);
