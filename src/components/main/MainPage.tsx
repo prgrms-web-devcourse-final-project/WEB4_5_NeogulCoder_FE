@@ -19,7 +19,7 @@ export default function MainPage() {
 
         <div id='recruit' className='pt-[120px]'>
           <div className='flex justify-between items-center'>
-            <p className='text-[22px] font-bold'>모집 중인 스터디</p>
+            <p className='text-[22px] font-bold'>모집글</p>
             {user && (
               <div className='text-right'>
                 <Link href={`/recruitment/write`} className='button-sm-type1'>
