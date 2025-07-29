@@ -1,5 +1,6 @@
 'use client';
 
+import { EllipsisVertical, Tally1 } from 'lucide-react';
 import WriteComment from '@/components/common/WriteComment';
 import Modal from '@/components/common/Modal';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -22,24 +23,15 @@ import Pagination2 from '@/components/common/Pagination2';
 import { fetchMyStudyApplicationData } from '@/lib/api/recruitment/fetchMyStudyApplicationData';
 import RecruitmentDetailSkeleton from '@/components/recruitment/RecruitmentDetailSkeleton';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
 
 export default function RecruitmentDetailPage() {
-  const EllipsisVertical = dynamic(
-    () => import('lucide-react').then((m) => m.EllipsisVertical),
-    { ssr: false }
-  );
-
-  const Tally1 = dynamic(() => import('lucide-react').then((m) => m.Tally1), {
-    ssr: false,
-  });
-
   const router = useRouter();
   const pathname = usePathname();
   const me = userAuthStore((state) => state.user);
   const handleGoToPr = () => {
     router.push(`/profile/pr/${userId}`);
   };
+
   const target = 'recruitment';
   const complete = 'COMPLETE';
   const recruitmentPostId = Number(pathname.split('/').pop());
@@ -109,7 +101,9 @@ export default function RecruitmentDetailPage() {
 
   type ApplicationType = {
     applicationId: number;
+    userId: number;
     nickname: string;
+    profileImageUrl: string;
     buddyEnergy: number;
     createdDate: string;
     applicationReason: string;
@@ -193,6 +187,7 @@ export default function RecruitmentDetailPage() {
     try {
       await studyApplicationApprove(applicationId);
       console.log('신청 승인요청 성공!');
+      toast.success('신청이 승인되었습니다.');
       await fetchApplicationData();
     } catch (error) {
       console.error('신청 승인요청 실패:', error);
@@ -203,6 +198,7 @@ export default function RecruitmentDetailPage() {
     try {
       await studyApplicationReject(applicationId);
       console.log('신청 거절요청 성공');
+      toast.success('신청이 거절되었습니다.');
       await fetchApplicationData();
     } catch (error) {
       console.error('신청 거절요청 실패:', error);
@@ -478,7 +474,7 @@ export default function RecruitmentDetailPage() {
           {isOpen && (
             <Modal
               title=''
-              className='w-[1020px] h-auto'
+              className='w-[1020px] h-[800px] overflow-y-auto'
               onClose={() => setIsOpen(false)}
             >
               {applications.length === 0 ? (
@@ -486,69 +482,93 @@ export default function RecruitmentDetailPage() {
                   신청 내역이 없습니다
                 </div>
               ) : (
-                applications.map((app) => (
-                  <div
-                    key={app.applicationId}
-                    className='rounded-[10px] px-10 w-full'
-                  >
-                    <div className='flex justify-between w-full'>
-                      <div className='flex space-x-6 items-center mb-10'>
-                        <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
-                        <div className='flex flex-col'>
-                          <div className='tm3 cursor-pointer ml-3'>
-                            {app.nickname}
-                          </div>
-                          <div className='flex justify-center items-center'>
+                <div className='flex flex-col min-h-full'>
+                  {applications.map((app) => (
+                    <div
+                      key={app.applicationId}
+                      className='rounded-[10px] px-10 w-full'
+                    >
+                      <div className='flex justify-between w-full'>
+                        <div className='flex space-x-6 items-center mb-10'>
+                          <button
+                            className='w-15 h-15 rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                            onClick={() =>
+                              router.push(`/profile/pr/${app.userId}`)
+                            }
+                          >
+                            <Image
+                              src={profileImageUrl ?? basicBunny.src}
+                              width={50}
+                              height={50}
+                              alt='예시 기본 프사'
+                              className='absolute inset-0 w-full h-full object-cover object-center'
+                            />
+                          </button>
+                          <div className='flex flex-col'>
+                            <div
+                              className='tm3 cursor-pointer ml-3'
+                              onClick={() =>
+                                router.push(`/profile/pr/${app.userId}`)
+                              }
+                            >
+                              {app.nickname}
+                            </div>
                             <div className='flex justify-center items-center'>
-                              <Image
-                                src={buddyEnergy}
-                                alt='버디 에너지'
-                                className='w-[40px] h-[40px]'
-                              />
-                              <div className='tm4 opacity-50 justify-center items-center'>
-                                {app.buddyEnergy}%
+                              <div className='flex justify-center items-center'>
+                                <Image
+                                  src={buddyEnergy}
+                                  alt='버디 에너지'
+                                  className='w-[40px] h-[40px]'
+                                />
+                                <div className='tm4 opacity-50 justify-center items-center'>
+                                  {app.buddyEnergy}%
+                                </div>
                               </div>
-                            </div>
-                            <div className='tm4 opacity-20 ml-5'>
-                              <Tally1 />
-                            </div>
-                            <div>
-                              <span className='tm4 opacity-50'>
-                                {formatDate(app.createdDate)}
-                              </span>
+                              <div className='tm4 opacity-20 ml-5'>
+                                <Tally1 />
+                              </div>
+                              <div>
+                                <span className='tm4 opacity-50'>
+                                  {formatDate(app.createdDate)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div
-                      className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
-                      style={{ borderColor: 'var(--color-border3)' }}
-                    >
-                      {app.applicationReason}
-                    </div>
-                    <div className='flex space-x-[15px] justify-end mb-10'>
-                      <button
-                        className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
-                        onClick={() => handleReject(app.applicationId)}
+                      <div
+                        className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
+                        style={{ borderColor: 'var(--color-border3)' }}
                       >
-                        거절
-                      </button>
-                      <button
-                        className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
-                        onClick={() => handleApprove(app.applicationId)}
-                      >
-                        승인
-                      </button>
+                        {app.applicationReason}
+                      </div>
+
+                      <div className='flex space-x-[15px] justify-end mb-10'>
+                        <button
+                          className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
+                          onClick={() => handleReject(app.applicationId)}
+                        >
+                          거절
+                        </button>
+                        <button
+                          className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
+                          onClick={() => handleApprove(app.applicationId)}
+                        >
+                          승인
+                        </button>
+                      </div>
                     </div>
+                  ))}
+
+                  <div className='pt-4 pb-6 flex justify-center border-gray-200'>
                     <Pagination2
                       page={page}
                       setPage={setPage}
                       totalPages={totalPages}
                     />
                   </div>
-                ))
+                </div>
               )}
             </Modal>
           )}
@@ -584,7 +604,7 @@ export default function RecruitmentDetailPage() {
             </Modal>
           )}
           {statusModalIsOpen && (
-            <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+            <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
               <div className='pt-10 pb-8 px-9 rounded-[10px] bg-white drop-shadow-md'>
                 <p className='mb-7 tm3 text-center'>
                   스터디 모집을 완료하시겠습니까? <br />

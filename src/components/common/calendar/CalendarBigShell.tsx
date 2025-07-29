@@ -7,8 +7,7 @@ import { getStudyEvents, getUserEvents } from '@/lib/api/calendar.api';
 import { UserInfo } from '@/stores/userStore';
 import CalendarBigSkeleton from './Skeleton/CalendarBigSkeleton';
 import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
-import { useStudyStore } from '@/stores/studyInfoStore';
-import dynamic from 'next/dynamic';
+import { ChevronDown } from 'lucide-react';
 
 export type ScheduleInputType = {
   title: string;
@@ -24,16 +23,8 @@ export default function CalendarBigShell({
 }: {
   type: string;
   user: UserInfo;
-  categories: { name: string; id: number }[];
+  categories: { name: string; id: number; isProgress: boolean }[];
 }) {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    {
-      ssr: false,
-    }
-  );
-
-  const studyIsProgress = useStudyStore().isProgress;
   const selectRef = useRef<HTMLDivElement>(null);
   // 날짜별 상세 팝업
   const [detailOpen, setDetailOpen] = useState(false);
@@ -203,7 +194,7 @@ export default function CalendarBigShell({
             </div>
           </div>
         )}
-        {studyIsProgress && (
+        {selectedCategory.isProgress && (
           <button
             onClick={writeOpenHandler}
             className='button-sm-type1 ml-auto'
@@ -235,7 +226,7 @@ export default function CalendarBigShell({
           handleEventDelete={handleEventDelete}
           handleEventUpdate={handleEventUpdate}
           date={detailDate}
-          categoryId={type === 'my' ? selectedCategory.id : categories[0].id} //마이페이지 캘린더면 선택된 카테고리의 id값, 스터디 캘린더면 카테고리 첫번째 id 값
+          category={type === 'my' ? selectedCategory : categories[0]} //마이페이지 캘린더면 선택된 카테고리의 id값, 스터디 캘린더면 카테고리 첫번째 id 값
         />
       )}
       {writeOpen && categories && (

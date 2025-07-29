@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -12,21 +13,8 @@ import RemainSlotModal from '@/components/study/RemainSlot';
 import { useRouter } from 'next/navigation';
 import RecruitmentFormSkeleton from '@/components/recruitment/RecruitmentFormSkeleton';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
 
 export default function RecruitmentWritePage() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    { ssr: false }
-  );
-
-  const Calendar = dynamic(
-    () => import('lucide-react').then((m) => m.Calendar),
-    {
-      ssr: false,
-    }
-  );
-
   const router = useRouter();
   const [subject, setSubject] = useState('');
   const [studyId, setStudyId] = useState<number | ''>('');
@@ -37,12 +25,12 @@ export default function RecruitmentWritePage() {
   const [studyType, setStudyType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [content, setContent] = useState('');
+  // const [content, setContent] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [isStudyOpen, setIsStudyOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(content);
+
   const displayText =
     remainSlots === null
       ? '1명 ~ 10명 이상'
@@ -109,7 +97,7 @@ export default function RecruitmentWritePage() {
 
   const handleSubmit = async () => {
     if (!isClick) {
-      toast.warning('스터디를 먼저 선택하고 정보를 가져와주세요.');
+      toast.warning('스터디를 선택해주세요.');
       return;
     }
 
@@ -348,10 +336,13 @@ export default function RecruitmentWritePage() {
             onChange={(e) => setSubject(e.target.value)}
           ></input>
           <div className='mb-10'>
-            <ClientEditorWrapper editorRef={editorRef} onChange={setContent} />
+            <ClientEditorWrapper editorRef={editorRef} />
           </div>
           <div className='flex justify-end'>
-            <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+            <button
+              className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+              onClick={() => router.push(`/#recruit`)}
+            >
               취소
             </button>
             <button

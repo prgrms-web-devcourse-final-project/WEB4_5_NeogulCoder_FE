@@ -1,17 +1,14 @@
 'use client';
-import { axiosInstance } from '@/lib/api/axios';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
 import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import { LogOut } from 'lucide-react';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function ManagerHeader() {
-  const LogOut = dynamic(() => import('lucide-react').then((m) => m.LogOut), {
-    ssr: false,
-  });
   const user = userAuthStore((state) => state.user);
   const router = useRouter();
 

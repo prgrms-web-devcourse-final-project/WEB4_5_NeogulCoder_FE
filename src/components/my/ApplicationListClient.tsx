@@ -6,7 +6,8 @@ import { MyApplicationListType } from '@/types/my';
 import SubMenuItem from './SubMenuItem';
 import { useCallback, useEffect, useState } from 'react';
 import { fetchMyApplicationList } from '@/lib/api/my';
-import StudyCardSkeleton from './StudyCardSkeleton';
+import { BookMarked } from 'lucide-react';
+import ApplyingStudyCardSkeleton from './ApplyingStudyCardSkeleton';
 
 const menuName = ['전체', '미완료', '승인', '거절'];
 const filterName = ['', 'APPLYING', 'APPROVED', 'REJECTED'];
@@ -66,7 +67,7 @@ export default function ApplicationListClient() {
         <>
           <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
             {Array.from({ length: 3 }).map((_, i) => (
-              <StudyCardSkeleton key={i} />
+              <ApplyingStudyCardSkeleton key={i} />
             ))}
           </div>
         </>
@@ -77,8 +78,15 @@ export default function ApplicationListClient() {
               className='flex flex-col gap-[30px] mt-[30px] relative 
                     h-[calc(100vh-105px-113px-198px)]'
             >
-              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+              {/* <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
                 스터디가 없습니다.
+              </div> */}
+              <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                <BookMarked
+                  className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
+                  strokeWidth={1}
+                />
+                <p className='tm3 text-border3 mb-3'>스터디가 없습니다.</p>
               </div>
             </div>
           )}

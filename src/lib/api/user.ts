@@ -1,5 +1,5 @@
 import { UserInfo } from '@/stores/userStore';
-import { axiosInstance } from './axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export const signup = (
   email: string,

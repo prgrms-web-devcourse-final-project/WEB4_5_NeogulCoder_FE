@@ -3,19 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import RegionModal from '@/components/common/RegionModal';
-import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
 // import IntroEditor from '@/components/profile/pr/IntroEditor';
 import dynamic from 'next/dynamic';
 import { ChevronDown } from 'lucide-react';
-
-// const ChevronDown = dynamic(
-//   () => import('lucide-react').then((m) => m.ChevronDown),
-//   { ssr: false }
-// );
-
-// import dynamic from "next/dynamic";
-
+import axiosInstance from '@/lib/api/axiosInstance';
 const IntroductionEditor = dynamic(
   () => import('@/components/profile/pr/IntroEditor'),
   {

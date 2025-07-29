@@ -5,18 +5,13 @@ import MannerStudyItem from '@/components/my/MannerStudyItem';
 import MannerTooltip from '@/components/my/MannerTooltip';
 import SubMenuItem from '@/components/my/SubMenuItem';
 import { fetchStudyList, fetchUserListByStudyId } from '@/lib/api/manners';
-// import { BadgeQuestionMark } from 'lucide-react';
+import { BadgeQuestionMark } from 'lucide-react';
 import Image from 'next/image';
 import completeStamp from '@/assets/images/complete-stamp.svg';
 import { useEffect, useState } from 'react';
 import { Study, User } from '@/types/manners';
 import MannerSkeleton from './MannerSkeleton';
-import dynamic from 'next/dynamic';
-
-const BadgeQuestionMark = dynamic(
-  () => import('lucide-react').then((m) => m.BadgeQuestionMark),
-  { ssr: false }
-);
+import { toast } from 'react-toastify';
 
 export default function MannersClient() {
   const [isShown, setIsShown] = useState(false);
@@ -45,6 +40,7 @@ export default function MannersClient() {
       if (data[0].studyId) await getUserList(data?.[0]?.studyId);
     } catch (e) {
       console.error('스터디 목록 불러오기 실패:', e);
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
     } finally {
       setIsLoading(false);
     }
@@ -64,6 +60,7 @@ export default function MannersClient() {
       setUserList(data);
     } catch (e) {
       console.error('스터디원 목록 불러오기 실패:', e);
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
     } finally {
       setIsLoading(false);
     }

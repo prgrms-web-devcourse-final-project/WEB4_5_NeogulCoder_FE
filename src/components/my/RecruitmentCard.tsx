@@ -3,14 +3,9 @@
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { formatDate } from '@/utils/formatDate';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
-// import { MessageSquareMore } from 'lucide-react';
+import { MessageSquareMore } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-
-const MessageSquareMore = dynamic(
-  () => import('lucide-react').then((m) => m.MessageSquareMore),
-  { ssr: false }
-);
+import ToastViewer from '../common/ToastViewer';
 
 export default function RecruitmentCard({
   studyId,
@@ -87,7 +82,10 @@ export default function RecruitmentCard({
       {type === 'my' && (
         <>
           <div className='w-[557px] line-clamp-2 t4 text-text1 opacity-50 mt-[18px]'>
-            {content}
+            {/* {content} */}
+            {content && (
+              <ToastViewer key={content} height='100%' initialValue={content} />
+            )}
           </div>
           <div className='flex justify-between items-end'>
             <div className='flex gap-2 items-center mt-[18px]'>
@@ -112,7 +110,10 @@ export default function RecruitmentCard({
       {type === 'study' && (
         <div className='flex justify-between items-end'>
           <div className='w-[557px] line-clamp-2 t4 text-text1 opacity-50 mt-[18px]'>
-            {content}
+            {/* {content} */}
+            {content && (
+              <ToastViewer key={content} height='100%' initialValue={content} />
+            )}
           </div>
           <div className='flex justify-center items-center gap-[5px]'>
             <MessageSquareMore className='w-5 h-5 text-text1 opacity-30' />

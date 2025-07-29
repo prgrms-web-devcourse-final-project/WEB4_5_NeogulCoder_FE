@@ -10,34 +10,14 @@ import Link from 'next/link';
 import MainStudyListCardSkeleton from './MainStudyListCardSkeleton';
 import { userAuthStore } from '@/stores/userStore';
 import { useStudiesStore } from '@/stores/useStudiesStore';
-import dynamic from 'next/dynamic';
+import {
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight,
+  LockKeyhole,
+} from 'lucide-react';
 
 export default function MainStudyList() {
-  const ArrowDown = dynamic(
-    () => import('lucide-react').then((m) => m.ArrowDown),
-    {
-      ssr: false,
-    }
-  );
-  const ChevronLeft = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronLeft),
-    {
-      ssr: false,
-    }
-  );
-  const ChevronRight = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronRight),
-    {
-      ssr: false,
-    }
-  );
-  const LockKeyhole = dynamic(
-    () => import('lucide-react').then((m) => m.LockKeyhole),
-    {
-      ssr: false,
-    }
-  );
-
   const user = userAuthStore().user;
   const [swiper, setSwiper] = useState<SwiperClass>();
   const { studies, loading } = useStudiesStore();
@@ -103,7 +83,7 @@ export default function MainStudyList() {
                           <StudyCard
                             studyId={study.studyId}
                             name={study.name}
-                            leaderNickname={study.leaderNickname}
+                            leaderNickname={study.leaderNickname ?? ''}
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}
@@ -134,7 +114,7 @@ export default function MainStudyList() {
                           <StudyCard
                             studyId={study.studyId}
                             name={study.name}
-                            leaderNickname={study.leaderNickname}
+                            leaderNickname={study.leaderNickname ?? ''}
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}

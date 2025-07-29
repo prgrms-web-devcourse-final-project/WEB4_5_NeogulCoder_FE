@@ -5,7 +5,7 @@ import SubmitScheduleModal from '@/components/study/SubmitScheduleModal';
 import TimeGrid from '@/components/study/TimeGrid';
 import { TimeVoteStatsType, TimeVoteSubmissionsType } from '@/types/schedule';
 import { formatDate } from '@/utils/formatDate';
-// import { BadgeQuestionMark } from 'lucide-react';
+import { BadgeQuestionMark, CalendarClock } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import DeleteScheduleModal from './DeleteScheduleModal';
 import { useParams } from 'next/navigation';
@@ -13,12 +13,6 @@ import { fetchTimeVoteStats } from '@/lib/api/schedule';
 import ScheduleSkeleton from './ScheduleSkeleton';
 import SetPeriodModal from './SetPeriodModal';
 import { checkMyRoleInStudy } from '@/lib/api/community';
-import dynamic from 'next/dynamic';
-
-const BadgeQuestionMark = dynamic(
-  () => import('lucide-react').then((m) => m.BadgeQuestionMark),
-  { ssr: false }
-);
 
 export default function StudyScheduleClient() {
   const { id } = useParams();
@@ -33,33 +27,37 @@ export default function StudyScheduleClient() {
   const [timeVoteSubmissions, setTimeVoteSubmissions] =
     useState<TimeVoteSubmissionsType>([]);
   const [isLeader, setIsLeader] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
+  const [isFetchingVoteStats, setIsFetchingVoteStats] = useState(true);
+  const [isFetchingRole, setIsFetchingRole] = useState(true);
+
+  const isFullyLoaded = !isFetchingVoteStats && !isFetchingRole;
 
   const handleCloseSubmitModal = () => setIsOpenSubmitModal(false);
   const handleCloseDeleteModal = () => setIsOpenDeleteModal(false);
   const handleClosePeriodModal = () => setIsOpenPeriodModal(false);
 
   const initVoteStats = async () => {
-    setIsLoading(true);
-    // try {
-    const data = await fetchTimeVoteStats(Number(id));
-    setInitialTimeVoteStats(data);
-    // } catch (e) {
-    //   console.error(e);
-    // } finally {
-    setIsLoading(false);
-    // }
+    setIsFetchingVoteStats(true);
+    try {
+      const data = await fetchTimeVoteStats(Number(id));
+      setInitialTimeVoteStats(data);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsFetchingVoteStats(false);
+    }
   };
 
   const checkMyRole = async () => {
-    setIsLoading(true);
+    setIsFetchingRole(true);
     try {
       const roleData = await checkMyRoleInStudy(Number(id));
       setIsLeader(roleData.role === 'LEADER');
     } catch (e) {
       console.error(e);
     } finally {
-      setIsLoading(false);
+      setIsFetchingRole(false);
     }
   };
 
@@ -70,11 +68,11 @@ export default function StudyScheduleClient() {
 
   return (
     <>
-      {isLoading ? (
+      {!isFullyLoaded ? (
         <ScheduleSkeleton />
       ) : (
         <>
-          {!isLoading && initialTimeVoteStats ? (
+          {initialTimeVoteStats ? (
             <>
               <div className='w-full relative'>
                 {isShown && (
@@ -122,7 +120,6 @@ export default function StudyScheduleClient() {
                     isLeader={isLeader}
                     isOpenDeleteModal={isOpenDeleteModal}
                     initialTimeVoteStats={initialTimeVoteStats}
-                    // setInitialTimeVoteStats={setInitialTimeVoteStats}
                     setTimeVoteSubmissions={setTimeVoteSubmissions}
                   />
                 </div>
@@ -143,7 +140,7 @@ export default function StudyScheduleClient() {
             </>
           ) : (
             <>
-              {!isLoading && !initialTimeVoteStats && (
+              {!initialTimeVoteStats && (
                 // 84px ?
                 <div
                   className='w-full relative h-[calc(100vh-105px-113px)]
@@ -162,8 +159,16 @@ export default function StudyScheduleClient() {
                       onMouseLeave={() => setIsShown(false)}
                     />
                   </div>
-                  <div className='flex flex-col gap-10 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-                    <span>스터디장이 아직 기간 설정을 하지 않았습니다.</span>
+                  <div className='flex flex-col gap-6 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                    <div className='flex flex-col gap-3'>
+                      <CalendarClock
+                        className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
+                        strokeWidth={1}
+                      />
+                      <span className='tm3 text-border3 mb-3'>
+                        스터디장이 아직 기간 설정을 하지 않았습니다.
+                      </span>
+                    </div>
                     {isLeader && (
                       <button
                         className='w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]'
