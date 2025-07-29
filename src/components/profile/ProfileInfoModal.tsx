@@ -1,5 +1,5 @@
 'use client';
-import { axiosInstance } from '@/lib/api/axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 import { userAuthStore } from '@/stores/userStore';
 import { BookCopy, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
