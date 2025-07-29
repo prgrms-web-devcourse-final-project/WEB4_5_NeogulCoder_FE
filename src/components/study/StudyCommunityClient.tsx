@@ -12,6 +12,7 @@ import NoticeItemSkeleton from './NoticeItemSkeleton';
 import CommunityCardSkeleton from './CommunityCardSkeleton';
 import Link from 'next/link';
 import { MessageCircleDashed } from 'lucide-react';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 const categoryMap: Record<string, '' | 'NOTICE' | 'FREE'> = {
   전체: '',
@@ -27,6 +28,8 @@ const sortingMap: Record<string, 'createDateTime' | 'commentCount'> = {
 export default function StudyCommunityClient() {
   const { id } = useParams();
   const studyId = Number(id);
+
+  const isProgress = useStudyStore().isProgress;
 
   const [selectedCategory, setSelectedCategory] = useState('카테고리');
   const [selectedSortingType, setSelectedSortingType] = useState('최신순');
@@ -78,12 +81,14 @@ export default function StudyCommunityClient() {
       <div className='flex justify-between items-center'>
         <div className='tb2 text-text1'>커뮤니티</div>
         <div className='text-right mr-4'>
-          <Link
-            href={`/study/${studyId}/study-community/write`}
-            className='button-sm-type1'
-          >
-            게시글 작성
-          </Link>
+          {isProgress && (
+            <Link
+              href={`/study/${studyId}/study-community/write`}
+              className='button-sm-type1'
+            >
+              게시글 작성
+            </Link>
+          )}
         </div>
       </div>
       <div className='mt-6'>
