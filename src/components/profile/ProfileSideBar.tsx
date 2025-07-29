@@ -111,6 +111,8 @@ export default function SideBar() {
                     src={userData?.profileImageUrl ?? basicBunny.src}
                     alt='예시 기본 프사'
                     className='w-full h-20 object-cover object-center rounded-full'
+                    width={70}
+                    height={70}
                   />
                 </div>
                 <div className='flex flex-col justify-center items-start'>

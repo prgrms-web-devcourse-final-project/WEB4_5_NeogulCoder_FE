@@ -53,7 +53,7 @@ export default function MannerSection() {
             <Image src={excellent} alt='최고예요' />
             <p>
               <span className='tm2'>{excellentCount}</span>{' '}
-              <span className='t4'>명</span>
+              <span className='t4'>개</span>
             </p>
           </div>
 
@@ -61,7 +61,7 @@ export default function MannerSection() {
             <Image src={good} alt='좋아요' />
             <p>
               <span className='tm2'>{goodCount}</span>{' '}
-              <span className='t4'>명</span>
+              <span className='t4'>개</span>
             </p>
           </div>
 
@@ -69,7 +69,7 @@ export default function MannerSection() {
             <Image src={notGood} alt='별로예요' />
             <p>
               <span className='tm2'>{notGoodCount}</span>{' '}
-              <span className='t4'>명</span>
+              <span className='t4'>개</span>
             </p>
           </div>
         </div>

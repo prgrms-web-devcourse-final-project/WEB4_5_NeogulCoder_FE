@@ -97,6 +97,8 @@ export default function EditProfileClient() {
                   ? previewImg
                   : basicBunny.src
               }
+              width={140}
+              height={140}
               alt='프로필 미리보기'
               className='w-full h-[160px] object-cover rounded-full'
             />
