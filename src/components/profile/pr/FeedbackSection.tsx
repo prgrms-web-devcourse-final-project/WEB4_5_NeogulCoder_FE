@@ -1,5 +1,4 @@
 import Image from 'next/image';
-// import musicBunny from '@/assets/images/music-bunny.svg';
 import { useEffect, useState } from 'react';
 import FeedbackModal from './FeedbackModal';
 import { userPrStore } from '@/stores/prStore';
@@ -43,30 +42,32 @@ export default function FeedbackSection() {
             받은 피드백이 없습니다
           </div>
         ) : (
-          <div className='flex flex-col gap-3'>
-            <div className='flex gap-3'>
-              <div className='w-[50px] h-[50px] bg-gray3 rounded-full overflow-hidden flex-shrink-0'>
-                <Image
-                  src={pr.reviewContents[0]?.reviewUserImgUrl}
-                  alt='유저 프로필'
-                  width={50}
-                  height={50}
-                />
+          <div className='flex flex-1 items-center'>
+            <div className='flex flex-col gap-2'>
+              <div className='flex gap-3 items-center'>
+                <div className='w-[50px] h-[50px] bg-gray3 rounded-full overflow-hidden flex-shrink-0'>
+                  <Image
+                    src={pr.reviewContents[0]?.reviewUserImgUrl}
+                    alt='유저 프로필'
+                    width={50}
+                    height={50}
+                  />
+                </div>
+
+                <div className='flex flex-col justify-center'>
+                  <p className='tm4'>
+                    {pr.reviewContents[0]?.reviewUserNickname}
+                  </p>
+                  <p className='t5 text-text1/50'>
+                    {pr.reviewContents[0]?.reviewDate}
+                  </p>
+                </div>
               </div>
 
-              <div className='flex flex-col justify-center'>
-                <p className='tm4'>
-                  {pr.reviewContents[0]?.reviewUserNickname}
-                </p>
-                <p className='t5 text-text1/50'>
-                  {pr.reviewContents[0]?.reviewDate}
-                </p>
-              </div>
+              <p className='t4 text-text1 pl-[62px]'>
+                {pr.reviewContents[0]?.reviewComment}
+              </p>
             </div>
-
-            <p className='t4 text-text1 pl-[62px]'>
-              {pr.reviewContents[0]?.reviewComment}
-            </p>
           </div>
         )}
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
+import { toast } from 'react-toastify';
 import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function WithdrawalClient() {
@@ -12,11 +13,10 @@ export default function WithdrawalClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordCheckRef = useRef<HTMLInputElement>(null);
-
   const user = userAuthStore((state) => state.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -56,9 +56,12 @@ export default function WithdrawalClient() {
   };
 
   const handleDeleteUser = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       await deleteUser(password);
-      alert('탈퇴가 완료되었습니다.');
+      toast.success('탈퇴가 완료되었습니다.');
       setIsModalOpen(false);
       router.push('/auth/login');
     } catch (error) {
