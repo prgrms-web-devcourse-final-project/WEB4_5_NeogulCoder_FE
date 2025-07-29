@@ -103,7 +103,7 @@ export default function MainStudyList() {
                           <StudyCard
                             studyId={study.studyId}
                             name={study.name}
-                            leaderNickname={study.leaderNickname}
+                            leaderNickname={study.leaderNickname ?? ''}
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}
@@ -134,7 +134,7 @@ export default function MainStudyList() {
                           <StudyCard
                             studyId={study.studyId}
                             name={study.name}
-                            leaderNickname={study.leaderNickname}
+                            leaderNickname={study.leaderNickname ?? ''}
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}

@@ -7,6 +7,7 @@ import { userAuthStore } from '@/stores/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export type AdminPostType = {
   id: number;
@@ -52,9 +53,9 @@ export default function ManagerRecruitmentsPage() {
           item.id === id ? { ...item, activated: false } : item
         )
       );
-      alert('삭제');
+      toast.success(`해당 모집글을 비활성화하였습니다.`);
     } catch (error) {
-      console.error('사용자 삭제 실패', error);
+      toast.error(`모집글 비활성화 실패 ${error}`);
     }
   };
 

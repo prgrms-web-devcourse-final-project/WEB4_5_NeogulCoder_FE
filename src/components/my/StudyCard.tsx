@@ -8,6 +8,7 @@ import { formatDate } from '@/utils/formatDate';
 import { MyStudyListType } from '@/types/my';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { categoryFormatting } from '@/utils/categoryFormatting';
 
 const Calendar = dynamic(() => import('lucide-react').then((m) => m.Calendar), {
   ssr: false,
@@ -82,7 +83,7 @@ export default function StudyCard({
       </div>
       <div className='flex gap-2 mt-6'>
         <div className='tag-type1'>
-          <span className='tb5'>{category}</span>
+          <span className='tb5'>{categoryFormatting(category)}</span>
         </div>
         <div className='tag-type1'>
           <span className='tb5'>
