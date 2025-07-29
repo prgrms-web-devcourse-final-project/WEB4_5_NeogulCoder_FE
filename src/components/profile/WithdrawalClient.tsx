@@ -1,12 +1,12 @@
 'use client';
 import WithdrawalModal from '@/components/profile/WithdrawalModal';
-import { axiosInstance } from '@/lib/api/axios';
 import { userAuthStore } from '@/stores/userStore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
 import { toast } from 'react-toastify';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function WithdrawalClient() {
   const router = useRouter();

@@ -1,8 +1,8 @@
-import { axiosInstance } from '@/lib/api/axios';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
 import { toast } from 'react-toastify';
+import axiosInstance from '@/lib/api/axiosInstance';
 import { X } from 'lucide-react';
 
 export default function PasswordChangeModal({
