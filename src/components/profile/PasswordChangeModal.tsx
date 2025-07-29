@@ -2,8 +2,8 @@ import { axiosInstance } from '@/lib/api/axios';
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
-import dynamic from 'next/dynamic';
 import { toast } from 'react-toastify';
+import { X } from 'lucide-react';
 
 export default function PasswordChangeModal({
   onClose,
@@ -18,10 +18,6 @@ export default function PasswordChangeModal({
   const passwordRef = useRef<HTMLInputElement>(null);
   const newPasswordRef = useRef<HTMLInputElement>(null);
   const newPasswordCheckRef = useRef<HTMLInputElement>(null);
-
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
 
   const handleNewPasswordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

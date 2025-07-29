@@ -1,5 +1,4 @@
 import Image from 'next/image';
-// import musicBunny from '@/assets/images/music-bunny.svg';
 import { useEffect, useState } from 'react';
 import FeedbackModal from './FeedbackModal';
 import { userPrStore } from '@/stores/prStore';

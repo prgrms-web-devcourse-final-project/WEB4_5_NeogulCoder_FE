@@ -6,8 +6,7 @@ import notion from '@/assets/images/icons/notion.svg';
 import tistory from '@/assets/images/icons/tistory.svg';
 import velog from '@/assets/images/icons/velog.svg';
 import naverBlog from '@/assets/images/icons/naver-blog.png';
-import dynamic from 'next/dynamic';
-
+import { Link2 } from 'lucide-react';
 const urlIcon: Record<string, { src: StaticImageData; className?: string }> = {
   'github.com': { src: github },
   'instagram.com': { src: instagram, className: 'scale-120' },
@@ -44,9 +43,6 @@ export default function InfoSection() {
 
   const locationLinksMessage = !hasLocation && !hasLinks;
 
-  const Link2 = dynamic(() => import('lucide-react').then((m) => m.Link2), {
-    ssr: false,
-  });
   return (
     <>
       <div className='w-1/2 h-[180px] border border-main/10 rounded-[10px] p-5 flex flex-col'>

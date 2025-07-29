@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { ReviewTagResponse } from '@/types/pr';
 import { getReviewTags } from '@/lib/api/pr';
 import MannerModalSkeleton from './skeleton/MannerModalSkeleton';
-import dynamic from 'next/dynamic';
+import { X } from 'lucide-react';
 
 export default function MannerModal({ onClose }: { onClose: () => void }) {
   const reviewSummary = [
@@ -47,10 +47,6 @@ export default function MannerModal({ onClose }: { onClose: () => void }) {
   ];
 
   const [reviewData, setReviewData] = useState<ReviewTagResponse | null>(null);
-
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
 
   useEffect(() => {
     const fetchTags = async () => {

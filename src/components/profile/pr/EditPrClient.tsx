@@ -6,13 +6,8 @@ import RegionModal from '@/components/common/RegionModal';
 import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
 import IntroEditor from '@/components/profile/pr/IntroEditor';
-import dynamic from 'next/dynamic';
 import { toast } from 'react-toastify';
-
-const ChevronDown = dynamic(
-  () => import('lucide-react').then((m) => m.ChevronDown),
-  { ssr: false }
-);
+import { ChevronDown } from 'lucide-react';
 
 export default function EditPrClient() {
   const router = useRouter();

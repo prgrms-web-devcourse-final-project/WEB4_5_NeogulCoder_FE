@@ -2,8 +2,8 @@
 import { axiosInstance } from '@/lib/api/axios';
 import { userAuthStore } from '@/stores/userStore';
 import { User } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { BookCopy, LogOut } from 'lucide-react';
 
 export default function UserInfoModal({
   onItemClick,
@@ -12,15 +12,6 @@ export default function UserInfoModal({
 }) {
   const router = useRouter();
   const me = userAuthStore((state) => state.user);
-
-  const BookCopy = dynamic(
-    () => import('lucide-react').then((m) => m.BookCopy),
-    { ssr: false }
-  );
-
-  const LogOut = dynamic(() => import('lucide-react').then((m) => m.LogOut), {
-    ssr: false,
-  });
 
   const handleGoToPr = () => {
     if (!me?.id) return;

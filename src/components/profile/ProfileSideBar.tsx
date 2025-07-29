@@ -6,8 +6,8 @@ import { useEffect, useState } from 'react';
 import { userAuthStore, UserInfo } from '@/stores/userStore';
 import { getUserById } from '@/lib/api/user';
 import ProfileSideBarSkeleton from './ProfileSideBarSkeleton';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import { ChevronRight } from 'lucide-react';
 
 export default function SideBar() {
   const router = useRouter();
@@ -35,11 +35,6 @@ export default function SideBar() {
 
   const isMyPage =
     params?.userId === 'me' || isEditOrWithdrawal || me?.id === userId;
-
-  const ChevronRight = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronRight),
-    { ssr: false }
-  );
 
   useEffect(() => {
     if (isMyPage) {
