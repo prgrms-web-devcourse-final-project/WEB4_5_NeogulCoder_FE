@@ -1,4 +1,5 @@
 import { userPrStore } from '@/stores/prStore';
+import { Viewer } from '@toast-ui/react-editor';
 
 export default function IntroSection() {
   const pr = userPrStore();
@@ -8,9 +9,7 @@ export default function IntroSection() {
     <>
       <div className='w-full h-[385px] border border-main/10 rounded-[10px] p-5'>
         <p className='tm3 mb-12'>소개글</p>
-        <div className='t4 whitespace-pre-line'>
-          {pr?.pr?.introduction ?? ''}
-        </div>
+        <Viewer initialValue={pr.pr?.introduction ?? ''} />
       </div>
     </>
   );
