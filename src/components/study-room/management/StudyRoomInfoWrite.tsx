@@ -5,7 +5,7 @@ import { putStudyInfo } from '@/lib/api/study.api';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import dayjs from 'dayjs';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import Image from 'next/image';
 import React, { useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
@@ -177,12 +177,13 @@ export default function StudyRoomInfoWrite({
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 {/* 사진 */}
                 <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
-                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden'>
+                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden flex item-center justify-center'>
                     <Image
-                      src={imagePreview ?? studyInfoData.imageUrl ?? musicBunny}
-                      width='100'
-                      height='100'
-                      className='w-full h-full object-cover'
+                      src={
+                        imagePreview ?? studyInfoData.imageUrl ?? studyDefault
+                      }
+                      width={100}
+                      height={0}
                       alt={`${studyInfoData.name} 프로필 사진`}
                     />
                   </div>

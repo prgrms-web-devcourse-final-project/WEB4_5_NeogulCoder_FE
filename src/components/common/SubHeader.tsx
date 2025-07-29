@@ -85,7 +85,7 @@ export default function SubHeader() {
                   ))}
                   {/* 보여주기 폴더형식 */}
                   {!studyOpen && (
-                    <div className='w-[32px] h-[32px] rounded-[6px] flex-wrap border border-border1 flex gap-0.5 p-[2px] bg-white'>
+                    <div className='w-[32px] h-[32px] rounded-[6px] items-center justify-center flex-wrap border border-border1 flex gap-0.5 p-[2px] bg-white'>
                       {studies.slice(0, 4).map((study) => (
                         <Image
                           key={`${study.name}이미지`}

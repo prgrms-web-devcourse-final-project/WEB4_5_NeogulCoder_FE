@@ -32,6 +32,7 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
   const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
   const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
   const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const addStudy = useStudiesStore((state) => state.addStudy);
   const me = userAuthStore((state) => state.user);
 
@@ -44,6 +45,8 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const formData = new FormData();
 
     const requestPayload = {
@@ -89,6 +92,8 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
     } catch (error) {
       console.error('응답 에러:', error);
       toast.error('스터디 생성 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -331,6 +336,7 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
           className='button-modal1 hover:bg-[#292929]'
           onClick={handleSubmit}
           disabled={
+            isSubmitting ||
             name === '' ||
             startDate === '' ||
             endDate === '' ||

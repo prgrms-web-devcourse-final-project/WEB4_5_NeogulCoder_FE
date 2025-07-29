@@ -64,6 +64,10 @@ export default function RecruitmentDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(true);
+  const [isStatusChange, setIsStatusChange] = useState(true);
+  const [isApproving, setIsApproving] = useState(true);
+  const [isRejecting, setIsRejecting] = useState(true);
 
   const isApplied = myApplications.some(
     (app) => app.recruitmentPostId === recruitmentPostId
@@ -158,6 +162,9 @@ export default function RecruitmentDetailPage() {
   }, [page]);
 
   const handleStudyAppSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const appData = await studyApplication(
         recruitmentPostId,
@@ -170,20 +177,30 @@ export default function RecruitmentDetailPage() {
     } catch (error) {
       console.error('생성 실패', error);
       toast.error('모집 신청 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleChangeStatus = async () => {
+    if (isStatusChange) return;
+    setIsStatusChange(true);
+
     try {
       await changeStatus(recruitmentPostId, complete);
       await fetchData();
       setStatusModalIsOpen(false);
     } catch (error) {
       console.error('상태 변경 실패:', error);
+    } finally {
+      setIsStatusChange(false);
     }
   };
 
   const handleApprove = async (applicationId: number) => {
+    if (isApproving) return;
+    setIsApproving(true);
+
     try {
       await studyApplicationApprove(applicationId);
       console.log('신청 승인요청 성공!');
@@ -191,10 +208,14 @@ export default function RecruitmentDetailPage() {
       await fetchApplicationData();
     } catch (error) {
       console.error('신청 승인요청 실패:', error);
+    } finally {
+      setIsApproving(false);
     }
   };
 
   const handleReject = async (applicationId: number) => {
+    if (isRejecting) return;
+    setIsRejecting(true);
     try {
       await studyApplicationReject(applicationId);
       console.log('신청 거절요청 성공');
@@ -202,6 +223,8 @@ export default function RecruitmentDetailPage() {
       await fetchApplicationData();
     } catch (error) {
       console.error('신청 거절요청 실패:', error);
+    } finally {
+      setIsRejecting(false);
     }
   };
 
@@ -497,7 +520,7 @@ export default function RecruitmentDetailPage() {
                             }
                           >
                             <Image
-                              src={profileImageUrl ?? basicBunny.src}
+                              src={app.profileImageUrl ?? basicBunny.src}
                               width={50}
                               height={50}
                               alt='예시 기본 프사'
@@ -548,12 +571,14 @@ export default function RecruitmentDetailPage() {
                         <button
                           className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
                           onClick={() => handleReject(app.applicationId)}
+                          disabled={isRejecting}
                         >
                           거절
                         </button>
                         <button
                           className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
                           onClick={() => handleApprove(app.applicationId)}
+                          disabled={isApproving}
                         >
                           승인
                         </button>
@@ -596,7 +621,9 @@ export default function RecruitmentDetailPage() {
                 <button
                   className='button-type5 hover:bg-[#292929]'
                   onClick={handleStudyAppSubmit}
-                  disabled={writeApplicationReason.trim() === ''}
+                  disabled={
+                    writeApplicationReason.trim() === '' || isSubmitting
+                  }
                 >
                   확인
                 </button>
@@ -620,6 +647,7 @@ export default function RecruitmentDetailPage() {
                   <button
                     className='button-type5 w-[120px]! bg-red! text-white! hover:bg-[#e14d4a]!'
                     onClick={handleChangeStatus}
+                    disabled={isStatusChange}
                   >
                     확인
                   </button>

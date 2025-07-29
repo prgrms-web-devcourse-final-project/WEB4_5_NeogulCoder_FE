@@ -76,6 +76,10 @@ export default function StudyCommunityClient() {
     filterList();
   }, [selectedCategory, selectedSortingType, keyword, page, filterList]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <div className='w-full'>
       <div className='flex justify-between items-center'>
@@ -111,9 +115,6 @@ export default function StudyCommunityClient() {
         ) : (
           <>
             {studyNoticeList.length === 0 && (
-              // <div className='text-center tm3 text-text1/80'>
-              //   공지가 없습니다.
-              // </div>
               <div className='text-center'>
                 <MessageCircleDashed
                   className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
@@ -143,9 +144,6 @@ export default function StudyCommunityClient() {
         ) : (
           <>
             {studyCommunityList.length === 0 && (
-              // <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-              //   게시글이 없습니다.
-              // </div>
               <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
                 <MessageCircleDashed
                   className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
