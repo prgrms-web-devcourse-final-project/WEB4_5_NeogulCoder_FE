@@ -2,15 +2,15 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
-  const token = req.cookies.get('refreshToken')?.value;
+  const token = req.cookies.get('REFRESH_TOKEN')?.value;
 
-  // 보호할 경로 패턴 설정
-  const protectedPaths = ['/profile', '/my', '/study', 'manager'];
-  if (
-    protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path)) &&
-    !token
-  ) {
-    // 로그인 페이지로 리다이렉트
+  // 보호할 경로 설정
+  const protectedPaths = ['/profile', '/my', '/study', '/manager'];
+  const pathname = req.nextUrl.pathname;
+
+  const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
+
+  if (isProtected && !token) {
     const loginUrl = req.nextUrl.clone();
     loginUrl.pathname = '/auth/login';
     return NextResponse.redirect(loginUrl);
@@ -19,17 +19,10 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// middleware가 적용될 경로
+// middleware가 적용될 경로 설정
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * Feel free to modify this pattern to include more paths.
-     */
+    // 모든 경로에 대해 middleware 적용하되, 아래 제외 경로는 무시
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
