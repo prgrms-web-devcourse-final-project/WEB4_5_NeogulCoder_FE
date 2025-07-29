@@ -74,6 +74,10 @@ export default function RecruitmentListClient() {
     filterList();
   }, [selectedCategory, selectedStudyType, keyword, page, filterList]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <div className='w-full'>
       <div className='tb3'>내가 작성한 모집 글</div>

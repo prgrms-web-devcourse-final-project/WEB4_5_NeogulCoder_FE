@@ -48,6 +48,10 @@ export default function ApplicationListClient() {
     filterList();
   }, [page, filterList]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <div className='w-full'>
       <div className='tb3'>내가 신청한 스터디</div>
