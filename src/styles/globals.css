@@ -198,6 +198,11 @@ body {
   }
 }
 
+/* 토스트 메시지 */
+.toast-paperlogy {
+  font-family: 'Paperlogy', sans-serif;
+}
+
 /* 스크롤 */
 .scroll-custom::-webkit-scrollbar {
   width: 0px;

@@ -2,6 +2,8 @@
 
 import { deleteMeByStudy } from '@/lib/api/community';
 import { useStudiesStore } from '@/stores/useStudiesStore';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function StudyOutCheckModal({
   studyId,
@@ -10,14 +12,20 @@ export default function StudyOutCheckModal({
   studyId: number;
   onClose: () => void;
 }) {
+  const router = useRouter();
   const { deleteStudy } = useStudiesStore();
 
   const handleClickOut = async () => {
-    await deleteMeByStudy(studyId);
-    deleteStudy(studyId);
-    onClose();
-    // 메인으로 리다이렉트 ?
-    // toast message
+    try {
+      await deleteMeByStudy(studyId);
+      deleteStudy(studyId);
+      onClose();
+      toast.success('스터디 탈퇴했습니다.');
+      router.push('/');
+    } catch (e) {
+      console.error(e);
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+    }
   };
 
   return (

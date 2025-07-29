@@ -160,7 +160,7 @@ export default function StudyCommunityDetailPage() {
           </div>
           <div
             className='w-full min-h-[600px] h-auto my-10 border-[1px] rounded-[10px] p-5 tm3'
-            style={{ borderColor: 'var(--color-border3)' }}
+            style={{ borderColor: 'var(--color-border2)' }}
           >
             {content && (
               <ToastViewer key={content} height='100%' initialValue={content} />

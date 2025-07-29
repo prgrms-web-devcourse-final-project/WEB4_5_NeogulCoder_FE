@@ -12,6 +12,7 @@ export interface UserInfo {
 
 export interface UserStore {
   user: UserInfo | null;
+  isLoading: boolean;
   setUser: (user: UserInfo) => void; // 사용자 정보 저장
   clearUser: () => void; // 사용자 상태 초기화
   fetchUser: () => Promise<void>; // 사용자 정보 가져오기
@@ -19,6 +20,7 @@ export interface UserStore {
 
 export const userAuthStore = create<UserStore>((set) => ({
   user: null,
+  isLoading: true,
 
   setUser: (user) => {
     // 로그인 하고 나서 저장
@@ -39,6 +41,7 @@ export const userAuthStore = create<UserStore>((set) => ({
   },
 
   fetchUser: async () => {
+    set({ isLoading: true });
     // 페이지 새로고침 후 정보 다시 불러오기
     try {
       const res = await getUser();
@@ -57,6 +60,10 @@ export const userAuthStore = create<UserStore>((set) => ({
     } catch (error) {
       console.error('실패: ', error);
       set({ user: null });
+    } finally {
+      set({ isLoading: false });
     }
   },
+
+  setLoading: (isLoading: boolean) => set({ isLoading: isLoading }),
 }));
