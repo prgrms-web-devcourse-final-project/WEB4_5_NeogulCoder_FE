@@ -1,4 +1,4 @@
-import { axiosInstance } from '../axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export const fetchMyStudyApplicationData = async (page: number) => {
   const size = 20;

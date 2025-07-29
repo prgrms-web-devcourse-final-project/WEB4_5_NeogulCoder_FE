@@ -1,4 +1,4 @@
-import { axiosInstance } from './axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 // 내 스터디 목록
 export const getStudies = async () => {
