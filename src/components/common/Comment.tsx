@@ -1,5 +1,6 @@
 'use client';
 
+import { EllipsisVertical } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import ClickVerticalMenu from './ClickVerticalMenu';
 import { useRouter } from 'next/navigation';
@@ -9,7 +10,6 @@ import { updateComments } from '@/lib/api/comment/update';
 import { deleteComments } from '@/lib/api/comment/delete';
 import { userAuthStore } from '@/stores/userStore';
 import basicBunny from '@/assets/images/basic-bunny.svg';
-import dynamic from 'next/dynamic';
 
 type CommentProps = {
   commentId: number;
@@ -32,10 +32,6 @@ export default function Comment({
   onUpdate,
   target,
 }: CommentProps) {
-  const EllipsisVertical = dynamic(
-    () => import('lucide-react').then((m) => m.EllipsisVertical),
-    { ssr: false }
-  );
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();

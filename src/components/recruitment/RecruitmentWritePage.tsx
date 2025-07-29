@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronDown, Calendar } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useEffect, useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -12,21 +13,8 @@ import RemainSlotModal from '@/components/study/RemainSlot';
 import { useRouter } from 'next/navigation';
 import RecruitmentFormSkeleton from '@/components/recruitment/RecruitmentFormSkeleton';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
 
 export default function RecruitmentWritePage() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    { ssr: false }
-  );
-
-  const Calendar = dynamic(
-    () => import('lucide-react').then((m) => m.Calendar),
-    {
-      ssr: false,
-    }
-  );
-
   const router = useRouter();
   const [subject, setSubject] = useState('');
   const [studyId, setStudyId] = useState<number | ''>('');

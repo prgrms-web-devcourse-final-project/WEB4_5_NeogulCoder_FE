@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronDown } from 'lucide-react';
 import ClientEditorWrapper from '@/components/common/ClientEditorWrapper';
 import { useRef, useState } from 'react';
 import { Editor as ToastEditor } from '@toast-ui/react-editor';
@@ -7,13 +8,8 @@ import { writeStudyPost } from '@/lib/api/study/write';
 import { usePathname, useRouter } from 'next/navigation';
 import CategoryStudyModal2 from '@/components/study/CategoryStudyModal2';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
 
 export default function StudyCommunityWritePage() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    { ssr: false }
-  );
   const pathname = usePathname();
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
