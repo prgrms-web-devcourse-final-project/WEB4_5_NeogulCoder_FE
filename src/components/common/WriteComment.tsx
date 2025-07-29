@@ -22,12 +22,16 @@ export default function WriteComment({
   onCommentAdd,
 }: CommentWriteProps) {
   const [comment, setComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(true);
   const router = useRouter();
   const handleGoToPr = () => {
     router.push(`/profile/pr/${userId}`);
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       await writeComment(`${target}`, {
         postId,
@@ -37,6 +41,8 @@ export default function WriteComment({
       setComment('');
     } catch (error) {
       console.error('댓글 등록 실패:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -85,6 +91,7 @@ export default function WriteComment({
             <button
               className='button-type5 color-[#ffffff] hover:bg-[#292929]'
               onClick={handleSubmit}
+              disabled={isSubmitting}
             >
               댓글 등록
             </button>
