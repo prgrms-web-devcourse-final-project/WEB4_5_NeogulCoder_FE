@@ -11,6 +11,7 @@ import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { login } from '@/lib/api/user';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 export default function LoginClient() {
   const router = useRouter();
@@ -53,6 +54,8 @@ export default function LoginClient() {
         role: user.role,
       });
       localStorage.setItem('login_status', 'Y');
+
+      toast.success('로그인 되었습니다!');
       router.push('/');
     } catch (error) {
       if (axios.isAxiosError(error)) {
