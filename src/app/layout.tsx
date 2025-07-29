@@ -23,7 +23,7 @@ export default function RootLayout({
         <UserStore />
         {children}
         <ToastContainer
-          toastClassName='tm3'
+          toastClassName='tm4 toast-paperlogy'
           position='top-center'
           autoClose={3000}
           hideProgressBar={false}

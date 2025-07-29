@@ -1,12 +1,6 @@
 import Image from 'next/image';
 import studyDefault from '@/assets/images/manner-default.svg';
-// import { BadgeAlert } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const BadgeAlert = dynamic(
-  () => import('lucide-react').then((m) => m.BadgeAlert),
-  { ssr: false }
-);
+import { BadgeAlert } from 'lucide-react';
 
 export default function MannerTooltip() {
   return (
@@ -42,6 +36,7 @@ export default function MannerTooltip() {
           src={studyDefault}
           alt='Wibby 로고'
           className='w-16 h-[31px] ml-1'
+          priority
         />
         <div>를 더 따뜻하게 만듭니다.</div>
       </div>

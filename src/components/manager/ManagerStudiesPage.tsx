@@ -9,6 +9,7 @@ import { categoryFormatting } from '@/utils/categoryFormatting';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export type AdminStudyType = {
   id: number;
@@ -59,7 +60,7 @@ export default function ManagerStudiesPage() {
     searchCategory || '전체'
   );
 
-  // 이용자 삭제
+  // 스터디 삭제
   const handleDelete = async (id: number) => {
     try {
       await deleteAdminStudy(id);
@@ -68,9 +69,9 @@ export default function ManagerStudiesPage() {
           item.id === id ? { ...item, activated: false } : item
         )
       );
-      alert('삭제');
+      toast.success(`해당 스터디를 비활성화 하였습니다.`);
     } catch (error) {
-      console.error('사용자 삭제 실패', error);
+      toast.error(`스터디 비활성화 실패 ${error}`);
     }
   };
 

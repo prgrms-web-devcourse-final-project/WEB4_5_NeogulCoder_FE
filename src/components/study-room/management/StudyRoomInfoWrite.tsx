@@ -11,6 +11,7 @@ import React, { useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import { useStudiesStore } from '@/stores/useStudiesStore';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
@@ -155,7 +156,7 @@ export default function StudyRoomInfoWrite({
           startDate: formattedStartDate,
         });
 
-        // 서브헤더 스터디 목록 업데이트를 위한 전역상태 업데이트
+        // 서브메뉴 스터디 목록 업데이트를 위한 전역상태 업데이트
         updateStudies(studyId, {
           name: request.name,
           introduction: request.introduction,
@@ -166,14 +167,16 @@ export default function StudyRoomInfoWrite({
           startDate: formattedStartDate,
         });
 
+        // 관리페이지 업데이트
         handleUpdate({
           ...request,
           imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
         });
 
+        toast.success('스터디 정보를 수정했습니다.');
         closeFn(); // 모달 닫기
       } catch (error) {
-        console.error('스터디 정보를 수정 실패:', error);
+        toast.error(`스터디 정보 수정에 실패했습니다.${error}`);
       }
     });
   };

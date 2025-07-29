@@ -3,6 +3,7 @@ import { useStudiesStore } from '@/stores/useStudiesStore';
 import dayjs from 'dayjs';
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export default function StudyRoomExtendWrite({
   closeFn,
@@ -53,9 +54,10 @@ export default function StudyRoomExtendWrite({
             studyType: study?.studyType,
             finished: false,
           });
+        toast.success(`스터디를 연장했습니다.`);
         closeFn(); // 모달 닫기
       } catch (error) {
-        console.error('스터디 연장에 실패했습니다', error);
+        toast.error(`스터디 연장에 실패했습니다 ${error}`);
       }
     });
   };

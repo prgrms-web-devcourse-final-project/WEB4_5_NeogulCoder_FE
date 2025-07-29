@@ -14,6 +14,7 @@ import {
 } from '@/lib/api/schedule';
 import { useParams } from 'next/navigation';
 import TimeGridSkeleton from './TimeGridSkeleton';
+import { toast } from 'react-toastify';
 
 type Cell = { day: number; hour: number };
 
@@ -76,14 +77,6 @@ export default function TimeGrid({
     setSelectedCells((prev) => prev.filter((c) => !isSameCell(c, cell)));
   };
 
-  // const toggleCell = (cell: Cell) => {
-  //   if (isCellSelected(cell)) {
-  //     removeCell(cell);
-  //   } else {
-  //     addCell(cell);
-  //   }
-  // };
-
   const handleMouseDown = (cell: Cell) => {
     if (!isEditing) return;
     isDragging.current = true;
@@ -139,9 +132,9 @@ export default function TimeGrid({
   };
 
   const getBgClass = (count: number) => {
-    if (count >= 5) return 'bg-blue-700 text-white';
-    if (count === 4) return 'bg-blue-500 text-white';
-    if (count === 3) return 'bg-blue-400 text-white';
+    if (count >= 5) return 'bg-blue-700';
+    if (count === 4) return 'bg-blue-500';
+    if (count === 3) return 'bg-blue-400';
     if (count === 2) return 'bg-blue-300';
     if (count === 1) return 'bg-blue-100';
     return 'bg-[#fafafa] hover:bg-[#f1f1f1]';
@@ -151,18 +144,6 @@ export default function TimeGrid({
     const indexArr = date.map((d, i) => (d.includes('n') ? i : -1));
     setNullDataIndex(indexArr);
   };
-
-  // const checkMyRole = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const roleData = await checkMyRoleInStudy(Number(id));
-  //     setIsLeader(roleData.role === 'LEADER');
-  //   } catch (e) {
-  //     console.error(e);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
 
   const checkSubmitted = async () => {
     setIsLoading(true);
@@ -257,17 +238,6 @@ export default function TimeGrid({
     return timeSlots;
   };
 
-  // const initVoteStats = async () => {
-  //   const newMap = new Map<string, number>();
-  //   totalTimeVoteStats.forEach((item) => {
-  //     const start = dayjs(item.timeSlot);
-  //     const dateKey = start.format('MM.DD');
-  //     const hour = start.hour();
-  //     newMap.set(`${dateKey}-${hour}`, item.voteCount);
-  //   });
-  //   setVoteMap(newMap);
-  // };
-
   const refreshVoteStats = async () => {
     setIsLoading(true);
     try {
@@ -297,6 +267,7 @@ export default function TimeGrid({
         const timeSlots = await getMyVotes();
         console.log('timeSlots:', timeSlots);
 
+        toast.info('클릭 또는 드래그를 통해 선택 가능합니다.');
         setSelectedCells(parseVoteDataToCells(timeSlots));
         setIsEditing(true);
         setButtonState('완료');
@@ -314,8 +285,13 @@ export default function TimeGrid({
       setIsLoading(true);
       try {
         if (selectedCells.length !== 0) {
-          if (hasSubmitted) await putMyTimeVote(Number(id), times);
-          else await postMyTimeVote(Number(id), times);
+          let data;
+          if (hasSubmitted) data = await putMyTimeVote(Number(id), times);
+          else data = await postMyTimeVote(Number(id), times);
+          if (data.code === 'TVS_003') {
+            throw new Error('통계 처리 중 에러 발생');
+          }
+          toast.success('시간 선택이 완료되었습니다.');
           setSelectedCells([]);
           setIsEditing(false);
           setHasSubmitted(true);
@@ -323,10 +299,11 @@ export default function TimeGrid({
           getSubmissions();
           await refreshVoteStats();
         } else {
-          // toast message - 시간을 선택해주세요!
+          toast.info('시간을 선택해주세요!');
         }
       } catch (e) {
         console.error(e);
+        toast.error('오류가 발생했습니다. 다시 시도해주세요!');
       } finally {
         setIsLoading(false);
       }
@@ -350,12 +327,13 @@ export default function TimeGrid({
   };
 
   useEffect(() => {
-    // checkMyRole();
+    // if (!isEditing) {
     getNullDataIndex();
     refreshVoteStats();
     checkSubmitted();
     getSubmissions();
     console.log('totalTimeVoteStats:', totalTimeVoteStats);
+    // }
   }, []);
 
   useEffect(() => {
@@ -376,19 +354,6 @@ export default function TimeGrid({
       }
     }
   }, [isOpenDeleteModal]);
-
-  // useEffect(() => {
-  //   if (!isOpenPeriodModal) {
-  //     getNullDataIndex();
-  //     refreshVoteStats();
-  //     checkSubmitted();
-  //     setSelectedCells([]);
-  //     // setIsEditing(false);
-  //     getSubmissions();
-
-  //     // router.refresh();
-  //   }
-  // }, [isOpenPeriodModal]);
 
   return (
     <>
@@ -462,12 +427,12 @@ export default function TimeGrid({
                             : getBgClass(count)
                         } ${hour === 0 ? 'rounded-t-xl' : ''} ${
                           hour === 23 ? 'rounded-b-xl border-none' : ''
-                        } cursor-pointer relative`}
+                        } cursor-pointer relative group`}
                       >
                         {!isEditing && count > 0 && (
-                          <span className='absolute right-1 bottom-0 text-xs text-black opacity-60'>
-                            {count}
-                          </span>
+                          <div className='absolute top-[-28px] left-1/2 -translate-x-1/2 bg-white border border-border1 px-2 py-[2px] rounded t5 text-black shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10'>
+                            {count}명 선택
+                          </div>
                         )}
                       </div>
                     );

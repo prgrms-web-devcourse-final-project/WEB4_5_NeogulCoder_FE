@@ -2,8 +2,11 @@ import MainBanner from '@/components/main/MainBanner';
 import MainStudyList from '@/components/main/MainStudyList';
 import MainRecruitmentList from '@/components/main/MainRecruitmentList';
 import { Suspense } from 'react';
+import Link from 'next/link';
+import { userAuthStore } from '@/stores/userStore';
 
 export default function MainPage() {
+  const user = userAuthStore().user;
   return (
     <>
       <div>
@@ -15,7 +18,16 @@ export default function MainPage() {
         </div>
 
         <div id='recruit' className='pt-[120px]'>
-          <p className='text-[22px] font-bold'>모집 중인 스터디</p>
+          <div className='flex justify-between items-center'>
+            <p className='text-[22px] font-bold'>모집 중인 스터디</p>
+            {user && (
+              <div className='text-right'>
+                <Link href={`/recruitment/write`} className='button-sm-type1'>
+                  모집글 작성
+                </Link>
+              </div>
+            )}
+          </div>
           <Suspense>
             <MainRecruitmentList />
           </Suspense>

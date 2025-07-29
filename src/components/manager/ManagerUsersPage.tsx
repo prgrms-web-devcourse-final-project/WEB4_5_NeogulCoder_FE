@@ -8,6 +8,7 @@ import { userAuthStore } from '@/stores/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export type AdminUserType = {
   id: number;
@@ -60,9 +61,9 @@ export default function ManagerUsersPage() {
           item.id === id ? { ...item, activated: false } : item
         )
       );
-      alert('삭제');
+      toast.success(`해당 사용자를 비활성화 하였습니다.`);
     } catch (error) {
-      console.error('사용자 삭제 실패', error);
+      toast.error(`사용자 비활성화 실패 ${error}`);
     }
   };
 
