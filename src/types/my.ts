@@ -69,7 +69,7 @@ export type MyApplicationListType = {
     introduction: string;
     category: string;
     studyType: string;
-    isRead: boolean;
+    read: boolean;
     status: string;
   }[];
   totalPage: number;
