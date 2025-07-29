@@ -1,4 +1,4 @@
-import { axiosInstance } from '../axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 // 사용자 목록 조회
 export const getAdminUser = async (page: number, email: string) => {

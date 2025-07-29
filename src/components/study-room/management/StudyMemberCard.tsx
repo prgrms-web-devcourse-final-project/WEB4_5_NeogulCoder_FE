@@ -4,10 +4,10 @@ import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import Image from 'next/image';
 import { useTransition } from 'react';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import defaultUserProfileImage from '@/assets/images/basic-bunny.svg';
 import { useRouter } from 'next/navigation';
 import { useStudyStore } from '@/stores/studyInfoStore';
-import dynamic from 'next/dynamic';
+import { Crown } from 'lucide-react';
 
 export default function MemberCard({
   member,
@@ -16,10 +16,6 @@ export default function MemberCard({
   member: StudyMemberType;
   studyId: number;
 }) {
-  const Crown = dynamic(() => import('lucide-react').then((m) => m.Crown), {
-    ssr: false,
-  });
-
   const router = useRouter();
   const authId = userAuthStore().user?.id;
   const setLeader = useStudyStore().setLeader;
@@ -48,7 +44,7 @@ export default function MemberCard({
         <div className='flex items-center gap-3'>
           <div className='w-10 h-10 overflow-hidden rounded-full border border-border1 shrink-0'>
             <Image
-              src={member.profileImageUrl ?? musicBunny}
+              src={member.profileImageUrl ?? defaultUserProfileImage}
               width={40}
               height={0}
               alt={`${member.nickname} 프로필 이미지`}

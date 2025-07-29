@@ -1,5 +1,5 @@
 import { ReviewContentResponse } from '@/types/pr';
-import { axiosInstance } from './axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export const updatePrInfo = async (
   location: string,

@@ -7,7 +7,8 @@ import { deleteAdminUser, getAdminUser } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
+import { Search, SearchX, X } from 'lucide-react';
 
 export type AdminUserType = {
   id: number;
@@ -17,16 +18,6 @@ export type AdminUserType = {
 };
 
 export default function ManagerUsersPage() {
-  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
-    ssr: false,
-  });
-  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
-    ssr: false,
-  });
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchKeyword = useMemo(
@@ -60,9 +51,9 @@ export default function ManagerUsersPage() {
           item.id === id ? { ...item, activated: false } : item
         )
       );
-      alert('삭제');
+      toast.success(`해당 사용자를 비활성화 하였습니다.`);
     } catch (error) {
-      console.error('사용자 삭제 실패', error);
+      toast.error(`사용자 비활성화 실패 ${error}`);
     }
   };
 

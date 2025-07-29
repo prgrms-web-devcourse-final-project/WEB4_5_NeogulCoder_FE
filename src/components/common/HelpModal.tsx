@@ -1,13 +1,8 @@
+import { BadgeAlert } from 'lucide-react';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
-import dynamic from 'next/dynamic';
 
 export default function HelpModal() {
-  const BadgeAlert = dynamic(
-    () => import('lucide-react').then((m) => m.BadgeAlert),
-    { ssr: false }
-  );
-
   return (
     <>
       <div className='w-[433px] h-[459px] border-[1px] border-[#B8B8B8] rounded-[10px] p-10'>

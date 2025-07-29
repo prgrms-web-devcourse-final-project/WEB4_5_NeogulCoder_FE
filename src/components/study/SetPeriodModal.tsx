@@ -3,17 +3,9 @@
 import { setTimeVotePeriods } from '@/lib/api/schedule';
 import { formatDate } from '@/utils/formatDate';
 import dayjs from 'dayjs';
-// import { CalendarDays, X } from 'lucide-react';
+import { CalendarDays, X } from 'lucide-react';
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
-
-const CalendarDays = dynamic(
-  () => import('lucide-react').then((m) => m.CalendarDays),
-  { ssr: false }
-);
-const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-  ssr: false,
-});
+import { toast } from 'react-toastify';
 
 export default function SetPeriodModal({
   studyId,
@@ -25,11 +17,23 @@ export default function SetPeriodModal({
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
+  // const tomorrow = useMemo(
+  //   () => dayjs().add(1, 'day').format('YYYY-MM-DD'),
+  //   []
+  // );
+
   const handleClick = async () => {
     try {
       const start = formatDate(startDate, 'YYYY-MM-DDT00:00:00');
       const end = formatDate(endDate, 'YYYY-MM-DDT23:59:59');
-      await setTimeVotePeriods(studyId, start, end);
+
+      const data = await setTimeVotePeriods(studyId, start, end);
+      console.log('기간 설정 api 호출');
+      console.log('data:', data);
+      if (data.code === 'TVP_004')
+        toast.error('시작 날짜는 오늘 날짜보다 이후여야 합니다.');
+      // else if (data.code === '2000')
+      //   toast.success('기간 설정이 완료되었습니다.');
       onClose();
       window.location.reload();
       // toast message
@@ -40,7 +44,7 @@ export default function SetPeriodModal({
 
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='w-[580px] flex flex-col gap-12 px-9 py-7 rounded-[10px] bg-white drop-shadow-md'>
           <div className='flex justify-between'>
             <span className='tm2'>기간 설정</span>

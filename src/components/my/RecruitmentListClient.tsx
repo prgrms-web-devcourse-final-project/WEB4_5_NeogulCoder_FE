@@ -7,6 +7,7 @@ import { fetchMyRecruitmentList } from '@/lib/api/my';
 import { MyRecruitmentListType } from '@/types/my';
 import { useCallback, useEffect, useState } from 'react';
 import RecruitmentCardSkeleton from './RecruitmentCardSkeleton';
+import { MessageCircleDashed } from 'lucide-react';
 
 const categoryMap: Record<string, string> = {
   전체: '',
@@ -103,8 +104,17 @@ export default function RecruitmentListClient() {
             }`}
           >
             {myRecruitmentList.length === 0 && (
-              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-                내가 작성한 모집 글이 없습니다.
+              // <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+              //   내가 작성한 모집 글이 없습니다.
+              // </div>
+              <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                <MessageCircleDashed
+                  className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
+                  strokeWidth={1}
+                />
+                <p className='tm4 text-border2 mb-3'>
+                  내가 작성한 모집 글이 없습니다.
+                </p>
               </div>
             )}
             {myRecruitmentList.length !== 0 &&

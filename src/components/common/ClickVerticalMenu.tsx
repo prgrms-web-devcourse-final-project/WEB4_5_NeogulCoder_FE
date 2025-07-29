@@ -1,9 +1,9 @@
+import { PencilLine, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { deleteRecruitmentPost } from '@/lib/api/recruitment/delete';
 import { deleteStudyPost } from '@/lib/api/study/delete';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
 
 type MenuProps = {
   title?: string;
@@ -26,14 +26,6 @@ export default function ClickVerticalMenu({
 }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
-  const PencilLine = dynamic(
-    () => import('lucide-react').then((m) => m.PencilLine),
-    { ssr: false }
-  );
-
-  const Trash2 = dynamic(() => import('lucide-react').then((m) => m.Trash2), {
-    ssr: false,
-  });
   const handleGoToModify = () => {
     router.push(`/recruitment/modify/${recruitmentPostId}`);
   };
@@ -77,7 +69,7 @@ export default function ClickVerticalMenu({
         )}
       </div>
       {isOpen && (
-        <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+        <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
           <div className='pt-10 pb-8 px-9 rounded-[10px] bg-white drop-shadow-md'>
             <p className='mb-7 tm3'>정말 삭제하시겠습니까?</p>
             <div className='flex gap-4 justify-center'>

@@ -3,22 +3,11 @@
 import Image from 'next/image';
 import studyDefault from '@/assets/images/study-default.svg';
 // import sunBunny from '@/assets/images/sun-bunny.svg';
-// import { Calendar, Crown, UsersRound } from 'lucide-react';
+import { Calendar, Crown, UsersRound } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 import { MyStudyListType } from '@/types/my';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-
-const Calendar = dynamic(() => import('lucide-react').then((m) => m.Calendar), {
-  ssr: false,
-});
-const Crown = dynamic(() => import('lucide-react').then((m) => m.Crown), {
-  ssr: false,
-});
-const UsersRound = dynamic(
-  () => import('lucide-react').then((m) => m.UsersRound),
-  { ssr: false }
-);
+import { categoryFormatting } from '@/utils/categoryFormatting';
 
 const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
   ONLINE: '온라인',
@@ -82,7 +71,7 @@ export default function StudyCard({
       </div>
       <div className='flex gap-2 mt-6'>
         <div className='tag-type1'>
-          <span className='tb5'>{category}</span>
+          <span className='tb5'>{categoryFormatting(category)}</span>
         </div>
         <div className='tag-type1'>
           <span className='tb5'>

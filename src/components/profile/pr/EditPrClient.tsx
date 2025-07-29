@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import RegionModal from '@/components/common/RegionModal';
-import { axiosInstance } from '@/lib/api/axios';
 import { userPrStore } from '@/stores/prStore';
-import IntroEditor from '@/components/profile/pr/IntroEditor';
 import { toast } from 'react-toastify';
 import { ChevronDown } from 'lucide-react';
+import IntroductionEditor from '@/components/profile/pr/IntroEditor';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function EditPrClient() {
   const router = useRouter();
@@ -201,7 +201,7 @@ export default function EditPrClient() {
         </div>
       )}
       {activeTab === '소개글' && (
-        <IntroEditor value={introduction} onChange={setIntroduction} />
+        <IntroductionEditor value={introduction} onChange={setIntroduction} />
       )}
       <div className='flex gap-5 mt-10 justify-end'>
         <button

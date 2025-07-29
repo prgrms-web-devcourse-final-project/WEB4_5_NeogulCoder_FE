@@ -1,4 +1,4 @@
-import { axiosInstance } from '../axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export const uploadImage = async (blob: Blob): Promise<string> => {
   const formData = new FormData();

@@ -10,7 +10,7 @@ import MainOnlineModal from './MainOnlineModal';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 
 export type MainPostType = {
   recruitmentPostId: number;
@@ -24,21 +24,6 @@ export type MainPostType = {
 };
 
 export default function MainRecruitmentList() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    {
-      ssr: false,
-    }
-  );
-  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
-    ssr: false,
-  });
-  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
-    ssr: false,
-  });
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParams = useMemo(
@@ -288,11 +273,6 @@ export default function MainRecruitmentList() {
             </div>
           </div>
         )}
-        <div className='text-right'>
-          <Link href={`/recruitment/write`} className='button-type4'>
-            모집글 작성하기
-          </Link>
-        </div>
       </div>
 
       <MainPagination page={page} handlePage={handlePage} total={totalPage} />

@@ -13,6 +13,7 @@ module.exports = {
         hostname: 'www.lorempixel.com',
         pathname: '**', // 모든 경로 허용
       },
+
       {
         protocol: 'https',
         hostname: 'placeimg.com',
@@ -25,8 +26,24 @@ module.exports = {
       },
       {
         protocol: 'https',
+
+        hostname: 'i.pinimg.com',
+        pathname: '**', // 모든 경로 허용
+      },
+      {
+        protocol: 'https',
+        hostname: 'dummyimage.com',
+        pathname: '**', // 모든 경로 허용
+      },
+      {
+        protocol: 'https',
+        hostname: 'wibby.com/profile',
+        pathname: '**', // 모든 경로 허용
+      },
+      {
+        protocol: 'https',
         hostname: 'example.com',
-        pathname: '**',
+        pathname: '**', // 모든 경로 허용
       },
     ],
   },
@@ -41,7 +58,7 @@ module.exports = {
 //       new URL('https://dummyimage.com/**'),
 //       new URL('http://localhost:8083/**'),
 //       new URL('https://wibby.com/profile/**'),
-
+//       new URL('https://example.com/**'),
 //     ],
 //   },
 // };
