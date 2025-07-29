@@ -1,4 +1,4 @@
-import { axiosInstance } from '@/lib/api/axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 import { PrStore } from '@/types/pr';
 import { create } from 'zustand';
 
