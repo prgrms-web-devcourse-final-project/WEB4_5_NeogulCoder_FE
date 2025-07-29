@@ -1,12 +1,6 @@
 import Image from 'next/image';
 import studyDefault from '@/assets/images/manner-default.svg';
-// import { BadgeCheck } from 'lucide-react';
-import dynamic from 'next/dynamic';
-
-const BadgeCheck = dynamic(
-  () => import('lucide-react').then((m) => m.BadgeCheck),
-  { ssr: false }
-);
+import { BadgeCheck } from 'lucide-react';
 
 export default function ScheduleTooltip() {
   return (

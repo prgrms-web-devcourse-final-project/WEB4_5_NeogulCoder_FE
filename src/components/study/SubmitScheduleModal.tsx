@@ -1,22 +1,10 @@
 'use client';
 
-// import { CircleCheck, CircleX, X } from 'lucide-react';
+import { CircleCheck, CircleX, X } from 'lucide-react';
 import Image from 'next/image';
 // import musicBunny from '@/assets/images/music-bunny.svg';
 import basicBunny from '@/assets/images/basic-bunny.svg';
 import { TimeVoteSubmissionsType } from '@/types/schedule';
-import dynamic from 'next/dynamic';
-
-const CircleCheck = dynamic(
-  () => import('lucide-react').then((m) => m.CircleCheck),
-  { ssr: false }
-);
-const CircleX = dynamic(() => import('lucide-react').then((m) => m.CircleX), {
-  ssr: false,
-});
-const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-  ssr: false,
-});
 
 export default function SubmitScheduleModal({
   timeVoteSubmissions,
