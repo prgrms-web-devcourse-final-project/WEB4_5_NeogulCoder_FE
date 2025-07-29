@@ -1,4 +1,5 @@
 import { deleteMyTimeVote } from '@/lib/api/schedule';
+import { toast } from 'react-toastify';
 
 export default function DeleteScheduleModal({
   studyId,
@@ -8,9 +9,17 @@ export default function DeleteScheduleModal({
   onClose: () => void;
 }) {
   const handleClickOut = async () => {
-    await deleteMyTimeVote(studyId);
-    onClose();
-    // toast message
+    try {
+      const data = await deleteMyTimeVote(studyId);
+      if (data.code === 'TVS_003') {
+        throw new Error('통계 처리 중 에러 발생');
+      }
+      toast.success('삭제되었습니다.');
+      onClose();
+    } catch (e) {
+      console.error(e);
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+    }
   };
 
   return (

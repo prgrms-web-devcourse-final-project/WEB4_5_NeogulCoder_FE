@@ -9,6 +9,7 @@ import goodGray from '@/assets/images/good-stamp-gray.svg';
 import badGray from '@/assets/images/bad-stamp-gray.svg';
 import { useState } from 'react';
 import { postReviews } from '@/lib/api/manners';
+import { toast } from 'react-toastify';
 
 type MannerOptionType = 'BAD' | 'GOOD' | 'EXCELLENT';
 
@@ -112,10 +113,12 @@ export default function MannerQuestion({
         reviewTag,
         content,
       });
+      toast.success('평가 완료되었습니다.');
       reset();
       await getUserList(currentStudyId);
     } catch (e) {
       console.error('제출 실패:', e);
+      toast.error('오류가 발생했습니다. 다시 시도해주세요!');
     }
   };
 
@@ -123,9 +126,12 @@ export default function MannerQuestion({
     <>
       <div className='flex flex-col gap-[50px] mt-[30px]'>
         <div>
-          <span className='tm3 text-text1'>
-            {currentUserName}님과의 스터디는 어떠셨나요?
-          </span>
+          <div className='flex gap-2 items-center'>
+            <span className='tm3 text-text1'>
+              {currentUserName}님과의 스터디는 어떠셨나요?
+            </span>
+            <span className='tm5 text-red'>*필수</span>
+          </div>
           <div className='flex justify-around mt-[26px]'>
             {STAMP_ICONS.map(({ type, label, active, inactive }) => (
               <div
@@ -139,6 +145,7 @@ export default function MannerQuestion({
                 <Image
                   src={reviewType === type ? active : inactive}
                   alt={label}
+                  priority
                 />
                 <span
                   className={`t3 ${
@@ -153,7 +160,10 @@ export default function MannerQuestion({
         </div>
 
         <div>
-          <span className='tm3 text-text1'>{currentOption.title}</span>
+          <div className='flex gap-2 items-center'>
+            <span className='tm3 text-text1'>{currentOption.title}</span>
+            <span className='tm5 text-red'>*필수</span>
+          </div>
           <div className='flex flex-col gap-6 mt-[26px]'>
             {currentOption.items.map((item, i) => {
               const inputId = `${reviewType}-${i + 1}`;

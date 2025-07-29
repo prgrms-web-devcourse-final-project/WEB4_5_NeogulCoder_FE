@@ -2,7 +2,8 @@
 
 // import { CircleCheck, CircleX, X } from 'lucide-react';
 import Image from 'next/image';
-import musicBunny from '@/assets/images/music-bunny.svg';
+// import musicBunny from '@/assets/images/music-bunny.svg';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 import { TimeVoteSubmissionsType } from '@/types/schedule';
 import dynamic from 'next/dynamic';
 
@@ -43,7 +44,7 @@ export default function SubmitScheduleModal({
                 <div className='flex gap-3 items-center'>
                   <Image
                     src={
-                      user.profileImageUrl ? user.profileImageUrl : musicBunny
+                      user.profileImageUrl ? user.profileImageUrl : basicBunny
                     }
                     alt='사용자 이미지'
                     width={34}
