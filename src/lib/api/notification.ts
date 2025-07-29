@@ -1,4 +1,4 @@
-import { axiosInstance } from './axios';
+import axiosInstance from './axiosInstance';
 
 // 내 읽지 않은 알림 목록 조회
 export const getUnreadNotifications = async () => {
