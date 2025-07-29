@@ -15,6 +15,8 @@ import {
 import { useParams } from 'next/navigation';
 import TimeGridSkeleton from './TimeGridSkeleton';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import { Flag } from 'lucide-react';
 
 type Cell = { day: number; hour: number };
 
@@ -39,6 +41,7 @@ export default function TimeGrid({
   );
   const day = currentDates.weekdays;
   const date = currentDates.dates;
+  const startDay = currentDates.startWeekday;
 
   const [nullDataIndex, setNullDataIndex] = useState<number[]>([]);
 
@@ -285,12 +288,8 @@ export default function TimeGrid({
       setIsLoading(true);
       try {
         if (selectedCells.length !== 0) {
-          let data;
-          if (hasSubmitted) data = await putMyTimeVote(Number(id), times);
-          else data = await postMyTimeVote(Number(id), times);
-          if (data.code === 'TVS_003') {
-            throw new Error('통계 처리 중 에러 발생');
-          }
+          if (hasSubmitted) await putMyTimeVote(Number(id), times);
+          else await postMyTimeVote(Number(id), times);
           toast.success('시간 선택이 완료되었습니다.');
           setSelectedCells([]);
           setIsEditing(false);
@@ -302,8 +301,17 @@ export default function TimeGrid({
           toast.info('시간을 선택해주세요!');
         }
       } catch (e) {
-        console.error(e);
-        toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+        if (axios.isAxiosError(e)) {
+          const code = e.response?.data?.code;
+          if (code === 'TVS_003') {
+            toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+          } else {
+            console.error(e);
+            toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+          }
+        } else {
+          console.error('Axios 외의 오류: ', e);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -363,6 +371,15 @@ export default function TimeGrid({
         <>
           <div className='select-none flex flex-col gap-[30px] '>
             <div className='grid grid-cols-[6px_repeat(7,minmax(0,1fr))] place-items-center gap-x-4 gap-y-0 px-20'>
+              <div></div>
+              {startDay.map((d, i) => (
+                <div
+                  key={i}
+                  className='w-full flex justify-center items-center'
+                >
+                  {d && <Flag className='pl-2 mb-1 w-8 h-8 text-logo1' />}
+                </div>
+              ))}
               <div></div>
               {day.map((d, i) => (
                 <div
