@@ -5,8 +5,9 @@ export const getStudies = async () => {
   const { data } = await axiosInstance.get('/api/studies', {
     params: {
       page: 0,
-      size: 1,
+      size: 10,
       sort: [],
+      finished: false,
     },
   });
   return data;

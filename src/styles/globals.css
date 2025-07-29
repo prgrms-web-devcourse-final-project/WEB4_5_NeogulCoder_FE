@@ -34,7 +34,10 @@
   /* Button Colors */
   --color-main: #111111;
 }
-
+:root {
+  --toastify-color-success: #90cff1; /* 성공 알림 색상 */
+  --toastify-color-error: #fbae8f; /* 에러 알림 색상 */
+}
 button {
   cursor: pointer;
 }
@@ -254,3 +257,5 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/*  */

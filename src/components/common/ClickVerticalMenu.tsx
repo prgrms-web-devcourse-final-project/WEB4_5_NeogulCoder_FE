@@ -77,7 +77,7 @@ export default function ClickVerticalMenu({
         )}
       </div>
       {isOpen && (
-        <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+        <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
           <div className='pt-10 pb-8 px-9 rounded-[10px] bg-white drop-shadow-md'>
             <p className='mb-7 tm3'>정말 삭제하시겠습니까?</p>
             <div className='flex gap-4 justify-center'>

@@ -5,6 +5,7 @@ type StudiesType = {
   capacity: number;
   currentCount: number;
   startDate: string;
+  endDate: string;
   imageUrl: string;
   introduction: string;
   category: string;

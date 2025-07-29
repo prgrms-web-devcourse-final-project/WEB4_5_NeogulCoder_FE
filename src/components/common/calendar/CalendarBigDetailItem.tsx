@@ -9,46 +9,27 @@ import defaultUserProfileImage from '@/assets/images/basic-bunny.svg';
 import { userAuthStore } from '@/stores/userStore';
 import { ScheduleInputType } from './CalendarBigShell';
 import CalendarDeleteCheckModal from './CalendarDeleteCheckModal';
-import dynamic from 'next/dynamic';
+import {
+  Clock,
+  EllipsisVertical,
+  PencilLine,
+  Trash2,
+  UserRound,
+} from 'lucide-react';
 
 export default function CalendarBigDetailItem({
   type,
   result,
-  categoryId,
+  category,
   handleDelete,
   handleUpdate,
 }: {
   type: string;
   result: UnionScheduleType;
-  categoryId: number;
+  category: { name: string; id: number; isProgress: boolean };
   handleDelete: (calendarId: number) => void;
   handleUpdate: (id: number, data: ScheduleInputType) => void;
 }) {
-  const Clock = dynamic(() => import('lucide-react').then((m) => m.Clock), {
-    ssr: false,
-  });
-  const EllipsisVertical = dynamic(
-    () => import('lucide-react').then((m) => m.EllipsisVertical),
-    {
-      ssr: false,
-    }
-  );
-  const PencilLine = dynamic(
-    () => import('lucide-react').then((m) => m.PencilLine),
-    {
-      ssr: false,
-    }
-  );
-  const Trash2 = dynamic(() => import('lucide-react').then((m) => m.Trash2), {
-    ssr: false,
-  });
-  const UserRound = dynamic(
-    () => import('lucide-react').then((m) => m.UserRound),
-    {
-      ssr: false,
-    }
-  );
-
   const authId = userAuthStore().user?.id;
   const [open, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -96,7 +77,7 @@ export default function CalendarBigDetailItem({
           </div>
           <div className='shrink-0 flex gap-4 items-start absolute right-2 top-3'>
             <div>
-              {result.writerId === authId && (
+              {result.writerId === authId && category.isProgress && (
                 <button>
                   <EllipsisVertical
                     onClick={() => setOpen(!open)}
@@ -137,7 +118,7 @@ export default function CalendarBigDetailItem({
           type={type}
           writeCloseHandler={() => setWriteModalOpen(false)}
           data={result}
-          categoryId={categoryId}
+          categoryId={category.id}
           handleUpdate={handleUpdate}
         />
       )}
