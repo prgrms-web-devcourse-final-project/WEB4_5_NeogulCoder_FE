@@ -4,10 +4,10 @@ import photoUpload from '@/assets/images/photo-upload.svg';
 import basicBunny from '@/assets/images/basic-bunny.svg';
 import { useEffect, useState } from 'react';
 import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
-import { axiosInstance } from '@/lib/api/axios';
 import { userAuthStore } from '@/stores/userStore';
 import { nicknameRegex } from '@/lib/auth/regex';
 import axios from 'axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function EditProfileClient() {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
