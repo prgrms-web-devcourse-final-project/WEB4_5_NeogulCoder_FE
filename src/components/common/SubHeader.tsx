@@ -93,7 +93,7 @@ export default function SubHeader() {
                     <div className='w-[32px] h-[32px] rounded-[6px] items-center justify-center flex-wrap border border-border1 flex gap-0.5 p-[2px] bg-white'>
                       {studies.slice(0, 4).map((study) => (
                         <Image
-                          key={`${study.name}이미지`}
+                          key={`${study.studyId}이미지`}
                           src={study.imageUrl ?? logoWibby}
                           width={10}
                           height={10}
