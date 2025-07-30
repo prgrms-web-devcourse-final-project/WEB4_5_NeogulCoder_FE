@@ -29,7 +29,7 @@ export default function ApplicationListClient() {
 
       const query = {
         page,
-        pageSize: 12,
+        size: 12,
         sort: 'DESC',
         ...(statusValue ? { status: statusValue } : {}),
       };

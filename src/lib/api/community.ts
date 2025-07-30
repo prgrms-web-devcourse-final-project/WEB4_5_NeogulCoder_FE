@@ -7,7 +7,7 @@ export const fetchStudyCommunityList = async (
 ) => {
   const {
     page,
-    pageSize = 10,
+    size = 10,
     category,
     keyword,
     attributeName = 'createDateTime',
@@ -16,7 +16,7 @@ export const fetchStudyCommunityList = async (
 
   const query = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    size: size.toString(),
     ...(category ? { category } : {}),
     ...(keyword ? { keyword } : {}),
     attributeName,
@@ -35,7 +35,7 @@ export const fetchMyCommunityList = async (
 ) => {
   const {
     page,
-    pageSize = 10,
+    size = 10,
     category,
     keyword,
     attributeName = 'createDateTime',
@@ -44,7 +44,7 @@ export const fetchMyCommunityList = async (
 
   const query = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    size: size.toString(),
     ...(category ? { category } : {}),
     ...(keyword ? { keyword } : {}),
     attributeName,

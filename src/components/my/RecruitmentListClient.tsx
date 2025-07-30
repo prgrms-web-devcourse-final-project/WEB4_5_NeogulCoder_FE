@@ -53,7 +53,7 @@ export default function RecruitmentListClient() {
 
       const query = {
         page,
-        pageSize: 10,
+        size: 10,
         sort: 'DESC',
         ...(categoryValue ? { category: categoryValue } : {}),
         ...(studyTypeValue ? { studyType: studyTypeValue } : {}),
