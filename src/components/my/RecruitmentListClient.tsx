@@ -87,6 +87,7 @@ export default function RecruitmentListClient() {
           setSelectedCategory={setSelectedCategory}
           selectedStudyType={selectedStudyType}
           setSelectedStudyType={setSelectedStudyType}
+          keyword={keyword}
           setKeyword={setKeyword}
           setPage={setPage}
         />
