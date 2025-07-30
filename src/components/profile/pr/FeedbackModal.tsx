@@ -14,9 +14,8 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
   const [totalPages, setTotalPages] = useState(0);
 
   const [page, setPage] = useState(0);
-  const allPage = 5;
+  const pageSize = 5;
 
-  // const totalPages = Math.ceil(reviews.length / allPage);
   const hasPrev = page > 0;
   const hasNext = page < totalPages - 1;
 
@@ -33,7 +32,7 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
 
     const fetchReviews = async () => {
       try {
-        const res = await getReviewContentsByUserId(userId, page, allPage);
+        const res = await getReviewContentsByUserId(userId, page, pageSize);
         setReviews(res.reviewContents);
         setTotalPages(res.totalPages);
       } catch (error) {
