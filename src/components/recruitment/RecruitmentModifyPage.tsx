@@ -104,7 +104,6 @@ export default function RecruitmentModifyPage() {
     try {
       const data = await modifyRecruitmentPost(recruitmentPostId, payload);
       const postId = data.data;
-      console.log('수정 완료', data);
       toast.success('게시글 수정이 완료되었습니다!');
       router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
@@ -113,17 +112,6 @@ export default function RecruitmentModifyPage() {
     } finally {
       setIsSubmitting(false);
     }
-
-    console.log(
-      'Subject:',
-      subject,
-      'Content:',
-      content,
-      'recruitmentCount:',
-      recruitmentCount,
-      'ExpiredDate:',
-      expiredDate
-    );
   };
 
   return (

@@ -170,11 +170,7 @@ export default function RecruitmentDetailPage() {
     setIsSubmitting(true);
 
     try {
-      const appData = await studyApplication(
-        recruitmentPostId,
-        writeApplicationReason
-      );
-      console.log('생성 완료', appData);
+      await studyApplication(recruitmentPostId, writeApplicationReason);
       toast.success('모집 신청이 완료되었습니다!');
       await fetchMyStudyApplication();
       setAppIsOpen(false);
@@ -207,7 +203,6 @@ export default function RecruitmentDetailPage() {
 
     try {
       await studyApplicationApprove(applicationId);
-      console.log('신청 승인요청 성공!');
       toast.success('신청이 승인되었습니다.');
       await fetchApplicationData();
     } catch (error) {
@@ -222,7 +217,6 @@ export default function RecruitmentDetailPage() {
     setIsRejecting(true);
     try {
       await studyApplicationReject(applicationId);
-      console.log('신청 거절요청 성공');
       toast.success('신청이 거절되었습니다.');
       await fetchApplicationData();
     } catch (error) {
