@@ -119,6 +119,7 @@ export default function MainRecruitmentList() {
     const newCategory = category === '전체' ? '' : category;
     setSelectedCategory(newCategory);
     setIsCategoryOpen(false);
+    setPage(1);
     router.push(
       `/?page=1&category=${newCategory}&studyType=${studyTypeParams}&keyword=${searchKeywordParams}`,
       { scroll: false }
@@ -129,6 +130,7 @@ export default function MainRecruitmentList() {
     const newStudyType = studyType === '전체' ? '' : studyType;
     setSelectedStudyType(newStudyType);
     setStudyTypeOpen(false);
+    setPage(1);
     router.push(
       `/?page=1&category=${categoryParams}&studyType=${newStudyType}&keyword=${searchKeywordParams}`,
       { scroll: false }
@@ -137,6 +139,7 @@ export default function MainRecruitmentList() {
   // 키워드 검색
   const handleKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      setPage(1);
       router.push(
         `/?page=1&category=${categoryParams}&studyType=${selectedStudyType}&keyword=${keyword}`,
         { scroll: false }
@@ -147,6 +150,7 @@ export default function MainRecruitmentList() {
   const handleKeywordReset = () => {
     setKeyword('');
     if (searchKeywordParams !== '') {
+      setPage(1);
       router.push(
         `/?page=1&category=${categoryParams}&studyType=${selectedStudyType}&keyword=${''}`,
         { scroll: false }
@@ -256,8 +260,12 @@ export default function MainRecruitmentList() {
               <SearchX className='w-12 h-12 mx-auto mb-3' strokeWidth={1.5} />
               <div className='flex gap-2 items-center'>
                 <span className='tb3'>
-                  {categoryParams !== '' ? ` " ${categoryParams} " ` : ''}
-                  {studyTypeParams !== '' ? ` " ${studyTypeParams} " ` : ''}
+                  {categoryParams !== ''
+                    ? ` " ${categoryFormatting(categoryParams)} " `
+                    : ''}
+                  {studyTypeParams !== ''
+                    ? ` " ${studyTypeFormatting(studyTypeParams)} " `
+                    : ''}
                   {searchKeywordParams !== ''
                     ? ` " ${searchKeywordParams} " `
                     : ''}
