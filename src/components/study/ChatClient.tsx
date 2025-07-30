@@ -61,7 +61,12 @@ export default function ChatClient() {
         const last = temp.totalPages > 0 ? temp.totalPages - 1 : 0;
 
         const res = await fetchChatMessage(studyId, last);
-        setChats(res.content);
+        const firstRes = await fetchChatMessage(studyId, 0);
+
+        const allChats = [...firstRes.content, ...res.content].filter(
+          (v, i, arr) => arr.findIndex((a) => a.id === v.id) === i
+        );
+        setChats(allChats);
         setCurrentPage(last);
       } catch (error) {
         console.error('초기 메시지 불러오기 실패: ', error);
