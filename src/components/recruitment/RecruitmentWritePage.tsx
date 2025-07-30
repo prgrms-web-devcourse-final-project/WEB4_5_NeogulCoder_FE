@@ -68,7 +68,6 @@ export default function RecruitmentWritePage() {
     setIsClick(true);
     try {
       const data = await fetchStudy(Number(studyId));
-      console.log(studyId);
       setCategory(data.category);
       setLocation(data.location);
       setStudyType(data.studyType);

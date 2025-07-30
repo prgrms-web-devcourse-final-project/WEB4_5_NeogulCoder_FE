@@ -48,7 +48,7 @@ export default function ClickVerticalMenu({
         toast.success('게시글 삭제가 완료되었습니다!');
         router.push(`/study/${studyId}/study-community`);
       } else {
-        console.log('target error');
+        console.error('target error');
       }
     } catch (error) {
       console.error('삭제 중 오류 발생', error);

@@ -25,10 +25,14 @@ export default function StudyCommunityModifyPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const categoryMap: { [key: string]: string } = {
+  const categoryDisplayNames: Record<string, string> = {
     NOTICE: '공지',
     FREE: '자유',
   };
+
+  const reverseCategoryDisplayNames = Object.fromEntries(
+    Object.entries(categoryDisplayNames).map(([key, val]) => [val, key])
+  );
 
   const fetchData = useCallback(async () => {
     try {
@@ -67,8 +71,7 @@ export default function StudyCommunityModifyPage() {
     };
 
     try {
-      const data = await modifyStudyPost(postId, payload);
-      console.log('수정 완료', data);
+      await modifyStudyPost(postId, payload);
       toast.success('게시글 수정이 완료되었습니다!');
       router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
@@ -77,8 +80,6 @@ export default function StudyCommunityModifyPage() {
     } finally {
       setIsSubmitting(false);
     }
-
-    console.log('Title:', title, 'Content:', content, 'category:', category);
   };
 
   return (
@@ -102,7 +103,7 @@ export default function StudyCommunityModifyPage() {
                 className={`mr-1 ${!category ? 'text-gray-400' : 'text-black'}`}
               >
                 {category
-                  ? categoryMap[category] || category
+                  ? categoryDisplayNames[category] || category
                   : '게시글 유형을 선택해 주세요'}
               </p>
               <ChevronDown className='w-6 h-6' />
@@ -111,8 +112,10 @@ export default function StudyCommunityModifyPage() {
             {isCategoryOpen && (
               <div className='absolute top-15 left-0 z-10'>
                 <CategoryStudyModal2
-                  onSelect={(category: string) => {
-                    setCategory(category);
+                  onSelect={(selected: string) => {
+                    const engCode =
+                      reverseCategoryDisplayNames[selected] || selected;
+                    setCategory(engCode);
                     setIsCategoryOpen(false);
                   }}
                 />
