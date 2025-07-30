@@ -85,6 +85,7 @@ export default function ManagerUsersPage() {
   const searchEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       router.push(`/manager?search=${keyword}&page=1`);
+      setPage(1);
     }
   };
 
