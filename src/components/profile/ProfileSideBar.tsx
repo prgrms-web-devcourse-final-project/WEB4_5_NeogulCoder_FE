@@ -108,7 +108,6 @@ export default function SideBar() {
                   <Image
                     src={userData?.profileImageUrl ?? basicBunny.src}
                     alt='예시 기본 프사'
-                    className='w-full h-20 object-cover object-center rounded-full'
                     width={70}
                     height={70}
                   />
