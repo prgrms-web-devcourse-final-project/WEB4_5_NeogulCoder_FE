@@ -64,6 +64,7 @@ export default function RecruitmentDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAppLoading, setIsAppLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isStatusChange, setIsStatusChange] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -144,11 +145,14 @@ export default function RecruitmentDetailPage() {
   const fetchApplicationData = useCallback(async () => {
     if (!me || me.nickname !== nickname) return;
     try {
+      setIsAppLoading(true);
       const appData = await fetchStudyApplication(recruitmentPostId, page);
       setApplications(appData.receivedApplications);
       setTotalElementCount(appData.totalElementCount);
     } catch (error) {
       console.error('신청 내역 불러오기 오류:', error);
+    } finally {
+      setIsAppLoading(false);
     }
   }, [me, nickname, recruitmentPostId, page]);
 
@@ -238,26 +242,6 @@ export default function RecruitmentDetailPage() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    try {
-      setIsLoading(true);
-      if (!isNaN(recruitmentPostId)) {
-        fetchData();
-        fetchApplicationData();
-        fetchMyStudyApplication();
-      }
-    } catch (error) {
-      console.error('스터디 리스트 불러오기 실패:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    recruitmentPostId,
-    fetchData,
-    fetchApplicationData,
-    fetchMyStudyApplication,
-  ]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -500,7 +484,11 @@ export default function RecruitmentDetailPage() {
               className='w-[1020px] h-[800px] overflow-y-auto'
               onClose={() => setIsOpen(false)}
             >
-              {applications.length === 0 ? (
+              {isAppLoading ? (
+                <div className='py-20 text-center text-gray-400'>
+                  로딩 중...
+                </div>
+              ) : applications.length === 0 ? (
                 <div className='tm3 text-center text-gray-500 py-20'>
                   신청 내역이 없습니다
                 </div>

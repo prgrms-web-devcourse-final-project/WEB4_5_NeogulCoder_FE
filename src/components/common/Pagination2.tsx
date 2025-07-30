@@ -27,6 +27,7 @@ export default function Pagination2({
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
+            type='button'
             onClick={() => handleClick(i)}
             className={`flex justify-center items-center w-6 h-6 rounded-[50%] ${
               page === i ? 'bg-main text-white' : 'bg-none text-text1'
