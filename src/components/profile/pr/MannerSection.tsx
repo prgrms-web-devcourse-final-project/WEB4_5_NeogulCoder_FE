@@ -6,7 +6,7 @@ import good from '@/assets/images/good.svg';
 import notGood from '@/assets/images/not-good.svg';
 import { useEffect, useState } from 'react';
 import MannerModal from './MannerModal';
-import { PrData } from '@/types/pr'; // pr 타입 불러오기
+import { PrData } from '@/types/pr';
 
 export default function MannerSection({ pr }: { pr: PrData }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,7 +25,7 @@ export default function MannerSection({ pr }: { pr: PrData }) {
       ?.reviewCount ?? 0;
   const goodCount =
     pr.reviewTypes?.find((tag) => tag.reviewType === 'GOOD')?.reviewCount ?? 0;
-  const notGoodCount =
+  const BadCount =
     pr.reviewTypes?.find((tag) => tag.reviewType === 'BAD')?.reviewCount ?? 0;
 
   return (
@@ -46,7 +46,7 @@ export default function MannerSection({ pr }: { pr: PrData }) {
           <Image src={excellent} alt='최고예요' />
           <p>
             <span className='tm2'>{excellentCount}</span>{' '}
-            <span className='t4'>명</span>
+            <span className='t4'>개</span>
           </p>
         </div>
 
@@ -54,15 +54,15 @@ export default function MannerSection({ pr }: { pr: PrData }) {
           <Image src={good} alt='좋아요' />
           <p>
             <span className='tm2'>{goodCount}</span>{' '}
-            <span className='t4'>명</span>
+            <span className='t4'>개</span>
           </p>
         </div>
 
         <div className='flex flex-col gap-5 items-center'>
           <Image src={notGood} alt='별로예요' />
           <p>
-            <span className='tm2'>{notGoodCount}</span>{' '}
-            <span className='t4'>명</span>
+            <span className='tm2'>{BadCount}</span>{' '}
+            <span className='t4'>개</span>
           </p>
         </div>
       </div>

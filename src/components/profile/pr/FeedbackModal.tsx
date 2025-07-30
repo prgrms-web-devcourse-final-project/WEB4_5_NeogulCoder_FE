@@ -1,24 +1,24 @@
-import { userPrStore } from '@/stores/prStore'; // 추가
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FeedbackModalSkeleton from './skeleton/FeedbackModalSkeleton';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import basicBunny from '@/assets/images/basic-bunny.svg';
+import { useParams } from 'next/navigation';
+import { ReviewContent } from '@/types/pr';
+import { getReviewContentsByUserId } from '@/lib/api/pr';
 
 export default function FeedbackModal({ onClose }: { onClose: () => void }) {
-  const { pr } = userPrStore();
-  const allReviews = pr?.reviewContents || [];
-  const [page, setPage] = useState(0);
-  const perPage = 5;
+  const params = useParams();
+  const userId = params?.userId ? Number(params.userId) : null;
+  const [reviews, setReviews] = useState<ReviewContent[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const totalPages = Math.ceil(allReviews.length / perPage);
+  const [page, setPage] = useState(0);
+  const allPage = 5;
+
+  // const totalPages = Math.ceil(reviews.length / allPage);
   const hasPrev = page > 0;
   const hasNext = page < totalPages - 1;
-
-  const visibleReviews = allReviews.slice(
-    page * perPage,
-    page * perPage + perPage
-  );
 
   const handlePrev = () => {
     if (hasPrev) setPage((prev) => prev - 1);
@@ -28,6 +28,22 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
     if (hasNext) setPage((prev) => prev + 1);
   };
 
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchReviews = async () => {
+      try {
+        const res = await getReviewContentsByUserId(userId, page, allPage);
+        setReviews(res.reviewContents);
+        setTotalPages(res.totalPages);
+      } catch (error) {
+        console.error('피드백 불러오기 실패: ', error);
+      }
+    };
+
+    fetchReviews();
+  }, [userId, page]);
+
   return (
     <div className='flex flex-col bg-white w-[520px] h-[660px] rounded-[10px] items-center shadow-sm px-6 py-6 relative '>
       <div className='flex justify-between items-center w-full mb-2'>
@@ -36,10 +52,10 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
       </div>
 
       <div className='flex flex-col gap-6 w-full overflow-y-auto max-h-[500px] mt-8 scroll-custom-4'>
-        {visibleReviews.length > 0 ? (
-          visibleReviews.map((feedback, index) => {
+        {reviews.length > 0 ? (
+          reviews.map((feedback, index) => {
             const isLastItem =
-              page === totalPages - 1 && index === visibleReviews.length - 1;
+              page === totalPages - 1 && index === reviews.length - 1;
 
             return (
               <div
@@ -51,7 +67,7 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
                 <div className='flex gap-3'>
                   <div className='w-[46px] h-[46px] rounded-full overflow-hidden flex-shrink-0'>
                     <Image
-                      src={feedback.reviewUserImgUrl ?? basicBunny}
+                      src={feedback.imageAccessUrl ?? basicBunny}
                       alt='프로필 이미지'
                       width={46}
                       height={46}
@@ -59,12 +75,12 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
                     />
                   </div>
                   <div className='flex flex-col justify-center'>
-                    <p className='tm4'>{feedback.reviewUserNickname}</p>
-                    <p className='t5 text-text1/50'>{feedback.reviewDate}</p>
+                    <p className='tm4'>{feedback.nickname}</p>
+                    <p className='t5 text-text1/50'>{feedback.createdAt}</p>
                   </div>
                 </div>
                 <p className='t4 text-text1 pl-[60px] text-wrap'>
-                  {feedback.reviewComment}
+                  {feedback.content}
                 </p>
               </div>
             );

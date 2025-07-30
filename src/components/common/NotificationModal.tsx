@@ -34,12 +34,13 @@ export default function NotificationModal({
         return `/recruitment/detail/${domainId}`;
       case 'TIME_VOTE':
         return `/study/${domainId}/study-schedule`;
+      case 'STUDY':
+        return `/study/${domainId}/dashboard`;
       default:
         return null;
     }
   };
 
-  // 읽음 여부 관련 없이 내 전체 알림 목록 조회
   const fetchUnreadNotifications = async () => {
     try {
       setIsLoading(true);

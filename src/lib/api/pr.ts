@@ -11,16 +11,20 @@ export const updatePrInfo = async (
   });
 };
 
-export const getReviewContents = async (page: number, size: number = 5) => {
-  const res = await axiosInstance.get('/reviews/me/contents', {
+export const getReviewContentsByUserId = async (
+  userId: number,
+  page: number,
+  size: number = 5
+) => {
+  const res = await axiosInstance.get(`/reviews/users/${userId}/contents`, {
     params: { page, size },
   });
   return res.data.data as ReviewContentResponse;
 };
 
-export const getReviewTags = async () => {
-  const res = await axiosInstance.get('/reviews/me/tags');
-  return res.data.data;
+export const getReviewTagsByUserId = async (userId: number) => {
+  const res = await axiosInstance.get(`/reviews/users/${userId}/tags`);
+  return res.data.data.reviewTypeMap;
 };
 
 export const getBuddyEnergy = async (userId: number) => {
