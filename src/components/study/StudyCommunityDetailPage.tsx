@@ -34,6 +34,7 @@ export default function StudyCommunityDetailPage() {
   const [commentCount, setCommentCount] = useState(0);
   const [comments, setComments] = useState<CommentType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   type CommentType = {
     commentId: number;
@@ -48,10 +49,6 @@ export default function StudyCommunityDetailPage() {
   const router = useRouter();
   const handleGoToPr = () => {
     router.push(`/profile/pr/${userId}`);
-  };
-
-  const handleCommentAdd = () => {
-    setCommentCount((prev) => prev + 1);
   };
 
   const fetchData = useCallback(async () => {
@@ -84,6 +81,7 @@ export default function StudyCommunityDetailPage() {
 
   useEffect(() => {
     try {
+      setIsLoading(true);
       if (!isNaN(studyId) && !isNaN(postId)) {
         fetchData();
       }
@@ -104,27 +102,29 @@ export default function StudyCommunityDetailPage() {
             <div className='tag-type3 red tb5'>
               <span>{category === 'NOTICE' ? '공지' : '자유'}</span>
             </div>
-            <div className='relative' ref={menuRef}>
-              <button
-                className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
-                  menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
-                }`}
-                onClick={() => menuSetIsOpen((prev) => !prev)}
-              >
-                <EllipsisVertical />
-              </button>
-              {menuIsOpen && (
-                <ClickVerticalMenu
-                  title='내 게시물'
-                  studyId={studyId}
-                  postId={postId}
-                  target={target}
-                />
-              )}
-            </div>
+            {me?.nickname === nickname && (
+              <div className='relative' ref={menuRef}>
+                <button
+                  className={`flex w-10 h-10 rounded-[10px] justify-center items-center ${
+                    menuIsOpen ? 'bg-[#f5f5f5]' : 'hover:bg-[#f5f5f5]'
+                  }`}
+                  onClick={() => menuSetIsOpen((prev) => !prev)}
+                >
+                  <EllipsisVertical />
+                </button>
+                {menuIsOpen && (
+                  <ClickVerticalMenu
+                    title='내 게시물'
+                    studyId={studyId}
+                    postId={postId}
+                    target={target}
+                  />
+                )}
+              </div>
+            )}
           </div>
 
-          <div className='tb2'>
+          <div className='tb2 mt-4'>
             <span>{title}</span>
           </div>
           <div className='flex space-x-6 items-center my-6 justify-between'>
@@ -174,16 +174,23 @@ export default function StudyCommunityDetailPage() {
           )}
           <div className='w-[898px]'>
             <WriteComment
+              key={refreshKey}
+              userId={me?.id}
               target={target}
               postId={postId}
               commentCount={commentCount}
               profileImageUrl={me?.profileImageUrl}
-              onCommentAdd={handleCommentAdd}
-              userId={me?.id}
+              onCommentAdd={fetchData}
             />
           </div>
           <div className='w-[898px]'>
-            <CommentList postId={postId} comments={comments} target={target} />
+            <CommentList
+              postId={postId}
+              comments={comments}
+              target={target}
+              setCommentCount={setCommentCount}
+              setRefreshKey={setRefreshKey}
+            />
           </div>
           {isOpen && (
             <Modal
