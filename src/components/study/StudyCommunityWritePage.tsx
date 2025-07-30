@@ -29,7 +29,7 @@ export default function StudyCommunityWritePage() {
     const content = instance?.getMarkdown() || '';
 
     if (!category) {
-      toast.warning('카테고리 선택해주세요.');
+      toast.warning('카테고리를 선택해주세요.');
       setIsSubmitting(false);
       return;
     }

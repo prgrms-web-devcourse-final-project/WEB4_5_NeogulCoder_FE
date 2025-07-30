@@ -135,7 +135,8 @@ export default function StudyCommunityDetailPage() {
             <div className='flex justify-center items-center'>
               <div>
                 <button
-                  className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                  className='w-[50px] h-[50px] rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden mr-5'
+                  style={{ borderColor: 'var(--color-border1)' }}
                   onClick={handleGoToPr}
                 >
                   <Image

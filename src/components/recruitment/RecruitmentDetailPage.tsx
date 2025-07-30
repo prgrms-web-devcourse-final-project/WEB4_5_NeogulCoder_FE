@@ -340,7 +340,8 @@ export default function RecruitmentDetailPage() {
             <div className='flex justify-center items-center'>
               <div>
                 <button
-                  className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                  className='w-[50px] h-[50px] rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden mr-5'
+                  style={{ borderColor: 'var(--color-border1)' }}
                   onClick={handleGoToPr}
                 >
                   <Image
@@ -502,7 +503,8 @@ export default function RecruitmentDetailPage() {
                       <div className='flex justify-between w-full'>
                         <div className='flex space-x-6 items-center mb-10'>
                           <button
-                            className='w-15 h-15 rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                            className='w-15 h-15 rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden mr-5'
+                            style={{ borderColor: 'var(--color-border1)' }}
                             onClick={() =>
                               router.push(`/profile/pr/${app.userId}`)
                             }
