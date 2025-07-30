@@ -36,6 +36,7 @@ export type PrData = {
 export type PrStore = {
   pr: PrData | null;
   fetchMyPr: () => Promise<void>;
+  fetchOtherPr: (userId: number) => Promise<void>;
   clearPr: () => void;
 };
 

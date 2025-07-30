@@ -1,33 +1,24 @@
-'use client';
-// import musicBunny from '@/assets/images/music-bunny.svg';
-import { useEffect, useState } from 'react';
+import { userPrStore } from '@/stores/prStore'; // 추가
 import Image from 'next/image';
-import { ReviewContent } from '@/types/pr';
-import { getReviewContents } from '@/lib/api/pr';
+import { useState } from 'react';
 import FeedbackModalSkeleton from './skeleton/FeedbackModalSkeleton';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import basicBunny from '@/assets/images/basic-bunny.svg';
+
 export default function FeedbackModal({ onClose }: { onClose: () => void }) {
-  const [totalPages, setTotalPages] = useState(1);
-  const [hasNext, setHasNext] = useState(false);
-  const [visibleReviews, setVisibleReviews] = useState<ReviewContent[]>([]);
+  const { pr } = userPrStore();
+  const allReviews = pr?.reviewContents || [];
   const [page, setPage] = useState(0);
   const perPage = 5;
 
-  useEffect(() => {
-    const fetchReviwes = async () => {
-      try {
-        const res = await getReviewContents(page, perPage);
-        setVisibleReviews(res.reviewContents);
-        setTotalPages(res.totalPages);
-        setHasNext(res.hasNext);
-      } catch (error) {
-        console.error('리뷰 불러오기 실패: ', error);
-      }
-    };
-    fetchReviwes();
-  }, [page]);
-
+  const totalPages = Math.ceil(allReviews.length / perPage);
   const hasPrev = page > 0;
+  const hasNext = page < totalPages - 1;
+
+  const visibleReviews = allReviews.slice(
+    page * perPage,
+    page * perPage + perPage
+  );
 
   const handlePrev = () => {
     if (hasPrev) setPage((prev) => prev - 1);
@@ -60,7 +51,7 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
                 <div className='flex gap-3'>
                   <div className='w-[46px] h-[46px] rounded-full overflow-hidden flex-shrink-0'>
                     <Image
-                      src={feedback.imageAccessUrl}
+                      src={feedback.reviewUserImgUrl ?? basicBunny}
                       alt='프로필 이미지'
                       width={46}
                       height={46}
@@ -68,12 +59,12 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
                     />
                   </div>
                   <div className='flex flex-col justify-center'>
-                    <p className='tm4'>{feedback.nickname}</p>
-                    <p className='t5 text-text1/50'>{feedback.createdAt}</p>
+                    <p className='tm4'>{feedback.reviewUserNickname}</p>
+                    <p className='t5 text-text1/50'>{feedback.reviewDate}</p>
                   </div>
                 </div>
                 <p className='t4 text-text1 pl-[60px] text-wrap'>
-                  {feedback.content}
+                  {feedback.reviewComment}
                 </p>
               </div>
             );

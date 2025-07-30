@@ -26,5 +26,5 @@ export const getUser = async () => {
 
 // 특정 사용자 조회
 export const getUserById = async (userid: number) => {
-  return await axiosInstance.get<UserInfo>(`/api/users/${userid}`);
+  return await axiosInstance.get<{ data: UserInfo }>(`/api/users/${userid}`);
 };
