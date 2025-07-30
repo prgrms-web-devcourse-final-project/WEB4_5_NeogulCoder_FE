@@ -25,7 +25,7 @@ export default function ManagerUsersPage() {
     [searchParams]
   );
   const pageParams = useMemo(
-    () => Number(searchParams.get('page')) || 0,
+    () => Number(searchParams.get('page')) || 1,
     [searchParams]
   );
   const user = userAuthStore((state) => state.user);
@@ -69,9 +69,13 @@ export default function ManagerUsersPage() {
     const fetchUsers = async () => {
       setLoading(true);
       try {
-        const { data } = await getAdminUser(page - 1, searchKeyword || '');
+        const keyword = searchParams.get('search') || '';
+        const pageNum = Number(searchParams.get('page')) || 1;
+        const { data } = await getAdminUser(pageNum - 1, keyword);
         setTotalPage(data.totalPages);
         setUsers(data.content);
+        setKeyword(keyword);
+        setPage(pageNum);
       } catch (error) {
         console.error('사용자 목록을 불러오지 못했습니다.', error);
       } finally {
@@ -80,12 +84,11 @@ export default function ManagerUsersPage() {
     };
 
     fetchUsers();
-  }, [user, page, searchKeyword, router]);
+  }, [user, router, searchParams]);
 
   const searchEmail = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       router.push(`/manager?search=${keyword}&page=1`);
-      setPage(1);
     }
   };
 

@@ -88,14 +88,23 @@ export default function MainRecruitmentList() {
     const fetchRecruitments = async () => {
       setIsLoading(true);
       try {
+        const keyword = searchParams.get('keyword') || '';
+        const pageNum = Number(searchParams.get('page')) || 1;
+        const fetchCategory = searchParams.get('category') || '';
+        const fetchStudyType = searchParams.get('studyType') || '';
+
         const { data } = await getRecruitments(
-          page - 1,
-          categoryParams || '',
-          studyTypeParams || '',
-          searchKeywordParams || ''
+          pageNum - 1,
+          fetchCategory,
+          fetchStudyType,
+          keyword
         );
         setTotalPage(data.totalPage);
         setPosts(data.postInfos);
+        setKeyword(keyword);
+        setPage(pageNum);
+        setSelectedCategory(fetchCategory);
+        setSelectedStudyType(fetchStudyType);
       } catch (error) {
         console.error('모집글 목록을 불러오는데 실패했습니다.', error);
       } finally {
@@ -104,7 +113,7 @@ export default function MainRecruitmentList() {
     };
 
     fetchRecruitments();
-  }, [page, categoryParams, studyTypeParams, searchKeywordParams]);
+  }, [searchParams]);
 
   // 페이지 변경
   const handlePage = (num: number) => {
@@ -119,7 +128,6 @@ export default function MainRecruitmentList() {
     const newCategory = category === '전체' ? '' : category;
     setSelectedCategory(newCategory);
     setIsCategoryOpen(false);
-    setPage(1);
     router.push(
       `/?page=1&category=${newCategory}&studyType=${studyTypeParams}&keyword=${searchKeywordParams}`,
       { scroll: false }
@@ -130,7 +138,6 @@ export default function MainRecruitmentList() {
     const newStudyType = studyType === '전체' ? '' : studyType;
     setSelectedStudyType(newStudyType);
     setStudyTypeOpen(false);
-    setPage(1);
     router.push(
       `/?page=1&category=${categoryParams}&studyType=${newStudyType}&keyword=${searchKeywordParams}`,
       { scroll: false }
@@ -139,7 +146,6 @@ export default function MainRecruitmentList() {
   // 키워드 검색
   const handleKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setPage(1);
       router.push(
         `/?page=1&category=${categoryParams}&studyType=${selectedStudyType}&keyword=${keyword}`,
         { scroll: false }
@@ -150,7 +156,6 @@ export default function MainRecruitmentList() {
   const handleKeywordReset = () => {
     setKeyword('');
     if (searchKeywordParams !== '') {
-      setPage(1);
       router.push(
         `/?page=1&category=${categoryParams}&studyType=${selectedStudyType}&keyword=${''}`,
         { scroll: false }
