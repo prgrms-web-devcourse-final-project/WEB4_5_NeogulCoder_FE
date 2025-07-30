@@ -23,6 +23,7 @@ import Pagination2 from '@/components/common/Pagination2';
 import { fetchMyStudyApplicationData } from '@/lib/api/recruitment/fetchMyStudyApplicationData';
 import RecruitmentDetailSkeleton from '@/components/recruitment/RecruitmentDetailSkeleton';
 import { toast } from 'react-toastify';
+import LoginSkeleton from '../auth/skeleton/LoginSkeleton';
 
 export default function RecruitmentDetailPage() {
   const router = useRouter();
@@ -480,8 +481,8 @@ export default function RecruitmentDetailPage() {
               onClose={() => setIsOpen(false)}
             >
               {isAppLoading ? (
-                <div className='flex flex-1  min-h-[300px] justify-center items-center text-gray-400'>
-                  로딩 중...
+                <div className='flex flex-1 h-[300px] justify-center items-center text-gray-400 overflow-hidden'>
+                  <LoginSkeleton />
                 </div>
               ) : applications.length === 0 ? (
                 <div className='flex flex-1 min-h-[300px] justify-center items-center tm3 text-gray-500'>
