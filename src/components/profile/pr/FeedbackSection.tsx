@@ -46,7 +46,7 @@ export default function FeedbackSection() {
           <div className='flex flex-1 items-center'>
             <div className='flex flex-col gap-2'>
               <div className='flex gap-3 items-center'>
-                <div className='w-[50px] h-[50px] bg-white rounded-full overflow-hidden flex-shrink-0'>
+                <div className='w-[50px] h-[50px] bg-white rounded-full overflow-hidden flex-shrink-0 border border-border1'>
                   <Image
                     src={pr.reviewContents[0]?.reviewUserImgUrl ?? basicBunny}
                     alt='유저 프로필'

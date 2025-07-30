@@ -108,9 +108,9 @@ export default function MyStudyInfoClient() {
 
       const query = {
         page,
-        pageSize: 5,
-        attributeName: sortingValue,
-        sort: 'DESC',
+        size: 5,
+        // attributeName: sortingValue,
+        sort: `${sortingValue},DESC`,
         ...(categoryValue ? { category: categoryValue } : {}),
         ...(keyword ? { keyword } : {}),
       };

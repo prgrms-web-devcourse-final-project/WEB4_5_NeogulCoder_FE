@@ -39,12 +39,11 @@ export default function NotificationModal({
     }
   };
 
-  // 읽음 여부 관련 없이 내 전체 알림 목록 조회
   const fetchUnreadNotifications = async () => {
     try {
       setIsLoading(true);
       const data = await getUnreadNotifications();
-      if (data) setNotification(data);
+      if (data) setNotification([...data].reverse());
     } catch (error) {
       console.error('알림 불러오기 실패: ', error);
     } finally {
@@ -67,7 +66,7 @@ export default function NotificationModal({
     }
   };
 
-  // 알림 개별 읽음 처리 - 수락/거절
+  // 수락/거절
   const handleReadNotifications = async (
     alarmId: number,
     accepted: boolean

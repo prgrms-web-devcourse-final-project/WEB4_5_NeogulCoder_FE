@@ -1,6 +1,6 @@
 export type MyRecruitmentQueryType = {
   page: number;
-  pageSize: number;
+  size: number;
   category?: string;
   studyType?: string;
   keyword?: string;
@@ -25,7 +25,7 @@ export type MyRecruitmentListType = {
 
 export type MyStudyQueryType = {
   page: number;
-  pageSize: number;
+  size: number;
   finished?: string;
   sort: string;
 };
@@ -52,7 +52,7 @@ export type MyStudyListType = {
 
 export type MyApplicationQueryType = {
   page: number;
-  pageSize: number;
+  size: number;
   status?: string;
   sort: string;
 };

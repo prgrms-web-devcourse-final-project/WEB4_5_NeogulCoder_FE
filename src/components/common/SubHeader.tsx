@@ -74,9 +74,14 @@ export default function SubHeader() {
                       <Image
                         src={study.imageUrl ?? logoWibby}
                         alt={study.name}
-                        className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
+                        // className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
                         width={38}
                         height={38}
+                        className={`rounded-[12px] group-hover:drop-shadow ${
+                          study.imageUrl
+                            ? 'w-8 h-8'
+                            : 'object-contain scale-[0.6]'
+                        }`}
                       />
                       <span className='absolute bg-white p-1 px-2 tl5 border border-border1 rounded-sm whitespace-nowrap bottom-0 left-1/2 -translate-x-1/2 translate-y-3/4 hidden group-hover:block  group-hover:drop-shadow z-2'>
                         {study.name}
@@ -111,9 +116,14 @@ export default function SubHeader() {
                     <Image
                       src={study.imageUrl ?? logoWibby}
                       alt={study.name}
-                      className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
-                      width={38}
-                      height={38}
+                      // className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
+                      width={32}
+                      height={32}
+                      className={`rounded-[12px] group-hover:drop-shadow ${
+                        study.imageUrl
+                          ? 'w-8 h-8'
+                          : 'object-contain scale-[0.6]'
+                      }`}
                     />
                     <span className='absolute bg-white p-1 px-2 tl5 border border-border1 rounded-sm whitespace-nowrap bottom-0 left-1/2 -translate-x-1/2 translate-y-3/4 hidden group-hover:block  group-hover:drop-shadow z-2'>
                       {study.name}

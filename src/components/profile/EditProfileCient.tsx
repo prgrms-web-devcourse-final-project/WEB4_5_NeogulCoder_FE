@@ -93,7 +93,7 @@ export default function EditProfileClient() {
       <div className='tb3'>프로필 수정</div>
       <div className='mt-[60px] flex flex-col items-center justify-center'>
         <div className='relative'>
-          <div className='w-[140px] h-[140px] rounded-full relative bg-black overflow-hidden'>
+          <div className='w-[140px] h-[140px] rounded-full relative bg-white overflow-hidden  border border-border1'>
             <Image
               src={
                 previewImg && previewImg.trim() !== ''

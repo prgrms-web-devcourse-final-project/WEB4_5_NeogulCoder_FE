@@ -8,6 +8,7 @@ import { Calendar, Crown, UsersRound } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 import { MyApplicationListType } from '@/types/my';
 import { useRouter } from 'next/navigation';
+import { categoryFormatting } from '@/utils/categoryFormatting';
 
 const studyTypeMap: Record<string, '온라인' | '오프라인' | '온/오프라인'> = {
   ONLINE: '온라인',
@@ -56,18 +57,21 @@ export default function ApplyingStudyCard({
           </div>
         </div>
         <div className='flex justify-center items-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%]'>
-          <div className='relative w-[40px] h-[40px]'>
+          <div className='relative w-full h-full'>
             <Image
               src={imageUrl ? imageUrl : logoWibby}
               alt='스터디 대표 이미지'
               fill
+              className={
+                imageUrl ? 'object-cover' : 'object-contain scale-[0.6]'
+              }
             />
           </div>
         </div>
       </div>
       <div className='flex justify-end gap-2 mt-5'>
         <div className='tag-type1'>
-          <span className='tb5'>{category}</span>
+          <span className='tb5'>{categoryFormatting(category)}</span>
         </div>
         <div className='tag-type1'>
           <span className='tb5'>

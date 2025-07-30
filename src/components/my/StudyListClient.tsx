@@ -29,7 +29,7 @@ export default function StudyListClient() {
 
       const query = {
         page,
-        pageSize: 12,
+        size: 12,
         sort: 'DESC',
         ...(finishedValue ? { finished: finishedValue } : {}),
       };

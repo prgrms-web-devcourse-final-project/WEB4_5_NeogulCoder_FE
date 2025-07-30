@@ -10,7 +10,7 @@ export const fetchMyRecruitmentList = async (
 ) => {
   const {
     page,
-    pageSize = 10,
+    size = 10,
     category,
     studyType,
     keyword,
@@ -19,7 +19,7 @@ export const fetchMyRecruitmentList = async (
 
   const query = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    size: size.toString(),
     ...(category ? { category } : {}),
     ...(studyType ? { studyType } : {}),
     ...(keyword ? { keyword } : {}),
@@ -33,11 +33,11 @@ export const fetchMyRecruitmentList = async (
 };
 
 export const fetchMyStudyList = async (params: MyStudyQueryType) => {
-  const { page, pageSize = 12, finished, sort = 'DESC' } = params;
+  const { page, size = 12, finished, sort = 'DESC' } = params;
 
   const query = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    size: size.toString(),
     ...(finished ? { finished } : {}),
     sort,
   });
@@ -49,11 +49,11 @@ export const fetchMyStudyList = async (params: MyStudyQueryType) => {
 export const fetchMyApplicationList = async (
   params: MyApplicationQueryType
 ) => {
-  const { page, pageSize = 12, status, sort = 'DESC' } = params;
+  const { page, size = 12, status, sort = 'DESC' } = params;
 
   const query = new URLSearchParams({
     page: page.toString(),
-    pageSize: pageSize.toString(),
+    size: size.toString(),
     ...(status ? { status } : {}),
     sort,
   });

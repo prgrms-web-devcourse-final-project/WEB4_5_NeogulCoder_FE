@@ -184,6 +184,11 @@ export default function StudyRoomInfoWrite({
                       width={100}
                       height={0}
                       alt={`${studyInfoData.name} 프로필 사진`}
+                      className={
+                        imagePreview
+                          ? 'object-cover'
+                          : 'object-contain scale-[0.6]'
+                      }
                     />
                   </div>
                   <label
