@@ -114,7 +114,9 @@ export default function StudyAttendance({
                   events={events}
                   validRange={{
                     start: dayjs(studyInfo?.startDate).format('YYYY-MM-DD'),
-                    end: dayjs(studyInfo?.endDate).format('YYYY-MM-DD'),
+                    end: dayjs(studyInfo?.endDate).format(
+                      'YYYY-MM-DD HH:mm:ss'
+                    ),
                   }}
                   headerToolbar={{
                     left: 'prev',
