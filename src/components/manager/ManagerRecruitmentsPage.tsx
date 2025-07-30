@@ -77,6 +77,7 @@ export default function ManagerRecruitmentsPage() {
   const searchSubject = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       router.push(`/manager/recruitment?search=${keyword}&page=1`);
+      setPage(1);
     }
   };
 
@@ -90,11 +91,13 @@ export default function ManagerRecruitmentsPage() {
   const handleClear = () => {
     setKeyword('');
     router.push(`/manager/recruitment?page=1`);
+    setPage(1);
   };
 
   // 버튼 클릭 검색
   const handleClickSubmit = () => {
     router.push(`/manager/recruitment?search=${keyword}&page=1`);
+    setPage(1);
   };
 
   return (
