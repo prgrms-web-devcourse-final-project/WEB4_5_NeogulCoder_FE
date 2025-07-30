@@ -64,6 +64,7 @@ export default function RecruitmentDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAppLoading, setIsAppLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isStatusChange, setIsStatusChange] = useState(false);
   const [isApproving, setIsApproving] = useState(false);
@@ -144,11 +145,14 @@ export default function RecruitmentDetailPage() {
   const fetchApplicationData = useCallback(async () => {
     if (!me || me.nickname !== nickname) return;
     try {
+      setIsAppLoading(true);
       const appData = await fetchStudyApplication(recruitmentPostId, page);
       setApplications(appData.receivedApplications);
       setTotalElementCount(appData.totalElementCount);
     } catch (error) {
       console.error('신청 내역 불러오기 오류:', error);
+    } finally {
+      setIsAppLoading(false);
     }
   }, [me, nickname, recruitmentPostId, page]);
 
@@ -166,11 +170,7 @@ export default function RecruitmentDetailPage() {
     setIsSubmitting(true);
 
     try {
-      const appData = await studyApplication(
-        recruitmentPostId,
-        writeApplicationReason
-      );
-      console.log('생성 완료', appData);
+      await studyApplication(recruitmentPostId, writeApplicationReason);
       toast.success('모집 신청이 완료되었습니다!');
       await fetchMyStudyApplication();
       setAppIsOpen(false);
@@ -203,7 +203,6 @@ export default function RecruitmentDetailPage() {
 
     try {
       await studyApplicationApprove(applicationId);
-      console.log('신청 승인요청 성공!');
       toast.success('신청이 승인되었습니다.');
       await fetchApplicationData();
     } catch (error) {
@@ -218,7 +217,6 @@ export default function RecruitmentDetailPage() {
     setIsRejecting(true);
     try {
       await studyApplicationReject(applicationId);
-      console.log('신청 거절요청 성공');
       toast.success('신청이 거절되었습니다.');
       await fetchApplicationData();
     } catch (error) {
@@ -238,26 +236,6 @@ export default function RecruitmentDetailPage() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
-  useEffect(() => {
-    try {
-      setIsLoading(true);
-      if (!isNaN(recruitmentPostId)) {
-        fetchData();
-        fetchApplicationData();
-        fetchMyStudyApplication();
-      }
-    } catch (error) {
-      console.error('스터디 리스트 불러오기 실패:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    recruitmentPostId,
-    fetchData,
-    fetchApplicationData,
-    fetchMyStudyApplication,
-  ]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -356,7 +334,8 @@ export default function RecruitmentDetailPage() {
             <div className='flex justify-center items-center'>
               <div>
                 <button
-                  className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                  className='w-[50px] h-[50px] rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden mr-5'
+                  style={{ borderColor: 'var(--color-border1)' }}
                   onClick={handleGoToPr}
                 >
                   <Image
@@ -497,11 +476,15 @@ export default function RecruitmentDetailPage() {
           {isOpen && (
             <Modal
               title=''
-              className='w-[1020px] h-[800px] overflow-y-auto'
+              className='w-[1020px] h-auto overflow-y-auto'
               onClose={() => setIsOpen(false)}
             >
-              {applications.length === 0 ? (
-                <div className='tm3 text-center text-gray-500 py-20'>
+              {isAppLoading ? (
+                <div className='flex flex-1  min-h-[300px] justify-center items-center text-gray-400'>
+                  로딩 중...
+                </div>
+              ) : applications.length === 0 ? (
+                <div className='flex flex-1 min-h-[300px] justify-center items-center tm3 text-gray-500'>
                   신청 내역이 없습니다
                 </div>
               ) : (
@@ -514,7 +497,8 @@ export default function RecruitmentDetailPage() {
                       <div className='flex justify-between w-full'>
                         <div className='flex space-x-6 items-center mb-10'>
                           <button
-                            className='w-15 h-15 rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                            className='w-15 h-15 rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden mr-5'
+                            style={{ borderColor: 'var(--color-border1)' }}
                             onClick={() =>
                               router.push(`/profile/pr/${app.userId}`)
                             }

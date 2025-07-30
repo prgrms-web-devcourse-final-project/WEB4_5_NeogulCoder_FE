@@ -7,6 +7,7 @@ import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export default function SideMenuLayout() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function SideMenuLayout() {
           const message = error.response?.data?.message;
           console.error('스터디 정보를 불러오지 못했습니다:', message);
           router.replace('/');
-          alert(message);
+          toast.error('스터디 정보를 불러오지 못했습니다.');
         } else {
           console.error('알 수 없는 오류 발생:', error);
         }

@@ -61,6 +61,9 @@ export default function StudyCard({
               alt='스터디 대표 이미지'
               priority
               fill
+              className={
+                imageUrl ? 'object-cover' : 'object-contain scale-[0.6]'
+              }
             />
           </div>
         </div>

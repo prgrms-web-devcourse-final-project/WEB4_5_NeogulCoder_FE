@@ -20,10 +20,10 @@ export type StudyListType = {
 
 export type StudyListQueryType = {
   page: number;
-  pageSize: number;
+  size: number;
   category?: string;
   keyword?: string;
-  attributeName?: string;
+  // attributeName?: string;
   sort: string;
 };
 
@@ -43,10 +43,10 @@ export type MyListType = {
 
 export type MyListQueryType = {
   page: number;
-  pageSize: number;
+  size: number;
   category?: string;
   keyword?: string;
-  attributeName?: string;
+  // attributeName?: string;
   sort: string;
 };
 

@@ -60,7 +60,6 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
       introduction,
     };
 
-    console.log(requestPayload);
     formData.append('request', JSON.stringify(requestPayload));
 
     if (imageFile) {
@@ -69,8 +68,6 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
 
     try {
       const data = await createStudy(formData);
-
-      console.log('생성 완료', data);
       const newStudy: StudiesMainType = {
         studyId: data.data,
         name: name,

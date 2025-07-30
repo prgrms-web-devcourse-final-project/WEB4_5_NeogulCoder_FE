@@ -68,7 +68,6 @@ export default function RecruitmentWritePage() {
     setIsClick(true);
     try {
       const data = await fetchStudy(Number(studyId));
-      console.log(studyId);
       setCategory(data.category);
       setLocation(data.location);
       setStudyType(data.studyType);
@@ -128,7 +127,7 @@ export default function RecruitmentWritePage() {
     const content = instance?.getMarkdown() || '';
 
     if (!content.trim()) {
-      toast.warning('본문 내용을 입력해주세요.');
+      toast.warning('내용을 입력해주세요.');
       setIsSubmitting(false);
       return;
     }

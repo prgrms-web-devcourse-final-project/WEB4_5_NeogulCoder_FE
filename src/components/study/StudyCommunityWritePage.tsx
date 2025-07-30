@@ -29,7 +29,7 @@ export default function StudyCommunityWritePage() {
     const content = instance?.getMarkdown() || '';
 
     if (!category) {
-      toast.warning('카테고리 선택해주세요.');
+      toast.warning('카테고리를 선택해주세요.');
       setIsSubmitting(false);
       return;
     }
@@ -62,8 +62,6 @@ export default function StudyCommunityWritePage() {
     try {
       const data = await writeStudyPost(studyId, payload);
       const postId = data.data;
-
-      console.log('작성 완료', data);
       toast.success('게시글 작성이 완료되었습니다!');
       router.push(`/study/${studyId}/study-community/detail/${postId}`);
     } catch (error) {
@@ -72,15 +70,6 @@ export default function StudyCommunityWritePage() {
     } finally {
       setIsSubmitting(false);
     }
-
-    console.log(
-      'Title:',
-      title,
-      'Content:',
-      content,
-      'Category:',
-      englishCategory
-    );
   };
 
   return (

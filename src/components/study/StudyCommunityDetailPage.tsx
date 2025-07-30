@@ -80,16 +80,20 @@ export default function StudyCommunityDetailPage() {
   }, []);
 
   useEffect(() => {
-    try {
-      setIsLoading(true);
-      if (!isNaN(studyId) && !isNaN(postId)) {
-        fetchData();
+    const fetchAll = async () => {
+      try {
+        setIsLoading(true);
+        if (!isNaN(studyId) && !isNaN(postId)) {
+          await fetchData();
+        }
+      } catch (error) {
+        console.error('데이터 받아오기 에러', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('데이터 받아오기 에러', error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    fetchAll();
   }, [studyId, postId, fetchData]);
 
   return (
@@ -135,7 +139,8 @@ export default function StudyCommunityDetailPage() {
             <div className='flex justify-center items-center'>
               <div>
                 <button
-                  className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                  className='w-[50px] h-[50px] rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden mr-5'
+                  style={{ borderColor: 'var(--color-border1)' }}
                   onClick={handleGoToPr}
                 >
                   <Image

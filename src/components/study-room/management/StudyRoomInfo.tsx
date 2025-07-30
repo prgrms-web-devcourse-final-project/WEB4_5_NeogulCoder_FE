@@ -74,6 +74,11 @@ export default function StudyRoomInfo({
           height={0}
           alt='스터디이미지'
           loading='lazy'
+          className={
+            studyInfoData.imageUrl
+              ? 'object-cover'
+              : 'object-contain scale-[0.6]'
+          }
         />
       </div>
       <div className='w-full grid grid-cols-2 gap-5'>
