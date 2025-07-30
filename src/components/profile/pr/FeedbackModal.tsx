@@ -29,7 +29,7 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className='flex flex-col bg-white w-[520px] h-[660px] rounded-[10px] items-center shadow-sm px-6 py-6 relative'>
+    <div className='flex flex-col bg-white w-[520px] h-[660px] rounded-[10px] items-center shadow-sm px-6 py-6 relative '>
       <div className='flex justify-between items-center w-full mb-2'>
         <h2 className='tm2'>피드백</h2>
         <X className='w-6 h-6 cursor-pointer' onClick={onClose} />
@@ -55,7 +55,7 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
                       alt='프로필 이미지'
                       width={46}
                       height={46}
-                      className='object-cover rounded-full'
+                      className='object-cover rounded-full border border-border1'
                     />
                   </div>
                   <div className='flex flex-col justify-center'>

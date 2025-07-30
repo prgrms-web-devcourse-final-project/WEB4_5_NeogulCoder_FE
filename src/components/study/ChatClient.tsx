@@ -7,7 +7,8 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { ChatGroup, ChatMessageType } from '@/types/chat';
 import { userAuthStore } from '@/stores/userStore';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import basicBunny from '@/assets/images/basic-bunny.svg';
+
 import SockJS from 'sockjs-client';
 import { fetchChatMessage } from '@/lib/api/chat';
 import { useParams } from 'next/navigation';
@@ -205,7 +206,7 @@ export default function ChatClient() {
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
-                  image={chat.profileImageUrl ?? musicBunny}
+                  image={chat.profileImageUrl ?? basicBunny}
                 />
               ))}
             </div>
