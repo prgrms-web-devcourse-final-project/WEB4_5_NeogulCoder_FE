@@ -4,6 +4,7 @@ import deleteText from '@/assets/images/delete-text.svg';
 import { toast } from 'react-toastify';
 import axiosInstance from '@/lib/api/axiosInstance';
 import { X } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function PasswordChangeModal({
   onClose,
@@ -15,6 +16,7 @@ export default function PasswordChangeModal({
   const [newPasswordCheck, setNewPasswordCheck] = useState('');
   const [newPasswordError, setNewPasswordError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const passwordRef = useRef<HTMLInputElement>(null);
   const newPasswordRef = useRef<HTMLInputElement>(null);
@@ -87,13 +89,25 @@ export default function PasswordChangeModal({
         </p>
         <div className='relative'>
           <input
-            type='password'
+            type={visible ? 'text' : 'password'}
             placeholder='현재 비밀번호를 입력해주세요'
             className='input-type3 w-full focus:outline-1 focus:outline-main'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             ref={passwordRef}
           />
+          {password && (
+            <div
+              onClick={() => setVisible(!visible)}
+              className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+            >
+              {visible ? (
+                <Eye className='w-4 h-4' />
+              ) : (
+                <EyeOff className='w-4 h-4' />
+              )}
+            </div>
+          )}
           {password && (
             <Image
               src={deleteText}
@@ -113,13 +127,25 @@ export default function PasswordChangeModal({
         </p>
         <div className='relative'>
           <input
-            type='password'
+            type={visible ? 'text' : 'password'}
             placeholder='새 비밀번호를 입력해주세요'
             className='input-type3 w-full focus:outline-1 focus:outline-main'
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             ref={newPasswordRef}
           />
+          {newPassword && (
+            <div
+              onClick={() => setVisible(!visible)}
+              className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+            >
+              {visible ? (
+                <Eye className='w-4 h-4' />
+              ) : (
+                <EyeOff className='w-4 h-4' />
+              )}
+            </div>
+          )}
           {newPassword && (
             <Image
               src={deleteText}
@@ -137,13 +163,25 @@ export default function PasswordChangeModal({
         </p>
         <div className='relative'>
           <input
-            type='password'
+            type={visible ? 'text' : 'password'}
             placeholder='새 비밀번호를 다시 한 번 입력해주세요'
             className='input-type3 w-full focus:outline-1 focus:outline-main'
             value={newPasswordCheck}
             onChange={handleNewPasswordCheck}
             ref={newPasswordCheckRef}
           />
+          {newPasswordCheck && (
+            <div
+              onClick={() => setVisible(!visible)}
+              className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+            >
+              {visible ? (
+                <Eye className='w-4 h-4' />
+              ) : (
+                <EyeOff className='w-4 h-4' />
+              )}
+            </div>
+          )}
           {newPasswordCheck && (
             <Image
               src={deleteText}
