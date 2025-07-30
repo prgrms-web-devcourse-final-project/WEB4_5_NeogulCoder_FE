@@ -19,6 +19,11 @@ export default function SideStudyInfo({
               height={0}
               src={studyInfo.imageUrl ?? logoWibby}
               alt='예시 기본 프사'
+              className={
+                studyInfo.imageUrl
+                  ? 'object-cover'
+                  : 'object-contain scale-[0.6]'
+              }
             />
           </div>
           <div>

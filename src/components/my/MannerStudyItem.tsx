@@ -33,6 +33,7 @@ export default function MannerStudyItem({
             src={imageUrl ? imageUrl : logoWibby}
             alt='스터디 이미지'
             fill
+            className={imageUrl ? 'object-cover' : 'object-contain scale-[0.6]'}
           />
         </div>
       </div>
