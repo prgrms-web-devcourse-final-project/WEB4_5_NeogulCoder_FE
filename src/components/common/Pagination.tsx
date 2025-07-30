@@ -16,7 +16,7 @@ export default function Pagination({
   currentPage: number;
   onPageChange: (page: number) => void;
 }) {
-  // if (totalPages <= 1) return null;
+  if (totalPages < 1) return null;
 
   const visiblePages = 5;
   const startPage = Math.floor(currentPage / visiblePages) * visiblePages;
