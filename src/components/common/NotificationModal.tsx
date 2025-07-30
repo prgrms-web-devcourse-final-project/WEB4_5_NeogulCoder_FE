@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import NotificationModalSkeleton from './NotificationModalSkeleton';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useStudiesStore } from '@/stores/useStudiesStore';
 
 export default function NotificationModal({
   onClose,
@@ -25,6 +26,7 @@ export default function NotificationModal({
   const { setUnReadCounts } = countNotificationStore();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { fetchStudies } = useStudiesStore();
 
   const getRoute = (domainType: string | null, domainId: number) => {
     switch (domainType?.toUpperCase()) {
@@ -75,8 +77,13 @@ export default function NotificationModal({
 
     try {
       const res = await readNotifications(alarmId, accepted);
-      setUnReadCounts(0);
+      const data = await getUnreadNotifications();
       toast.success(res?.message);
+      setUnReadCounts(data.length);
+
+      if (accepted) {
+        await fetchStudies();
+      }
       setNotification((prev) => prev.filter((item) => item.id !== alarmId));
     } catch (error) {
       if (axios.isAxiosError(error)) {

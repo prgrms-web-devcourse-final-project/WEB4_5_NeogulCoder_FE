@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import studyDefault from '@/assets/images/study-default.svg';
+// import studyDefault from '@/assets/images/study-default.svg';
+import logoWibby from '@/assets/images/logo-wibby.svg';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import { Backpack, MapPin } from 'lucide-react';
 
@@ -16,7 +17,7 @@ export default function SideStudyInfo({
             <Image
               width={70}
               height={0}
-              src={studyInfo.imageUrl ?? studyDefault}
+              src={studyInfo.imageUrl ?? logoWibby}
               alt='예시 기본 프사'
             />
           </div>

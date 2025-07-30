@@ -8,6 +8,7 @@ import { getUserById } from '@/lib/api/user';
 import ProfileSideBarSkeleton from './ProfileSideBarSkeleton';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import OtherProfileSideBarSkeleton from './OtherProfileSideBarSkeleton';
 
 export default function SideBar() {
   const router = useRouter();
@@ -16,9 +17,7 @@ export default function SideBar() {
   const [selectedMenu, setSelectedMenu] = useState<'pr' | '회원 탈퇴' | ''>(
     'pr'
   );
-  // 로그인 된 사용자 정보
   const me = userAuthStore((state) => state.user);
-  // 로그인 후 새로고침
   const fetchUser = userAuthStore((state) => state.fetchUser);
 
   const params = useParams();
@@ -50,7 +49,7 @@ export default function SideBar() {
       // 다른 사람 페이지면 그 사람 정보 가져오기
       getUserById(userId)
         .then((res) => {
-          setOtherUser(res.data);
+          setOtherUser(res.data.data);
         })
         .catch((error) => {
           console.error('다른 사용자 정보 가져오기 실패: ', error);
@@ -95,17 +94,20 @@ export default function SideBar() {
   return (
     <>
       {isLoading ? (
-        <ProfileSideBarSkeleton />
+        isMyPage ? (
+          <ProfileSideBarSkeleton />
+        ) : (
+          <OtherProfileSideBarSkeleton />
+        )
       ) : (
         <div className='w-full flex justify-center text-text1'>
           <div className='w-full max-w-[1248px] flex flex-col'>
             <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
               <div className='flex items-center gap-[28px] pl-8'>
-                <div className='w-[70px] h-[70px] bg-black rounded-full overflow-hidden'>
+                <div className='w-[70px] h-[70px] bg-white rounded-full overflow-hidden'>
                   <Image
                     src={userData?.profileImageUrl ?? basicBunny.src}
                     alt='예시 기본 프사'
-                    className='w-full h-20 object-cover object-center rounded-full'
                     width={70}
                     height={70}
                   />
