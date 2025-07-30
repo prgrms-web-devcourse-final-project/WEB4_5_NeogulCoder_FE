@@ -7,7 +7,7 @@ import basicBunny from '@/assets/images/basic-bunny.svg';
 type CommentWriteProps = {
   target: 'recruitment' | 'study';
   postId: number;
-  // studyId?: number;
+  userId: number | undefined;
   profileImageUrl: string | null | undefined;
   commentCount: number;
   onCommentAdd?: () => void;
@@ -15,18 +15,23 @@ type CommentWriteProps = {
 
 export default function WriteComment({
   target,
+  userId,
   profileImageUrl,
   commentCount,
   postId,
   onCommentAdd,
 }: CommentWriteProps) {
   const [comment, setComment] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       await writeComment(`${target}`, {
         postId,
@@ -36,6 +41,8 @@ export default function WriteComment({
       setComment('');
     } catch (error) {
       console.error('댓글 등록 실패:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -84,6 +91,7 @@ export default function WriteComment({
             <button
               className='button-type5 color-[#ffffff] hover:bg-[#292929]'
               onClick={handleSubmit}
+              disabled={isSubmitting}
             >
               댓글 등록
             </button>

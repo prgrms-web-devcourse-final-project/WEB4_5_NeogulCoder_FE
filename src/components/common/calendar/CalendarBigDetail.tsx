@@ -16,7 +16,8 @@ import { ScheduleInputType } from './CalendarBigShell';
 import CalendarBigDetailItemSkeleton from './Skeleton/CalendarBigDetailItemSkeleton';
 import { calendarFormattingResult } from '@/utils/calendarTypeFormatting';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
+import { CalendarDays, X } from 'lucide-react';
+
 dayjs.extend(isBetween);
 
 export default function CalendarBigDetail({
@@ -24,26 +25,16 @@ export default function CalendarBigDetail({
   handleEventDelete,
   closeDetailHandler,
   date,
-  categoryId,
+  category,
   type,
 }: {
   handleEventUpdate: (id: number, data: ScheduleInputType) => void;
   handleEventDelete: (id: number) => void;
   closeDetailHandler: () => void;
   date: string;
-  categoryId: number;
+  category: { name: string; id: number; isProgress: boolean };
   type: string;
 }) {
-  const CalendarDays = dynamic(
-    () => import('lucide-react').then((m) => m.CalendarDays),
-    {
-      ssr: false,
-    }
-  );
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const authId = userAuthStore().user?.id;
 
   const dateFormat = (date: string) => {
@@ -71,7 +62,7 @@ export default function CalendarBigDetail({
           const { data: result } = await getUserDayEvents(authId, date);
           data = result;
         } else {
-          const { data: result } = await getStudyDayEvents(categoryId, date);
+          const { data: result } = await getStudyDayEvents(category.id, date);
           data = result;
         }
         setEvents(calendarFormattingResult(data));
@@ -82,7 +73,7 @@ export default function CalendarBigDetail({
       }
     };
     fetchDateEvent();
-  }, [type, categoryId, date, authId]);
+  }, [type, category, date, authId]);
 
   // 상세일정삭제
   const handleEventDetailDelete = (scheduleId: number) => {
@@ -92,7 +83,7 @@ export default function CalendarBigDetail({
   const handleDelete = async (scheduleId: number) => {
     try {
       const deleteFn = type === 'personal' ? deleteUserEvent : deleteStudyEvent;
-      const res = await deleteFn(categoryId, scheduleId);
+      const res = await deleteFn(category.id, scheduleId);
 
       if (res) {
         handleEventDelete(scheduleId); // 전체에서 삭제
@@ -128,7 +119,7 @@ export default function CalendarBigDetail({
 
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='pt-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] w-full'>
           <div className='flex justify-between mb-8 px-9 '>
             {/* 모달헤더 */}
@@ -147,7 +138,7 @@ export default function CalendarBigDetail({
                 events.map((event, i) => (
                   <CalendarBigDetailItem
                     key={`schedule${i}`}
-                    categoryId={categoryId}
+                    category={category}
                     result={event}
                     type={type}
                     handleDelete={handleDelete}

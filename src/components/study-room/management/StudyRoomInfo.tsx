@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import StudyRoomInfoCard from './StudyRoomInfoCard';
 import StudyRoomInfoWrite from './StudyRoomInfoWrite';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
-import dynamic from 'next/dynamic';
+import { PenLine } from 'lucide-react';
 
 export default function StudyRoomInfo({
   studyInfoData,
@@ -19,10 +19,6 @@ export default function StudyRoomInfo({
   studyId: number;
   handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
-  const PenLine = dynamic(() => import('lucide-react').then((m) => m.PenLine), {
-    ssr: false,
-  });
-
   const [infoModal, setInfoModal] = useState(false);
   const infoModalOpen = () => {
     setInfoModal(true);
@@ -70,9 +66,9 @@ export default function StudyRoomInfo({
           <PenLine className='w-5 h-5' />
         </button>
       </div>
-      <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto'>
+      <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto flex item-center justify-center'>
         <Image
-          src={studyInfoData.imageUrl ?? musicBunny}
+          src={studyInfoData.imageUrl ?? studyDefault}
           width={120}
           height={0}
           alt='스터디이미지'

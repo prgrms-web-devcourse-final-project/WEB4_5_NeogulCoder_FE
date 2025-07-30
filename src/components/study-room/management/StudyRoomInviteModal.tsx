@@ -1,8 +1,9 @@
-import musicBunny from '@/assets/images/music-bunny.svg';
-import { getAllUser } from '@/lib/api/study.api';
+import defaultUserProfileImage from '@/assets/images/basic-bunny.svg';
+import { getAllUser, postStudyInvite } from '@/lib/api/study.api';
+import { Search, X } from 'lucide-react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useState, useTransition } from 'react';
+import { toast } from 'react-toastify';
 
 type AllUserType = {
   id: number;
@@ -12,24 +13,19 @@ type AllUserType = {
 };
 
 export default function StudyRoomInfoWrite({
-  // studyId,
+  studyId,
   memberInfo,
   closeFn,
 }: {
-  // studyId: number;
+  studyId: number;
   memberInfo: StudyMemberType[];
   closeFn: () => void;
 }) {
-  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
-    ssr: false,
-  });
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const [allUser, setAllUser] = useState<AllUserType[]>([]);
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isPending, startTransition] = useTransition();
+
   useEffect(() => {
     const fetchAllUser = async () => {
       setIsLoading(true);
@@ -59,9 +55,22 @@ export default function StudyRoomInfoWrite({
 
     return searchUser;
   };
+
+  const handleInvite = (name: string) => {
+    startTransition(async () => {
+      try {
+        await postStudyInvite(studyId, name);
+        toast.success(`${name} 님을 초대했습니다.`);
+        closeFn(); // 모달 닫기
+      } catch (error) {
+        console.error(`error : ${error}`);
+        toast.error(`${name} 초대에 실패했습니다.`);
+      }
+    });
+  };
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
           <div className='flex justify-between mb-8 px-9 '>
             <h3 className='tm2'>스터디 초대</h3>
@@ -98,7 +107,7 @@ export default function StudyRoomInfoWrite({
                   <div className='flex items-center gap-3'>
                     <div className='w-[42px] h-[42px] rounded-full overflow-hidden bg-white border border-border1'>
                       <Image
-                        src={user.profileImageUrl ?? musicBunny}
+                        src={user.profileImageUrl ?? defaultUserProfileImage}
                         width={42}
                         height={42}
                         alt={`${user.nickname} 프로필 이미지`}
@@ -110,7 +119,11 @@ export default function StudyRoomInfoWrite({
                       <p className='t4'>{user.email}</p>
                     </div>
                   </div>
-                  <button className='button-sm-type1 !text-[12px]'>
+                  <button
+                    onClick={() => handleInvite(user.nickname)}
+                    className='button-sm-type1 !text-[12px]'
+                    disabled={isPending}
+                  >
                     초대하기
                   </button>
                 </div>

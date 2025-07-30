@@ -5,7 +5,7 @@ import SubHeader from '@/components/common/SubHeader';
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className='fixed left-0 top-0 right-0 bg-white z-10'>
+      <div className='fixed left-0 top-0 right-0 bg-white z-25'>
         <Header />
         <SubHeader />
       </div>

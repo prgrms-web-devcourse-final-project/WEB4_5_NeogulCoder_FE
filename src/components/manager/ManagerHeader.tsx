@@ -1,17 +1,14 @@
 'use client';
-import { axiosInstance } from '@/lib/api/axios';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
 import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import { LogOut } from 'lucide-react';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function ManagerHeader() {
-  const LogOut = dynamic(() => import('lucide-react').then((m) => m.LogOut), {
-    ssr: false,
-  });
   const user = userAuthStore((state) => state.user);
   const router = useRouter();
 
@@ -39,12 +36,14 @@ export default function ManagerHeader() {
     <>
       <header className='py-4 border-b border-border1'>
         <div className='max-w-[1280px] px-4 mx-auto flex items-center justify-between'>
-          <h1 className='flex items-start text-[24px] font-bold text-logo3 gap-1'>
-            <Image
-              src={logoWibby}
-              alt='로고'
-              className='w-[80px] h-9 cursor-pointer'
-            />
+          <h1 className='flex items-start text-[22px] font-bold text-logo3 gap-2'>
+            <Link href={'/'}>
+              <Image
+                src={logoWibby}
+                alt='로고'
+                className='w-[80px] h-9 cursor-pointer'
+              />
+            </Link>
             관리자
           </h1>
           <div className='flex items-center gap-25 tm2'>

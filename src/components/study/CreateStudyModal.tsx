@@ -10,6 +10,8 @@ import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import OnlineModal from '../common/OnlineModal';
 import RegionModal from '../common/RegionModal';
 import { toast } from 'react-toastify';
+import { useStudiesStore } from '@/stores/useStudiesStore';
+import { userAuthStore } from '@/stores/userStore';
 
 type CreateStudyModalProps = {
   onClose: () => void;
@@ -30,6 +32,9 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
   const [isOpenCategoryModal, setIsOpenCategoryModal] = useState(false);
   const [isOpenRegionModal, setIsOpenRegionModal] = useState(false);
   const [isOpenStudyTypeModal, setIsOpenStudyTypeModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const addStudy = useStudiesStore((state) => state.addStudy);
+  const me = userAuthStore((state) => state.user);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -40,6 +45,8 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const formData = new FormData();
 
     const requestPayload = {
@@ -62,35 +69,33 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
 
     try {
       const data = await createStudy(formData);
+
       console.log('생성 완료', data);
+      const newStudy: StudiesMainType = {
+        studyId: data.data,
+        name: name,
+        leaderNickname: me?.nickname,
+        capacity: Number(capacity),
+        currentCount: 1,
+        startDate: new Date(startDate).toISOString(),
+        endDate: new Date(endDate).toISOString(),
+        imageUrl: imagePreview ?? null,
+        introduction: introduction,
+        category: category,
+        studyType: studyType,
+        finished: false,
+      };
+
+      addStudy(newStudy);
       toast.success('스터디 생성이 완료되었습니다!');
       onClose();
     } catch (error) {
       console.error('응답 에러:', error);
       toast.error('스터디 생성 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
-  // const handlePersonCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const input = e.target.value;
-
-  //   if (!/^\d*$/.test(input)) return;
-  //   if (input === '') {
-  //     setPersonCount('');
-  //     return;
-  //   }
-
-  //   const value = Number(input);
-
-  //   // 3. 숫자 범위 제한
-  //   if (value < 1) {
-  //     setPersonCount(1);
-  //   } else if (value > 1000) {
-  //     setPersonCount(1000);
-  //   } else {
-  //     setPersonCount(value);
-  //   }
-  // };
 
   return (
     <>
@@ -331,6 +336,7 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
           className='button-modal1 hover:bg-[#292929]'
           onClick={handleSubmit}
           disabled={
+            isSubmitting ||
             name === '' ||
             startDate === '' ||
             endDate === '' ||

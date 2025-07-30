@@ -5,12 +5,13 @@ import { putStudyInfo } from '@/lib/api/study.api';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import dayjs from 'dayjs';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import studyDefault from '@/assets/images/study-default.svg';
 import Image from 'next/image';
 import React, { useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import { useStudiesStore } from '@/stores/useStudiesStore';
-import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
+import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
@@ -23,25 +24,6 @@ export default function StudyRoomInfoWrite({
   closeFn: () => void;
   handleUpdate: (newData: StudyInfoUpdateType) => void;
 }) {
-  const CalendarDays = dynamic(
-    () => import('lucide-react').then((m) => m.CalendarDays),
-    {
-      ssr: false,
-    }
-  );
-  const Camera = dynamic(() => import('lucide-react').then((m) => m.Camera), {
-    ssr: false,
-  });
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    {
-      ssr: false,
-    }
-  );
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const updateStudyInfo = useStudyStore().updateStudyInfo;
   const updateStudies = useStudiesStore().updateStudy;
 
@@ -155,7 +137,7 @@ export default function StudyRoomInfoWrite({
           startDate: formattedStartDate,
         });
 
-        // 서브헤더 스터디 목록 업데이트를 위한 전역상태 업데이트
+        // 서브메뉴 스터디 목록 업데이트를 위한 전역상태 업데이트
         updateStudies(studyId, {
           name: request.name,
           introduction: request.introduction,
@@ -166,21 +148,23 @@ export default function StudyRoomInfoWrite({
           startDate: formattedStartDate,
         });
 
+        // 관리페이지 업데이트
         handleUpdate({
           ...request,
           imageUrl: imageFile ? imagePreview : studyInfoData.imageUrl,
         });
 
+        toast.success('스터디 정보를 수정했습니다.');
         closeFn(); // 모달 닫기
       } catch (error) {
-        console.error('스터디 정보를 수정 실패:', error);
+        toast.error(`스터디 정보 수정에 실패했습니다.${error}`);
       }
     });
   };
 
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
           <div className='flex justify-between mb-8 px-9 '>
             <h3 className='tm2'>스터디 정보 수정</h3>
@@ -193,12 +177,13 @@ export default function StudyRoomInfoWrite({
               <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 {/* 사진 */}
                 <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
-                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden'>
+                  <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden flex item-center justify-center'>
                     <Image
-                      src={imagePreview ?? studyInfoData.imageUrl ?? musicBunny}
-                      width='100'
-                      height='100'
-                      className='w-full h-full object-cover'
+                      src={
+                        imagePreview ?? studyInfoData.imageUrl ?? studyDefault
+                      }
+                      width={100}
+                      height={0}
                       alt={`${studyInfoData.name} 프로필 사진`}
                     />
                   </div>

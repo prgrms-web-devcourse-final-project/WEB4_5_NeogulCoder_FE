@@ -1,23 +1,25 @@
-import { X } from 'lucide-react';
 import Image from 'next/image';
 import excellent from '@/assets/images/excellent.svg';
 import good from '@/assets/images/good.svg';
 import notGood from '@/assets/images/not-good.svg';
-import { useEffect, useState } from 'react';
-import { ReviewTagResponse } from '@/types/pr';
-import { getReviewTags } from '@/lib/api/pr';
+import { X } from 'lucide-react';
+import { userPrStore } from '@/stores/prStore';
+import MannerModalSkeleton from './skeleton/MannerModalSkeleton';
 
 export default function MannerModal({ onClose }: { onClose: () => void }) {
+  const { pr } = userPrStore();
+  const reviewData = pr?.reviewTypes;
+
   const reviewSummary = [
     {
       category: '최고예요',
       type: 'EXCELLENT',
       icon: excellent,
       items: [
-        '항상 먼저 도와주고 분위기를 이끌어주는 팀원이었어요.',
-        '책임감이 넘치고 맡은 일 이상으로 기여해줘서 감동이었어요.',
         '꼼꼼하고 빠른 진행 덕분에 팀 전체가 수월하게 움직였어요.',
+        '항상 먼저 도와주고 분위기를 이끌어주는 팀원이었어요.',
         '커뮤니케이션도 최고, 실력도 최고! 이런 팀원은 흔치 않아요.',
+        '책임감이 넘치고 맡은 일 이상으로 기여해줘서 감동이었어요.',
       ],
     },
     {
@@ -45,20 +47,6 @@ export default function MannerModal({ onClose }: { onClose: () => void }) {
     },
   ];
 
-  const [reviewData, setReviewData] = useState<ReviewTagResponse | null>(null);
-
-  useEffect(() => {
-    const fetchTags = async () => {
-      try {
-        const data = await getReviewTags();
-        setReviewData(data);
-      } catch (error) {
-        console.error('리뷰 태그 불러오기 실패: ', error);
-      }
-    };
-    fetchTags();
-  }, []);
-
   return (
     <div className='flex flex-col bg-white w-175 h-175 rounded-[10px] items-center shadow-sm gap-[30px] px-6 py-6'>
       <div className='flex justify-between items-center w-full'>
@@ -66,35 +54,38 @@ export default function MannerModal({ onClose }: { onClose: () => void }) {
         <X className='w-6 h-6 cursor-pointer' onClick={onClose} />
       </div>
 
-      {reviewSummary.map((review) => (
-        <div
-          key={review.category}
-          className='w-[640px] h-[690px] border border-main/10 rounded-[6px] flex gap-6 px-6 py-5 bg-white'
-        >
-          <div className='flex flex-col items-center justify-start'>
-            <Image src={review.icon} alt='리뷰 아이콘' />
-          </div>
+      {reviewData ? (
+        reviewSummary.map((review) => {
+          const count =
+            reviewData.find((tag) => tag.reviewType === review.type)
+              ?.reviewCount ?? 0;
 
-          <div className='flex flex-col gap-3 w-full'>
-            {review.items.map((content, index) => {
-              const typeKey = review.type as keyof ReviewTagResponse;
-              const count =
-                reviewData?.[typeKey]?.find((tag) => tag.reviewTag === content)
-                  ?.reviewTagContent ?? 0;
+          return (
+            <div
+              key={review.category}
+              className='w-[640px] border border-main/10 rounded-[6px] flex gap-6 px-6 py-5 bg-white'
+            >
+              <div className='flex flex-col items-center justify-start'>
+                <Image src={review.icon} alt='리뷰 아이콘' />
+              </div>
 
-              return (
-                <div key={index} className='flex justify-between'>
-                  <p className='t4'>{content}</p>
-                  <p>
-                    <span className='tm3'>{count}</span>{' '}
-                    <span className='t4'>명</span>
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      ))}
+              <div className='flex flex-col gap-3 w-full'>
+                {review.items.map((content, index) => (
+                  <div key={index} className='flex justify-between'>
+                    <p className='t4'>{content}</p>
+                    <p>
+                      <span className='tm3'>{count}</span>{' '}
+                      <span className='t4'>개</span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <MannerModalSkeleton />
+      )}
     </div>
   );
 }

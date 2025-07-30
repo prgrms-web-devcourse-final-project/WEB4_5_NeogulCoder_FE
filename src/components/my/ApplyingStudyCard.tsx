@@ -3,22 +3,10 @@
 import Image from 'next/image';
 import studyDefault from '@/assets/images/study-default.svg';
 // import sunBunny from '@/assets/images/sun-bunny.svg';
-// import { Calendar, Crown, UsersRound } from 'lucide-react';
+import { Calendar, Crown, UsersRound } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 import { MyApplicationListType } from '@/types/my';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
-
-const Calendar = dynamic(() => import('lucide-react').then((m) => m.Calendar), {
-  ssr: false,
-});
-const Crown = dynamic(() => import('lucide-react').then((m) => m.Crown), {
-  ssr: false,
-});
-const UsersRound = dynamic(
-  () => import('lucide-react').then((m) => m.UsersRound),
-  { ssr: false }
-);
 
 const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
   ONLINE: '온라인',
@@ -37,7 +25,7 @@ export default function ApplyingStudyCard({
   introduction,
   category,
   studyType,
-  isRead,
+  read,
   status,
 }: MyApplicationListType['applications'][0]) {
   const router = useRouter();
@@ -94,7 +82,7 @@ export default function ApplyingStudyCard({
       </div>
       <div className='flex justify-between items-center mt-[18px]'>
         <div className='tag-type5 px-3 py-[11px]'>
-          {isRead ? '신청내역 열람 완료' : '신청내역 미열람'}
+          {read ? '신청내역 열람 완료' : '신청내역 미열람'}
         </div>
         {status === 'APPLYING' && (
           <div className='tag-type4 red py-3'>

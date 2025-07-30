@@ -8,11 +8,11 @@ import { writeRecruitmentPost } from '@/lib/api/recruitment/write';
 import { fetchStudy } from '@/lib/api/recruitment/fetchStudy';
 import { fetchStudyList } from '@/lib/api/recruitment/fetchStudyList';
 import { formatDate } from '@/utils/formatDate';
-import { title } from 'process';
 import StudyListModal from '@/components/study/StudyListModal';
 import RemainSlotModal from '@/components/study/RemainSlot';
 import { useRouter } from 'next/navigation';
 import RecruitmentFormSkeleton from '@/components/recruitment/RecruitmentFormSkeleton';
+import { toast } from 'react-toastify';
 
 export default function RecruitmentWritePage() {
   const router = useRouter();
@@ -25,11 +25,13 @@ export default function RecruitmentWritePage() {
   const [studyType, setStudyType] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [content, setContent] = useState('');
+  // const [content, setContent] = useState('');
   const [isClick, setIsClick] = useState(false);
   const [isStudyOpen, setIsStudyOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const displayText =
     remainSlots === null
       ? '1명 ~ 10명 이상'
@@ -95,9 +97,43 @@ export default function RecruitmentWritePage() {
   }, []);
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    if (!isClick) {
+      toast.warning('스터디를 선택해주세요.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!expiredDate) {
+      toast.warning('모집 마감일을 입력해주세요.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (remainSlots === null) {
+      toast.warning('모집 인원을 선택해주세요.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!subject.trim()) {
+      toast.warning('제목을 입력해주세요.');
+      setIsSubmitting(false);
+      return;
+    }
+
     const instance = editorRef.current?.getInstance();
     const content = instance?.getMarkdown() || '';
 
+    if (!content.trim()) {
+      toast.warning('본문 내용을 입력해주세요.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    // 모든 조건 충족 시, API 호출
     const payload = {
       studyId: studyId,
       subject: subject,
@@ -109,23 +145,14 @@ export default function RecruitmentWritePage() {
     try {
       const data = await writeRecruitmentPost(payload);
       const postId = data.data;
-      console.log('생성 완료', data);
+      toast.success('게시글 작성이 완료되었습니다!');
       router.push(`/recruitment/detail/${postId}`);
     } catch (error) {
-      console.error('생성 실패', error);
+      console.error('작성 실패', error);
+      toast.error('게시글 작성 중 오류가 발생하였습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
-    console.log(
-      'StudyId:',
-      studyId,
-      'Subject:',
-      subject,
-      'Content:',
-      content,
-      'remainSlots:',
-      remainSlots,
-      'ExpiredDate:',
-      expiredDate
-    );
   };
 
   return (
@@ -300,6 +327,7 @@ export default function RecruitmentWritePage() {
               value={expiredDate}
               onChange={(e) => setExpiredDate(e.target.value)}
               min={new Date().toISOString().split('T')[0]} // 선택 가능한 최소 날짜를 오늘로 지정
+              max={endDate.split('T')[0]}
             />
           </div>
           <div className='flex items-center  mt-10'>
@@ -320,22 +348,19 @@ export default function RecruitmentWritePage() {
             onChange={(e) => setSubject(e.target.value)}
           ></input>
           <div className='mb-10'>
-            <ClientEditorWrapper editorRef={editorRef} onChange={setContent} />
+            <ClientEditorWrapper editorRef={editorRef} />
           </div>
           <div className='flex justify-end'>
-            <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+            <button
+              className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+              onClick={() => router.push(`/#recruit`)}
+            >
               취소
             </button>
             <button
               className='button-type5 hover:bg-[#292929]'
               onClick={handleSubmit}
-              disabled={
-                expiredDate === '' ||
-                remainSlots === null ||
-                title === '' ||
-                content.trim() === '' ||
-                !isClick
-              }
+              disabled={isSubmitting}
             >
               등록
             </button>

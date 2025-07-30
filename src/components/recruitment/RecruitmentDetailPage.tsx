@@ -29,8 +29,9 @@ export default function RecruitmentDetailPage() {
   const pathname = usePathname();
   const me = userAuthStore((state) => state.user);
   const handleGoToPr = () => {
-    router.push('/profile/pr');
+    router.push(`/profile/pr/${userId}`);
   };
+
   const target = 'recruitment';
   const complete = 'COMPLETE';
   const recruitmentPostId = Number(pathname.split('/').pop());
@@ -49,6 +50,7 @@ export default function RecruitmentDetailPage() {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState('');
+  const [userId, setUserId] = useState('');
   const [commentCount, setCommentCount] = useState(0);
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [expiredDate, setExpiredDate] = useState('');
@@ -62,6 +64,10 @@ export default function RecruitmentDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isStatusChange, setIsStatusChange] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
 
   const isApplied = myApplications.some(
     (app) => app.recruitmentPostId === recruitmentPostId
@@ -99,7 +105,9 @@ export default function RecruitmentDetailPage() {
 
   type ApplicationType = {
     applicationId: number;
+    userId: number;
     nickname: string;
+    profileImageUrl: string;
     buddyEnergy: number;
     createdDate: string;
     applicationReason: string;
@@ -122,9 +130,10 @@ export default function RecruitmentDetailPage() {
       setNickname(data.postDetailsInfo.nickname);
       setSubject(data.postDetailsInfo.subject);
       setContent(data.postDetailsInfo.content);
-      setProfileImageUrl(data.postDetailsInfo.profileImageUrl);
+      setProfileImageUrl(data.postDetailsInfo.imageUrl);
       setExpiredDate(data.postDetailsInfo.expiredDate);
       setStatus(data.postDetailsInfo.status);
+      setUserId(data.postDetailsInfo.userId);
       setCommentCount(data.commentCount);
       setComments(data.commentsWithWriterInfos);
     } catch (error) {
@@ -153,6 +162,9 @@ export default function RecruitmentDetailPage() {
   }, [page]);
 
   const handleStudyAppSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
     try {
       const appData = await studyApplication(
         recruitmentPostId,
@@ -165,36 +177,54 @@ export default function RecruitmentDetailPage() {
     } catch (error) {
       console.error('생성 실패', error);
       toast.error('모집 신청 중 오류가 발생했습니다.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleChangeStatus = async () => {
+    if (isStatusChange) return;
+    setIsStatusChange(true);
+
     try {
       await changeStatus(recruitmentPostId, complete);
       await fetchData();
       setStatusModalIsOpen(false);
     } catch (error) {
       console.error('상태 변경 실패:', error);
+    } finally {
+      setIsStatusChange(false);
     }
   };
 
   const handleApprove = async (applicationId: number) => {
+    if (isApproving) return;
+    setIsApproving(true);
+
     try {
       await studyApplicationApprove(applicationId);
       console.log('신청 승인요청 성공!');
+      toast.success('신청이 승인되었습니다.');
       await fetchApplicationData();
     } catch (error) {
       console.error('신청 승인요청 실패:', error);
+    } finally {
+      setIsApproving(false);
     }
   };
 
   const handleReject = async (applicationId: number) => {
+    if (isRejecting) return;
+    setIsRejecting(true);
     try {
       await studyApplicationReject(applicationId);
       console.log('신청 거절요청 성공');
+      toast.success('신청이 거절되었습니다.');
       await fetchApplicationData();
     } catch (error) {
       console.error('신청 거절요청 실패:', error);
+    } finally {
+      setIsRejecting(false);
     }
   };
 
@@ -385,14 +415,21 @@ export default function RecruitmentDetailPage() {
                 </span>
               </div>
               <div className='flex w-[400px]'>
-                <span className=' mr-8 tm3 opacity-50'>지역</span>
-                <span className='tm3'>{location}</span>
+                <span className='mr-8 tm3 opacity-50'>
+                  {location ? '지역' : '모집 마감일'}
+                </span>
+                <span className='tm3'>
+                  {location ? location : formatDate(expiredDate)}
+                </span>
               </div>
             </div>
-            <div className='flex w-[400px]'>
-              <span className='mr-8 tm3 opacity-50'>모집 마감일</span>
-              <span className='tm3'>{formatDate(expiredDate)}</span>
-            </div>
+
+            {location && (
+              <div className='flex w-[400px]'>
+                <span className='mr-8 tm3 opacity-50'>모집 마감일</span>
+                <span className='tm3'>{formatDate(expiredDate)}</span>
+              </div>
+            )}
           </div>
           <div
             className='w-full h-[600px] my-10 border-[1px] rounded-[10px] p-5 tm3'
@@ -439,6 +476,7 @@ export default function RecruitmentDetailPage() {
           <div className='w-[852px]'>
             <WriteComment
               key={refreshKey}
+              userId={me?.id}
               target={target}
               postId={recruitmentPostId}
               commentCount={commentCount}
@@ -459,7 +497,7 @@ export default function RecruitmentDetailPage() {
           {isOpen && (
             <Modal
               title=''
-              className='w-[1020px] h-auto'
+              className='w-[1020px] h-[800px] overflow-y-auto'
               onClose={() => setIsOpen(false)}
             >
               {applications.length === 0 ? (
@@ -467,69 +505,95 @@ export default function RecruitmentDetailPage() {
                   신청 내역이 없습니다
                 </div>
               ) : (
-                applications.map((app) => (
-                  <div
-                    key={app.applicationId}
-                    className='rounded-[10px] px-10 w-full'
-                  >
-                    <div className='flex justify-between w-full'>
-                      <div className='flex space-x-6 items-center mb-10'>
-                        <div className='w-15 h-15 rounded-full bg-gray-300 mr-5 cursor-pointer'></div>
-                        <div className='flex flex-col'>
-                          <div className='tm3 cursor-pointer ml-3'>
-                            {app.nickname}
-                          </div>
-                          <div className='flex justify-center items-center'>
+                <div className='flex flex-col min-h-full'>
+                  {applications.map((app) => (
+                    <div
+                      key={app.applicationId}
+                      className='rounded-[10px] px-10 w-full'
+                    >
+                      <div className='flex justify-between w-full'>
+                        <div className='flex space-x-6 items-center mb-10'>
+                          <button
+                            className='w-15 h-15 rounded-full bg-gray-300 shrink-0 relative overflow-hidden mr-5'
+                            onClick={() =>
+                              router.push(`/profile/pr/${app.userId}`)
+                            }
+                          >
+                            <Image
+                              src={app.profileImageUrl ?? basicBunny.src}
+                              width={50}
+                              height={50}
+                              alt='예시 기본 프사'
+                              className='absolute inset-0 w-full h-full object-cover object-center'
+                            />
+                          </button>
+                          <div className='flex flex-col'>
+                            <div
+                              className='tm3 cursor-pointer ml-3'
+                              onClick={() =>
+                                router.push(`/profile/pr/${app.userId}`)
+                              }
+                            >
+                              {app.nickname}
+                            </div>
                             <div className='flex justify-center items-center'>
-                              <Image
-                                src={buddyEnergy}
-                                alt='버디 에너지'
-                                className='w-[40px] h-[40px]'
-                              />
-                              <div className='tm4 opacity-50 justify-center items-center'>
-                                {app.buddyEnergy}%
+                              <div className='flex justify-center items-center'>
+                                <Image
+                                  src={buddyEnergy}
+                                  alt='버디 에너지'
+                                  className='w-[40px] h-[40px]'
+                                />
+                                <div className='tm4 opacity-50 justify-center items-center'>
+                                  {app.buddyEnergy}%
+                                </div>
                               </div>
-                            </div>
-                            <div className='tm4 opacity-20 ml-5'>
-                              <Tally1 />
-                            </div>
-                            <div>
-                              <span className='tm4 opacity-50'>
-                                {formatDate(app.createdDate)}
-                              </span>
+                              <div className='tm4 opacity-20 ml-5'>
+                                <Tally1 />
+                              </div>
+                              <div>
+                                <span className='tm4 opacity-50'>
+                                  {formatDate(app.createdDate)}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    <div
-                      className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
-                      style={{ borderColor: 'var(--color-border3)' }}
-                    >
-                      {app.applicationReason}
-                    </div>
-                    <div className='flex space-x-[15px] justify-end mb-10'>
-                      <button
-                        className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
-                        onClick={() => handleReject(app.applicationId)}
+                      <div
+                        className='w-full h-[400px] border-[1px] rounded-[10px] p-5 mb-10'
+                        style={{ borderColor: 'var(--color-border3)' }}
                       >
-                        거절
-                      </button>
-                      <button
-                        className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
-                        onClick={() => handleApprove(app.applicationId)}
-                      >
-                        승인
-                      </button>
+                        {app.applicationReason}
+                      </div>
+
+                      <div className='flex space-x-[15px] justify-end mb-10'>
+                        <button
+                          className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
+                          onClick={() => handleReject(app.applicationId)}
+                          disabled={isRejecting}
+                        >
+                          거절
+                        </button>
+                        <button
+                          className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
+                          onClick={() => handleApprove(app.applicationId)}
+                          disabled={isApproving}
+                        >
+                          승인
+                        </button>
+                      </div>
                     </div>
+                  ))}
+
+                  <div className='pt-4 pb-6 flex justify-center border-gray-200'>
                     <Pagination2
                       page={page}
                       setPage={setPage}
                       totalPages={totalPages}
                     />
                   </div>
-                ))
+                </div>
               )}
             </Modal>
           )}
@@ -557,7 +621,9 @@ export default function RecruitmentDetailPage() {
                 <button
                   className='button-type5 hover:bg-[#292929]'
                   onClick={handleStudyAppSubmit}
-                  disabled={writeApplicationReason.trim() === ''}
+                  disabled={
+                    writeApplicationReason.trim() === '' || isSubmitting
+                  }
                 >
                   확인
                 </button>
@@ -565,7 +631,7 @@ export default function RecruitmentDetailPage() {
             </Modal>
           )}
           {statusModalIsOpen && (
-            <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+            <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
               <div className='pt-10 pb-8 px-9 rounded-[10px] bg-white drop-shadow-md'>
                 <p className='mb-7 tm3 text-center'>
                   스터디 모집을 완료하시겠습니까? <br />
@@ -581,6 +647,7 @@ export default function RecruitmentDetailPage() {
                   <button
                     className='button-type5 w-[120px]! bg-red! text-white! hover:bg-[#e14d4a]!'
                     onClick={handleChangeStatus}
+                    disabled={isStatusChange}
                   >
                     확인
                   </button>

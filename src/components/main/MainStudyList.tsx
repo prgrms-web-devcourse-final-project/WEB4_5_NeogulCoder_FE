@@ -1,45 +1,24 @@
 'use client';
 
-import { Swiper, SwiperClass, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { A11y, Navigation, Pagination } from 'swiper/modules';
 import StudyCard from '../my/StudyCard';
-import { useState } from 'react';
 import 'swiper/css';
+import 'swiper/css/pagination';
 import '@/styles/swiper/main.css';
 import Link from 'next/link';
 import MainStudyListCardSkeleton from './MainStudyListCardSkeleton';
 import { userAuthStore } from '@/stores/userStore';
 import { useStudiesStore } from '@/stores/useStudiesStore';
-import dynamic from 'next/dynamic';
+import {
+  ArrowDown,
+  ChevronLeft,
+  ChevronRight,
+  LockKeyhole,
+} from 'lucide-react';
 
 export default function MainStudyList() {
-  const ArrowDown = dynamic(
-    () => import('lucide-react').then((m) => m.ArrowDown),
-    {
-      ssr: false,
-    }
-  );
-  const ChevronLeft = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronLeft),
-    {
-      ssr: false,
-    }
-  );
-  const ChevronRight = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronRight),
-    {
-      ssr: false,
-    }
-  );
-  const LockKeyhole = dynamic(
-    () => import('lucide-react').then((m) => m.LockKeyhole),
-    {
-      ssr: false,
-    }
-  );
-
   const user = userAuthStore().user;
-  const [swiper, setSwiper] = useState<SwiperClass>();
   const { studies, loading } = useStudiesStore();
 
   // 비회원
@@ -55,21 +34,15 @@ export default function MainStudyList() {
             <div className='flex gap-2 swiper-nav-btns'>
               <button
                 type='button'
-                className='w-[30px] h-[30px] border border-border1 rounded-full flex justify-center items-center'
-                onClick={() => {
-                  swiper?.slidePrev();
-                }}
+                className='study-swiper-prev w-[30px] h-[30px] opacity-40 border rounded-full flex justify-center items-center hover:opacity-70 transition-all duration-300'
               >
-                <ChevronLeft className='opacity-20 w-5 h-5' />
+                <ChevronLeft className='w-5 h-5' />
               </button>
               <button
                 type='button'
-                className='w-[30px] h-[30px] border border-border1 rounded-full flex justify-center items-center'
-                onClick={() => {
-                  swiper?.slideNext();
-                }}
+                className='study-swiper-next w-[30px] h-[30px] opacity-40 border rounded-full flex justify-center items-center hover:opacity-70 transition-all duration-300'
               >
-                <ChevronRight className='opacity-20 w-5 h-5' />
+                <ChevronRight className='w-5 h-5' />
               </button>
             </div>
           )}
@@ -86,38 +59,50 @@ export default function MainStudyList() {
           ) : (
             <>
               {studies.length >= 4 ? (
-                <Swiper
-                  modules={[Navigation, Pagination, A11y]}
-                  spaceBetween={0}
-                  slidesPerView={4}
-                  loop={true}
-                  onSlideChange={() => console.log('slide change')}
-                  onSwiper={(e) => {
-                    setSwiper(e);
-                  }}
-                >
-                  {studies &&
-                    studies.map((study) => (
-                      <SwiperSlide key={`${study.studyId}`}>
-                        <Link href={`study/${study.studyId}/dashboard`}>
-                          <StudyCard
-                            studyId={study.studyId}
-                            name={study.name}
-                            leaderNickname={study.leaderNickname}
-                            currentCount={study.currentCount}
-                            capacity={study.capacity}
-                            startDate={study.startDate}
-                            endDate={study.endDate}
-                            category={study.category}
-                            studyType={study.studyType}
-                            introduction={study.introduction}
-                            imageUrl={study.imageUrl ?? ''}
-                            finished={study.finished}
-                          />
-                        </Link>
-                      </SwiperSlide>
-                    ))}
-                </Swiper>
+                <>
+                  <Swiper
+                    modules={[Navigation, Pagination, A11y]}
+                    spaceBetween={0}
+                    slidesPerView={4}
+                    navigation={{
+                      prevEl: '.study-swiper-prev', //스와이퍼 외부에 컨트롤러 설정하기
+                      nextEl: '.study-swiper-next',
+                    }}
+                    pagination={{
+                      dynamicBullets: true,
+                      el: '.study-swiper-pagination',
+                    }}
+                  >
+                    {studies &&
+                      studies.map((study) => (
+                        <SwiperSlide key={`${study.studyId}`}>
+                          <Link
+                            className='flex justify-center'
+                            href={`study/${study.studyId}/dashboard`}
+                          >
+                            <StudyCard
+                              studyId={study.studyId}
+                              name={study.name}
+                              leaderNickname={study.leaderNickname ?? ''}
+                              currentCount={study.currentCount}
+                              capacity={study.capacity}
+                              startDate={study.startDate}
+                              endDate={study.endDate}
+                              category={study.category}
+                              studyType={study.studyType}
+                              introduction={study.introduction}
+                              imageUrl={study.imageUrl ?? ''}
+                              finished={study.finished}
+                            />
+                          </Link>
+                        </SwiperSlide>
+                      ))}
+                  </Swiper>
+
+                  <div className='relative mt-7'>
+                    <div className='study-swiper-pagination swiper-pagination swiper-pagination-bullets-dynamic swiper-pagination-bullets swiper-pagination-horizontal'></div>
+                  </div>
+                </>
               ) : (
                 <div
                   className={`flex pt-[30px] pb-[10px] ${
@@ -134,7 +119,7 @@ export default function MainStudyList() {
                           <StudyCard
                             studyId={study.studyId}
                             name={study.name}
-                            leaderNickname={study.leaderNickname}
+                            leaderNickname={study.leaderNickname ?? ''}
                             currentCount={study.currentCount}
                             capacity={study.capacity}
                             startDate={study.startDate}

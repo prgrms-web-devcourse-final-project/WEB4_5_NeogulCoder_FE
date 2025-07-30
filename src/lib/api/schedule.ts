@@ -31,7 +31,7 @@ export const postMyTimeVote = async (studyId: number, timeSlots: string[]) => {
     `/api/studies/${studyId}/time-vote/votes`,
     { timeSlots }
   );
-  return data.data;
+  return data;
 };
 
 export const putMyTimeVote = async (studyId: number, timeSlots: string[]) => {
@@ -39,14 +39,14 @@ export const putMyTimeVote = async (studyId: number, timeSlots: string[]) => {
     `/api/studies/${studyId}/time-vote/votes`,
     { timeSlots }
   );
-  return data.data;
+  return data;
 };
 
 export const deleteMyTimeVote = async (studyId: number) => {
   const { data } = await axiosInstance.delete(
     `/api/studies/${studyId}/time-vote/votes`
   );
-  return data.data;
+  return data;
 };
 
 export const setTimeVotePeriods = async (
@@ -58,5 +58,5 @@ export const setTimeVotePeriods = async (
     `/api/studies/${studyId}/time-vote/periods`,
     { startDate, endDate }
   );
-  return data.data;
+  return data;
 };

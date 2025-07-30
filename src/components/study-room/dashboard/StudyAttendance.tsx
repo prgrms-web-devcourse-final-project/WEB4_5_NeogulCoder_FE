@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import { userAuthStore } from '@/stores/userStore';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import StudyAttendanceSkeleton from './StudyAttendanceSkeleton';
+import { toast } from 'react-toastify';
 
 export default function StudyAttendance({
   studyId,
@@ -69,12 +70,14 @@ export default function StudyAttendance({
             attendanceDate: dayjs().format('YYYY-MM-DD'),
           },
         ]);
+
+        toast.success('출석체크가 완료되었습니다.');
         setAttendanceRate(Math.round(((prevCount + 1) / totalDays) * 100));
         setTodayCheck(true);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const message = error.response?.data?.message ?? '출석 체크 실패';
-          alert(message);
+          toast.error(`${message}`);
         }
       }
     });
@@ -111,7 +114,9 @@ export default function StudyAttendance({
                   events={events}
                   validRange={{
                     start: dayjs(studyInfo?.startDate).format('YYYY-MM-DD'),
-                    end: dayjs(studyInfo?.endDate).format('YYYY-MM-DD'),
+                    end: dayjs(studyInfo?.endDate).format(
+                      'YYYY-MM-DD 23:59:59'
+                    ),
                   }}
                   headerToolbar={{
                     left: 'prev',

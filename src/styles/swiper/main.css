@@ -59,3 +59,17 @@
 .main-studies .swiper {
   padding: 30px 0 10px;
 }
+.study-swiper-next.swiper-button-disabled,
+.study-slide-prev.swiper-button-disabled {
+  opacity: 0.1;
+}
+.study-swiper-next.swiper-button-disabled:hover,
+.study-swiper-prev.swiper-button-disabled:hover {
+  opacity: 0.1;
+}
+.study-swiper-pagination .swiper-pagination-bullet {
+  background-color: #808080;
+}
+.study-swiper-pagination .swiper-pagination-bullet-active {
+  background-color: #90cff1;
+}

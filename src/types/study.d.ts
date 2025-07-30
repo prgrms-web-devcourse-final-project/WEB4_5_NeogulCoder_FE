@@ -108,7 +108,7 @@ type HeaderStudiesType = {
 type StudiesMainType = {
   studyId: number;
   name: string;
-  leaderNickname: string;
+  leaderNickname: string | undefined;
   capacity: number;
   currentCount: number;
   startDate: string;

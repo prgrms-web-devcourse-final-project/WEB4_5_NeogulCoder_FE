@@ -1,6 +1,8 @@
+'use client';
 import { sendEmailCode, verifyEmailCode } from '@/lib/api/emailAuth';
 import { VerifyEmailModalProps } from '@/types/email';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 export default function VerifyEmailModal({
   onClose,
@@ -56,12 +58,12 @@ export default function VerifyEmailModal({
 
   const handleVerifyEmailCode = async () => {
     if (!code) {
-      alert('인증 코드를 입력해주세요');
+      toast.error('인증 코드를 입력해주세요!');
       return;
     }
     try {
       await verifyEmailCode(email, code);
-      alert('인증되었습니다.');
+      toast.success('인증되었습니다.');
       setEmailVerified(true);
       setEmailError('');
 
@@ -70,6 +72,10 @@ export default function VerifyEmailModal({
       console.error('이메일 코드 확인 실패: ', error);
     }
   };
+
+  useEffect(() => {
+    inputRef.current[0]?.focus();
+  }, []);
 
   return (
     <div className='flex flex-col bg-white w-[440px] h-[360px] rounded-[10px] shadow-sm px-6 py-6 items-center justify-center gap-8'>

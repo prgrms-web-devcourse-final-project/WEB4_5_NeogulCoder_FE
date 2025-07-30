@@ -4,9 +4,10 @@ import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerRecruitmentList from '@/components/manager/ManagerRecruitmentList';
 import { deleteAdminPost, getAdminPosts } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
+import { Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export type AdminPostType = {
   id: number;
@@ -16,15 +17,6 @@ export type AdminPostType = {
 };
 
 export default function ManagerRecruitmentsPage() {
-  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
-    ssr: false,
-  });
-  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
-    ssr: false,
-  });
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchKeyword = useMemo(
@@ -52,9 +44,9 @@ export default function ManagerRecruitmentsPage() {
           item.id === id ? { ...item, activated: false } : item
         )
       );
-      alert('삭제');
+      toast.success(`해당 모집글을 비활성화하였습니다.`);
     } catch (error) {
-      console.error('사용자 삭제 실패', error);
+      toast.error(`모집글 비활성화 실패 ${error}`);
     }
   };
 
@@ -85,6 +77,7 @@ export default function ManagerRecruitmentsPage() {
   const searchSubject = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       router.push(`/manager/recruitment?search=${keyword}&page=1`);
+      setPage(1);
     }
   };
 
@@ -98,11 +91,13 @@ export default function ManagerRecruitmentsPage() {
   const handleClear = () => {
     setKeyword('');
     router.push(`/manager/recruitment?page=1`);
+    setPage(1);
   };
 
   // 버튼 클릭 검색
   const handleClickSubmit = () => {
     router.push(`/manager/recruitment?search=${keyword}&page=1`);
+    setPage(1);
   };
 
   return (

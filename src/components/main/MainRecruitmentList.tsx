@@ -10,7 +10,7 @@ import MainOnlineModal from './MainOnlineModal';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 
 export type MainPostType = {
   recruitmentPostId: number;
@@ -24,21 +24,6 @@ export type MainPostType = {
 };
 
 export default function MainRecruitmentList() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    {
-      ssr: false,
-    }
-  );
-  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
-    ssr: false,
-  });
-  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
-    ssr: false,
-  });
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParams = useMemo(
@@ -134,6 +119,7 @@ export default function MainRecruitmentList() {
     const newCategory = category === '전체' ? '' : category;
     setSelectedCategory(newCategory);
     setIsCategoryOpen(false);
+    setPage(1);
     router.push(
       `/?page=1&category=${newCategory}&studyType=${studyTypeParams}&keyword=${searchKeywordParams}`,
       { scroll: false }
@@ -144,6 +130,7 @@ export default function MainRecruitmentList() {
     const newStudyType = studyType === '전체' ? '' : studyType;
     setSelectedStudyType(newStudyType);
     setStudyTypeOpen(false);
+    setPage(1);
     router.push(
       `/?page=1&category=${categoryParams}&studyType=${newStudyType}&keyword=${searchKeywordParams}`,
       { scroll: false }
@@ -152,6 +139,7 @@ export default function MainRecruitmentList() {
   // 키워드 검색
   const handleKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
+      setPage(1);
       router.push(
         `/?page=1&category=${categoryParams}&studyType=${selectedStudyType}&keyword=${keyword}`,
         { scroll: false }
@@ -162,6 +150,7 @@ export default function MainRecruitmentList() {
   const handleKeywordReset = () => {
     setKeyword('');
     if (searchKeywordParams !== '') {
+      setPage(1);
       router.push(
         `/?page=1&category=${categoryParams}&studyType=${selectedStudyType}&keyword=${''}`,
         { scroll: false }
@@ -173,7 +162,7 @@ export default function MainRecruitmentList() {
     <>
       <div className='flex justify-between'>
         <div className='flex gap-4 mt-[35px] relative'>
-          <div className='relative'>
+          <div ref={categorySelectRef} className='relative'>
             <button
               type='button'
               className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
@@ -190,10 +179,7 @@ export default function MainRecruitmentList() {
             </button>
 
             {isCategoryOpen && (
-              <div
-                ref={categorySelectRef}
-                className='absolute top-10 left-0 z-10'
-              >
+              <div className='absolute top-10 left-0 z-10'>
                 <MainCategoriesModal
                   onSelect={(category: string) => handleCategory(category)}
                 />
@@ -201,7 +187,7 @@ export default function MainRecruitmentList() {
             )}
           </div>
 
-          <div className='relative'>
+          <div ref={studyTypeSelectRef} className='relative'>
             <button
               className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
                 isSelectedStudyType
@@ -217,10 +203,7 @@ export default function MainRecruitmentList() {
             </button>
 
             {isStudyTypeOpen && (
-              <div
-                ref={studyTypeSelectRef}
-                className='absolute top-10 left-0 z-10'
-              >
+              <div className='absolute top-10 left-0 z-10'>
                 <MainOnlineModal
                   onSelect={(studyType: string) => handleStudyType(studyType)}
                 />
@@ -277,8 +260,12 @@ export default function MainRecruitmentList() {
               <SearchX className='w-12 h-12 mx-auto mb-3' strokeWidth={1.5} />
               <div className='flex gap-2 items-center'>
                 <span className='tb3'>
-                  {categoryParams !== '' ? ` " ${categoryParams} " ` : ''}
-                  {studyTypeParams !== '' ? ` " ${studyTypeParams} " ` : ''}
+                  {categoryParams !== ''
+                    ? ` " ${categoryFormatting(categoryParams)} " `
+                    : ''}
+                  {studyTypeParams !== ''
+                    ? ` " ${studyTypeFormatting(studyTypeParams)} " `
+                    : ''}
                   {searchKeywordParams !== ''
                     ? ` " ${searchKeywordParams} " `
                     : ''}
@@ -288,11 +275,6 @@ export default function MainRecruitmentList() {
             </div>
           </div>
         )}
-        <div className='text-right'>
-          <Link href={`/recruitment/write`} className='button-type4'>
-            모집글 작성하기
-          </Link>
-        </div>
       </div>
 
       <MainPagination page={page} handlePage={handlePage} total={totalPage} />

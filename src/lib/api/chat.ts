@@ -1,5 +1,5 @@
 import { ApiResponse, ChatMessageType, PageResponse } from '@/types/chat';
-import { axiosInstance } from './axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 export const fetchChatMessage = async (
   studyId: number,

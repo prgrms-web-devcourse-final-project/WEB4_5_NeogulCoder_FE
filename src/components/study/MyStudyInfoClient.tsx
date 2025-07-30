@@ -15,6 +15,7 @@ import {
 import StudyExtendCheckModal from '@/components/study-room/dashboard/StudyExtendCheckModal';
 import { userAuthStore } from '@/stores/userStore';
 import MyStudyInfoSkeleton from './MyStudyInfoSkeleton';
+import { MessageCircleDashed } from 'lucide-react';
 
 const categoryMap: Record<string, '' | 'NOTICE' | 'FREE'> = {
   전체: '',
@@ -131,6 +132,16 @@ export default function MyStudyInfoClient() {
     filterList();
   }, [selectedCategory, selectedSortingType, keyword, page, filterList]);
 
+  useEffect(() => {
+    if (!isOpenExtendModal) {
+      checkExtension();
+    }
+  }, [isOpenExtendModal]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <>
       {isLoading ? (
@@ -156,8 +167,15 @@ export default function MyStudyInfoClient() {
             }`}
           >
             {myCommunityList.length === 0 && (
-              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-                내가 작성한 글이 없습니다.
+              // <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+              //   내가 작성한 글이 없습니다.
+              // </div>
+              <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                <MessageCircleDashed
+                  className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
+                  strokeWidth={1}
+                />
+                <p className='tm3 text-border3 mb-3'>게시글이 없습니다.</p>
               </div>
             )}
             {myCommunityList.length !== 0 &&

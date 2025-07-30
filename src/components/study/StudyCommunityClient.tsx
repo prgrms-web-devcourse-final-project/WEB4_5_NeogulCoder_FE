@@ -10,6 +10,9 @@ import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import NoticeItemSkeleton from './NoticeItemSkeleton';
 import CommunityCardSkeleton from './CommunityCardSkeleton';
+import Link from 'next/link';
+import { MessageCircleDashed } from 'lucide-react';
+import { useStudyStore } from '@/stores/studyInfoStore';
 
 const categoryMap: Record<string, '' | 'NOTICE' | 'FREE'> = {
   전체: '',
@@ -25,6 +28,8 @@ const sortingMap: Record<string, 'createDateTime' | 'commentCount'> = {
 export default function StudyCommunityClient() {
   const { id } = useParams();
   const studyId = Number(id);
+
+  const isProgress = useStudyStore().isProgress;
 
   const [selectedCategory, setSelectedCategory] = useState('카테고리');
   const [selectedSortingType, setSelectedSortingType] = useState('최신순');
@@ -71,9 +76,25 @@ export default function StudyCommunityClient() {
     filterList();
   }, [selectedCategory, selectedSortingType, keyword, page, filterList]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <div className='w-full'>
-      <div className='tb2 text-text1'>커뮤니티</div>
+      <div className='flex justify-between items-center'>
+        <div className='tb2 text-text1'>커뮤니티</div>
+        <div className='text-right mr-4'>
+          {isProgress && (
+            <Link
+              href={`/study/${studyId}/study-community/write`}
+              className='button-sm-type1'
+            >
+              게시글 작성
+            </Link>
+          )}
+        </div>
+      </div>
       <div className='mt-6'>
         <ListMenuStudy
           selectedCategory={selectedCategory}
@@ -94,13 +115,17 @@ export default function StudyCommunityClient() {
         ) : (
           <>
             {studyNoticeList.length === 0 && (
-              <div className='text-center tm3 text-text1/80'>
-                공지가 없습니다.
+              <div className='text-center'>
+                <MessageCircleDashed
+                  className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
+                  strokeWidth={1}
+                />
+                <p className='tm4 text-border2 mb-3'>공지글이 없습니다.</p>
               </div>
             )}
             {studyNoticeList.length !== 0 &&
               studyNoticeList.map((notice) => (
-                <NoticeItem key={notice.postId} {...notice} />
+                <NoticeItem key={notice.postId} studyId={studyId} {...notice} />
               ))}
           </>
         )}
@@ -119,8 +144,12 @@ export default function StudyCommunityClient() {
         ) : (
           <>
             {studyCommunityList.length === 0 && (
-              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-                게시글이 없습니다.
+              <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                <MessageCircleDashed
+                  className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
+                  strokeWidth={1}
+                />
+                <p className='tm3 text-border3 mb-3'>게시글이 없습니다.</p>
               </div>
             )}
             {studyCommunityList.length !== 0 &&

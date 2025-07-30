@@ -1,4 +1,4 @@
-import { axiosInstance } from './axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 // 스터디 정보 목록
 export const getStudyInfoData = async (studyId: number) => {
@@ -42,6 +42,14 @@ export const postDelegate = async (studyId: number, newLeaderId: number) => {
 // 초대를 위한 회원전체 조회
 export const getAllUser = async () => {
   const { data } = await axiosInstance.get(`/api/users/all`);
+  return data;
+};
+
+// 스터디 초대
+export const postStudyInvite = async (studyId: number, name: string) => {
+  const { data } = await axiosInstance.post(
+    `/api/studies/${studyId}/invite/user?targetUserNickname=${name}`
+  );
   return data;
 };
 

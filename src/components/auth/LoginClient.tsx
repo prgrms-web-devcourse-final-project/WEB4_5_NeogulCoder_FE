@@ -7,20 +7,20 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import deleteText from '@/assets/images/delete-text.svg';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-// import Link from 'next/link';
 import { userAuthStore } from '@/stores/userStore';
 import axios from 'axios';
 import { login } from '@/lib/api/user';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 
 export default function LoginClient() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleGoToSignUp = () => {
     router.push('/auth/signup');
@@ -41,6 +41,9 @@ export default function LoginClient() {
       passwordRef.current?.focus();
       return;
     }
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const res = await login(email, password);
       const user = res.data.data.user;
@@ -54,7 +57,9 @@ export default function LoginClient() {
         role: user.role,
       });
       localStorage.setItem('login_status', 'Y');
-      alert('로그인 성공');
+
+      document.cookie = 'login_status=true; path=/';
+      toast.success('로그인 되었습니다!');
       router.push('/');
     } catch (error) {
       if (axios.isAxiosError(error)) {

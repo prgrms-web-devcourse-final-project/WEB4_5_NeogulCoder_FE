@@ -7,6 +7,7 @@ import SubMenuItem from '@/components/my/SubMenuItem';
 import { MyStudyListType } from '@/types/my';
 import { fetchMyStudyList } from '@/lib/api/my';
 import StudyCardSkeleton from './StudyCardSkeleton';
+import { BookMarked } from 'lucide-react';
 
 const menuName = ['전체', '진행 중', '종료'];
 const filterName = ['', 'false', 'true'];
@@ -47,6 +48,10 @@ export default function StudyListClient() {
     filterList();
   }, [page, filterList]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <div className='w-full'>
       <div className='tb3'>전체 스터디</div>
@@ -77,8 +82,15 @@ export default function StudyListClient() {
               className='flex flex-col gap-[30px] mt-[30px] relative 
             h-[calc(100vh-105px-113px-198px)]'
             >
-              <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+              {/* <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
                 스터디가 없습니다.
+              </div> */}
+              <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                <BookMarked
+                  className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
+                  strokeWidth={1}
+                />
+                <p className='tm3 text-border3 mb-3'>스터디가 없습니다.</p>
               </div>
             </div>
           )}

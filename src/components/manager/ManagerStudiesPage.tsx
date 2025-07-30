@@ -6,9 +6,10 @@ import ManagerStudyList from '@/components/manager/ManagerStudyList';
 import { deleteAdminStudy, getAdminStudies } from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { categoryFormatting } from '@/utils/categoryFormatting';
+import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export type AdminStudyType = {
   id: number;
@@ -18,22 +19,6 @@ export type AdminStudyType = {
   activated: boolean;
 };
 export default function ManagerStudiesPage() {
-  const ChevronDown = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronDown),
-    {
-      ssr: false,
-    }
-  );
-  const Search = dynamic(() => import('lucide-react').then((m) => m.Search), {
-    ssr: false,
-  });
-  const SearchX = dynamic(() => import('lucide-react').then((m) => m.SearchX), {
-    ssr: false,
-  });
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParams = useMemo(
@@ -59,7 +44,7 @@ export default function ManagerStudiesPage() {
     searchCategory || '전체'
   );
 
-  // 이용자 삭제
+  // 스터디 삭제
   const handleDelete = async (id: number) => {
     try {
       await deleteAdminStudy(id);
@@ -68,9 +53,9 @@ export default function ManagerStudiesPage() {
           item.id === id ? { ...item, activated: false } : item
         )
       );
-      alert('삭제');
+      toast.success(`해당 스터디를 비활성화 하였습니다.`);
     } catch (error) {
-      console.error('사용자 삭제 실패', error);
+      toast.error(`스터디 비활성화 실패 ${error}`);
     }
   };
 
@@ -130,12 +115,14 @@ export default function ManagerStudiesPage() {
     router.push(
       `/manager/study?name=${keyword}&category=${newCategory}&page=1`
     );
+    setPage(1);
   };
   const handleClickSubmit = () => {
     const newCategory = selectedCategory === '전체' ? '' : selectedCategory;
     router.push(
       `/manager/study?name=${keyword}&category=${newCategory}&page=1`
     );
+    setPage(1);
   };
 
   return (

@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { deleteRecruitmentPost } from '@/lib/api/recruitment/delete';
 import { deleteStudyPost } from '@/lib/api/study/delete';
+import { toast } from 'react-toastify';
 
 type MenuProps = {
   title?: string;
@@ -24,6 +25,7 @@ export default function ClickVerticalMenu({
   onDeleteClick,
 }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
   const handleGoToModify = () => {
     router.push(`/recruitment/modify/${recruitmentPostId}`);
@@ -31,6 +33,31 @@ export default function ClickVerticalMenu({
   const handleGoToModifyStudy = () => {
     router.push(`/study/${studyId}/study-community/modify/${postId}`);
   };
+
+  const handleDelete = async () => {
+    if (isDeleting) return;
+
+    setIsDeleting(true);
+    try {
+      if (target === 'recruitment') {
+        await deleteRecruitmentPost(recruitmentPostId);
+        toast.success('게시글 삭제가 완료되었습니다!');
+        router.push('/');
+      } else if (target === 'study') {
+        await deleteStudyPost(postId);
+        toast.success('게시글 삭제가 완료되었습니다!');
+        router.push(`/study/${studyId}/study-community`);
+      } else {
+        console.log('target error');
+      }
+    } catch (error) {
+      console.error('삭제 중 오류 발생', error);
+      toast.error('삭제 중 오류가 발생했습니다');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <>
       <div className='absolute right-0 mt-2 w-[160px] border border-main/10 bg-white rounded-md shadow-lg overflow-hidden tm3 z-3'>
@@ -68,7 +95,7 @@ export default function ClickVerticalMenu({
         )}
       </div>
       {isOpen && (
-        <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+        <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
           <div className='pt-10 pb-8 px-9 rounded-[10px] bg-white drop-shadow-md'>
             <p className='mb-7 tm3'>정말 삭제하시겠습니까?</p>
             <div className='flex gap-4 justify-center'>
@@ -80,17 +107,8 @@ export default function ClickVerticalMenu({
               </button>
               <button
                 className='button-type5 w-[120px]! bg-red! text-white!'
-                onClick={async () => {
-                  if (target === 'recruitment') {
-                    await deleteRecruitmentPost(recruitmentPostId);
-                    router.push('/');
-                  } else if (target === 'study') {
-                    await deleteStudyPost(postId);
-                    router.push(`/study/${studyId}/study-community`);
-                  } else {
-                    console.log('target error');
-                  }
-                }}
+                onClick={handleDelete}
+                disabled={isDeleting}
               >
                 삭제
               </button>

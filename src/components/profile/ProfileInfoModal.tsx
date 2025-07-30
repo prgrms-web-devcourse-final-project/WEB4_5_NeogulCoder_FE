@@ -1,8 +1,7 @@
 'use client';
-import { axiosInstance } from '@/lib/api/axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 import { userAuthStore } from '@/stores/userStore';
-import { BookCopy, LogOut } from 'lucide-react';
-import { User } from 'lucide-react';
+import { BookCopy, LogOut, User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function UserInfoModal({
@@ -30,6 +29,7 @@ export default function UserInfoModal({
       onItemClick();
       userAuthStore.getState().clearUser();
       localStorage.removeItem('login_status');
+      document.cookie = 'login_status=; path=/';
       router.push('/');
     } catch (error) {
       console.error('로그아웃 실패: ', error);

@@ -4,7 +4,8 @@ import { dayFormatting } from '@/utils/day';
 import isBetween from 'dayjs/plugin/isBetween';
 import Link from 'next/link';
 import { useStudyStore } from '@/stores/studyInfoStore';
-import dynamic from 'next/dynamic';
+import { CalendarDays, ChevronRight } from 'lucide-react';
+
 dayjs.extend(isBetween);
 
 export default function CalendarSmallDetail({
@@ -16,24 +17,12 @@ export default function CalendarSmallDetail({
   studyId: number;
   calendarData: StudyScheduleType[];
 }) {
-  const CalendarDays = dynamic(
-    () => import('lucide-react').then((m) => m.CalendarDays),
-    {
-      ssr: false,
-    }
-  );
-  const ChevronRight = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronRight),
-    {
-      ssr: false,
-    }
-  );
-
   const studyIsProgress = useStudyStore().isProgress;
   const dateFormat = (date: string) => {
-    const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(
+    const dateString = `${dayjs(date).format('M')}월 ${dayjs(date).get(
       'D'
     )}일 (${dayFormatting(date)})`;
+
     return dateString;
   };
 
@@ -43,6 +32,7 @@ export default function CalendarSmallDetail({
     const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
     return dayjs(date).isBetween(startDay, endDay, 'day', '[]');
   });
+
   return (
     <>
       <div className='w-full grid grid-rows-[auto_1fr] h-full px-9 border-l border-border1 py-3'>

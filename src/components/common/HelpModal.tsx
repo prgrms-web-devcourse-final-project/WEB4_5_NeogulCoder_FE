@@ -1,6 +1,6 @@
-import { BadgeAlert } from "lucide-react";
-import Image from "next/image";
-import logoWibby from "@/assets/images/wibby.svg";
+import { BadgeAlert } from 'lucide-react';
+import Image from 'next/image';
+import logoWibby from '@/assets/images/wibby.svg';
 
 export default function HelpModal() {
   return (

@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
-import musicBunny from '@/assets/images/music-bunny.svg';
+import logoWibby from '@/assets/images/logo-wibby.svg';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CreateStudyModal from '../study/CreateStudyModal';
@@ -36,9 +37,15 @@ export default function SubHeader() {
               홈
             </button>
             <Link href={`/#recruit`}>모집</Link>
-            <button type='button' onClick={() => setIsOpen(true)}>
-              스터디 생성
-            </button>
+
+            {user && (
+              <>
+                <Link href={`/recruitment/write`}>모집글 작성</Link>
+                <button type='button' onClick={() => setIsOpen(true)}>
+                  스터디 생성
+                </button>
+              </>
+            )}
             {user && user.role === 'ROLE_ADMIN' && (
               <Link href={`/manager`}>관리자</Link>
             )}
@@ -55,7 +62,7 @@ export default function SubHeader() {
                       key={study.studyId}
                       href={`/study/${study.studyId}/dashboard`}
                       type='button'
-                      className='group w-8 h-8 rounded-[12px] absolute bg-gray3 flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.12)] transition-all duration-300 ease-in-out'
+                      className='group w-8 h-8 rounded-[12px] absolute bg-white flex items-center justify-center shadow-[0_1px_4px_rgba(0,0,0,0.18)] transition-all duration-300 ease-in-out'
                       style={{
                         right: studyOpen
                           ? `${(studies.length - i - 1) * 50}px`
@@ -65,9 +72,9 @@ export default function SubHeader() {
                       }}
                     >
                       <Image
-                        src={study.imageUrl ?? musicBunny}
+                        src={study.imageUrl ?? logoWibby}
                         alt={study.name}
-                        className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
+                        className='w-5 h-5 rounded-[12px] group-hover:drop-shadow'
                         width={38}
                         height={38}
                       />
@@ -78,11 +85,11 @@ export default function SubHeader() {
                   ))}
                   {/* 보여주기 폴더형식 */}
                   {!studyOpen && (
-                    <div className='w-[32px] h-[32px] rounded-[6px] flex-wrap border border-border1 flex gap-0.5 p-[2px] bg-white'>
+                    <div className='w-[32px] h-[32px] rounded-[6px] items-center justify-center flex-wrap border border-border1 flex gap-0.5 p-[2px] bg-white'>
                       {studies.slice(0, 4).map((study) => (
                         <Image
                           key={`${study.name}이미지`}
-                          src={study.imageUrl ?? musicBunny}
+                          src={study.imageUrl ?? logoWibby}
                           width={10}
                           height={10}
                           alt={`${study.name}이미지`}
@@ -98,13 +105,13 @@ export default function SubHeader() {
                     key={study.studyId}
                     href={`/study/${study.studyId}/dashboard`}
                     type='button'
-                    className='group w-8 h-8 rounded-[12px] relative bg-gray3 flex items-center justify-center 
-             shadow-[0_1px_4px_rgba(0,0,0,0.12)]'
+                    className='group w-8 h-8 rounded-[12px] relative bg-white flex items-center justify-center 
+             shadow-[0_1px_4px_rgba(0,0,0,0.18)]'
                   >
                     <Image
-                      src={study.imageUrl ?? musicBunny}
+                      src={study.imageUrl ?? logoWibby}
                       alt={study.name}
-                      className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
+                      className='w-5 h-5 rounded-[12px] group-hover:drop-shadow'
                       width={38}
                       height={38}
                     />

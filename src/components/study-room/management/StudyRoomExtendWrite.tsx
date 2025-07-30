@@ -1,8 +1,9 @@
 import { postStudyExtend } from '@/lib/api/study.api';
 import { useStudiesStore } from '@/stores/useStudiesStore';
 import dayjs from 'dayjs';
+import { CalendarDays, X } from 'lucide-react';
 import { useState, useTransition } from 'react';
-import dynamic from 'next/dynamic';
+import { toast } from 'react-toastify';
 
 export default function StudyRoomExtendWrite({
   closeFn,
@@ -15,16 +16,6 @@ export default function StudyRoomExtendWrite({
   endDate: string;
   studyId: number;
 }) {
-  const CalendarDays = dynamic(
-    () => import('lucide-react').then((m) => m.CalendarDays),
-    {
-      ssr: false,
-    }
-  );
-  const X = dynamic(() => import('lucide-react').then((m) => m.X), {
-    ssr: false,
-  });
-
   const [extendDate, setExtendDate] = useState('');
   const [isPending, startTransition] = useTransition();
   const study = useStudiesStore().studies.find((f) => f.studyId === studyId);
@@ -53,9 +44,10 @@ export default function StudyRoomExtendWrite({
             studyType: study?.studyType,
             finished: false,
           });
+        toast.success(`스터디를 연장했습니다.`);
         closeFn(); // 모달 닫기
       } catch (error) {
-        console.error('스터디 연장에 실패했습니다', error);
+        toast.error(`스터디 연장에 실패했습니다 ${error}`);
       }
     });
   };
@@ -66,7 +58,7 @@ export default function StudyRoomExtendWrite({
   };
   return (
     <>
-      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-15 flex items-center justify-center'>
+      <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
         <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
           <div className='flex justify-between mb-8 px-9 '>
             <h3 className='tm2'>스터디 연장</h3>

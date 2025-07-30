@@ -1,12 +1,13 @@
-import { axiosInstance } from './axios';
+import axiosInstance from '@/lib/api/axiosInstance';
 
 // 내 스터디 목록
 export const getStudies = async () => {
   const { data } = await axiosInstance.get('/api/studies', {
     params: {
       page: 0,
-      size: 1,
+      size: 10,
       sort: [],
+      finished: false,
     },
   });
   return data;
