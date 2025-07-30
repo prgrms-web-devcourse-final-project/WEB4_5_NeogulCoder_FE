@@ -51,13 +51,15 @@ export default function MannersClient() {
     try {
       const data = await fetchUserListByStudyId(studyId);
       if (data.length === 0) {
-        await getStudyList();
+        // await getStudyList();
         return;
       }
       setActiveUserIndex(0);
       setCurrentUserId(data?.[0]?.userId);
       setCurrentUserName(data?.[0]?.nickname);
       setUserList(data);
+
+      return data;
     } catch (e) {
       console.error('스터디원 목록 불러오기 실패:', e);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
@@ -165,6 +167,7 @@ export default function MannersClient() {
                 currentStudyId={currentStudyId}
                 currentUserId={currentUserId}
                 currentUserName={currentUserName}
+                getStudyList={getStudyList}
                 getUserList={getUserList}
               />
             </>

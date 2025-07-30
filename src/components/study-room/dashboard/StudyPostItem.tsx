@@ -1,3 +1,4 @@
+import dateFormat from '@/utils/dateFormatting';
 import Link from 'next/link';
 
 export default function StudyPostItem({
@@ -25,7 +26,7 @@ export default function StudyPostItem({
             {data.title}
           </p>
         </div>
-        <p className='shrink-0 t5 text-gray5'>{data.createdAt}</p>
+        <p className='shrink-0 t5 text-gray5'>{dateFormat(data.createdAt)}</p>
       </Link>
     </>
   );

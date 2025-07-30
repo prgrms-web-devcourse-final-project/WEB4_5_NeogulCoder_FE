@@ -1,17 +1,18 @@
 'use client';
 
 import Image from 'next/image';
-import studyDefault from '@/assets/images/study-default.svg';
+// import studyDefault from '@/assets/images/study-default.svg';
+import logoWibby from '@/assets/images/logo-wibby.svg';
 // import sunBunny from '@/assets/images/sun-bunny.svg';
 import { Calendar, Crown, UsersRound } from 'lucide-react';
 import { formatDate } from '@/utils/formatDate';
 import { MyApplicationListType } from '@/types/my';
 import { useRouter } from 'next/navigation';
 
-const studyTypeMap: Record<string, '온라인' | '오프라인' | '병행'> = {
+const studyTypeMap: Record<string, '온라인' | '오프라인' | '온/오프라인'> = {
   ONLINE: '온라인',
   OFFLINE: '오프라인',
-  HYBRID: '병행',
+  HYBRID: '온/오프라인',
 };
 
 export default function ApplyingStudyCard({
@@ -57,7 +58,7 @@ export default function ApplyingStudyCard({
         <div className='flex justify-center items-center w-15 h-15 bg-white border border-[#EBE9E9] rounded-[50%]'>
           <div className='relative w-[40px] h-[40px]'>
             <Image
-              src={imageUrl ? imageUrl : studyDefault}
+              src={imageUrl ? imageUrl : logoWibby}
               alt='스터디 대표 이미지'
               fill
             />

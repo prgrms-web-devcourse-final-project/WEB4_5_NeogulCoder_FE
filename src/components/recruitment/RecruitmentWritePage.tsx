@@ -102,21 +102,25 @@ export default function RecruitmentWritePage() {
 
     if (!isClick) {
       toast.warning('스터디를 선택해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
     if (!expiredDate) {
       toast.warning('모집 마감일을 입력해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
     if (remainSlots === null) {
       toast.warning('모집 인원을 선택해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
     if (!subject.trim()) {
       toast.warning('제목을 입력해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
@@ -125,6 +129,7 @@ export default function RecruitmentWritePage() {
 
     if (!content.trim()) {
       toast.warning('본문 내용을 입력해주세요.');
+      setIsSubmitting(false);
       return;
     }
 

@@ -64,10 +64,10 @@ export default function RecruitmentDetailPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(true);
-  const [isStatusChange, setIsStatusChange] = useState(true);
-  const [isApproving, setIsApproving] = useState(true);
-  const [isRejecting, setIsRejecting] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isStatusChange, setIsStatusChange] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
 
   const isApplied = myApplications.some(
     (app) => app.recruitmentPostId === recruitmentPostId

@@ -10,6 +10,7 @@ import badGray from '@/assets/images/bad-stamp-gray.svg';
 import { useState } from 'react';
 import { postReviews } from '@/lib/api/manners';
 import { toast } from 'react-toastify';
+import { User } from '@/types/manners';
 
 type MannerOptionType = 'BAD' | 'GOOD' | 'EXCELLENT';
 
@@ -71,16 +72,19 @@ export default function MannerQuestion({
   currentStudyId,
   currentUserId,
   currentUserName,
+  getStudyList,
   getUserList,
 }: {
   currentStudyId: number;
   currentUserId: number;
   currentUserName: string;
-  getUserList: (studyId: number) => Promise<void>;
+  getStudyList: () => Promise<void>;
+  getUserList: (studyId: number) => Promise<User[]>;
 }) {
   const [reviewType, setReviewType] = useState<MannerOptionType>('GOOD');
   const [reviewTag, setReviewTag] = useState<string[]>([]);
   const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentOption = MANNER_OPTIONS[reviewType];
 
@@ -97,6 +101,8 @@ export default function MannerQuestion({
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const data = await postReviews(
         currentStudyId,
@@ -115,10 +121,16 @@ export default function MannerQuestion({
       });
       toast.success('평가 완료되었습니다.');
       reset();
+
       await getUserList(currentStudyId);
+
+      // if (userList.length === 0) await getStudyList();
+      await getStudyList();
     } catch (e) {
       console.error('제출 실패:', e);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -130,7 +142,7 @@ export default function MannerQuestion({
             <span className='tm3 text-text1'>
               {currentUserName}님과의 스터디는 어떠셨나요?
             </span>
-            <span className='tm5 text-red'>*필수</span>
+            <span className='tm5 text-red'>(필수)</span>
           </div>
           <div className='flex justify-around mt-[26px]'>
             {STAMP_ICONS.map(({ type, label, active, inactive }) => (
@@ -162,7 +174,7 @@ export default function MannerQuestion({
         <div>
           <div className='flex gap-2 items-center'>
             <span className='tm3 text-text1'>{currentOption.title}</span>
-            <span className='tm5 text-red'>*필수</span>
+            <span className='tm5 text-red'>(필수)</span>
           </div>
           <div className='flex flex-col gap-6 mt-[26px]'>
             {currentOption.items.map((item, i) => {
@@ -204,9 +216,9 @@ export default function MannerQuestion({
       <div className='flex justify-end mt-[30px]'>
         <button
           className={`button-type2 ${
-            reviewTag.length === 0 ? 'cursor-not-allowed!' : ''
+            reviewTag.length === 0 || isSubmitting ? 'cursor-not-allowed!' : ''
           }`}
-          disabled={reviewTag.length === 0}
+          disabled={reviewTag.length === 0 || isSubmitting}
           onClick={handleSubmit}
         >
           완료

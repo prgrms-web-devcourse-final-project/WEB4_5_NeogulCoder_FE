@@ -480,7 +480,12 @@ export default function TimeGrid({
                 </button>
               )}
               <button
-                className='w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]'
+                className={`w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929] ${
+                  isLoading
+                    ? 'cursor-not-allowed! bg-[#c9c9c9] transition-colors duration-300'
+                    : ''
+                }`}
+                disabled={isLoading}
                 onClick={handleMainButtonClick}
               >
                 {buttonState}

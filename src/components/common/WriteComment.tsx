@@ -22,7 +22,7 @@ export default function WriteComment({
   onCommentAdd,
 }: CommentWriteProps) {
   const [comment, setComment] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const handleGoToPr = () => {
     router.push(`/profile/pr/${userId}`);

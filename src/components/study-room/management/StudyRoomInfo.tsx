@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import StudyRoomInfoCard from './StudyRoomInfoCard';
 import StudyRoomInfoWrite from './StudyRoomInfoWrite';
-import studyDefault from '@/assets/images/study-default.svg';
+// import studyDefault from '@/assets/images/study-default.svg';
+import logoWibby from '@/assets/images/logo-wibby.svg';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import { categoryFormatting } from '@/utils/categoryFormatting';
@@ -68,7 +69,7 @@ export default function StudyRoomInfo({
       </div>
       <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto flex item-center justify-center'>
         <Image
-          src={studyInfoData.imageUrl ?? studyDefault}
+          src={studyInfoData.imageUrl ?? logoWibby}
           width={120}
           height={0}
           alt='스터디이미지'

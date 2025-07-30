@@ -30,16 +30,19 @@ export default function StudyCommunityWritePage() {
 
     if (!category) {
       toast.warning('카테고리 선택해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
     if (!title) {
       toast.warning('제목을 입력해주세요.');
+      setIsSubmitting(false);
       return;
     }
 
     if (!content.trim()) {
       toast.warning('내용을 입력해주세요.');
+      setIsSubmitting(false);
       return;
     }
 

@@ -1,12 +1,6 @@
-import dynamic from 'next/dynamic';
+import { CalendarDays } from 'lucide-react';
 
 export default function ChatDate({ date }: { date: string }) {
-  const CalendarDays = dynamic(
-    () => import('lucide-react').then((m) => m.CalendarDays),
-    {
-      ssr: false,
-    }
-  );
   return (
     <>
       <div className='relative z-1 flex justify-center my-10'>

@@ -9,8 +9,18 @@ export const userPrStore = create<PrStore>((set) => ({
     try {
       const res = await axiosInstance.get('/api/template/mine');
       set({ pr: res.data.data });
+      return res.data.data;
     } catch (error) {
       console.error('내 PR 정보 가져오기 실패:', error);
+    }
+  },
+  fetchOtherPr: async (userId: number) => {
+    try {
+      const res = await axiosInstance.get(`/api/template/${userId}`);
+      set({ pr: res.data.data });
+      return res.data.data;
+    } catch (error) {
+      console.error('사용자 PR 정보 가져오기 실패:', error);
     }
   },
 

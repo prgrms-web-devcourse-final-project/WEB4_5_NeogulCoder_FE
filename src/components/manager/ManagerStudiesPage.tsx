@@ -115,12 +115,14 @@ export default function ManagerStudiesPage() {
     router.push(
       `/manager/study?name=${keyword}&category=${newCategory}&page=1`
     );
+    setPage(1);
   };
   const handleClickSubmit = () => {
     const newCategory = selectedCategory === '전체' ? '' : selectedCategory;
     router.push(
       `/manager/study?name=${keyword}&category=${newCategory}&page=1`
     );
+    setPage(1);
   };
 
   return (

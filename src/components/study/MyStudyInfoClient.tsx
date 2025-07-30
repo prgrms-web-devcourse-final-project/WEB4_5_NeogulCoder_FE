@@ -16,6 +16,7 @@ import StudyExtendCheckModal from '@/components/study-room/dashboard/StudyExtend
 import { userAuthStore } from '@/stores/userStore';
 import MyStudyInfoSkeleton from './MyStudyInfoSkeleton';
 import { MessageCircleDashed } from 'lucide-react';
+import CommunityCardSkeleton from './CommunityCardSkeleton';
 
 const categoryMap: Record<string, '' | 'NOTICE' | 'FREE'> = {
   전체: '',
@@ -48,6 +49,7 @@ export default function MyStudyInfoClient() {
   const [isExtended, setIsExtended] = useState(false);
   const [isLeader, setIsLeader] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingPost, setIsLoadingPost] = useState(true);
 
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -99,7 +101,7 @@ export default function MyStudyInfoClient() {
   }, [studyId]);
 
   const filterList = useCallback(async () => {
-    setIsLoading(true);
+    setIsLoadingPost(true);
     try {
       const categoryValue = categoryMap[selectedCategory];
       const sortingValue = sortingMap[selectedSortingType];
@@ -119,7 +121,7 @@ export default function MyStudyInfoClient() {
     } catch (e) {
       console.error(e);
     } finally {
-      setIsLoading(false);
+      setIsLoadingPost(false);
     }
   }, [selectedCategory, selectedSortingType, keyword, page, studyId]);
 
@@ -140,7 +142,7 @@ export default function MyStudyInfoClient() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [isLoading]);
+  }, [isLoading, isLoadingPost]);
 
   return (
     <>
@@ -156,6 +158,7 @@ export default function MyStudyInfoClient() {
               setSelectedCategory={setSelectedCategory}
               selectedSortingType={selectedSortingType}
               setSelectedSortingType={setSelectedSortingType}
+              keyword={keyword}
               setKeyword={setKeyword}
               setPage={setPage}
             />
@@ -166,27 +169,37 @@ export default function MyStudyInfoClient() {
               'h-[calc(100vh-105px-113px-193px-200px)]'
             }`}
           >
-            {myCommunityList.length === 0 && (
-              // <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-              //   내가 작성한 글이 없습니다.
-              // </div>
-              <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
-                <MessageCircleDashed
-                  className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
-                  strokeWidth={1}
-                />
-                <p className='tm3 text-border3 mb-3'>게시글이 없습니다.</p>
-              </div>
+            {isLoadingPost ? (
+              <>
+                {Array.from({ length: 2 }).map((_, i) => (
+                  <CommunityCardSkeleton key={i} />
+                ))}
+              </>
+            ) : (
+              <>
+                {myCommunityList.length === 0 && (
+                  // <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
+                  //   내가 작성한 글이 없습니다.
+                  // </div>
+                  <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                    <MessageCircleDashed
+                      className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
+                      strokeWidth={1}
+                    />
+                    <p className='tm3 text-border3 mb-3'>게시글이 없습니다.</p>
+                  </div>
+                )}
+                {myCommunityList.length !== 0 &&
+                  myCommunityList.map((post) => (
+                    <RecruitmentCard
+                      key={post.id}
+                      type='study'
+                      studyId={studyId}
+                      {...post}
+                    />
+                  ))}
+              </>
             )}
-            {myCommunityList.length !== 0 &&
-              myCommunityList.map((post) => (
-                <RecruitmentCard
-                  key={post.id}
-                  type='study'
-                  studyId={studyId}
-                  {...post}
-                />
-              ))}
           </div>
           <div className='mt-[45px]'>
             <Pagination

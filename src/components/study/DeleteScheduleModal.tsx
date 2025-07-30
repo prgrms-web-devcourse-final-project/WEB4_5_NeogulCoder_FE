@@ -1,5 +1,8 @@
+'use client';
+
 import { deleteMyTimeVote } from '@/lib/api/schedule';
 import axios from 'axios';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function DeleteScheduleModal({
@@ -9,7 +12,11 @@ export default function DeleteScheduleModal({
   studyId: number;
   onClose: () => void;
 }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleClickOut = async () => {
+    if (isDeleting) return;
+    setIsDeleting(true);
     try {
       await deleteMyTimeVote(studyId);
       toast.success('삭제되었습니다.');
@@ -26,6 +33,8 @@ export default function DeleteScheduleModal({
       } else {
         console.error('Axios 외의 오류: ', e);
       }
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -40,7 +49,10 @@ export default function DeleteScheduleModal({
             취소
           </button>
           <button
-            className='button-type5 w-[120px]! bg-red! text-white!'
+            className={`button-type5 w-[120px]! bg-red! text-white! ${
+              isDeleting ? 'cursor-not-allowed!' : ''
+            }`}
+            disabled={isDeleting}
             onClick={handleClickOut}
           >
             삭제하기

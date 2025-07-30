@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import mannerDefault from '@/assets/images/manner-default.svg';
+// import mannerDefault from '@/assets/images/manner-default.svg';
+import logoWibby from '@/assets/images/logo-wibby.svg';
 import { useState } from 'react';
 
 export default function MannerStudyItem({
@@ -23,13 +24,13 @@ export default function MannerStudyItem({
         onClick={onClick}
         onMouseEnter={() => setIsHover(true)}
         onMouseLeave={() => setIsHover(false)}
-        className={`w-15 h-15 flex justify-center items-center cursor-pointer rounded-[20px] border border-border1 hover:shadow-[0_1px_4px_rgba(0,0,0,0.12)]  ${
+        className={`w-15 h-15 flex justify-center items-center cursor-pointer rounded-[20px] border border-border1 hover:shadow-[0_1px_4px_rgba(0,0,0,0.12)] overflow-hidden ${
           isActive && 'border-2 border-main'
         }`}
       >
-        <div className='relative w-[40px] h-[40px]'>
+        <div className='relative w-15 h-15'>
           <Image
-            src={imageUrl ? imageUrl : mannerDefault}
+            src={imageUrl ? imageUrl : logoWibby}
             alt='스터디 이미지'
             fill
           />
