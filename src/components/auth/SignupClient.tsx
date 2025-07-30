@@ -13,6 +13,7 @@ import { signup } from '@/lib/api/user';
 import VerifyEmailModal from '@/components/common/VerifyEmailModal';
 import { sendEmailCode } from '@/lib/api/emailAuth';
 import { toast } from 'react-toastify';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function SignUpClient() {
   const router = useRouter();
@@ -39,8 +40,8 @@ export default function SignUpClient() {
   const nicknameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordCheckRef = useRef<HTMLInputElement>(null);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (!mailCode) return;
@@ -337,13 +338,26 @@ export default function SignUpClient() {
               <div className='flex flex-col justify-center'>
                 <div className='relative'>
                   <input
-                    type='password'
+                    type={visible ? 'text' : 'password'}
                     value={password}
                     onChange={validatePassword}
                     className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
                     ref={passwordRef}
                     onBlur={handlePassword}
                   />
+                  {password && (
+                    <div
+                      onClick={() => setVisible(!visible)}
+                      className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+                    >
+                      {visible ? (
+                        <Eye className='w-4 h-4' />
+                      ) : (
+                        <EyeOff className='w-4 h-4' />
+                      )}
+                    </div>
+                  )}
+
                   {password && (
                     <Image
                       src={deleteText}
@@ -377,12 +391,24 @@ export default function SignUpClient() {
               <div className='flex flex-col justify-center'>
                 <div className='relative'>
                   <input
-                    type='password'
+                    type={visible ? 'text' : 'password'}
                     value={passwordCheck}
                     onChange={handlePasswordCheck}
                     className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
                     ref={passwordCheckRef}
                   />
+                  {passwordCheck && (
+                    <div
+                      onClick={() => setVisible(!visible)}
+                      className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+                    >
+                      {visible ? (
+                        <Eye className='w-4 h-4' />
+                      ) : (
+                        <EyeOff className='w-4 h-4' />
+                      )}
+                    </div>
+                  )}
                   {passwordCheck && (
                     <Image
                       src={deleteText}
