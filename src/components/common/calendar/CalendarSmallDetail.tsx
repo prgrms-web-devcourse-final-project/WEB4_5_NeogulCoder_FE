@@ -19,9 +19,10 @@ export default function CalendarSmallDetail({
 }) {
   const studyIsProgress = useStudyStore().isProgress;
   const dateFormat = (date: string) => {
-    const dateString = `${dayjs(date).get('M')}월 ${dayjs(date).get(
+    const dateString = `${dayjs(date).format('M')}월 ${dayjs(date).get(
       'D'
     )}일 (${dayFormatting(date)})`;
+
     return dateString;
   };
 
@@ -31,6 +32,7 @@ export default function CalendarSmallDetail({
     const endDay = dayjs(result.endTime).format('YYYY-MM-DD');
     return dayjs(date).isBetween(startDay, endDay, 'day', '[]');
   });
+
   return (
     <>
       <div className='w-full grid grid-rows-[auto_1fr] h-full px-9 border-l border-border1 py-3'>

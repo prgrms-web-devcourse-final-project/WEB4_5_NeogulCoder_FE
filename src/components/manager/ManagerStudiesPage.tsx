@@ -22,7 +22,7 @@ export default function ManagerStudiesPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pageParams = useMemo(
-    () => Number(searchParams.get('page')) || 0,
+    () => Number(searchParams.get('page')) || 1,
     [searchParams]
   );
   const searchKeyword = useMemo(
@@ -70,15 +70,20 @@ export default function ManagerStudiesPage() {
 
     const fetchStudies = async () => {
       setLoading(true);
-      const newCategory = searchCategory === '전체' ? '' : searchCategory;
       try {
-        const { data } = await getAdminStudies(
-          page - 1,
-          searchKeyword || '',
-          newCategory
-        );
+        const keyword = searchParams.get('name') || '';
+        const cate =
+          searchParams.get('category') === '전체'
+            ? ''
+            : searchParams.get('category') || '';
+        const pageNum = Number(searchParams.get('page')) || 1;
+        const { data } = await getAdminStudies(pageNum - 1, keyword, cate);
         setTotalPage(data.totalPages);
         setStudies(data.content);
+
+        setKeyword(keyword);
+        setPage(pageNum);
+        setSelectedCategory(cate || '전체');
       } catch (error) {
         console.error('사용자 목록을 불러오지 못했습니다.', error);
       } finally {
@@ -87,7 +92,7 @@ export default function ManagerStudiesPage() {
     };
 
     fetchStudies();
-  }, [user, page, searchKeyword, searchCategory, router]);
+  }, [user, searchParams, router]);
 
   // // 카테고리 선택
   const handleCategory = (category: string) => {
@@ -98,7 +103,7 @@ export default function ManagerStudiesPage() {
   // 페이지 변경
   const handlePage = (num: number) => {
     router.push(
-      `/manager/study?name=${keyword}&category=${selectedCategory}&page=${num}`
+      `/manager/study?name=${searchKeyword}&category=${selectedCategory}&page=${num}`
     );
     setPage(num);
   };
@@ -218,7 +223,7 @@ export default function ManagerStudiesPage() {
                         <div className='flex gap-2 items-center'>
                           <span className='tb3'>
                             {searchCategory !== ''
-                              ? `" ${searchCategory} "`
+                              ? `" ${categoryFormatting(searchCategory)} "`
                               : ''}
                           </span>
                           <span className='tb3'>

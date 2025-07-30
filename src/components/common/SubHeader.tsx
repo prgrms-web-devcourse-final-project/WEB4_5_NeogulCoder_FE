@@ -74,7 +74,7 @@ export default function SubHeader() {
                       <Image
                         src={study.imageUrl ?? logoWibby}
                         alt={study.name}
-                        className='w-5 h-5 rounded-[12px] group-hover:drop-shadow'
+                        className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
                         width={38}
                         height={38}
                       />
@@ -111,7 +111,7 @@ export default function SubHeader() {
                     <Image
                       src={study.imageUrl ?? logoWibby}
                       alt={study.name}
-                      className='w-5 h-5 rounded-[12px] group-hover:drop-shadow'
+                      className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
                       width={38}
                       height={38}
                     />

@@ -17,6 +17,7 @@ export default function SetPeriodModal({
 }) {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [isPending, setIsPending] = useState(false);
 
   // const tomorrow = useMemo(
   //   () => dayjs().add(1, 'day').format('YYYY-MM-DD'),
@@ -24,6 +25,8 @@ export default function SetPeriodModal({
   // );
 
   const handleClick = async () => {
+    if (isPending) return;
+    setIsPending(true);
     try {
       const start = formatDate(startDate, 'YYYY-MM-DDT00:00:00');
       const end = formatDate(endDate, 'YYYY-MM-DDT23:59:59');
@@ -43,6 +46,8 @@ export default function SetPeriodModal({
       } else {
         console.error('Axios 외의 오류: ', e);
       }
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -103,7 +108,13 @@ export default function SetPeriodModal({
               </span>
             </div>
             <div className='mt-12'>
-              <button className='button-modal1' onClick={handleClick}>
+              <button
+                className={`button-modal1 ${
+                  isPending ? 'cursor-not-allowed!' : ''
+                }`}
+                disabled={isPending}
+                onClick={handleClick}
+              >
                 요청
               </button>
             </div>

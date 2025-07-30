@@ -1,4 +1,7 @@
+'use client';
+
 import { participateInStudyExtension } from '@/lib/api/community';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function StudyExtendCheckModal({
@@ -8,7 +11,11 @@ export default function StudyExtendCheckModal({
   studyId: number;
   onClose: () => void;
 }) {
+  const [isPending, setIsPending] = useState(false);
+
   const handleClickExtend = async () => {
+    if (isPending) return;
+    setIsPending(true);
     try {
       await participateInStudyExtension(studyId);
       onClose();
@@ -16,6 +23,8 @@ export default function StudyExtendCheckModal({
     } catch (e) {
       console.error(e);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -34,7 +43,10 @@ export default function StudyExtendCheckModal({
               취소
             </button>
             <button
-              className='button-type5 w-[120px]!'
+              className={`button-type5 w-[120px]! ${
+                isPending ? 'cursor-not-allowed!' : ''
+              }`}
+              disabled={isPending}
               onClick={handleClickExtend}
             >
               참여하기

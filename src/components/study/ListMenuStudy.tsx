@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, Search } from 'lucide-react';
+import { ChevronDown, Search, X } from 'lucide-react';
 import { useRef, useState } from 'react';
 import CategoryStudyModal from './CategoryStudyModal';
 import SortingTypeModal from './SortingTypeModal';
@@ -10,6 +10,7 @@ export default function ListMenuStudy({
   setSelectedCategory,
   selectedSortingType,
   setSelectedSortingType,
+  keyword,
   setKeyword,
   setPage,
 }: {
@@ -17,12 +18,14 @@ export default function ListMenuStudy({
   setSelectedCategory: (v: string) => void;
   selectedSortingType: string;
   setSelectedSortingType: (v: string) => void;
+  keyword: string;
   setKeyword: (v: string) => void;
   setPage: (page: number) => void;
 }) {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isSortingTypeOpen, setSortingTypeOpen] = useState(false);
 
+  const inputRef = useRef<HTMLInputElement>(null);
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const handleKeywordInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +39,13 @@ export default function ListMenuStudy({
       setKeyword(value);
       setPage(0);
     }, 300);
+  };
+
+  const handleKeywordReset = () => {
+    setKeyword('');
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
   };
 
   return (
@@ -96,13 +106,20 @@ export default function ListMenuStudy({
       </div>
 
       <div className='w-[260px] h-[34px] bg-gray4 rounded-[50px] flex items-center gap-4 px-4 mr-4 tm4 text-text1/50'>
-        <Search className='w-4 h-4' />
+        <Search className='w-4 h-4 shrink-0' />
         <input
           type='text'
+          ref={inputRef}
           placeholder='검색어를 입력해주세요.'
           className='focus:outline-none'
           onChange={handleKeywordInput}
         />
+        {keyword !== '' && (
+          <X
+            onClick={handleKeywordReset}
+            className='w-4 h-4 shrink-0 cursor-pointer'
+          />
+        )}
       </div>
     </div>
   );

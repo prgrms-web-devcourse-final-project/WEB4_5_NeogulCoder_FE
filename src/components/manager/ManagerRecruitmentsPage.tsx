@@ -24,7 +24,7 @@ export default function ManagerRecruitmentsPage() {
     [searchParams]
   );
   const pageParams = useMemo(
-    () => Number(searchParams.get('page')) || 0,
+    () => Number(searchParams.get('page')) || 1,
     [searchParams]
   );
   const user = userAuthStore((state) => state.user);
@@ -60,9 +60,15 @@ export default function ManagerRecruitmentsPage() {
     const fetchRecruit = async () => {
       setLoading(true);
       try {
-        const { data } = await getAdminPosts(page - 1, searchKeyword || '');
+        const keyword = searchParams.get('search') || '';
+        const pageNum = Number(searchParams.get('page')) || 1;
+
+        const { data } = await getAdminPosts(pageNum - 1, keyword);
+
         setTotalPage(data.totalPages);
         setRecruits(data.content);
+        setKeyword(keyword);
+        setPage(pageNum);
       } catch (error) {
         console.error('모집글 목록을 불러오지 못했습니다.', error);
       } finally {
@@ -71,7 +77,7 @@ export default function ManagerRecruitmentsPage() {
     };
 
     fetchRecruit();
-  }, [user, page, searchKeyword, router]);
+  }, [user, searchParams, router]);
 
   // 키보드 Enter검색
   const searchSubject = (e: React.KeyboardEvent<HTMLInputElement>) => {

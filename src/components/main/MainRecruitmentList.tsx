@@ -88,14 +88,23 @@ export default function MainRecruitmentList() {
     const fetchRecruitments = async () => {
       setIsLoading(true);
       try {
+        const keyword = searchParams.get('keyword') || '';
+        const pageNum = Number(searchParams.get('page')) || 1;
+        const fetchCategory = searchParams.get('category') || '';
+        const fetchStudyType = searchParams.get('studyType') || '';
+
         const { data } = await getRecruitments(
-          page - 1,
-          categoryParams || '',
-          studyTypeParams || '',
-          searchKeywordParams || ''
+          pageNum - 1,
+          fetchCategory,
+          fetchStudyType,
+          keyword
         );
         setTotalPage(data.totalPage);
         setPosts(data.postInfos);
+        setKeyword(keyword);
+        setPage(pageNum);
+        setSelectedCategory(fetchCategory);
+        setSelectedStudyType(fetchStudyType);
       } catch (error) {
         console.error('모집글 목록을 불러오는데 실패했습니다.', error);
       } finally {
@@ -104,7 +113,7 @@ export default function MainRecruitmentList() {
     };
 
     fetchRecruitments();
-  }, [page, categoryParams, studyTypeParams, searchKeywordParams]);
+  }, [searchParams]);
 
   // 페이지 변경
   const handlePage = (num: number) => {
@@ -256,8 +265,12 @@ export default function MainRecruitmentList() {
               <SearchX className='w-12 h-12 mx-auto mb-3' strokeWidth={1.5} />
               <div className='flex gap-2 items-center'>
                 <span className='tb3'>
-                  {categoryParams !== '' ? ` " ${categoryParams} " ` : ''}
-                  {studyTypeParams !== '' ? ` " ${studyTypeParams} " ` : ''}
+                  {categoryParams !== ''
+                    ? ` " ${categoryFormatting(categoryParams)} " `
+                    : ''}
+                  {studyTypeParams !== ''
+                    ? ` " ${studyTypeFormatting(studyTypeParams)} " `
+                    : ''}
                   {searchKeywordParams !== ''
                     ? ` " ${searchKeywordParams} " `
                     : ''}

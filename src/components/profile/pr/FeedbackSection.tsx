@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import FeedbackModal from './FeedbackModal';
 import { userPrStore } from '@/stores/prStore';
+import basicBunny from '@/assets/images/basic-bunny.svg';
 
 export default function FeedbackSection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,9 +46,9 @@ export default function FeedbackSection() {
           <div className='flex flex-1 items-center'>
             <div className='flex flex-col gap-2'>
               <div className='flex gap-3 items-center'>
-                <div className='w-[50px] h-[50px] bg-gray3 rounded-full overflow-hidden flex-shrink-0'>
+                <div className='w-[50px] h-[50px] bg-white rounded-full overflow-hidden flex-shrink-0'>
                   <Image
-                    src={pr.reviewContents[0]?.reviewUserImgUrl}
+                    src={pr.reviewContents[0]?.reviewUserImgUrl ?? basicBunny}
                     alt='유저 프로필'
                     width={50}
                     height={50}
