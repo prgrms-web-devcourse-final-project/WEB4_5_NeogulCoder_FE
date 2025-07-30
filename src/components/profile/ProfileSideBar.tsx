@@ -8,6 +8,7 @@ import { getUserById } from '@/lib/api/user';
 import ProfileSideBarSkeleton from './ProfileSideBarSkeleton';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
+import OtherProfileSideBarSkeleton from './OtherProfileSideBarSkeleton';
 
 export default function SideBar() {
   const router = useRouter();
@@ -93,7 +94,11 @@ export default function SideBar() {
   return (
     <>
       {isLoading ? (
-        <ProfileSideBarSkeleton />
+        isMyPage ? (
+          <ProfileSideBarSkeleton />
+        ) : (
+          <OtherProfileSideBarSkeleton />
+        )
       ) : (
         <div className='w-full flex justify-center text-text1'>
           <div className='w-full max-w-[1248px] flex flex-col'>
