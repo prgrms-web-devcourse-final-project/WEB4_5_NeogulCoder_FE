@@ -76,6 +76,8 @@ export default function LoginClient() {
       } else {
         console.error('Axios 외의 오류', error);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (

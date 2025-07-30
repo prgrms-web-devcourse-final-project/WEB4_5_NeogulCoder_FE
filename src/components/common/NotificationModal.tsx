@@ -34,6 +34,8 @@ export default function NotificationModal({
         return `/recruitment/detail/${domainId}`;
       case 'TIME_VOTE':
         return `/study/${domainId}/study-schedule`;
+      case 'STUDY':
+        return `/study/${domainId}/dashboard`;
       default:
         return null;
     }

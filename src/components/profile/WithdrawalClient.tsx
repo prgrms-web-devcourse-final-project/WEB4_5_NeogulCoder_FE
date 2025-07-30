@@ -68,6 +68,8 @@ export default function WithdrawalClient() {
       router.push('/auth/login');
     } catch (error) {
       console.log('회원탈퇴 실패: ', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
