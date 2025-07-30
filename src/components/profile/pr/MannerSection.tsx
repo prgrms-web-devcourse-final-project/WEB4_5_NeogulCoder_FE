@@ -26,8 +26,7 @@ export default function MannerSection({ pr }: { pr: PrData }) {
   const goodCount =
     pr.reviewTypes?.find((tag) => tag.reviewType === 'GOOD')?.reviewCount ?? 0;
   const notGoodCount =
-    pr.reviewTypes?.find((tag) => tag.reviewType === 'NOTGOOD')?.reviewCount ??
-    0;
+    pr.reviewTypes?.find((tag) => tag.reviewType === 'BAD')?.reviewCount ?? 0;
 
   return (
     <div className='w-1/2 h-[260px] border border-main/10 rounded-[10px] flex flex-col p-5'>

@@ -8,6 +8,7 @@ import defaultUserProfileImage from '@/assets/images/basic-bunny.svg';
 import { useRouter } from 'next/navigation';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import { Crown } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function MemberCard({
   member,
@@ -30,7 +31,8 @@ export default function MemberCard({
         if (axios.isAxiosError(error)) {
           const message =
             error.response?.data?.message ?? '알 수 없는 오류가 발생했습니다.';
-          alert(message);
+          console.error(message);
+          toast.error('오류가 발생했습니다.');
         }
       }
     });

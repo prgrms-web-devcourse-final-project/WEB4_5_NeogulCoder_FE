@@ -64,7 +64,8 @@ export default function WriteComment({
           <div className='w-full flex my-8'>
             <div>
               <button
-                className='w-[50px] h-[50px] rounded-full bg-gray-300 shrink-0 relative overflow-hidden'
+                className='w-[50px] h-[50px] rounded-full bg-white border-[1px] shrink-0 relative overflow-hidden'
+                style={{ borderColor: 'var(--color-border1)' }}
                 onClick={handleGoToPr}
               >
                 <Image
