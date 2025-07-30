@@ -12,6 +12,7 @@ import axios from 'axios';
 import { login } from '@/lib/api/user';
 import Link from 'next/link';
 import { toast } from 'react-toastify';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function LoginClient() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function LoginClient() {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const handleGoToSignUp = () => {
     router.push('/auth/signup');
@@ -74,6 +76,8 @@ export default function LoginClient() {
       } else {
         console.error('Axios 외의 오류', error);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
@@ -136,12 +140,24 @@ export default function LoginClient() {
               <p className='pb-2 t4'>비밀번호</p>
               <div className='relative'>
                 <input
-                  type='password'
+                  type={visible ? 'text' : 'password'}
                   value={password}
                   className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
                   onChange={(e) => setPassword(e.target.value)}
                   ref={passwordRef}
                 />
+                {password && (
+                  <div
+                    onClick={() => setVisible(!visible)}
+                    className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+                  >
+                    {visible ? (
+                      <Eye className='w-4 h-4' />
+                    ) : (
+                      <EyeOff className='w-4 h-4' />
+                    )}
+                  </div>
+                )}
                 {password && (
                   <Image
                     src={deleteText}

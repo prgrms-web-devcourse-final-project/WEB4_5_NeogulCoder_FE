@@ -11,7 +11,7 @@ export default function StudyPostItem({
   return (
     <>
       <Link
-        href={`/study/${studyId}/detail/${data.postId}`}
+        href={`/study/${studyId}/study-community/detail/${data.postId}`}
         className='flex justify-between items-center gap-3 group'
       >
         <div className='w-full flex gap-3'>

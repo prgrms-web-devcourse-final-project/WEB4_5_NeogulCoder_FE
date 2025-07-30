@@ -110,6 +110,8 @@ export default function EditPrClient() {
       router.back();
     } catch (error) {
       console.error('저장 실패: ', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (

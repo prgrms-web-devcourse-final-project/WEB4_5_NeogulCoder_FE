@@ -7,6 +7,7 @@ import Image from 'next/image';
 import deleteText from '@/assets/images/delete-text.svg';
 import { toast } from 'react-toastify';
 import axiosInstance from '@/lib/api/axiosInstance';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function WithdrawalClient() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function WithdrawalClient() {
   const passwordCheckRef = useRef<HTMLInputElement>(null);
   const user = userAuthStore((state) => state.user);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -66,6 +68,8 @@ export default function WithdrawalClient() {
       router.push('/auth/login');
     } catch (error) {
       console.log('회원탈퇴 실패: ', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -86,12 +90,24 @@ export default function WithdrawalClient() {
           </p>
           <div className='relative'>
             <input
-              type='password'
+              type={visible ? 'text' : 'password'}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
               ref={passwordRef}
             />
+            {password && (
+              <div
+                onClick={() => setVisible(!visible)}
+                className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+              >
+                {visible ? (
+                  <Eye className='w-4 h-4' />
+                ) : (
+                  <EyeOff className='w-4 h-4' />
+                )}
+              </div>
+            )}
             {password && (
               <Image
                 src={deleteText}
@@ -111,12 +127,24 @@ export default function WithdrawalClient() {
           </p>
           <div className='relative'>
             <input
-              type='password'
+              type={visible ? 'text' : 'password'}
               value={passwordCheck}
               className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
               onChange={(e) => setPasswordCheck(e.target.value)}
               ref={passwordCheckRef}
             />
+            {passwordCheck && (
+              <div
+                onClick={() => setVisible(!visible)}
+                className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+              >
+                {visible ? (
+                  <Eye className='w-4 h-4' />
+                ) : (
+                  <EyeOff className='w-4 h-4' />
+                )}
+              </div>
+            )}
             {passwordCheck && (
               <Image
                 src={deleteText}

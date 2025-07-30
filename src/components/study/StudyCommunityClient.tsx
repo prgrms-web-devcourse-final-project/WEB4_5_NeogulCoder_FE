@@ -55,8 +55,8 @@ export default function StudyCommunityClient() {
       const query = {
         page,
         size: 10,
-        attributeName: sortingValue,
-        sort: 'DESC',
+        // attributeName: sortingValue,
+        sort: `${sortingValue},DESC`,
         ...(categoryValue ? { category: categoryValue } : {}),
         ...(keyword ? { keyword } : {}),
       };

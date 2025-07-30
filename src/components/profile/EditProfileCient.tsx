@@ -86,6 +86,8 @@ export default function EditProfileClient() {
       } else {
         console.error(error);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (
