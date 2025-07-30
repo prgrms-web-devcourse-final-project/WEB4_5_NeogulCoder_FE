@@ -3,7 +3,7 @@ export default function StudyTypeModal({
 }: {
   onSelect: (studyType: string) => void;
 }) {
-  const studyType = ['전체', '온라인', '오프라인', '병행'];
+  const studyType = ['전체', '온라인', '오프라인', '온/오프라인'];
   return (
     <div className='w-[132px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3'>
       <div className='flex flex-col gap-2'>

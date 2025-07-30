@@ -32,9 +32,9 @@ export default function WithdrawalClient() {
   }, [isModalOpen]);
 
   // 회원 탈퇴
-  const deleteUser = async (password: string) => {
+  const deleteUser = async (password: string, passwordCheck: string) => {
     await axiosInstance.delete(`/api/users/delete/me`, {
-      data: { password },
+      data: { password, passwordCheck },
     });
   };
 
@@ -62,7 +62,7 @@ export default function WithdrawalClient() {
     setIsSubmitting(true);
 
     try {
-      await deleteUser(password);
+      await deleteUser(password, passwordCheck);
       toast.success('탈퇴가 완료되었습니다.');
       setIsModalOpen(false);
       router.push('/auth/login');
