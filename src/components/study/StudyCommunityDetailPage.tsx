@@ -80,16 +80,20 @@ export default function StudyCommunityDetailPage() {
   }, []);
 
   useEffect(() => {
-    try {
-      setIsLoading(true);
-      if (!isNaN(studyId) && !isNaN(postId)) {
-        fetchData();
+    const fetchAll = async () => {
+      try {
+        setIsLoading(true);
+        if (!isNaN(studyId) && !isNaN(postId)) {
+          await fetchData();
+        }
+      } catch (error) {
+        console.error('데이터 받아오기 에러', error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error('데이터 받아오기 에러', error);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    fetchAll();
   }, [studyId, postId, fetchData]);
 
   return (

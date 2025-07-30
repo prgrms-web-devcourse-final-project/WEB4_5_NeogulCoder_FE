@@ -476,15 +476,15 @@ export default function RecruitmentDetailPage() {
           {isOpen && (
             <Modal
               title=''
-              className='w-[1020px] h-[800px] overflow-y-auto'
+              className='w-[1020px] h-auto overflow-y-auto'
               onClose={() => setIsOpen(false)}
             >
               {isAppLoading ? (
-                <div className='py-20 text-center text-gray-400'>
+                <div className='flex flex-1  min-h-[300px] justify-center items-center text-gray-400'>
                   로딩 중...
                 </div>
               ) : applications.length === 0 ? (
-                <div className='tm3 text-center text-gray-500 py-20'>
+                <div className='flex flex-1 min-h-[300px] justify-center items-center tm3 text-gray-500'>
                   신청 내역이 없습니다
                 </div>
               ) : (
