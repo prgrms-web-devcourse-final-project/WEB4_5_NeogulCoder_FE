@@ -11,7 +11,7 @@ import musicBunny from '@/assets/images/music-bunny.svg';
 import SockJS from 'sockjs-client';
 import { fetchChatMessage } from '@/lib/api/chat';
 import { useParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import { Send } from 'lucide-react';
 
 function groupChatsByDate(chats: ChatMessageType[]): ChatGroup[] {
   const map = new Map<string, ChatMessageType[]>();
@@ -45,10 +45,11 @@ export default function ChatClient() {
   const params = useParams();
   const studyId = Number(params?.id);
   const me = userAuthStore((state) => state.user);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const Send = dynamic(() => import('lucide-react').then((m) => m.Send), {
-    ssr: false,
-  });
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   // 메시지 불러오기 + 웹소켓 연결
   useEffect(() => {
@@ -107,6 +108,7 @@ export default function ChatClient() {
       const timeout = setTimeout(() => {
         textBottomRef.current?.scrollIntoView({
           behavior: 'auto',
+          block: 'nearest',
         });
       }, 0);
 
@@ -208,7 +210,7 @@ export default function ChatClient() {
         <div className='px-7 mb-7'>
           <div className='relative'>
             <input
-              className='input-type1 w-full focus:outline-none placeholder:opacity-50'
+              className='input-type1 w-full focus:outline-1 focus:outline-none placeholder:opacity-50'
               type='text'
               placeholder='내용을 입력해주세요.'
               value={message}
@@ -216,9 +218,14 @@ export default function ChatClient() {
               onKeyDown={handleKeyDown}
               onCompositionStart={() => setIsInput(true)}
               onCompositionEnd={() => setIsInput(false)}
+              ref={inputRef}
             />
             <Send
-              className='w-[18px] h-[18px] text-gray5 absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+              className={`w-[18px] h-[18px] absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer transition-colors ${
+                message.trim()
+                  ? 'text-gray5 hover:text-[#292929]'
+                  : 'text-gray5/30 cursor-default'
+              }`}
               onClick={handleSendMessage}
             />
           </div>
