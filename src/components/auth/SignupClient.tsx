@@ -20,7 +20,6 @@ export default function SignUpClient() {
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-
   const [passwordError, setPasswordError] = useState('');
   const [passwordCheckError, setPasswordCheckError] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -40,6 +39,8 @@ export default function SignUpClient() {
   const nicknameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordCheckRef = useRef<HTMLInputElement>(null);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!mailCode) return;
@@ -164,8 +165,12 @@ export default function SignUpClient() {
       passwordCheckRef.current?.focus();
       return;
     }
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       await signup(email, nickname, password, passwordCheck);
+
       toast.success('회원가입 되었습니다!');
       router.push('/auth/login');
     } catch (error) {

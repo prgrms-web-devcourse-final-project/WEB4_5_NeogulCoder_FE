@@ -85,6 +85,10 @@ export default function MannersClient() {
     getStudyList();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <>
       {isLoading ? (

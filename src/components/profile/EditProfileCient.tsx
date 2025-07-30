@@ -7,6 +7,7 @@ import PasswordChangeModal from '@/components/profile/PasswordChangeModal';
 import { userAuthStore } from '@/stores/userStore';
 import { nicknameRegex } from '@/lib/auth/regex';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import axiosInstance from '@/lib/api/axiosInstance';
 
 export default function EditProfileClient() {
@@ -16,6 +17,7 @@ export default function EditProfileClient() {
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
   const user = userAuthStore((state) => state.user);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const initUserProfile = async () => {
@@ -54,6 +56,8 @@ export default function EditProfileClient() {
       setNicknameError('');
     }
 
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const formData = new FormData();
 
@@ -71,7 +75,7 @@ export default function EditProfileClient() {
         setPreviewImg(updatedUser.profileImageUrl || '');
       }
 
-      alert('프로필 수정 완료');
+      toast.success('프로필 수정이 완료되었습니다.');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const msg = error.response?.data?.message;
@@ -90,12 +94,14 @@ export default function EditProfileClient() {
       <div className='mt-[60px] flex flex-col items-center justify-center'>
         <div className='relative'>
           <div className='w-[140px] h-[140px] rounded-full relative bg-black overflow-hidden'>
-            <img
+            <Image
               src={
                 previewImg && previewImg.trim() !== ''
                   ? previewImg
                   : basicBunny.src
               }
+              width={140}
+              height={140}
               alt='프로필 미리보기'
               className='w-full h-[160px] object-cover rounded-full'
             />

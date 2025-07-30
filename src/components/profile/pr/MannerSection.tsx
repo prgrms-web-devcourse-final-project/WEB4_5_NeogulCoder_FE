@@ -25,6 +25,15 @@ export default function MannerSection() {
   const { pr } = userPrStore();
   if (!pr) return null;
 
+  const excellentCount =
+    pr.reviewTypes?.find((tag) => tag.reviewType === 'EXCELLENT')
+      ?.reviewCount ?? 0;
+  const goodCount =
+    pr.reviewTypes?.find((tag) => tag.reviewType === 'GOOD')?.reviewCount ?? 0;
+  const notGoodCount =
+    pr.reviewTypes?.find((tag) => tag.reviewType === 'NOTGOOD')?.reviewCount ??
+    0;
+
   return (
     <>
       <div className='w-1/2 h-[260px] border border-main/10 rounded-[10px] flex flex-col p-5'>
@@ -43,30 +52,24 @@ export default function MannerSection() {
           <div className='flex flex-col gap-5 items-center'>
             <Image src={excellent} alt='최고예요' />
             <p>
-              <span className='tm2'>
-                {pr.reviewTags?.[0]?.reviewCount ?? 0}
-              </span>{' '}
-              <span className='t4'>명</span>
+              <span className='tm2'>{excellentCount}</span>{' '}
+              <span className='t4'>개</span>
             </p>
           </div>
 
           <div className='flex flex-col gap-5 items-center'>
             <Image src={good} alt='좋아요' />
             <p>
-              <span className='tm2'>
-                {pr.reviewTags?.[0]?.reviewCount ?? 0}
-              </span>{' '}
-              <span className='t4'>명</span>
+              <span className='tm2'>{goodCount}</span>{' '}
+              <span className='t4'>개</span>
             </p>
           </div>
 
           <div className='flex flex-col gap-5 items-center'>
             <Image src={notGood} alt='별로예요' />
             <p>
-              <span className='tm2'>
-                {pr.reviewTags?.[0]?.reviewCount ?? 0}
-              </span>{' '}
-              <span className='t4'>명</span>
+              <span className='tm2'>{notGoodCount}</span>{' '}
+              <span className='t4'>개</span>
             </p>
           </div>
         </div>

@@ -363,6 +363,10 @@ export default function TimeGrid({
     }
   }, [isOpenDeleteModal]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [isLoading]);
+
   return (
     <>
       {isLoading ? (

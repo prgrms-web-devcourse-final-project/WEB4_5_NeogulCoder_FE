@@ -6,7 +6,8 @@ import { useEffect, useState } from 'react';
 import { userAuthStore, UserInfo } from '@/stores/userStore';
 import { getUserById } from '@/lib/api/user';
 import ProfileSideBarSkeleton from './ProfileSideBarSkeleton';
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { ChevronRight } from 'lucide-react';
 
 export default function SideBar() {
   const router = useRouter();
@@ -34,11 +35,6 @@ export default function SideBar() {
 
   const isMyPage =
     params?.userId === 'me' || isEditOrWithdrawal || me?.id === userId;
-
-  const ChevronRight = dynamic(
-    () => import('lucide-react').then((m) => m.ChevronRight),
-    { ssr: false }
-  );
 
   useEffect(() => {
     if (isMyPage) {
@@ -106,10 +102,12 @@ export default function SideBar() {
             <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
               <div className='flex items-center gap-[28px] pl-8'>
                 <div className='w-[70px] h-[70px] bg-black rounded-full overflow-hidden'>
-                  <img
+                  <Image
                     src={userData?.profileImageUrl ?? basicBunny.src}
                     alt='예시 기본 프사'
                     className='w-full h-20 object-cover object-center rounded-full'
+                    width={70}
+                    height={70}
                   />
                 </div>
                 <div className='flex flex-col justify-center items-start'>

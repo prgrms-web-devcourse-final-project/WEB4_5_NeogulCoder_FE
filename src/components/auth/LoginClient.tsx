@@ -18,9 +18,9 @@ export default function LoginClient() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleGoToSignUp = () => {
     router.push('/auth/signup');
@@ -41,6 +41,9 @@ export default function LoginClient() {
       passwordRef.current?.focus();
       return;
     }
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       const res = await login(email, password);
       const user = res.data.data.user;
@@ -54,6 +57,7 @@ export default function LoginClient() {
         role: user.role,
       });
       localStorage.setItem('login_status', 'Y');
+
       document.cookie = 'login_status=true; path=/';
       toast.success('로그인 되었습니다!');
       router.push('/');
