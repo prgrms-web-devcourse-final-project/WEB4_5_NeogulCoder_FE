@@ -99,7 +99,11 @@ export default function StudyCommunityDetailPage() {
       ) : (
         <div className='w-[898px] mx-auto'>
           <div className='flex justify-between'>
-            <div className='tag-type3 red tb5'>
+            <div
+              className={`tag-type3 tb5 ${
+                category === 'NOTICE' ? 'red' : 'green'
+              }`}
+            >
               <span>{category === 'NOTICE' ? '공지' : '자유'}</span>
             </div>
             {me?.nickname === nickname && (

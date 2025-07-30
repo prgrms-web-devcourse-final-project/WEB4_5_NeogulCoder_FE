@@ -3,6 +3,7 @@
 import { deleteMeByStudy } from '@/lib/api/community';
 import { useStudiesStore } from '@/stores/useStudiesStore';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 export default function StudyOutCheckModal({
@@ -15,7 +16,11 @@ export default function StudyOutCheckModal({
   const router = useRouter();
   const { deleteStudy } = useStudiesStore();
 
+  const [isPending, setIsPending] = useState(false);
+
   const handleClickOut = async () => {
+    if (isPending) return;
+    setIsPending(true);
     try {
       await deleteMeByStudy(studyId);
       deleteStudy(studyId);
@@ -25,6 +30,8 @@ export default function StudyOutCheckModal({
     } catch (e) {
       console.error(e);
       toast.error('오류가 발생했습니다. 다시 시도해주세요!');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -40,7 +47,10 @@ export default function StudyOutCheckModal({
               취소
             </button>
             <button
-              className='button-type5 w-[120px]! bg-red! text-white!'
+              className={`button-type5 w-[120px]! bg-red! text-white! ${
+                isPending ? 'cursor-not-allowed!' : ''
+              }`}
+              disabled={isPending}
               onClick={handleClickOut}
             >
               탈퇴하기

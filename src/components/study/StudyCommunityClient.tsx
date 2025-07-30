@@ -101,6 +101,7 @@ export default function StudyCommunityClient() {
           setSelectedCategory={setSelectedCategory}
           selectedSortingType={selectedSortingType}
           setSelectedSortingType={setSelectedSortingType}
+          keyword={keyword}
           setKeyword={setKeyword}
           setPage={setPage}
         />

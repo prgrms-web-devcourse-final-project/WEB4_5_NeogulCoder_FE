@@ -20,7 +20,7 @@ export interface UserStore {
 
 export const userAuthStore = create<UserStore>((set) => ({
   user: null,
-  isLoading: true,
+  isLoading: false,
 
   setUser: (user) => {
     // 로그인 하고 나서 저장
