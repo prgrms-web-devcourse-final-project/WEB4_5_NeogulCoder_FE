@@ -17,7 +17,7 @@ const studyTypeMap: Record<string, '온라인' | '오프라인' | '온/오프라
 };
 
 export default function ApplyingStudyCard({
-  applicationId,
+  recruitmentPostId,
   name,
   leaderNickname,
   capacity,
@@ -34,7 +34,7 @@ export default function ApplyingStudyCard({
   return (
     <div
       className='flex flex-col justify-center w-[274px] px-[30px] py-[30px] bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
-      onClick={() => router.push(`/recruitment/detail/${applicationId}`)}
+      onClick={() => router.push(`/recruitment/detail/${recruitmentPostId}`)}
     >
       <div className='tm3 text-text1 truncate'>{name}</div>
       <div className='flex justify-between mt-5'>
