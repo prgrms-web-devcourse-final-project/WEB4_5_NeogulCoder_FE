@@ -7,7 +7,9 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <>
       <div className='fixed left-0 top-0 right-0 bg-white z-25'>
         <Header />
-        <SubHeader />
+        <div className='hidden lg:block'>
+          <SubHeader />
+        </div>
       </div>
       <div className='max-w-[1280px] m-auto mt-[113px] pt-[48px] pb-16 px-4 min-h-[800px]'>
         {children}
