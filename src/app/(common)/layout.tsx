@@ -11,7 +11,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <SubHeader />
         </div>
       </div>
-      <div className='max-w-[1280px] m-auto mt-[113px] pt-[48px] pb-16 px-4 min-h-[800px]'>
+      <div className='max-w-[1280px] m-auto mt-[97px] pt-[48px] pb-16 px-4 min-h-[800px]'>
         {children}
       </div>
       <Footer />
