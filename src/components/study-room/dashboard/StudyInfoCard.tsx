@@ -13,15 +13,21 @@ export default function StudyInfoCard({
 }) {
   return (
     <>
-      <div className='border border-border1 rounded-[10px] p-6 text-gray5'>
+      <div className='flex flex-col justify-between w-full border border-border1 rounded-[10px] lg:p-6 p-3.5 text-gray5'>
         <p className='tm4 mb-4'>{title}</p>
-        <div className='flex justify-between items-end'>
+        <div className='lg:flex justify-between items-end'>
           <div>
-            {type === 'day' && <Calendar1 strokeWidth={1} />}
-            {type === 'personnel' && <UserRound strokeWidth={1} />}
-            {type === 'post' && <NotepadText strokeWidth={1} />}
+            {type === 'day' && (
+              <Calendar1 className='w-[18px] h-[18px]' strokeWidth={1} />
+            )}
+            {type === 'personnel' && (
+              <UserRound className='w-[18px] h-[18px]' strokeWidth={1} />
+            )}
+            {type === 'post' && (
+              <NotepadText className='w-[18px] h-[18px]' strokeWidth={1} />
+            )}
           </div>
-          <p className='tm1 flex items-end leading-none text-text1 gap-1'>
+          <p className='justify-end tm1 flex items-end leading-none text-text1 gap-1'>
             {data}
             {type === 'day' && <span className='tm4'>일</span>}
             {type === 'personnel' && (

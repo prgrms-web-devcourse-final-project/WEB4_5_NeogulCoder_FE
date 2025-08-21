@@ -35,7 +35,7 @@ export default function CalendarSmallDetail({
 
   return (
     <>
-      <div className='w-full grid grid-rows-[auto_1fr] h-full px-9 border-l border-border1 py-3'>
+      <div className='lg:w-full lg:grid lg:grid-rows-[auto_1fr] h-full px-1.5 mx-3.5 lg:mx-0 lg:px-9 border-t lg:border-t-0 lg:border-l border-border1 py-3'>
         <div className='flex justify-between items-center mb-4'>
           <h3 className='tm2'>{dateFormat(date)}</h3>
           <Link

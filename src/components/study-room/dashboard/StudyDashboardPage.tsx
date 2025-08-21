@@ -70,7 +70,7 @@ export default function StudyDashboardPage() {
               일 스터디 중!
             </p>
           </div>
-          <div className='flex gap-6 mb-12'>
+          <div className='block lg:flex gap-6 mb-12'>
             <div className='shrink-0'>
               <StudyAttendance
                 studyId={studyId}
@@ -79,7 +79,7 @@ export default function StudyDashboardPage() {
             </div>
             <div className='w-full'>
               <h3 className='tb3 mb-[18px]'>스터디 세부정보</h3>
-              <div className='flex flex-col gap-3'>
+              <div className='flex lg:flex-col lg:gap-3 gap-2.5'>
                 {studyInfos.map((info) => (
                   <StudyInfoCard
                     key={`${studyInfo?.name}${info.title}`}
@@ -94,7 +94,7 @@ export default function StudyDashboardPage() {
           </div>
           <div className='mb-12'>
             <h3 className='tb3 mb-[18px]'>스터디 일정</h3>
-            <div className='grid h-[400px] grid-cols-2 border border-border1 rounded-[10px] py-6'>
+            <div className='lg:grid lg:h-[400px] lg:grid-cols-2 border border-border1 rounded-[10px] py-6'>
               <CalendarSmallShell
                 studyId={studyId}
                 calendarData={studyCalendar}
