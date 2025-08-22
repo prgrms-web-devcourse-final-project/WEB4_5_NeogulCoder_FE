@@ -96,7 +96,7 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
 
   return (
     <>
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4 '>
         <div className='relative w-fit mx-auto my-10'>
           <input
             type='file'
@@ -121,7 +121,7 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
           </label>
         </div>
 
-        <div className='flex flex-col w-full max-w-[650px] min-w-[580px]'>
+        <div className='flex flex-col w-full'>
           <div>
             <span className='t3 mb-2.5'>스터디명 </span>
             <span className='tm5 text-red'>(필수)</span>
@@ -135,7 +135,7 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
           />
         </div>
 
-        <div className='flex gap-3'>
+        <div className='flex flex-col gap-3 lg:flex-row'>
           {/* 시작 날짜 */}
           <div className='flex flex-col w-full'>
             <div>
@@ -245,44 +245,54 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
           </div>
         </div>
 
-        <div className=' shrink-0'>
-          <p className='t3'>
-            진행 방식 <span className='tm5 text-red'>(필수)</span>
-          </p>
-          <div className='flex gap-3'>
-            <div
-              className='w-full relative input-type2 border-[1px] mt-3'
-              style={{ borderColor: 'var(--color-border3)' }}
-            >
-              <button
-                className={`w-full h-full text-left ${
-                  !studyType ? 'text-gray-400' : 'text-black'
-                }`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setIsOpenStudyTypeModal((prev) => !prev);
-                }}
-              >
-                {studyType
-                  ? studyTypeFormatting(studyType)
-                  : '진행 방식을 선택해 주세요'}{' '}
-              </button>
-              <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
-                <ChevronDown />
-              </div>
-              {isOpenStudyTypeModal && (
-                <div className='absolute top-full w-full left-0 z-1'>
-                  <OnlineModal
-                    onSelect={(online: string) => {
-                      setStudyType(online);
-                      setIsOpenStudyTypeModal(false);
-                    }}
-                    customCss='!w-full !h-[120px] !overflow-auto t4'
-                  />
-                </div>
-              )}
+        <div className='flex flex-col gap-3 lg:flex-row shrink-0'>
+          <div className='flex flex-col w-full'>
+            <div>
+              <span className='t3 mb-2.5'>진행 방식</span>
+              <span className='tm5 text-red'>(필수)</span>
             </div>
-            {studyType !== 'ONLINE' && (
+
+            <div className='flex flex-col gap-3 lg:flex-row'>
+              <div
+                className='w-full relative input-type2 border-[1px] mt-3'
+                style={{ borderColor: 'var(--color-border3)' }}
+              >
+                <button
+                  className={`w-full h-full text-left ${
+                    !studyType ? 'text-gray-400' : 'text-black'
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsOpenStudyTypeModal((prev) => !prev);
+                  }}
+                >
+                  {studyType
+                    ? studyTypeFormatting(studyType)
+                    : '진행 방식을 선택해 주세요'}{' '}
+                </button>
+                <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
+                  <ChevronDown />
+                </div>
+                {isOpenStudyTypeModal && (
+                  <div className='absolute top-full w-full left-0 z-1'>
+                    <OnlineModal
+                      onSelect={(online: string) => {
+                        setStudyType(online);
+                        setIsOpenStudyTypeModal(false);
+                      }}
+                      customCss='!w-full !h-[120px] !overflow-auto t4'
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {studyType !== 'ONLINE' && (
+            <div className='flex flex-col w-full'>
+              <div>
+                <span className='t3 mb-2.5'>지역</span>
+              </div>
               <div
                 className='w-full relative input-type2 border-[1px] mt-3'
                 style={{ borderColor: 'var(--color-border3)' }}
@@ -315,9 +325,10 @@ export default function CreateStudyModal({ onClose }: CreateStudyModalProps) {
                   </div>
                 )}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
+
         <div className='flex flex-col w-full mt-3'>
           <span className='t3'>스터디 한 줄 소개</span>
           <textarea

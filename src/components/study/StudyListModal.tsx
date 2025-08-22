@@ -6,7 +6,7 @@ export default function StudyListModal({
   onSelect: (studyId: number) => void;
 }) {
   return (
-    <div className='w-[320px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3'>
+    <div className='w-full lg:w-[320px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3'>
       <div className='flex flex-col gap-2'>
         {studyList.map((study) => (
           <button
