@@ -129,7 +129,7 @@ body {
     @apply bg-[#c9c9c9] transition-colors duration-300;
   }
   .button-sm-type1 {
-    @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
+    @apply bg-main inline-flex h-8 items-center justify-center lg:rounded-[10px] rounded-[4px] px-4 py-1.5 lg:py-2 text-center text-xs text-white md:text-sm;
   }
   .button-sm-type1:hover {
     @apply bg-[#292929] transition-colors duration-300;

@@ -61,8 +61,8 @@ export default function StudyDashboardPage() {
       {isLoading ? (
         <StudyDashboardSkeleton />
       ) : (
-        <>
-          <div className='flex gap-3 items-end leading-0 mb-10'>
+        <div className='bg-border1 lg:bg-white -ml-4 w-[calc(100%+32px)]'>
+          <div className='bg-white flex gap-3 items-end leading-0 pb-10  px-[18px] lg:px-0'>
             <p className='t4 text-gray3'>
               {/* 스터디 이름 조회 */}
               <span className='tb3 text-text1 mr-1'>{studyInfo?.name}</span>와
@@ -70,14 +70,14 @@ export default function StudyDashboardPage() {
               일 스터디 중!
             </p>
           </div>
-          <div className='block lg:flex gap-6 mb-12'>
-            <div className='shrink-0'>
+          <div className=' block lg:flex gap-6 lg:mb-12'>
+            <div className=' bg-white shrink-0 pb-10 mb-1.5 lg:mb-0 lg:pb-0 px-[18px] lg:px-0'>
               <StudyAttendance
                 studyId={studyId}
                 totalDays={studyData?.totalDays ?? 1}
               />
             </div>
-            <div className='w-full'>
+            <div className=' bg-white w-full py-10 lg:py-0 mb-1.5  px-[18px] lg:px-0'>
               <h3 className='tb3 mb-[18px]'>스터디 세부정보</h3>
               <div className='flex lg:flex-col lg:gap-3 gap-2.5'>
                 {studyInfos.map((info) => (
@@ -92,7 +92,7 @@ export default function StudyDashboardPage() {
               </div>
             </div>
           </div>
-          <div className='mb-12'>
+          <div className='py-10 lg:py-0 lg:mb-12 mb-1.5 bg-white  px-[18px] lg:px-0'>
             <h3 className='tb3 mb-[18px]'>스터디 일정</h3>
             <div className='lg:grid lg:h-[400px] lg:grid-cols-2 border border-border1 rounded-[10px] py-6'>
               <CalendarSmallShell
@@ -101,7 +101,7 @@ export default function StudyDashboardPage() {
               />
             </div>
           </div>
-          <div className='mb-12'>
+          <div className='pt-10 pb-12 bg-white  px-[18px] lg:px-0'>
             <div className='flex justify-between mb-[18px]'>
               <h3 className='tb3'>스터디 공지사항</h3>
 
@@ -112,7 +112,7 @@ export default function StudyDashboardPage() {
                 더보기 <ChevronRight className='w-4 h-4' />
               </Link>
             </div>
-            <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
+            <div className='border border-border1 rounded-[10px] flex flex-col p-3.5 lg:p-6 gap-4'>
               {studyData?.noticePosts && studyData?.noticePosts.length > 0 ? (
                 studyData?.noticePosts.map((post) => (
                   <StudyPostItem
@@ -125,7 +125,7 @@ export default function StudyDashboardPage() {
                 <div className='flex h-full justify-center flex-col gap-5'>
                   <div className='text-center'>
                     <MessageCircleDashed
-                      className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
+                      className='mx-auto mb-3  w-[35px] h-[35px] lg:w-[50px] lg:h-[50px] text-border2'
                       strokeWidth={1}
                     />
                     <p className='tm4 text-border2  mb-3'>
@@ -144,7 +144,7 @@ export default function StudyDashboardPage() {
               )}
             </div>
           </div>
-          <div className='mb-12'>
+          <div className='pb-12 bg-white  px-[18px] lg:px-0'>
             <div className='flex justify-between  mb-[18px]'>
               <h3 className='tb3'>스터디 최신글</h3>
               <Link
@@ -154,7 +154,7 @@ export default function StudyDashboardPage() {
                 더보기 <ChevronRight className='w-4 h-4' />
               </Link>
             </div>
-            <div className='border border-border1 rounded-[10px] flex flex-col p-6 gap-4'>
+            <div className='border border-border1 rounded-[10px] flex flex-col p-3.5 lg:p-6 gap-4'>
               {studyData?.freePosts && studyData?.freePosts.length > 0 ? (
                 studyData?.freePosts.map((post) => (
                   <StudyPostItem
@@ -167,7 +167,7 @@ export default function StudyDashboardPage() {
                 <div className='flex h-full justify-center flex-col gap-5'>
                   <div className='text-center'>
                     <MessageCircleDashed
-                      className='mx-auto mb-3 w-[50px] h-[50px] text-border2'
+                      className='mx-auto mb-3 w-[35px] h-[35px] lg:w-[50px] lg:h-[50px] text-border2'
                       strokeWidth={1}
                     />
                     <p className='tm4 text-border2 mb-3'>
@@ -186,7 +186,7 @@ export default function StudyDashboardPage() {
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
     </>
   );
