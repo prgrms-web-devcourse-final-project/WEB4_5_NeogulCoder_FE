@@ -53,7 +53,7 @@ body {
 @layer utilities {
   /* 버튼 */
   .button-modal1 {
-    @apply bg-main inline-flex h-12 w-full items-center justify-center rounded-md text-center text-sm leading-4 text-white md:text-base;
+    @apply bg-main inline-flex h-10 lg:h-12 w-full items-center justify-center rounded-md text-center text-sm leading-4 text-white md:text-base;
   }
   .button-modal1:hover {
     @apply bg-[#292929] transition-colors duration-300;
@@ -176,7 +176,7 @@ body {
     @apply border-border1 text-text1 h-[45px] rounded-[10px] border px-5 text-xs md:text-sm;
   }
   .input-type2 {
-    @apply border-border1 text-text1 h-10 rounded-md border px-4 text-xs md:text-sm;
+    @apply border-border1 text-text1 h-8 lg:h-10 rounded-md border px-3 lg:px-4 text-xs md:text-sm;
   }
   .input-type3 {
     @apply border-border2 text-text1 h-[50px] rounded-[10px] border px-5 text-xs md:text-sm;

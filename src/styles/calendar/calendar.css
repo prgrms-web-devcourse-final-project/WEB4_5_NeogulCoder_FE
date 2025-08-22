@@ -61,6 +61,7 @@
 }
 .big-calendar .fc .fc-daygrid-day {
   cursor: pointer;
+  height: 120px;
 }
 
 .big-calendar .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
@@ -155,6 +156,35 @@
   cursor: pointer;
 }
 @media screen and (max-width: 1024px) {
+  .big-calendar .fc-toolbar-title {
+    font-size: 20px;
+    padding: 0 10px;
+  }
+  .big-calendar .fc .fc-button-primary {
+    font-size: 14px;
+  }
+  .big-calendar .fc-col-header-cell-cushion {
+    font-size: 12px;
+    height: 20px;
+  }
+  .big-calendar .fc .fc-daygrid-day-top {
+    font-size: 10px;
+  }
+  .big-calendar .fc-event-title-container {
+    font-size: 9px;
+  }
+  .big-calendar .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number {
+    height: 24px;
+    width: 24px;
+  }
+  .big-calendar .fc .fc-daygrid-day {
+    height: 80px;
+  }
+  .big-calendar .fc-daygrid-more-link.fc-more-link {
+    font-size: 8px;
+  }
+
+  /* 작은달력 */
   .small-calendar .fc-toolbar-title {
     font-size: 16px;
     font-weight: 500;
