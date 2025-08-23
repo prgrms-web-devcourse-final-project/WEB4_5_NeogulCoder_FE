@@ -9,20 +9,24 @@ export default function ManagerStudyList({
 }) {
   return (
     <tr className='h-13 tm4 text-center border-b border-border1 last:border-b-0 hover:bg-gray4'>
-      <td className='px-5'>{study.name}</td>
-      <td className='px-5'>{categoryFormatting(study.category)}</td>
-      <td className='px-5'>{study.finished ? '종료' : '진행중'}</td>
-      <td className='px-5'>
+      <td className='px-2 lg:px-5 break-words'>{study.name}</td>
+      <td className='px-2 lg:px-5 break-words'>
+        {categoryFormatting(study.category)}
+      </td>
+      <td className='px-2 lg:px-5 break-words'>
+        {study.finished ? '종료' : '진행중'}
+      </td>
+      <td className='px-2 lg:px-5 break-words'>
         {study.activated ? (
           <span className='text-green'>활성화</span>
         ) : (
           <span className='text-red'>비활성화</span>
         )}
       </td>
-      <td className='px-5'>
+      <td className='px-2 lg:px-5 break-words'>
         <button
           onClick={() => handleDelete(study.id)}
-          className='tag-type3 red'
+          className='tag-type3 red mobile1'
         >
           삭제
         </button>

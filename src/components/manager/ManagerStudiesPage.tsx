@@ -130,9 +130,9 @@ export default function ManagerStudiesPage() {
 
   return (
     <>
-      <div className='flex justify-between items-start mb-4'>
-        <h1 className='tb2'>스터디 목록</h1>
-        <div className='flex items-center bg-gray4 rounded-2xl pr-4'>
+      <div className='flex flex-wrap justify-between items-start mb-3 lg:mb-4 gap-2'>
+        <h1 className='tb2 whitespace-nowrap'>스터디 목록</h1>
+        <div className='w-full max-w-[419px] lg:w-auto flex items-center ml-auto bg-gray4 rounded-2xl pr-4'>
           <div className='w-[150px] h-9 relative z-1 pl-4 pr-6'>
             <button
               className={`w-full h-full t4 text-left ${
@@ -155,13 +155,13 @@ export default function ManagerStudiesPage() {
               </div>
             )}
           </div>
-          <div className='relative'>
+          <div className='w-full lg:w-auto relative'>
             <form onSubmit={handleSubmit}>
               <input
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 // onKeyDown={searchName}
-                className='h-9 t4 px-3 placeholder:text-gray3'
+                className='h-9 t4 px-3 placeholder:text-gray3 w-full lg:w-auto'
                 placeholder='스터디 이름 검색'
               ></input>
             </form>
@@ -179,7 +179,7 @@ export default function ManagerStudiesPage() {
           </div>
         </div>
       </div>
-      <div className='h-[580px] mb-10'>
+      <div className='min-h-[580px] mb-10'>
         <div className='w-full border rounded-[10px] border-border1 overflow-hidden'>
           <table className='w-full'>
             <colgroup>
@@ -191,11 +191,17 @@ export default function ManagerStudiesPage() {
             </colgroup>
             <thead className='bg-gray4 h-15'>
               <tr className='border-b border-border1'>
-                <th className='px-5'>이름</th>
-                <th className='px-5'>카테고리</th>
-                <th className='px-5'>종료여부</th>
-                <th className='px-5'>상태</th>
-                <th className='w-[200px] px-5'>삭제</th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>이름</th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                  카테고리
+                </th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                  종료여부
+                </th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
+                <th className='w-[200px] px-2 lg:px-5 text-[14px] lg:text-base'>
+                  삭제
+                </th>
               </tr>
             </thead>
             <tbody>

@@ -105,20 +105,20 @@ export default function ManagerRecruitmentsPage() {
 
   return (
     <>
-      <div className='flex justify-between items-start mb-4'>
-        <h1 className='tb2'>모집글 목록</h1>
-        <div className='flex items-center bg-gray4 rounded-2xl pr-4'>
-          <div className='relative'>
+      <div className='flex flex-wrap justify-between items-start mb-3 lg:mb-4 gap-2'>
+        <h1 className='tb2 whitespace-nowrap'>모집글 목록</h1>
+        <div className='w-full max-w-[285px] lg:w-auto flex items-center bg-gray4 rounded-2xl pr-4'>
+          <div className='w-full lg:w-auto relative'>
             <input
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={searchSubject}
-              className='h-9 t4 px-3 placeholder:text-gray3'
+              className='h-9 t4 px-3 placeholder:text-gray3 w-full lg:w-auto'
               placeholder='모집글 제목 검색'
             ></input>
           </div>
 
-          <div className='flex gap-3 w-[60px] items-center justify-end'>
+          <div className='flex  w-[60px] items-center justify-end'>
             {keyword && (
               <button className='' onClick={handleClear}>
                 <X className='w-4.5 h-4.5 text-gray2/80' />
@@ -130,21 +130,25 @@ export default function ManagerRecruitmentsPage() {
           </div>
         </div>
       </div>
-      <div className='h-[580px] mb-10'>
+      <div className='min-h-[580px] mb-10'>
         <div className='w-full border rounded-[10px] border-border1 overflow-hidden'>
           <table className='w-full table-fixed'>
             <colgroup>
-              <col className='w-[50%]'></col>
-              <col className='w-[20%]'></col>
+              <col className='w-[45%] lg:w-[50%]'></col>
+              <col className='w-[25%] lg:w-[20%]'></col>
               <col className='w-[15%]'></col>
               <col className='w-[15%]'></col>
             </colgroup>
             <thead className='bg-gray4 h-15'>
               <tr className='border-b border-border1'>
-                <th className='px-5'>제목</th>
-                <th className='px-5'>모집마감일</th>
-                <th className='px-5'>상태</th>
-                <th className='w-[200px] px-5'>삭제</th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>제목</th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                  모집마감일
+                </th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
+                <th className='w-[200px] px-2 lg:px-5 text-[14px] lg:text-base'>
+                  삭제
+                </th>
               </tr>
             </thead>
             <tbody>

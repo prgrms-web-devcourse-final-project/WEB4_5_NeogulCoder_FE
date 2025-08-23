@@ -11,25 +11,25 @@ export default function ManagerRecruitment({
   return (
     <>
       <tr className='h-13 tm4 text-center border-b border-border1 last:border-b-0 hover:bg-gray4'>
-        <td className='px-5'>
+        <td className='px-2 lg:px-5 break-words'>
           <Link href={`/recruitment/detail/${recruit.id}`} target='_black'>
             {recruit.subject}
           </Link>
         </td>
-        <td className='px-5'>
+        <td className='px-2 lg:px-5 break-words text-[10px] md:text-sm'>
           {dayjs(recruit.expiredDate).format('YYYY-MM-DD ( HH:mm:ss )')}
         </td>
-        <td className='px-5'>
+        <td className='px-2 lg:px-5 break-words'>
           {recruit.activated ? (
             <span className='text-green'>활성화</span>
           ) : (
             <span className='text-red'>비활성화</span>
           )}
         </td>
-        <td className='px-5'>
+        <td className='px-2 lg:px-5 break-words'>
           <button
             onClick={() => handleDelete(recruit.id)}
-            className='tag-type3 red'
+            className='tag-type3 red mobile1'
           >
             삭제
           </button>
