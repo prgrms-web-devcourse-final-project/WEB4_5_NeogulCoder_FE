@@ -78,7 +78,7 @@ export default function StudyCommunityWritePage() {
         <button
           type='button'
           style={{ borderColor: 'var(--color-border3)' }}
-          className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border mb-6  ${
+          className={`w-full max-w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border mb-6  ${
             isSelectedCategory
               ? 'border-main text-text1 tm4'
               : 'border-main/10 text-text1/50 tm4'

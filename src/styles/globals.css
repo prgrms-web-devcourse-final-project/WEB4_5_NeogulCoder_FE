@@ -93,7 +93,7 @@ body {
   }
 
   .button-type4 {
-    @apply bg-main inline-flex h-11 w-[118px] items-center justify-center rounded-[10px] text-center text-sm text-white md:text-[15px];
+    @apply bg-main inline-flex h-11 w-full lg:w-[118px] items-center justify-center rounded-[10px] text-center text-sm text-white md:text-[15px];
   }
   .button-type4:hover {
     @apply bg-[#292929] transition-colors duration-300;
