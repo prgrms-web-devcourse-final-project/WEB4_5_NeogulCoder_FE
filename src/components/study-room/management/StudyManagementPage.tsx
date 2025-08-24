@@ -46,26 +46,29 @@ export default function StudyManagementPage() {
         <StudyMamagementSkeleton />
       ) : (
         studyInfo && (
-          <>
-            <div className='mb-24'>
+          <div className='bg-border1 lg:bg-white lg:ml-0 lg:w-auto -ml-4 w-[calc(100%+32px)]'>
+            <div className=' bg-white mb-1.5 lg:mb-24 px-[18px] lg:px-0 pb-10 lg:pb-0'>
               <StudyRoomInfo
                 studyInfoData={studyInfo}
                 studyId={studyId}
                 handleUpdate={handleUpdate}
               />
             </div>
-            <div className='mb-24'>
+            <div className=' bg-white mb-1.5 lg:mb-24 px-[18px] lg:px-0 py-10 lg:py-0'>
               <StudyMemberList
                 memberInfo={studyInfo.members}
                 studyId={studyId}
               />
             </div>
+            <div className=' bg-white px-[18px] lg:px-0 py-10 lg:py-0'>
+              <StudyExtend endDate={studyInfo.endDate} studyId={studyId} />
 
-            <StudyExtend endDate={studyInfo.endDate} studyId={studyId} />
-
-            {/* 스터디에 팀장만 있을경우 스터디 삭제 할 수 있게 */}
-            {studyInfo.members.length <= 1 && <StudyDelete studyId={studyId} />}
-          </>
+              {/* 스터디에 팀장만 있을경우 스터디 삭제 할 수 있게 */}
+              {studyInfo.members.length <= 1 && (
+                <StudyDelete studyId={studyId} />
+              )}
+            </div>
+          </div>
         )
       )}
     </>

@@ -166,18 +166,18 @@ export default function StudyRoomInfoWrite({
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
-        <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
-          <div className='flex justify-between mb-8 px-9 '>
+        <div className='py-4 lg:py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] lg:min-w-[580px] w-[calc(100%-36px)]'>
+          <div className='flex justify-between px-4 lg:px-9 mb-5 lg:mb-8'>
             <h3 className='tm2'>스터디 정보 수정</h3>
             <button onClick={closeFn}>
-              <X className='w-8 y-8' />
+              <X className='w-6 h-6 lg:w-8 lg:h-8' />
             </button>
           </div>
           <div>
             <form onSubmit={(e) => e.preventDefault()}>
-              <div className='px-9 mb-8 flex flex-col gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
+              <div className='px-4 lg:px-9 mb-5 lg:mb-8 flex flex-col gap-3 lg:gap-4 max-h-[calc(90vh-160px)] overflow-auto'>
                 {/* 사진 */}
-                <div className='w-[100px] h-[100px] mx-auto relative shrink-0 '>
+                <div className='w-[80px] h-[80px] lg:w-[80px] lg:h-[80px] mx-auto relative shrink-0 '>
                   <div className='w-full h-full rounded-full border border-border1 bg-white overflow-hidden flex item-center justify-center'>
                     <Image
                       src={imagePreview ?? studyInfoData.imageUrl ?? logoWibby}
@@ -207,7 +207,7 @@ export default function StudyRoomInfoWrite({
                 </div>
                 {/* 이름 */}
                 <div className=' shrink-0'>
-                  <p className='t3 mb-3'>
+                  <p className='t3 mb-1.5 lg:mb-3'>
                     이름 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <input
@@ -219,7 +219,7 @@ export default function StudyRoomInfoWrite({
                 </div>
                 {/* 카테고리 */}
                 <div className=' shrink-0'>
-                  <p className='t3 mb-3'>
+                  <p className='t3 mb-1.5 lg:mb-3'>
                     카테고리 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='w-full relative input-type2'>
@@ -232,7 +232,7 @@ export default function StudyRoomInfoWrite({
                     >
                       {categoryFormatting(selectedCategory)}
                     </button>
-                    <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
+                    <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
                     {isOpenCategoryModal && (
                       <div className='absolute top-full w-full left-0 z-1'>
                         <CategoriesModal
@@ -248,7 +248,7 @@ export default function StudyRoomInfoWrite({
                 </div>
                 {/* 인원 수 */}
                 <div className=' shrink-0'>
-                  <p className='t3 mb-3'>
+                  <p className='t3 mb-1.5 lg:mb-3'>
                     인원 수{' '}
                     <span className='tm5 text-red'>
                       (필수){' '}
@@ -270,7 +270,7 @@ export default function StudyRoomInfoWrite({
                 {/* 시작 날짜 (스터디 시작 전에만 수정 가능) */}
                 {isFutureStartDate && (
                   <div className=' shrink-0'>
-                    <p className='t3 mb-3'>
+                    <p className='t3 mb-1.5 lg:mb-3'>
                       시작날짜 <span className='tm5 text-red'>(필수)</span>
                     </p>
                     <label className='w-full relative'>
@@ -287,14 +287,14 @@ export default function StudyRoomInfoWrite({
                       />
                       <CalendarDays
                         strokeWidth={1}
-                        className='w-5 h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2 -z-1'
+                        className='w-4 h-4 lg:w-5 lg:h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2 -z-1'
                       />
                     </label>
                   </div>
                 )}
                 {/* 진행방식 */}
                 <div className=' shrink-0'>
-                  <p className='t3 mb-3'>
+                  <p className='t3 mb-1.5 lg:mb-3'>
                     진행방식 <span className='tm5 text-red'>(필수)</span>
                   </p>
                   <div className='flex gap-3'>
@@ -308,7 +308,7 @@ export default function StudyRoomInfoWrite({
                       >
                         {studyTypeFormatting(selectedStudyType)}
                       </button>
-                      <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
+                      <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
                       {isOpenStudyTypeModal && (
                         <div className='absolute top-full w-full left-0 z-1'>
                           <OnlineModal
@@ -332,7 +332,7 @@ export default function StudyRoomInfoWrite({
                         >
                           {selectedRegion}
                         </button>
-                        <ChevronDown className='absolute w-5 h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
+                        <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
                         {isOpenRegionModal && (
                           <div className='absolute top-full w-full left-0 z-1'>
                             <RegionModal
@@ -352,7 +352,7 @@ export default function StudyRoomInfoWrite({
                 </div>
                 {/* 스터디 한 줄 소개 */}
                 <div className=' shrink-0'>
-                  <p className='t3 mb-3'>스터디 한 줄 소개</p>
+                  <p className='t3 mb-1.5 lg:mb-3'>스터디 한 줄 소개</p>
                   <textarea
                     value={introduction}
                     onChange={(e) => setIntroduction(e.target.value)}
@@ -360,7 +360,7 @@ export default function StudyRoomInfoWrite({
                   />
                 </div>
               </div>
-              <div className='px-9'>
+              <div className='px-4 lg:px-9'>
                 <button
                   className='button-modal1'
                   onClick={hadleSubmit}

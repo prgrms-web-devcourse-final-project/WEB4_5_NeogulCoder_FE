@@ -42,9 +42,9 @@ export default function MemberCard({
 
   return (
     <>
-      <div className='w-full flex items-center justify-between border border-border1 rounded-[10px] px-4 py-3'>
-        <div className='flex items-center gap-3'>
-          <div className='w-10 h-10 overflow-hidden rounded-full border border-border1 shrink-0'>
+      <div className='w-full flex flex-col lg:flex-row items-center justify-between border border-border1 rounded-[10px] gap-2 lg:gap-0 px-3 lg:px-4 py-3'>
+        <div className='flex flex-col lg:flex-row items-center gap-0 lg:gap-3'>
+          <div className='w-9 h-9 lg:w-10 lg:h-10 overflow-hidden rounded-full border border-border1 shrink-0'>
             <Image
               src={member.profileImageUrl ?? defaultUserProfileImage}
               width={40}
@@ -53,17 +53,19 @@ export default function MemberCard({
               loading='lazy'
             />
           </div>
-          <div className='leading-none mt-1'>{member.nickname}</div>
+          <div className='leading-none mt-1 text-sm md:text-base'>
+            {member.nickname}
+          </div>
         </div>
         {member.userId === authId ? (
-          <div className=' flex items-center gap-2 t5 text-gray5'>
+          <div className=' flex items-center gap-1 lg:gap-2 t5 text-gray5'>
             나
-            <Crown className='text-[#FBE175] w-5 h-5' />
+            <Crown className='text-[#FBE175] w-3.5 h-3.5 lg:w-5 lg:h-5' />
           </div>
         ) : (
           <div className='flex gap-x-1.5 shrink-0'>
             <button
-              className='inline-flex items-center justify-center t5 px-1.5 py-1 text-gray1 border border-gray1 rounded-md'
+              className='inline-flex items-center justify-center t5 px-1.5 lg:py-1 py-0.5 text-gray1 border border-gray1 rounded-md'
               onClick={() => handleDelegate(member.userId)}
               disabled={isPending}
             >

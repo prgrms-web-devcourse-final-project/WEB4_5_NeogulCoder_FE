@@ -129,11 +129,11 @@ export default function CalendarWrite({
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
-        <div className='py-4 lg:py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] lg:min-w-[580px] min-w-[calc(100%-36px)]'>
+        <div className='py-4 lg:py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] lg:min-w-[580px] w-[calc(100%-36px)]'>
           <div className='flex justify-between mb-5 lg:mb-8 px-4 lg:px-9 '>
             <h3 className='tm2'>일정 {data ? '수정' : '등록'}</h3>
             <button onClick={writeCloseHandler}>
-              <X className='w-8 y-8' />
+              <X className='w-6 h-6 lg:w-8 lg:h-8' />
             </button>
           </div>
           <div>
