@@ -59,7 +59,7 @@ export type MyApplicationQueryType = {
 
 export type MyApplicationListType = {
   applications: {
-    applicationId: number;
+    recruitmentPostId: number;
     name: string;
     leaderNickname: string;
     capacity: number;

@@ -97,7 +97,7 @@ export default function ApplicationListClient() {
           {myApplicationList.length !== 0 && (
             <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
               {myApplicationList.map((study) => (
-                <ApplyingStudyCard key={study.applicationId} {...study} />
+                <ApplyingStudyCard key={study.recruitmentPostId} {...study} />
               ))}
             </div>
           )}
