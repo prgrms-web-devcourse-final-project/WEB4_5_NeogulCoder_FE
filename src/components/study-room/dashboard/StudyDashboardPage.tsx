@@ -62,7 +62,7 @@ export default function StudyDashboardPage() {
         <StudyDashboardSkeleton />
       ) : (
         <div className='bg-border1 lg:bg-white lg:ml-0 lg:w-auto -ml-4 w-[calc(100%+32px)]'>
-          <div className='bg-white flex gap-3 items-end leading-0 pb-10 px-[18px] lg:px-0'>
+          <div className='bg-white flex gap-3 items-end pb-6 lg:pb-10 px-[18px] lg:px-0'>
             <p className='t4 text-gray3'>
               {/* 스터디 이름 조회 */}
               <span className='tb3 text-text1 mr-1'>{studyInfo?.name}</span>와

@@ -48,7 +48,7 @@ export default function SideMenuLayout() {
   }, [studyId, user, router, setStudyInfo, setStudyLoading, setLeader]);
   return (
     <>
-      <div className='lg:w-[300px] mr-10 shrink-0 lg:static fixed left-0 top-[48px] w-full bg-white border-b border-border1 z-24'>
+      <div className='lg:w-[300px] mr-10 shrink-0 lg:static fixed left-0 top-[47px] w-full bg-white border-b border-border1 z-24 lg:z-auto'>
         <SideMenu studyId={studyId} />
       </div>
     </>

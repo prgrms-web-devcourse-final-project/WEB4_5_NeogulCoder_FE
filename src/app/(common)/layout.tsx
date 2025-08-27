@@ -7,14 +7,14 @@ export default function layout({ children }: { children: React.ReactNode }) {
     <>
       <div className='fixed left-0 top-0 right-0 bg-white z-25'>
         <Header />
-        <div className='hidden lg:block'>
-          <SubHeader />
-        </div>
+        <SubHeader />
       </div>
-      <div className='max-w-[1280px] m-auto mt-[97px] pt-[48px] pb-16 px-4 min-h-[800px]'>
+      <div className='max-w-[1280px] m-auto mt-[48px] lg:mt-[97px] pt-[32px] lg:pt-[48px] pb-16 px-4 min-h-[800px]'>
         {children}
       </div>
-      <Footer />
+      <div className=' mb-[54px] lg:mb-0 '>
+        <Footer />
+      </div>
     </>
   );
 }
