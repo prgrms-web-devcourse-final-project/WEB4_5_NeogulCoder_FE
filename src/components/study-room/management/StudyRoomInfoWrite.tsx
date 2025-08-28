@@ -8,11 +8,14 @@ import dayjs from 'dayjs';
 // import studyDefault from '@/assets/images/study-default.svg';
 import logoWibby from '@/assets/images/logo-wibby.svg';
 import Image from 'next/image';
-import React, { useState, useTransition } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import { useStudyStore } from '@/stores/studyInfoStore';
 import { useStudiesStore } from '@/stores/useStudiesStore';
 import { toast } from 'react-toastify';
 import { CalendarDays, Camera, ChevronDown, X } from 'lucide-react';
+import MobileCategoriesModal from '@/components/common/MobileCategoriesModal';
+import MobileOnlineModal from '@/components/common/MobileOnlineModal';
+import MobileRegionModal from '@/components/common/MobileRegionModal';
 
 export default function StudyRoomInfoWrite({
   studyInfoData,
@@ -163,10 +166,23 @@ export default function StudyRoomInfoWrite({
     });
   };
 
+  const [width, setWidth] = useState<number>(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    handleResize(); // 최초 세팅
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
-        <div className='py-4 lg:py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] lg:min-w-[580px] w-[calc(100%-36px)]'>
+        <div className='py-4 lg:py-7 rounded-[10px] bg-white max-w-[650px] lg:min-w-[580px] w-[calc(100%-36px)]'>
           <div className='flex justify-between px-4 lg:px-9 mb-5 lg:mb-8'>
             <h3 className='tm2'>스터디 정보 수정</h3>
             <button onClick={closeFn}>
@@ -232,18 +248,31 @@ export default function StudyRoomInfoWrite({
                     >
                       {categoryFormatting(selectedCategory)}
                     </button>
-                    <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
-                    {isOpenCategoryModal && (
-                      <div className='absolute top-full w-full left-0 z-1'>
-                        <CategoriesModal
-                          onSelect={(category: string) => {
-                            setSelectedCategory(category);
-                            setIsOpenCategoryModal(false);
-                          }}
-                          customCss='!w-full !h-[120px] !overflow-auto t4'
-                        />
-                      </div>
+                    <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 z-1' />
+                    {width > 1024 ? (
+                      isOpenCategoryModal && (
+                        <div className='absolute top-full w-full left-0 z-1'>
+                          <CategoriesModal
+                            onSelect={(category: string) => {
+                              setSelectedCategory(category);
+                              setIsOpenCategoryModal(false);
+                            }}
+                            customCss='!w-full !h-[120px] !overflow-auto t4'
+                          />
+                        </div>
+                      )
+                    ) : (
+                      <MobileCategoriesModal
+                        onSelect={(category: string) => {
+                          setSelectedCategory(category);
+                          setIsOpenCategoryModal(false);
+                        }}
+                        isOpenCategoryModal={isOpenCategoryModal}
+                        selectedCategory={selectedCategory}
+                        closeFn={() => setIsOpenCategoryModal(false)}
+                      />
                     )}
+                    {}
                   </div>
                 </div>
                 {/* 인원 수 */}
@@ -287,7 +316,7 @@ export default function StudyRoomInfoWrite({
                       />
                       <CalendarDays
                         strokeWidth={1}
-                        className='w-4 h-4 lg:w-5 lg:h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2 -z-1'
+                        className='w-4 h-4 lg:w-5 lg:h-5 text-gray5 absolute right-3 top-1/2 -translate-y-1/2 z-1'
                       />
                     </label>
                   </div>
@@ -308,17 +337,29 @@ export default function StudyRoomInfoWrite({
                       >
                         {studyTypeFormatting(selectedStudyType)}
                       </button>
-                      <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
-                      {isOpenStudyTypeModal && (
-                        <div className='absolute top-full w-full left-0 z-1'>
-                          <OnlineModal
-                            onSelect={(online: string) => {
-                              setSelectedStudyType(online);
-                              setIsOpenStudyTypeModal(false);
-                            }}
-                            customCss='!w-full !h-[120px] !overflow-auto t4'
-                          />
-                        </div>
+                      <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 z-1' />
+                      {width > 1024 ? (
+                        isOpenStudyTypeModal && (
+                          <div className='absolute top-full w-full left-0 z-1'>
+                            <OnlineModal
+                              onSelect={(online: string) => {
+                                setSelectedStudyType(online);
+                                setIsOpenStudyTypeModal(false);
+                              }}
+                              customCss='!w-full !h-[120px] !overflow-auto t4'
+                            />
+                          </div>
+                        )
+                      ) : (
+                        <MobileOnlineModal
+                          isOpenStudyTypeModal={isOpenStudyTypeModal}
+                          selectedStudyType={selectedStudyType}
+                          closeFn={() => setIsOpenStudyTypeModal(false)}
+                          onSelect={(online: string) => {
+                            setSelectedStudyType(online);
+                            setIsOpenStudyTypeModal(false);
+                          }}
+                        />
                       )}
                     </div>
                     {selectedStudyType !== 'ONLINE' && (
@@ -330,21 +371,34 @@ export default function StudyRoomInfoWrite({
                             setIsOpenRegionModal((prev) => !prev);
                           }}
                         >
-                          {selectedRegion}
+                          {selectedRegion === '' ? '서울' : selectedRegion}
                         </button>
-                        <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 -z-1' />
-                        {isOpenRegionModal && (
-                          <div className='absolute top-full w-full left-0 z-1'>
-                            <RegionModal
-                              onSelect={(region: string | null) => {
-                                if (region === null) return;
-                                setSelectedRegion(region);
-                                setIsOpenRegionModal(false);
-                              }}
-                              selectedRegion={selectedRegion}
-                              customCss='!w-full !h-[120px] !overflow-auto t4'
-                            />
-                          </div>
+                        <ChevronDown className='absolute w-4 h-4 lg:w-5 lg:h-5 right-3 top-1/2 -translate-y-1/2 z-1' />
+                        {width > 1024 ? (
+                          isOpenRegionModal && (
+                            <div className='absolute top-full w-full left-0 z-1'>
+                              <RegionModal
+                                onSelect={(region: string | null) => {
+                                  if (region === null) return;
+                                  setSelectedRegion(region);
+                                  setIsOpenRegionModal(false);
+                                }}
+                                selectedRegion={selectedRegion}
+                                customCss='!w-full !h-[120px] !overflow-auto t4'
+                              />
+                            </div>
+                          )
+                        ) : (
+                          <MobileRegionModal
+                            selectedRegion={selectedRegion}
+                            isOpenRegionModal={isOpenRegionModal}
+                            closeFn={() => setIsOpenRegionModal(false)}
+                            onSelect={(region: string | null) => {
+                              if (region === null) return;
+                              setSelectedRegion(region);
+                              setIsOpenRegionModal(false);
+                            }}
+                          />
                         )}
                       </div>
                     )}

@@ -10,6 +10,7 @@ import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import ManagerMobileCategoryModal from './ManagerMobileCategoryModal';
 
 export type AdminStudyType = {
   id: number;
@@ -128,6 +129,19 @@ export default function ManagerStudiesPage() {
     );
   };
 
+  const [width, setWidth] = useState<number>(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    handleResize(); // 최초 세팅
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
       <div className='flex flex-wrap justify-between items-start mb-3 lg:mb-4 gap-2'>
@@ -146,13 +160,22 @@ export default function ManagerStudiesPage() {
               {categoryFormatting(selectedCategory)}
             </button>
             <ChevronDown className='absolute w-5 h-5 text-main/60 right-0 top-1/2 -translate-y-1/2 -z-1' />
-            {isOpenCategoryModal && (
-              <div className='absolute top-full w-full left-0 z-1'>
-                <ManagerCategoriesModal
-                  onSelect={handleCategory}
-                  customCss='!w-full !h-[200px] !overflow-auto t4'
-                />
-              </div>
+            {width > 1025 ? (
+              isOpenCategoryModal && (
+                <div className='absolute top-full w-full left-0 z-1'>
+                  <ManagerCategoriesModal
+                    onSelect={handleCategory}
+                    customCss='!w-full !h-[200px] !overflow-auto t4'
+                  />
+                </div>
+              )
+            ) : (
+              <ManagerMobileCategoryModal
+                selectedCategory={selectedCategory}
+                isOpenCategoryModal={isOpenCategoryModal}
+                closeFn={() => setIsOpenCategoryModal(false)}
+                onSelect={handleCategory}
+              />
             )}
           </div>
           <div className='w-full lg:w-auto relative'>

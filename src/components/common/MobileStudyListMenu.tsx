@@ -26,7 +26,7 @@ export default function MobileStudyListMenu({
           className={`w-full rounded-t-[24px] bg-white drop-shadow-md transform transition-transform duration-300 ease-out
           ${mobileOpen ? 'translate-y-0' : 'translate-y-full'}`}
         >
-          <div className='pt-4' onClick={closeFn}>
+          <div className='py-4' onClick={closeFn}>
             <div className='w-[50px] h-[3px] bg-border1 rounded-[3px] mx-auto mb-4'></div>
           </div>
           <div className='min-h-[200px] max-h-[60vh] overflow-y-auto'>

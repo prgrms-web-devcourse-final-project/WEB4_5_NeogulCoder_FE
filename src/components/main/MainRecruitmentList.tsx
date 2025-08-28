@@ -11,6 +11,8 @@ import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import Link from 'next/link';
 import { ChevronDown, Search, SearchX, X } from 'lucide-react';
+import MobileCategoryModal from './MobileCategoryModal';
+import MobileOnlineModal from './MobileOnlineModal';
 
 export type MainPostType = {
   recruitmentPostId: number;
@@ -163,6 +165,20 @@ export default function MainRecruitmentList() {
     }
   };
 
+  //
+  const [width, setWidth] = useState<number>(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    handleResize(); // 최초 세팅
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
       <div className='flex justify-between flex-wrap mt-4 lg:mt-[35px]'>
@@ -183,12 +199,21 @@ export default function MainRecruitmentList() {
               <ChevronDown className='w-4 h-4' />
             </button>
 
-            {isCategoryOpen && (
-              <div className='absolute top-10 left-0 z-10'>
-                <MainCategoriesModal
-                  onSelect={(category: string) => handleCategory(category)}
-                />
-              </div>
+            {width > 1024 ? (
+              isCategoryOpen && (
+                <div className='absolute top-10 left-0 z-10'>
+                  <MainCategoriesModal
+                    onSelect={(category: string) => handleCategory(category)}
+                  />
+                </div>
+              )
+            ) : (
+              <MobileCategoryModal
+                onSelect={(category: string) => handleCategory(category)}
+                isCategoryOpen={isCategoryOpen}
+                selectedCategory={selectedCategory}
+                closeFn={() => setIsCategoryOpen(false)}
+              />
             )}
           </div>
 
@@ -206,14 +231,24 @@ export default function MainRecruitmentList() {
               </p>
               <ChevronDown className='w-4 h-4' />
             </button>
-
-            {isStudyTypeOpen && (
-              <div className='absolute top-10 left-0 z-10'>
-                <MainOnlineModal
-                  onSelect={(studyType: string) => handleStudyType(studyType)}
-                />
-              </div>
+            {width > 1024 ? (
+              isStudyTypeOpen && (
+                <div className='absolute top-10 left-0 z-10'>
+                  <MainOnlineModal
+                    onSelect={(studyType: string) => handleStudyType(studyType)}
+                  />
+                </div>
+              )
+            ) : (
+              <MobileOnlineModal
+                onSelect={(studyType: string) => handleStudyType(studyType)}
+                isStudyTypeOpen={isStudyTypeOpen}
+                selectedStudyType={selectedStudyType}
+                closeFn={() => setStudyTypeOpen(false)}
+              />
             )}
+
+            {}
           </div>
         </div>
         <div className='w-[210px] md:w-[240px] lg:w-[260px] h-[30px] lg:h-[34px] tm3 text-[12px] md:text-[14px] md:text-base bg-gray4 rounded-[50px] flex items-center px-2.5 gap-2 lg:gap-4 lg:px-4 text-text1/50'>
