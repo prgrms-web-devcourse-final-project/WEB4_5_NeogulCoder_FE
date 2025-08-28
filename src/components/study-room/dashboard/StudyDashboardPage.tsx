@@ -94,7 +94,7 @@ export default function StudyDashboardPage() {
           </div>
           <div className='py-10 lg:py-0 lg:mb-12 mb-1.5 bg-white  px-[18px] lg:px-0'>
             <h3 className='tb3 mb-[18px]'>스터디 일정</h3>
-            <div className='lg:grid lg:h-[400px] lg:grid-cols-2 border border-border1 rounded-[10px] py-6'>
+            <div className='lg:grid lg:grid-cols-2 border border-border1 rounded-[10px] py-6'>
               <CalendarSmallShell
                 studyId={studyId}
                 calendarData={studyCalendar}
