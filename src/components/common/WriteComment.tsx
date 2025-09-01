@@ -90,7 +90,7 @@ export default function WriteComment({
           </div>
           <div className='flex justify-end mb-10'>
             <button
-              className='button-type5 color-[#ffffff] hover:bg-[#292929] !w-[100px]'
+              className='button-type5 w-full lg:w-[100px] color-[#ffffff] hover:bg-[#292929]'
               onClick={handleSubmit}
               disabled={isSubmitting}
             >

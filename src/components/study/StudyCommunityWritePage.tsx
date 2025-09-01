@@ -113,15 +113,15 @@ export default function StudyCommunityWritePage() {
       <div className='mb-10'>
         <ClientEditorWrapper editorRef={editorRef} />
       </div>
-      <div className='flex justify-end'>
+      <div className='flex justify-end w-full'>
         <button
-          className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+          className='button-type6 !w-full lg:!w-[100px] mr-[15px] hover:bg-[#f5f5f5]'
           onClick={() => router.push(`/study/${studyId}/study-community`)}
         >
           취소
         </button>
         <button
-          className='button-type5 hover:bg-[#292929]'
+          className='button-type5 !w-full lg:!w-[100px] hover:bg-[#292929]'
           onClick={handleSubmit}
           disabled={isSubmitting}
         >

@@ -278,7 +278,7 @@ export default function RecruitmentDetailPage() {
                   setAppIsOpen(true);
                 }
               }}
-              className={`w-[118px] h-[44px] tm3 rounded-[10px] text-white ${
+              className={`!w-full lg:!w-[118px] h-[44px] tm3 rounded-[10px] text-white ${
                 status === '완료' || isApplied
                   ? 'bg-gray-400 '
                   : 'bg-[#00C471] hover:bg-[#00B261]'
@@ -296,7 +296,7 @@ export default function RecruitmentDetailPage() {
             {me?.nickname === nickname && (
               <button
                 onClick={() => setIsOpen(true)}
-                className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
+                className='!w-full lg:!w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
                 style={{ borderColor: 'var(--color-gray2)' }}
               >
                 신청 내역
@@ -419,7 +419,7 @@ export default function RecruitmentDetailPage() {
               <ToastViewer key={content} height='100%' initialValue={content} />
             )}
           </div>
-          <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10 '>
+          <div className='2xl:hidden flex flex-row space-x-4 space-y-4  mt-6 mb-10 '>
             <button
               onClick={() => {
                 if (status === '완료' || isApplied) return;

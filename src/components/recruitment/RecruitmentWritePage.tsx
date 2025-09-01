@@ -353,13 +353,13 @@ export default function RecruitmentWritePage() {
           </div>
           <div className='flex justify-end'>
             <button
-              className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+              className='button-type6 !w-full lg:!w-[100px] mr-[15px] hover:bg-[#f5f5f5]'
               onClick={() => router.push(`/#recruit`)}
             >
               취소
             </button>
             <button
-              className='button-type5 hover:bg-[#292929]'
+              className='button-type5 !w-full lg:!w-[100px] hover:bg-[#292929]'
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
