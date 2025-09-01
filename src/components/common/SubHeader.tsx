@@ -31,7 +31,7 @@ export default function SubHeader() {
         className='w-full flex justify-center text-text1'
         onMouseLeave={() => setStudyOpen(false)}
       >
-        <div className='w-full min-h-[32px] max-w-[1280px] flex items-center justify-between mt-4 px-4'>
+        <div className='w-full min-h-[32px] max-w-[1280px] flex items-center justify-between mt-4 px-4 whitespace-nowrap'>
           <div className='flex gap-[50px] tm3'>
             <button type='button' onClick={handleHome}>
               홈

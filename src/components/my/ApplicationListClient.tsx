@@ -54,7 +54,7 @@ export default function ApplicationListClient() {
 
   return (
     <div className='w-full'>
-      <div className='tb3'>내가 신청한 스터디</div>
+      <div className='tb3 max-[1024px]:hidden'>내가 신청한 스터디</div>
       {/* border-b border-b-[#e5e5e5] */}
       <div className='mt-6'>
         {[...Array(4)].map((_, i) => (
@@ -69,7 +69,7 @@ export default function ApplicationListClient() {
       </div>
       {isLoading ? (
         <>
-          <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+          <div className='grid min-[724px]:grid-cols-3 min-[1024px]:max-[1130px]:grid-cols-2 min-[470px]:grid-cols-2 grid-cols-1 place-items-center gap-[26px] mt-[30px]'>
             {Array.from({ length: 3 }).map((_, i) => (
               <ApplyingStudyCardSkeleton key={i} />
             ))}
@@ -95,7 +95,7 @@ export default function ApplicationListClient() {
             </div>
           )}
           {myApplicationList.length !== 0 && (
-            <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+            <div className='grid min-[724px]:grid-cols-3 min-[1024px]:max-[1130px]:grid-cols-2 min-[470px]:grid-cols-2 grid-cols-1 place-items-center gap-[26px] mt-[30px]'>
               {myApplicationList.map((study) => (
                 <ApplyingStudyCard key={study.recruitmentPostId} {...study} />
               ))}

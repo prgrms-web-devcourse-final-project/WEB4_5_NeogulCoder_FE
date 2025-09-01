@@ -80,7 +80,7 @@ export default function RecruitmentListClient() {
 
   return (
     <div className='w-full'>
-      <div className='tb3'>내가 작성한 모집 글</div>
+      <div className='tb3 max-[1024px]:hidden'>내가 작성한 모집 글</div>
       <div className='mt-6'>
         <ListMenu
           selectedCategory={selectedCategory}
@@ -94,7 +94,7 @@ export default function RecruitmentListClient() {
       </div>
       {isLoading ? (
         <>
-          <div className='flex flex-col gap-[30px] mt-[30px]'>
+          <div className='flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:mx-[-18px]'>
             {Array.from({ length: 3 }).map((_, i) => (
               <RecruitmentCardSkeleton key={i} />
             ))}
@@ -103,7 +103,7 @@ export default function RecruitmentListClient() {
       ) : (
         <>
           <div
-            className={`flex flex-col gap-[30px] mt-[30px] relative ${
+            className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:mx-[-18px] relative ${
               myRecruitmentList.length === 0 &&
               'h-[calc(100vh-105px-113px-198px)]'
             }`}
