@@ -97,16 +97,16 @@ export default function MannersClient() {
         <MannerSkeleton />
       ) : (
         <div
-          className={`w-full max-w-[908px] relative ${
+          className={`w-full lg:max-w-[908px] relative ${
             studyList.length === 0 && 'h-[calc(100vh-105px-113px)]'
           }`}
         >
           {isShown && (
-            <div className='absolute top-9 right-1 z-10'>
+            <div className='absolute lg:top-9 top-51 right-1 z-10'>
               <MannerTooltip />
             </div>
           )}
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-between items-center max-[1024px]:hidden'>
             <div className='tb3'>스터디원 매너 평가</div>
             <BadgeQuestionMark
               className='w-6 h-6 text-main opacity-70 hover:opacity-100'
@@ -127,7 +127,7 @@ export default function MannersClient() {
             </div>
           ) : (
             <>
-              <div className='max-w-[908px] overflow-hidden'>
+              <div className='lg:max-w-[908px] w-full overflow-hidden'>
                 <div className='overflow-x-auto scroll-custom'>
                   <div className='flex items-center gap-10 mt-6'>
                     {Array.isArray(studyList) &&
@@ -143,7 +143,7 @@ export default function MannersClient() {
                   </div>
                 </div>
               </div>
-              <div className='max-w-[908px] overflow-hidden'>
+              <div className='lg:max-w-[908px] w-full overflow-hidden'>
                 <div className='overflow-x-auto scroll-custom'>
                   <div className='flex items-center mt-6'>
                     {Array.isArray(userList) &&
@@ -169,6 +169,7 @@ export default function MannersClient() {
                 currentUserName={currentUserName}
                 getStudyList={getStudyList}
                 getUserList={getUserList}
+                setIsShown={setIsShown}
               />
             </>
           )}
