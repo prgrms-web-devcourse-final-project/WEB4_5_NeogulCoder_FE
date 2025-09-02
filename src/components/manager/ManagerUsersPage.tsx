@@ -3,7 +3,11 @@
 import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
 import ManagerUserList from '@/components/manager/ManagerUserList';
-import { deleteAdminUser, getAdminUser } from '@/lib/api/manager/manager';
+import {
+  deleteAdminUser,
+  getAdminUser,
+  postAdminUser,
+} from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -42,7 +46,7 @@ export default function ManagerUsersPage() {
     setPage(num);
   };
 
-  // 이용자 삭제
+  // 이용자 비활성화
   const handleDelete = async (id: number) => {
     try {
       await deleteAdminUser(id);
@@ -54,6 +58,21 @@ export default function ManagerUsersPage() {
       toast.success(`해당 사용자를 비활성화 하였습니다.`);
     } catch (error) {
       toast.error(`사용자 비활성화 실패 ${error}`);
+    }
+  };
+
+  // 이용자 활성화
+  const handleActive = async (id: number) => {
+    try {
+      await postAdminUser(id);
+      setUsers((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, activated: true } : item
+        )
+      );
+      toast.success(`해당 사용자를 활성화 하였습니다.`);
+    } catch (error) {
+      toast.error(`사용자 활성화 실패 ${error}`);
     }
   };
 
@@ -145,7 +164,9 @@ export default function ManagerUsersPage() {
                   이메일
                 </th>
                 <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>삭제</th>
+                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                  상태변경
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -159,6 +180,7 @@ export default function ManagerUsersPage() {
                     key={`${user.id}`}
                     user={user}
                     handleDelete={handleDelete}
+                    handleActive={handleActive}
                   />
                 ))
               ) : (

@@ -3,7 +3,11 @@ import ManagerCategoriesModal from '@/components/manager/ManagerCategoriesModal'
 import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
 import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerStudyList from '@/components/manager/ManagerStudyList';
-import { deleteAdminStudy, getAdminStudies } from '@/lib/api/manager/manager';
+import {
+  deleteAdminStudy,
+  getAdminStudies,
+  postAdminStudy,
+} from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { ChevronDown, Search, SearchX, X } from 'lucide-react';
@@ -45,7 +49,7 @@ export default function ManagerStudiesPage() {
     searchCategory || '전체'
   );
 
-  // 스터디 삭제
+  // 스터디 비활성화
   const handleDelete = async (id: number) => {
     try {
       await deleteAdminStudy(id);
@@ -57,6 +61,21 @@ export default function ManagerStudiesPage() {
       toast.success(`해당 스터디를 비활성화 하였습니다.`);
     } catch (error) {
       toast.error(`스터디 비활성화 실패 ${error}`);
+    }
+  };
+
+  // 스터디 활성화
+  const handleActive = async (id: number) => {
+    try {
+      await postAdminStudy(id);
+      setStudies((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, activated: true } : item
+        )
+      );
+      toast.success(`해당 스터디를 활성화 하였습니다.`);
+    } catch (error) {
+      toast.error(`스터디 활성화 실패 ${error}`);
     }
   };
 
@@ -223,7 +242,7 @@ export default function ManagerStudiesPage() {
                 </th>
                 <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
                 <th className='w-[200px] px-2 lg:px-5 text-[14px] lg:text-base'>
-                  삭제
+                  상태변경
                 </th>
               </tr>
             </thead>
@@ -238,6 +257,7 @@ export default function ManagerStudiesPage() {
                     key={`${study.id}`}
                     study={study}
                     handleDelete={handleDelete}
+                    handleActive={handleActive}
                   />
                 ))
               ) : (

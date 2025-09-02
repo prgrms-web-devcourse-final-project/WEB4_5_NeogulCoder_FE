@@ -181,7 +181,7 @@ export default function MainRecruitmentList() {
 
   return (
     <>
-      <div className='flex justify-between flex-wrap mt-4 lg:mt-[35px]'>
+      <div className='flex justify-between flex-wrap mt-4 lg:mt-[35px] gap-2'>
         <div className='flex gap-1 lg:gap-4 relative'>
           <div ref={categorySelectRef} className='relative'>
             <button
@@ -251,7 +251,7 @@ export default function MainRecruitmentList() {
             {}
           </div>
         </div>
-        <div className='w-[210px] md:w-[240px] lg:w-[260px] h-[30px] lg:h-[34px] tm3 text-[12px] md:text-[14px] md:text-base bg-gray4 rounded-[50px] flex items-center px-2.5 gap-2 lg:gap-4 lg:px-4 text-text1/50'>
+        <div className='ml-auto grow sm:grow-0 w-[210px] md:w-[240px] lg:w-[260px] h-[30px] lg:h-[34px] tm3 text-[12px] md:text-[14px] md:text-base bg-gray4 rounded-[50px] flex items-center px-2.5 gap-2 lg:gap-4 lg:px-4 text-text1/50'>
           <Search className='w-4 h-4 shrink-0' />
           <input
             type='text'

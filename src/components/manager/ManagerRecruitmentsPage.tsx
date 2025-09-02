@@ -2,7 +2,11 @@
 import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
 import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerRecruitmentList from '@/components/manager/ManagerRecruitmentList';
-import { deleteAdminPost, getAdminPosts } from '@/lib/api/manager/manager';
+import {
+  deleteAdminPost,
+  getAdminPosts,
+  postAdminPost,
+} from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -45,6 +49,21 @@ export default function ManagerRecruitmentsPage() {
         )
       );
       toast.success(`해당 모집글을 비활성화하였습니다.`);
+    } catch (error) {
+      toast.error(`모집글 비활성화 실패 ${error}`);
+    }
+  };
+
+  // 모집글 활성화
+  const handleActive = async (id: number) => {
+    try {
+      await postAdminPost(id);
+      setRecruits((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, activated: true } : item
+        )
+      );
+      toast.success(`해당 모집글을 활성화하였습니다.`);
     } catch (error) {
       toast.error(`모집글 비활성화 실패 ${error}`);
     }
@@ -147,7 +166,7 @@ export default function ManagerRecruitmentsPage() {
                 </th>
                 <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
                 <th className='w-[200px] px-2 lg:px-5 text-[14px] lg:text-base'>
-                  삭제
+                  상태변경
                 </th>
               </tr>
             </thead>
@@ -162,6 +181,7 @@ export default function ManagerRecruitmentsPage() {
                     key={`${recruit.id}`}
                     recruit={recruit}
                     handleDelete={handleDelete}
+                    handleActive={handleActive}
                   />
                 ))
               ) : (

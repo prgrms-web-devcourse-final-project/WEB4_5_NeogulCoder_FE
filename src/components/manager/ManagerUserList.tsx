@@ -1,9 +1,11 @@
 export default function ManagerUserList({
   user,
   handleDelete,
+  handleActive,
 }: {
   user: AdminUserType;
   handleDelete: (id: number) => void;
+  handleActive: (id: number) => void;
 }) {
   return (
     <tr className='h-13 tm4 text-center border-b border-border1 last:border-b-0 hover:bg-gray4'>
@@ -17,12 +19,21 @@ export default function ManagerUserList({
         )}
       </td>
       <td className='px-2 lg:px-5'>
-        <button
-          onClick={() => handleDelete(user.id)}
-          className='tag-type3 mobile1 red'
-        >
-          삭제
-        </button>
+        {user.activated ? (
+          <button
+            onClick={() => handleDelete(user.id)}
+            className='tag-type3 mobile1 red'
+          >
+            비활성화
+          </button>
+        ) : (
+          <button
+            onClick={() => handleActive(user.id)}
+            className='tag-type3 mobile1 !bg-green'
+          >
+            활성화
+          </button>
+        )}
       </td>
     </tr>
   );

@@ -159,6 +159,7 @@ body {
   .tag-type3.red {
     @apply bg-red;
   }
+
   .tag-type3.mobile1 {
     @apply h-[18px] min-w-[36px] text-[10px] lg:h-[22px] lg:min-w-[57px] lg:text-xs;
   }
