@@ -126,7 +126,7 @@ export default function ManagerRecruitmentsPage() {
     <>
       <div className='flex flex-wrap justify-between items-start mb-3 lg:mb-4 gap-2'>
         <h1 className='tb2 whitespace-nowrap'>모집글 목록</h1>
-        <div className='w-full max-w-[285px] lg:w-auto flex items-center bg-gray4 rounded-2xl pr-4'>
+        <div className='w-full max-w-[285px] ml-auto lg:w-auto flex items-center bg-gray4 rounded-2xl pr-4'>
           <div className='w-full lg:w-auto relative'>
             <input
               value={keyword}
@@ -160,12 +160,12 @@ export default function ManagerRecruitmentsPage() {
             </colgroup>
             <thead className='bg-gray4 h-15'>
               <tr className='border-b border-border1'>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>제목</th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>제목</th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
                   모집마감일
                 </th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
-                <th className='w-[200px] px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>상태</th>
+                <th className='w-[200px] px-1 lg:px-5 text-[12px] lg:text-base'>
                   상태변경
                 </th>
               </tr>

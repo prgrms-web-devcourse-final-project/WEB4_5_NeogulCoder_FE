@@ -136,7 +136,7 @@ export default function ManagerUsersPage() {
             ></input>
           </div>
 
-          <div className='flex w-[60px] items-center justify-end'>
+          <div className='flex w-[60px] items-center justify-end ml-auto'>
             {keyword && (
               <button className='' onClick={handleClear}>
                 <X className='w-4.5 h-4.5 text-gray2/80' />
@@ -159,12 +159,12 @@ export default function ManagerUsersPage() {
             </colgroup>
             <thead className='bg-gray4 h-15'>
               <tr className='border-b border-border1'>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>이름</th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>이름</th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
                   이메일
                 </th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>상태</th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
                   상태변경
                 </th>
               </tr>

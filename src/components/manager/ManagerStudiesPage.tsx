@@ -233,15 +233,15 @@ export default function ManagerStudiesPage() {
             </colgroup>
             <thead className='bg-gray4 h-15'>
               <tr className='border-b border-border1'>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>이름</th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>이름</th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
                   카테고리
                 </th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
                   종료여부
                 </th>
-                <th className='px-2 lg:px-5 text-[14px] lg:text-base'>상태</th>
-                <th className='w-[200px] px-2 lg:px-5 text-[14px] lg:text-base'>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>상태</th>
+                <th className='w-[200px] px-1 lg:px-5 text-[12px] lg:text-base'>
                   상태변경
                 </th>
               </tr>
