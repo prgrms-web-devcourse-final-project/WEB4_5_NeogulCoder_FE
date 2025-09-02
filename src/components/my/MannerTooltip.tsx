@@ -20,15 +20,15 @@ export default function MannerTooltip() {
         </div>
         <div>
           <div className='flex items-center lg:gap-2 gap-1'>
-            <BadgeAlert className='lg:w-[18px] lg:h-[18px] w-3.5 h-3.5 text-red' />
+            <BadgeAlert className='lg:w-[18px] lg:h-[18px] w-3.5 h-3.5 text-green' />
             <span>구체적인 사례가 있다면 더 좋아요!</span>
           </div>
           <div className='flex items-center lg:gap-2 gap-1'>
-            <BadgeAlert className='lg:w-[18px] lg:h-[18px] w-3.5 h-3.5 text-red' />
+            <BadgeAlert className='lg:w-[18px] lg:h-[18px] w-3.5 h-3.5 text-green' />
             <span>비난보다는 제안하는 말투로 표현해주세요.</span>
           </div>
           <div className='flex items-center lg:gap-2 gap-1'>
-            <BadgeAlert className='lg:w-[18px] lg:h-[18px] w-3.5 h-3.5 text-red' />
+            <BadgeAlert className='lg:w-[18px] lg:h-[18px] w-3.5 h-3.5 text-green' />
             <span>단점보다 장점도 꼭 함께 적어주세요!</span>
           </div>
         </div>
