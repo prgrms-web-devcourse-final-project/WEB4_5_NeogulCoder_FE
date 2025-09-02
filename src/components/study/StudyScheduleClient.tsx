@@ -76,11 +76,12 @@ export default function StudyScheduleClient() {
             <>
               <div className='w-full relative'>
                 {isShown && (
-                  <div className='absolute top-13 right-6 z-10'>
+                  // top-13 right-6
+                  <div className='absolute lg:top-9 top-19 right-1 z-10'>
                     <ScheduleTooltip />
                   </div>
                 )}
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center max-[1024px]:hidden'>
                   <div className='tb2 text-text1'>모임 일정 조율</div>
                   <BadgeQuestionMark
                     className='w-6 h-6 text-main opacity-70 hover:opacity-100'
@@ -88,7 +89,7 @@ export default function StudyScheduleClient() {
                     onMouseLeave={() => setIsShown(false)}
                   />
                 </div>
-                <div className='flex justify-between items-center mt-6'>
+                <div className='flex max-[538px]:flex-wrap justify-between items-center gap-4 mt-6'>
                   <span className='tm3'>
                     {formatDate(
                       initialTimeVoteStats.startDate,
@@ -100,22 +101,29 @@ export default function StudyScheduleClient() {
                       'YYYY년 M월 D일 dddd'
                     )}
                   </span>
-                  <div className='flex items-center gap-3 tm4 text-white'>
+                  <div className='flex max-[538px]:flex-1 items-center gap-3 tm4 text-white'>
                     <button
-                      className='w-[90px] h-[30px] bg-main rounded-[10px] hover:bg-[#292929]'
+                      className='max-[538px]:w-full max-[538px]:min-w-[90px] w-[90px] h-[30px] max-[538px]:h-9 bg-main lg:rounded-[10px] rounded-md hover:bg-[#292929]'
                       onClick={() => setIsOpenSubmitModal(true)}
                     >
                       제출 현황
                     </button>
                     <button
-                      className='w-[90px] h-[30px] bg-main rounded-[10px] hover:bg-[#292929]'
+                      className='max-[538px]:w-full max-[538px]:min-w-[90px] w-[90px] h-[30px] max-[538px]:h-9 bg-main lg:rounded-[10px] rounded-md hover:bg-[#292929]'
                       onClick={() => setIsOpenDeleteModal(true)}
                     >
                       전체 지우기
                     </button>
                   </div>
                 </div>
-                <div className='mt-[60px]'>
+                <div className='flex justify-end mt-5 lg:hidden'>
+                  <BadgeQuestionMark
+                    className='w-5 h-5 text-main opacity-70 hover:opacity-100'
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}
+                  />
+                </div>
+                <div className='lg:mt-15 mt-5'>
                   <TimeGrid
                     isLeader={isLeader}
                     isOpenDeleteModal={isOpenDeleteModal}
@@ -147,11 +155,11 @@ export default function StudyScheduleClient() {
           '
                 >
                   {isShown && (
-                    <div className='absolute top-13 right-6 z-10'>
+                    <div className='absolute lg:top-9 top-19 right-1 z-10'>
                       <ScheduleTooltip />
                     </div>
                   )}
-                  <div className='flex justify-between items-center'>
+                  <div className='flex justify-between items-center max-[1024px]:hidden'>
                     <div className='tb2 text-text1'>모임 일정 조율</div>
                     <BadgeQuestionMark
                       className='w-6 h-6 text-main opacity-70 hover:opacity-100'
@@ -165,13 +173,13 @@ export default function StudyScheduleClient() {
                         className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
                         strokeWidth={1}
                       />
-                      <span className='tm3 text-border3 mb-3'>
+                      <span className='min-w-[253px] tm3 text-border3 mb-3'>
                         스터디장이 아직 기간 설정을 하지 않았습니다.
                       </span>
                     </div>
                     {isLeader && (
                       <button
-                        className='w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929]'
+                        className='w-[235px] h-[48px] bg-main lg:rounded-[10px] rounded-lg tm3 text-white hover:bg-[#292929]'
                         onClick={() => setIsOpenPeriodModal(true)}
                       >
                         가능 시간 요청
