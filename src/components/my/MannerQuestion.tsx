@@ -225,7 +225,7 @@ export default function MannerQuestion({
 
       <div className='flex justify-end mt-[30px]'>
         <button
-          className={`button-type2 max-[1024px]:w-full max-[1024px]:rounded-lg! ${
+          className={`button-type2 max-[1024px]:w-full max-[1024px]:h-11! max-[1024px]:text-sm! ${
             reviewTag.length === 0 || isSubmitting ? 'cursor-not-allowed!' : ''
           }`}
           disabled={reviewTag.length === 0 || isSubmitting}
