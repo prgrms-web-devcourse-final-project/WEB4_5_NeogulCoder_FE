@@ -150,7 +150,9 @@ export default function MyStudyInfoClient() {
         <MyStudyInfoSkeleton />
       ) : (
         <div className='w-full'>
-          <div className='tb2  text-text1'>스터디 My 정보</div>
+          <div className='tb2 text-text1 max-[1024px]:hidden'>
+            스터디 My 정보
+          </div>
           <div className='tm2 text-text1 mt-[30px]'>내가 작성한 글</div>
           <div className='mt-6'>
             <ListMenuStudy
@@ -164,7 +166,7 @@ export default function MyStudyInfoClient() {
             />
           </div>
           <div
-            className={`flex flex-col gap-[30px] mt-[30px] relative ${
+            className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:mx-[-18px] relative ${
               myCommunityList.length === 0 &&
               'h-[calc(100vh-105px-113px-193px-200px)]'
             }`}
@@ -178,9 +180,6 @@ export default function MyStudyInfoClient() {
             ) : (
               <>
                 {myCommunityList.length === 0 && (
-                  // <div className='flex justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 tm2 text-text1/80'>
-                  //   내가 작성한 글이 없습니다.
-                  // </div>
                   <div className='flex flex-col gap-3 justify-center items-center absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
                     <MessageCircleDashed
                       className='mx-auto mb-3 w-[50px] h-[50px] text-border3'
@@ -209,8 +208,13 @@ export default function MyStudyInfoClient() {
             />
           </div>
 
+          <div className='mx-[-18px]'>
+            {/* bg-[#f7f7f7] */}
+            <div className='w-full h-1.5 bg-gray4 mt-[40px] lg:hidden'></div>
+          </div>
+
           {!isLeader && isExtended && !isParticipated && (
-            <div className='mt-13'>
+            <div className='mt-[40px] lg:mt-13'>
               <div className='tm2 text-text1'>스터디 연장 참여</div>
               <hr className='mt-4 text-border2' />
               <div className='flex justify-between items-center mt-6 t3'>
@@ -218,7 +222,7 @@ export default function MyStudyInfoClient() {
                   연장된 스터디에 참여하실 수 있습니다.
                 </span>
                 <button
-                  className='button-type2 min-w-[140px]!'
+                  className='button-type2 min-w-[125px]! lg:min-w-[140px]!'
                   onClick={() => setIsOpenExtendModal(true)}
                 >
                   스터디 연장 참여
@@ -227,7 +231,7 @@ export default function MyStudyInfoClient() {
             </div>
           )}
           {isExtended && isParticipated && (
-            <div className='mt-13'>
+            <div className='mt-[40px] lg:mt-13'>
               <div className='tm2 text-text1'>스터디 연장 참여</div>
               <hr className='mt-4 text-border2' />
               <div className='flex justify-between items-center mt-6 t3'>
@@ -235,7 +239,7 @@ export default function MyStudyInfoClient() {
                   연장된 스터디에 참여 완료하셨습니다.
                 </span>
                 <button
-                  className='button-type2 min-w-[140px]! disabled:cursor-not-allowed!'
+                  className='button-type2 min-w-[125px]! lg:min-w-[140px]! disabled:cursor-not-allowed!'
                   disabled
                 >
                   스터디 연장 참여
@@ -244,7 +248,7 @@ export default function MyStudyInfoClient() {
             </div>
           )}
           {!isExtended && (
-            <div className='mt-13'>
+            <div className='mt-[40px] lg:mt-13'>
               <div className='tm2 text-text1'>스터디 연장 참여</div>
               <hr className='mt-4 text-border2' />
               <div className='flex justify-between items-center mt-6 t3'>
@@ -252,7 +256,7 @@ export default function MyStudyInfoClient() {
                   아직 스터디가 연장되지 않았습니다.
                 </span>
                 <button
-                  className='button-type2 min-w-[140px]! disabled:cursor-not-allowed!'
+                  className='button-type2 min-w-[125px]! lg:min-w-[140px]! disabled:cursor-not-allowed!'
                   disabled
                 >
                   스터디 연장 참여
@@ -269,7 +273,7 @@ export default function MyStudyInfoClient() {
                 스터디를 탈퇴하면 불이익이 발생합니다.
               </span>
               <button
-                className='button-type2 min-w-[140px]!'
+                className='button-type2 min-w-[125px]! lg:min-w-[140px]!'
                 onClick={() => setIsOpenOutModal(true)}
               >
                 스터디 탈퇴
