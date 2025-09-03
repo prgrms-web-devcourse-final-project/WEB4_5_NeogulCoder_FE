@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import logoWibby from '@/assets/images/logo-wibby.svg';
 
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import CreateStudyModal from '../study/CreateStudyModal';
 import Link from 'next/link';
@@ -16,6 +16,14 @@ export default function SubHeader() {
   const { studies, fetchStudies } = useStudiesStore();
   const [studyOpen, setStudyOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const hiddenPath = [
+    '/profile/pr',
+    '/profile/edit-profile',
+    '/profile/withdrawal',
+  ];
+  const isHidden = hiddenPath.some((p) => pathname.startsWith(p));
+
   const handleHome = () => {
     router.push('/');
   };
@@ -28,7 +36,9 @@ export default function SubHeader() {
   return (
     <>
       <div
-        className='w-full flex justify-center text-text1'
+        className={`w-full flex justify-center text-text1 ${
+          isHidden ? 'hidden lg:flex' : ''
+        }`}
         onMouseLeave={() => setStudyOpen(false)}
       >
         <div className='w-full min-h-[32px] max-w-[1280px] flex items-center justify-between mt-4 px-4'>
