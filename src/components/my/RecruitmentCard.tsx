@@ -69,7 +69,8 @@ export default function RecruitmentCard({
               <span className='tb5'>자유</span>
             </div>
           )}
-          <div className='tm3 text-text1 w-[430px] truncate max-[1024px]:hidden'>
+          {/* w-[430px] */}
+          <div className='tm3 text-text1 max-w-[440px] min-[892px]:max-w-[650px] min-[1024px]:max-w-[440px] min-[1234px]:max-w-[650px] truncate max-[1024px]:hidden'>
             {type === 'study' ? title : subject}
           </div>
         </div>
@@ -79,7 +80,7 @@ export default function RecruitmentCard({
             : formatDate(createAt!, 'YYYY.MM.DD')}
         </div>
       </div>
-      <div className='tm3 text-text1 w-[280px] min-[484px]:w-[430px] mt-3 truncate lg:hidden'>
+      <div className='tm3 text-text1 w-[280px] min-[484px]:w-[430px] min-[892px]:w-[650px] mt-3 truncate lg:hidden'>
         {type === 'study' ? title : subject}
       </div>
       {type === 'my' && (
