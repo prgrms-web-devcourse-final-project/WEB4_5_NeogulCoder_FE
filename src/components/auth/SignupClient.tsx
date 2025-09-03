@@ -194,70 +194,93 @@ export default function SignUpClient() {
     }
   };
   return (
-    <div className='w-full min-h-screen flex justify-center relative'>
+    <div className='w-full min-h-screen flex justify-center relative px-4 lg:px-0'>
       <Image
         src={topBlue}
         alt='로그인 및 회원가입 페이지 배경 도형'
-        className='absolute top-0 right-0'
+        className='absolute top-0 right-0 w-[30vw] sm:w-[36vw] md:w-[38vw] lg:w-[40vw]'
+        priority
       />
 
       <div className='absolute bottom-0 left-0'>
         <Image
           src={bottomPink}
           alt='로그인 및 회원가입 페이지 배경 도형'
-          className='relative'
+          className='relative w-[30vw] sm:w-[36vw] md:w-[38vw] lg:w-[40vw]'
+          priority
         />
         <Image
           src={musicBunny}
-          alt='토끼 캐릭터'
-          className='absolute bottom-0 drop-shadow-[0_8px_10px_rgba(0,0,0,0.15)]'
+          alt='토끼'
+          className='absolute bottom-0 drop-shadow-[0_8px_10px_rgba(0,0,0,0.15)] w-[30vw] sm:w-[33vw] md:w-[35vw] lg:w-[40vw] h-auto'
+          priority
         />
       </div>
 
-      <div className='flex flex-col items-center justify-center'>
-        <Image src={logoWibby} alt='로고' className='mb-[96px] w-30' />
-        <div className='z-10'>
-          <form onSubmit={handleSignUp}>
-            <div className='mb-6'>
-              <div className='w-[390px] mx-auto'>
-                <p className='pb-2 t4'>
-                  이메일{' '}
-                  {signupError.email && (
-                    <span className='text-red-500 transition duration-200'>
-                      (필수)
-                    </span>
-                  )}
-                </p>
-              </div>
-              <div className='flex items-center justify-between gap-2'>
-                <div className='relative w-[390px] mx-auto'>
-                  <input
-                    type='text'
-                    value={email}
-                    onChange={handleEmailChange}
-                    className='input-type3 w-full focus:outline-2 focus:outline-main'
-                    ref={emailRef}
-                  />
+      <div className='flex flex-col items-center justify-center w-full'>
+        <Image
+          src={logoWibby}
+          alt='로고'
+          className='w-20 mb-4 lg:w-30 lg:mb-[96px]'
+        />
 
-                  {email && (
-                    <>
-                      {/* 입력 삭제 아이콘 */}
+        <p className='block mb-10 lg:hidden'>
+          모임부터 일정 관리, 협업까지 한 번에.
+        </p>
+
+        <div className='z-10 w-full max-w-[360px] mx-auto'>
+          <form onSubmit={handleSignUp}>
+            <div className='mb-3 lg:mb-6'>
+              <p className='pb-2 t4'>
+                이메일{' '}
+                {signupError.email && (
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
+                )}
+              </p>
+              <div className='flex items-center justify-between gap-2'>
+                <div className='relative w-full flex gap-2 lg:block lg:gap-0'>
+                  <div className='relative flex-1'>
+                    <input
+                      type='text'
+                      value={email}
+                      onChange={handleEmailChange}
+                      className='input-type3 w-full h-[45px] focus:outline-2 focus:outline-main lg:h-[50px]'
+                      ref={emailRef}
+                    />
+
+                    {email && (
                       <Image
                         src={deleteText}
                         alt='전체 삭제'
                         onClick={() => setEmail('')}
-                        className='absolute right-5 top-1/2 -translate-y-1/2 w-4 h-4 cursor-pointer'
+                        className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
                       />
+                    )}
+                  </div>
+
+                  {email && (
+                    <>
                       {/* 인증 버튼 */}
                       <button
                         type='button'
-                        className='absolute right-[-90px] top-0 t4 bg-main text-white h-[50px] w-[80px] flex items-center justify-center rounded-[10px]'
+                        className='absolute right-[-90px] top-0 t4 bg-main text-white h-[50px] w-[80px] items-center justify-center rounded-[10px] hidden lg:block'
                         onClick={handleSendEmailCode}
                       >
                         인증
                       </button>
                     </>
                   )}
+
+                  {/* 모바일 인증 버튼 */}
+                  <button
+                    type='button'
+                    className='block w-[60px] h-[45px] rounded-[10px] text-white text-[12px] bg-black lg:hidden'
+                    onClick={handleSendEmailCode}
+                  >
+                    인증
+                  </button>
                 </div>
 
                 {isModalOpen && (
@@ -284,25 +307,23 @@ export default function SignUpClient() {
                 {emailError || '\u00A0'}
               </p>
             </div>
-            <div className='mb-6'>
-              <div className='w-[390px] mx-auto'>
-                <p className='pb-2 t4'>
-                  닉네임{' '}
-                  {signupError.nickname && (
-                    <span className='text-red-500 transition duration-200'>
-                      (필수)
-                    </span>
-                  )}
-                </p>
-              </div>
+            <div className='mb-3 lg:mb-6'>
+              <p className='pb-2 t4'>
+                닉네임{' '}
+                {signupError.nickname && (
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
+                )}
+              </p>
 
-              <div className='flex flex-col justify-center'>
+              <div className='w-full'>
                 <div className='relative'>
                   <input
                     type='text'
                     value={nickname}
                     onChange={validateNickname}
-                    className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                    className='input-type3 w-full h-[45px] focus:outline-2 focus:outline-main lg:h-[50px]'
                     ref={nicknameRef}
                     onBlur={handleNickname}
                   />
@@ -325,25 +346,23 @@ export default function SignUpClient() {
               </div>
             </div>
 
-            <div className='mb-6'>
-              <div className='relative w-[390px] mx-auto'>
-                <p className='pb-2 t4'>
-                  비밀번호{' '}
-                  {signupError.password && (
-                    <span className='text-red-500 transition duration-200'>
-                      (필수)
-                    </span>
-                  )}
-                </p>
-              </div>
+            <div className='mb-3 lg:mb-6'>
+              <p className='pb-2 t4'>
+                비밀번호{' '}
+                {signupError.password && (
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
+                )}
+              </p>
 
-              <div className='flex flex-col justify-center'>
+              <div className='w-full'>
                 <div className='relative'>
                   <input
                     type={visible ? 'text' : 'password'}
                     value={password}
                     onChange={validatePassword}
-                    className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                    className='input-type3 w-full h-[45px] focus:outline-2 focus:outline-main lg:h-[50px]'
                     ref={passwordRef}
                     onBlur={handlePassword}
                   />
@@ -378,25 +397,23 @@ export default function SignUpClient() {
                 </p>
               </div>
             </div>
-            <div className='mb-6'>
-              <div className='relative w-[390px] mx-auto'>
-                <p className='pb-2 t4'>
-                  비밀번호 확인{' '}
-                  {signupError.passwordCheck && (
-                    <span className='text-red-500 transition duration-200'>
-                      (필수)
-                    </span>
-                  )}
-                </p>
-              </div>
+            <div className='mb-3 lg:mb-6'>
+              <p className='pb-2 t4'>
+                비밀번호 확인{' '}
+                {signupError.passwordCheck && (
+                  <span className='text-red-500 transition duration-200'>
+                    (필수)
+                  </span>
+                )}
+              </p>
 
-              <div className='flex flex-col justify-center'>
+              <div className='w-full'>
                 <div className='relative'>
                   <input
                     type={visible ? 'text' : 'password'}
                     value={passwordCheck}
                     onChange={handlePasswordCheck}
-                    className='input-type3 w-[390px] focus:outline-2 focus:outline-main'
+                    className='input-type3 w-full h-[45px] focus:outline-2 focus:outline-main lg:h-[50px]'
                     ref={passwordCheckRef}
                   />
                   {passwordCheck && (
@@ -429,12 +446,15 @@ export default function SignUpClient() {
                 </p>
               </div>
             </div>
-            <button
-              type='submit'
-              className='button-type1 cursor-pointer mb-[14px]'
-            >
-              회원가입
-            </button>
+
+            <div className='w-full'>
+              <button
+                type='submit'
+                className='button-type1 w-full h-[45px] cursor-pointer mb-[14px] lg:h-[50px]'
+              >
+                회원가입
+              </button>
+            </div>
           </form>
         </div>
       </div>
