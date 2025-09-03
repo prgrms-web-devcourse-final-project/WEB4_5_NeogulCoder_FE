@@ -44,8 +44,8 @@ export default function FeedbackModal({ onClose }: { onClose: () => void }) {
   }, [userId, page]);
 
   return (
-    <div className='flex flex-col bg-white w-[520px] h-[660px] rounded-[10px] items-center shadow-sm px-6 py-6 relative '>
-      <div className='flex justify-between items-center w-full mb-2'>
+    <div className='flex flex-col bg-white w-screen h-screen lg:w-[520px] lg:h-[660px] rounded-[10px] items-center shadow-sm px-6 py-6 relative'>
+      <div className='flex justify-between items-center w-full mb-2 lg:mb-[30px]'>
         <h2 className='tm2'>피드백</h2>
         <X className='w-6 h-6 cursor-pointer' onClick={onClose} />
       </div>

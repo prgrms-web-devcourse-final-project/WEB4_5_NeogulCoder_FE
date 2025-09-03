@@ -33,13 +33,14 @@ export default function BuddyEnergySection() {
     energy >= 98 ? 'calc(100% - 35px)' : `calc(${energy}% - 35px)`;
   return (
     <>
-      <div className='w-1/2 h-[180px] border border-main/10 rounded-[10px] flex flex-col p-5'>
-        <p className='tm3 mb-[35px]'>버디 에너지</p>
+      <div className='lg:h-[180px] lg:border lg:border-main/10 lg:rounded-[10px] flex flex-col p-5'>
+        <p className='tm3 lg:mb-[35px]'>버디 에너지</p>
+        <hr className='block lg:hidden w-full border-t border-gray-200 mt-2 mb-8' />
 
         <div className='w-full flex flex-col items-center'>
           <div className='relative w-full max-w-[500px] bg-border1 rounded-full h-5 overflow-visible'>
             <div
-              className='bg-orange h-full rounded-full transition-all duration-500'
+              className='bg-[#FBAE8F] h-full rounded-full transition-all duration-500'
               style={{ width: `${energy}%` }}
             />
 
@@ -53,7 +54,7 @@ export default function BuddyEnergySection() {
               <Image
                 src={buddyEnergy}
                 alt='버디 에너지'
-                className='w-[70px] h-auto'
+                className='w-[65px] lg:w-[70px] h-auto'
               />
             </div>
           </div>
