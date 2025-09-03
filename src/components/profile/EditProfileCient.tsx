@@ -92,8 +92,8 @@ export default function EditProfileClient() {
   };
   return (
     <>
-      <div className='tb3'>프로필 수정</div>
-      <div className='mt-[60px] flex flex-col items-center justify-center'>
+      <div className='tb3 max-lg:hidden'>프로필 수정</div>
+      <div className='-mt-[30px] lg:mt-[60px] flex flex-col items-center justify-center'>
         <div className='relative'>
           <div className='w-[140px] h-[140px] rounded-full relative bg-white overflow-hidden  border border-border1'>
             <Image
@@ -125,7 +125,7 @@ export default function EditProfileClient() {
           />
         </div>
 
-        <div>
+        <div className='w-full max-w-[390px]'>
           <p className='pb-2 mt-[60px] t4'>
             닉네임 <span className='text-red'>(필수)</span>
           </p>
@@ -133,7 +133,7 @@ export default function EditProfileClient() {
             <input
               type='text'
               value={nickname}
-              className='input-type3 w-[390px] focus:outline-1 focus:outline-main mb-[5px]'
+              className='input-type3 w-full h-[50px] focus:outline-1 focus:outline-main mb-[5px] max-lg:h-[45px]'
               onChange={(e) => setNickname(e.target.value)}
             />
           </div>
@@ -146,10 +146,10 @@ export default function EditProfileClient() {
           </p>
         </div>
 
-        <div className='flex flex-col items-start mt-8'>
+        <div className='flex flex-col items-start mt-8 w-full max-w-[390px]'>
           <button
             type='button'
-            className='button-type1 mb-4 hover:bg-[#292929]'
+            className='button-type1 w-full h-[50px] mb-4 hover:bg-[#292929]'
             onClick={handleSubmit}
           >
             저장
