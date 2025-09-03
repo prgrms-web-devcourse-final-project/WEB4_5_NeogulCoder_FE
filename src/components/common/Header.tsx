@@ -92,7 +92,7 @@ export default function Header() {
                   />
                 </div>
               )}
-              <div className='relative z-50'>
+              <div className='relative'>
                 <div
                   className='w-[90px] h-[34px] rounded-[4px] bg-gray4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#EEEEEE]'
                   onClick={() => setIsProfileModalOpen((prev) => !prev)}

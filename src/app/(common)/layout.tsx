@@ -9,7 +9,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
         <Header />
         <SubHeader />
       </div>
-      <div className='max-w-[1280px] m-auto mt-[107px] lg:pt-[48px] pb-16 lg:px-4 lg:min-h-[800px]'>
+      <div className='max-w-[1280px] m-auto mt-[48px] lg:mt-[97px] lg:pt-[48px] pb-16 lg:px-4 lg:min-h-[800px]'>
         {children}
       </div>
       <Footer />
