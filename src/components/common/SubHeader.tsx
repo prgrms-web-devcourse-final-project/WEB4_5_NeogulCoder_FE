@@ -17,7 +17,7 @@ import {
   Settings,
   SquarePen,
 } from 'lucide-react';
-// import MobileStudyListMenu from './MobileStudyListMenu';
+import MobileStudyListMenu from './MobileStudyListMenu';
 
 export default function SubHeader() {
   const router = useRouter();
@@ -110,11 +110,11 @@ export default function SubHeader() {
                   <Layers className='w-4 h-4' strokeWidth={1.7} />
                   <p>내 스터디</p>
                 </button>
-                {/* <MobileStudyListMenu
+                <MobileStudyListMenu
                   studies={studies}
                   mobileOpen={mobileOpen}
                   closeFn={() => setMobileOpen(false)}
-                /> */}
+                />
               </div>
             )}
           </div>
