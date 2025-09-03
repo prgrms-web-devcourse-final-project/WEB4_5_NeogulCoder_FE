@@ -75,93 +75,97 @@ export default function WithdrawalClient() {
 
   return (
     <>
-      <div className='tb3'>회원 탈퇴</div>
-      <div className='mt-[60px] flex flex-col items-center justify-center gap-10'>
-        <div className='flex items-center gap-6 cursor-default'>
-          <p className='w-[120px] text-left t4'>이메일(로그인 ID)</p>
-          <div className='w-[390px] h-[50px] rounded-[10px] bg-gray4 flex items-center px-4 '>
+      <div className='hidden lg:block tb3'>회원 탈퇴</div>
+      <div className='-mt-[30px] lg:mt-[60px] w-full max-w-[534px] mx-auto flex flex-col items-stretch justify-center gap-10'>
+        <div className='flex flex-col lg:flex-row lg:items-center gap-6 cursor-default'>
+          <p className='t4 text-left w-full lg:w-[120px]'>이메일(로그인 ID)</p>
+          <div className='w-full lg:w-[390px] h-[50px] rounded-[10px] bg-gray4 flex items-center px-4'>
             <span className='t4 text-text1/70'>{user?.email}</span>
           </div>
         </div>
 
-        <div className='flex items-center gap-6'>
-          <p className='w-[120px] text-left t4 cursor-default'>
+        <div className='flex flex-col lg:flex-row lg:items-center gap-6'>
+          <p className='t4 text-left w-full lg:w-[120px] cursor-default'>
             비밀번호 <span className='text-red'>(필수)</span>
           </p>
-          <div className='relative'>
-            <input
-              type={visible ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
-              ref={passwordRef}
-            />
-            {password && (
-              <div
-                onClick={() => setVisible(!visible)}
-                className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
-              >
-                {visible ? (
-                  <Eye className='w-4 h-4' />
-                ) : (
-                  <EyeOff className='w-4 h-4' />
-                )}
-              </div>
-            )}
-            {password && (
-              <Image
-                src={deleteText}
-                alt='전체 삭제'
-                onClick={() => {
-                  setPassword('');
-                }}
-                className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+          <div className='w-full lg:w-[390px]'>
+            <div className='relative'>
+              <input
+                type={visible ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className='input-type3 w-full h-[50px] focus:outline-1 focus:outline-main'
+                ref={passwordRef}
               />
-            )}
+              {password && (
+                <div
+                  onClick={() => setVisible(!visible)}
+                  className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+                >
+                  {visible ? (
+                    <Eye className='w-4 h-4' />
+                  ) : (
+                    <EyeOff className='w-4 h-4' />
+                  )}
+                </div>
+              )}
+              {password && (
+                <Image
+                  src={deleteText}
+                  alt='전체 삭제'
+                  onClick={() => {
+                    setPassword('');
+                  }}
+                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                />
+              )}
+            </div>
           </div>
         </div>
 
-        <div className='flex items-center gap-6'>
-          <p className='w-[120px] text-left t4 cursor-default'>
+        <div className='flex flex-col lg:flex-row lg:items-center gap-6'>
+          <p className='t4 text-left w-full lg:w-[120px] cursor-default'>
             비밀번호 확인 <span className='text-red'>(필수)</span>
           </p>
-          <div className='relative'>
-            <input
-              type={visible ? 'text' : 'password'}
-              value={passwordCheck}
-              className='input-type3 w-[390px] focus:outline-1 focus:outline-main'
-              onChange={(e) => setPasswordCheck(e.target.value)}
-              ref={passwordCheckRef}
-            />
-            {passwordCheck && (
-              <div
-                onClick={() => setVisible(!visible)}
-                className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
-              >
-                {visible ? (
-                  <Eye className='w-4 h-4' />
-                ) : (
-                  <EyeOff className='w-4 h-4' />
-                )}
-              </div>
-            )}
-            {passwordCheck && (
-              <Image
-                src={deleteText}
-                alt='전체 삭제'
-                onClick={() => {
-                  setPasswordCheck('');
-                }}
-                className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+          <div className='w-full lg:w-[390px]'>
+            <div className='relative'>
+              <input
+                type={visible ? 'text' : 'password'}
+                value={passwordCheck}
+                className='input-type3 w-full h-[50px] focus:outline-1 focus:outline-main'
+                onChange={(e) => setPasswordCheck(e.target.value)}
+                ref={passwordCheckRef}
               />
-            )}
+              {passwordCheck && (
+                <div
+                  onClick={() => setVisible(!visible)}
+                  className='absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer'
+                >
+                  {visible ? (
+                    <Eye className='w-4 h-4' />
+                  ) : (
+                    <EyeOff className='w-4 h-4' />
+                  )}
+                </div>
+              )}
+              {passwordCheck && (
+                <Image
+                  src={deleteText}
+                  alt='전체 삭제'
+                  onClick={() => {
+                    setPasswordCheck('');
+                  }}
+                  className='absolute w-4 h-4 right-5 top-1/2 -translate-y-1/2 cursor-pointer'
+                />
+              )}
+            </div>
           </div>
         </div>
 
-        <div className='w-[534px] flex justify-end'>
+        <div className='w-full lg:w-[534px] lg:mx-0 mx-auto flex lg:justify-end'>
           <button
             type='button'
-            className='button-type1 hover:bg-[#292929]'
+            className='button-type1 hover:bg-[#292929] h-[50px] w-full lg:w-auto'
             onClick={handleDeleteBtn}
           >
             탈퇴하기
