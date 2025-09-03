@@ -112,7 +112,7 @@ export default function ListMenu({
         </div>
       </div>
 
-      <div className='max-[494px]:flex-1 min-w-[216px] w-[220px] min-[577px]:w-[245px] md:w-[260px] h-[34px] bg-gray4 rounded-[50px] flex justify-between  items-center gap-2 min-[577px]:gap-4 px-4 tm4 text-text1/50'>
+      <div className='max-[494px]:flex-1 min-w-[216px] w-[220px] min-[577px]:w-[245px] md:w-[260px] h-[34px] bg-gray4 rounded-[50px] flex justify-between items-center gap-2 min-[577px]:gap-4 px-4 tm4 text-text1/50'>
         <div className='w-full flex gap-2 items-center'>
           <Search className='w-[14px] h-[14px] min-[577px]:w-4 min-[577px]:h-4 shrink-0' />
           <input
