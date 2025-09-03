@@ -41,7 +41,7 @@ export default function Notification() {
       </button>
 
       {isNotificationModalOpen && (
-        <div className='fixed bottom-5 right-5 z-50'>
+        <div className='fixed z-50 inset-0 lg:inset-auto lg:bottom-5 lg:right-5 flex items-center justify-center lg:items-end lg:justify-end'>
           <NotificationModal
             onClose={() => setIsNotificationModalOpen(false)}
           />
