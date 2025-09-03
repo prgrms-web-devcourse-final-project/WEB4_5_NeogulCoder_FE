@@ -183,10 +183,10 @@ export default function ChatClient() {
   };
 
   return (
-    <div className='w-full rounded-[10px] border border-border2'>
-      <div className='h-[690px] flex flex-col'>
+    <div className='w-full lg:rounded-[10px] lg:border lg:border-border2'>
+      <div className='h-[100vh] lg:h-[690px] flex flex-col'>
         <div
-          className='flex-1 overflow-y-auto min-w-0 px-7 flex flex-col scroll-custom-4'
+          className='flex-1 overflow-y-auto min-w-0 px-3 lg:px-7 flex flex-col scroll-custom-4'
           ref={scrollRef}
           onScroll={handleScroll}
         >
@@ -213,10 +213,11 @@ export default function ChatClient() {
           ))}
           <div ref={textBottomRef}></div>
         </div>
-        <div className='px-7 mb-7'>
+        <div className='lg:px-7 mb-7'>
+          <hr className='block lg:hidden w-full border-t border-gray-300 mb-3' />
           <div className='relative'>
             <input
-              className='input-type1 w-full focus:outline-1 focus:outline-none placeholder:opacity-50'
+              className='lg:border lg:border-border1 lg:text-text1 lg:h-[45px] lg:rounded-[10px]  px-5 text-xs md:text-sm w-full lg:focus:outline-1 focus:outline-none placeholder:opacity-50'
               type='text'
               placeholder='내용을 입력해주세요.'
               value={message}
