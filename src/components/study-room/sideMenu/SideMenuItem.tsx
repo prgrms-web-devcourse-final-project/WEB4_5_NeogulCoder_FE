@@ -17,12 +17,15 @@ export default function SideMenuItem({
     <>
       <Link
         href={to}
-        className={`flex justify-between ${
+        className={`flex pt-4 pb-3 lg:py-0 h-full relative justify-between ${
           isActive ? 'opacity-100' : 'opacity-30'
         }`}
       >
-        <span className='tm4'>{name}</span>
-        <ChevronRight className='w-[22px] h-[22px]' />
+        <span className='tm4 text-[14px]'>{name}</span>
+        <ChevronRight className='w-[22px] h-[22px] lg:block hidden' />
+        {isActive && (
+          <span className='absolute left-0 bottom-0 w-full h-[3px] bg-main lg:hidden'></span>
+        )}
       </Link>
     </>
   );

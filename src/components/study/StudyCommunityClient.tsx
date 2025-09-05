@@ -103,7 +103,7 @@ export default function StudyCommunityClient() {
           <PencilLine />
         </Link>
       )}
-      <div className='mt-6'>
+      <div className='lg:mt-6'>
         <ListMenuStudy
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -140,7 +140,7 @@ export default function StudyCommunityClient() {
         )}
       </div>
       <div
-        className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:mx-[-18px] relative ${
+        className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:-mx-[18px] border-t-1 border-border1 lg:border-0 relative ${
           studyCommunityList.length === 0 && 'h-[calc(100vh-105px-113px-198px)]'
         }`}
       >

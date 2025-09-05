@@ -32,7 +32,7 @@ export default function StudyCard({
   return (
     // min-[900px]:w-[274px] w-[230px]
     <div
-      className='flex flex-col justify-center w-full min-[900px]:px-[30px] min-[900px]:py-[30px] px-6 py-6 bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
+      className='flex flex-col justify-center w-full min-[900px]:px-[30px] min-[900px]:py-[30px] px-6 py-6 bg-white border-2 border-border1 rounded-[20px] lg:rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
       onClick={() => router.push(`/study/${studyId}/dashboard`)}
     >
       <div className='min-[900px]:tm3 tm4 text-text1 truncate'>{name}</div>
@@ -53,11 +53,31 @@ export default function StudyCard({
           <div className='flex gap-[10px] items-center'>
             <Calendar className='min-[900px]:w-5 min-[900px]:h-5 w-4 h-4 text-[#FBE175]' />
             <span className='min-[900px]:t4 t5 text-text1 truncate'>
+              {/* className='flex flex-col justify-center w-full md:min-w-[220px] lg:w-[274px] px-3.5 py-5 lg:px-[30px] lg:py-[30px] bg-white border-2 border-border1 rounded-[20px] lg:rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
+      onClick={() => router.push(`/study/${studyId}/dashboard`)}
+    >
+      <div className='tm3 text-text1 truncate'>{name}</div>
+      <div className='flex justify-between mt-2 lg:mt-5'>
+        <div className='flex flex-col gap-[6px] lg:gap-[10px]'>
+          <div className='flex gap-[6px] lg:gap-[10px] items-center'>
+            <Crown className='w-4 h-4 lg:w-5 lg:h-5 text-[#FBE175]' />
+            <span className='t4 text-text1'>{leaderNickname}</span>
+          </div>
+          <div className='flex gap-[6px] lg:gap-[10px] items-center'>
+            <UsersRound className='w-4 h-4 lg:w-5 lg:h-5 text-[#FBE175]' />
+            <span className='t4 text-text1'>
+              {currentCount}/{capacity}
+            </span>
+          </div>
+          <div className='flex gap-[6px] lg:gap-[10px] items-center'>
+            <Calendar className='w-4 h-4 lg:w-5 lg:h-5 text-[#FBE175]' />
+            <span className='t4 text-text1'> */}
               {formatDate(startDate, 'YYYY.MM.DD')}
             </span>
           </div>
         </div>
         <div className='flex justify-center items-center min-[900px]:w-15 min-[900px]:h-15 w-13 h-13 bg-white border border-[#EBE9E9] rounded-[50%] overflow-hidden'>
+          {/* <div className='flex justify-center items-center w-12 h-12 lg:w-15 lg:h-15 bg-white border border-[#EBE9E9] rounded-[50%] overflow-hidden'> */}
           <div className='relative w-full h-full'>
             <Image
               src={imageUrl ? imageUrl : logoWibby}
@@ -71,12 +91,18 @@ export default function StudyCard({
           </div>
         </div>
       </div>
-      <div className='flex justify-center items-center px-3 min-[900px]:py-4 py-3 rounded-[10px] bg-gray4 min-[900px]:mt-5 mt-4'>
+      <div className='flex justify-center items-center px-3 min-[900px]:py-4 py-3 rounded-[6px] lg:rounded-[10px] bg-gray4 min-[900px]:mt-5 mt-4'>
         <span className='min-[900px]:t4 t5 text-text1 opacity-70 truncate'>
           {introduction ? introduction : '함께 좋은 결과 만들어봅시다!'}
         </span>
       </div>
       <div className='flex gap-2 min-[900px]:mt-6 mt-5'>
+        {/* <div className='flex justify-center items-center px-2 lg:px-3 py-2 lg:py-4 rounded-[6px] lg:rounded-[10px] bg-gray4 mt-5'>
+        <span className='t4 text-text1 opacity-70 truncate'>
+          {introduction ? introduction : '함께 좋은 결과 만들어봅시다!'}
+        </span>
+      </div>
+      <div className='flex gap-2 mt-4 lg:mt-6'> */}
         <div className='tag-type1'>
           <span className='min-[900px]:tb5 tb6'>
             {categoryFormatting(category)}

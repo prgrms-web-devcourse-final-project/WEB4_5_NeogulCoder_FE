@@ -153,7 +153,7 @@ export default function MyStudyInfoClient() {
           <div className='tb2 text-text1 max-[1024px]:hidden'>
             스터디 My 정보
           </div>
-          <div className='tm2 text-text1 mt-[30px]'>내가 작성한 글</div>
+          <div className='tm2 text-text1 lg:mt-[30px]'>내가 작성한 글</div>
           <div className='mt-6'>
             <ListMenuStudy
               selectedCategory={selectedCategory}
@@ -166,7 +166,7 @@ export default function MyStudyInfoClient() {
             />
           </div>
           <div
-            className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:mx-[-18px] relative ${
+            className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:-mx-[18px] border-t-1 border-border1 lg:border-0 relative ${
               myCommunityList.length === 0 &&
               'h-[calc(100vh-105px-113px-193px-200px)]'
             }`}

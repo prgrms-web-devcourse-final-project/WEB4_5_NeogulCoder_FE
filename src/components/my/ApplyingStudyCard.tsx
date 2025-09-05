@@ -33,7 +33,7 @@ export default function ApplyingStudyCard({
   const router = useRouter();
   return (
     <div
-      className='flex flex-col justify-center w-full min-[900px]:px-[30px] min-[900px]:py-[30px] px-6 py-6 bg-white border-2 border-border1 rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
+      className='flex flex-col justify-center w-full min-[900px]:px-[30px] min-[900px]:py-[30px] px-6 py-6 bg-white border-2 border-border1 rounded-[20px] lg:rounded-[30px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
       onClick={() => router.push(`/recruitment/detail/${recruitmentPostId}`)}
     >
       <div className='min-[900px]:tm3 tm4 text-text1 truncate'>{name}</div>
@@ -84,7 +84,7 @@ export default function ApplyingStudyCard({
           </span>
         </div>
       </div>
-      <div className='flex justify-center items-center px-3 min-[900px]:py-4 py-3 rounded-[10px] bg-gray4 min-[900px]:mt-[10px] mt-2'>
+      <div className='flex justify-center items-center px-3 min-[900px]:py-4 py-3 rounded-[6px] lg:rounded-[10px] bg-gray4 min-[900px]:mt-[10px] mt-2'>
         <span className='min-[900px]:t4 t5 text-text1 opacity-70 truncate'>
           {introduction ? introduction : '함께 좋은 결과 만들어봅시다!'}
         </span>

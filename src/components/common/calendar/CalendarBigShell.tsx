@@ -162,11 +162,11 @@ export default function CalendarBigShell({
             <div className='relative'>
               <button
                 type='button'
-                className={`flex px-4 cursor-pointer items-center`}
+                className={`flex px-3 lg:px-4 text-xs lg:text-sm cursor-pointer items-center`}
                 onClick={() => setIsCategoryOpen((prev) => !prev)}
               >
                 <p className='mr-1'>{selectedCategory.name}</p>
-                <ChevronDown className='w-5 h-5 ml-3' />
+                <ChevronDown className='w-4 h-4 lg:w-5 lg:h-5 ml-3' />
               </button>
               {isCategoryOpen && (
                 <div
@@ -178,7 +178,7 @@ export default function CalendarBigShell({
                       <button
                         key={`${category.name}${i}`}
                         type='button'
-                        className='flex items-center justify-center h-10 w-full rounded-[10px] hover:bg-gray4'
+                        className='flex text-xs lg:text-sm items-center justify-center h-10 w-full rounded-[10px] hover:bg-gray4'
                         onClick={() => {
                           setSelectedCategory(category);
                           setIsCategoryOpen(false);
@@ -197,7 +197,7 @@ export default function CalendarBigShell({
         {selectedCategory.isProgress && (
           <button
             onClick={writeOpenHandler}
-            className='button-sm-type1 ml-auto'
+            className='button-sm-type1 ml-auto !text-[11px] !h-6.5 lg:!h-8 lg:!text-sm !px-3 lg:!px-4'
           >
             일정등록
           </button>

@@ -11,9 +11,9 @@ export default function SideStudyInfo({
 }) {
   return (
     <>
-      <div className='px-5 py-5 bg-gray4 rounded-[10px] mb-3'>
+      <div className='w-[215px] px-3.5 py-3.5 lg:w-full lg:px-5 lg:py-5 bg-gray4 rounded-[10px] mb-3 lg:static absolute'>
         <div className='flex gap-3 mb-3 items-center'>
-          <div className='w-[70px] h-[70px] bg-white rounded-full shrink-0 overflow-hidden flex items-center justify-center'>
+          <div className='w-[46px] h-[46px] lg:w-[70px] lg:h-[70px] bg-white rounded-full shrink-0 overflow-hidden flex items-center justify-center'>
             <Image
               width={70}
               height={0}

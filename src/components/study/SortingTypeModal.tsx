@@ -29,9 +29,13 @@ export default function SortingTypeModal({
         onClick={onClose}
       >
         <div
-          className='w-full flex flex-col gap-5 px-9 py-9 rounded-t-[24px] bg-white drop-shadow-md'
+          className='w-full flex flex-col gap-5 px-9 pt-6 pb-9 rounded-t-[24px] bg-white drop-shadow-md'
           onClick={(e) => e.stopPropagation()}
         >
+          <div
+            className='w-[50px] h-[3px] bg-border1 rounded-[3px] mx-auto'
+            onClick={onClose}
+          ></div>
           <p className='tm3 text-text1'>정렬</p>
           <div className='flex flex-wrap gap-3'>
             {sortingType.map((sortingType) => (

@@ -56,7 +56,7 @@ export default function StudyListClient() {
     <div className='w-full'>
       <div className='tb3 max-[1024px]:hidden'>전체 스터디</div>
       {/* border-b border-b-[#e5e5e5] */}
-      <div className='mt-6'>
+      <div className='lg:mt-6'>
         {[...Array(3)].map((_, i) => (
           <SubMenuItem
             key={i}

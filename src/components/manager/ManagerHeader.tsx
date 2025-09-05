@@ -34,31 +34,31 @@ export default function ManagerHeader() {
 
   return (
     <>
-      <header className='py-4 border-b border-border1'>
+      <header className='fixed top-0 left-0 bg-white w-full py-2.5 lg:py-4 border-b border-border1 z-25'>
         <div className='max-w-[1280px] px-4 mx-auto flex items-center justify-between'>
-          <h1 className='flex items-start text-[22px] font-bold text-logo3 gap-2'>
+          <h1 className='flex items-center lg:items-start text-[18px] lg:text-[22px] font-bold text-logo3 gap-2'>
             <Link href={'/'}>
               <Image
                 src={logoWibby}
                 alt='로고'
-                className='w-[80px] h-9 cursor-pointer'
+                className='w-[68px] lg:w-[80px] h-9 cursor-pointer'
               />
             </Link>
             관리자
           </h1>
-          <div className='flex items-center gap-25 tm2'>
+          <div className='hidden lg:flex items-center gap-25 tm2'>
             <Link href={'/manager'}>회원관리</Link>
             <Link href={'/manager/study'}>스터디관리</Link>
             <Link href={'/manager/recruitment'}>모집글관리</Link>
           </div>
           <div>
             {user && (
-              <div className='flex items-center gap-3'>
-                <p className='t3'>
+              <div className='flex items-center gap-2 lg:gap-3'>
+                <p className='t3 text-sm'>
                   <span className='font-bold mr-1'>{user.nickname}</span>님
                 </p>
                 <button className='flex items-center t5' onClick={handleLogout}>
-                  <LogOut className='w-5 h-5' />
+                  <LogOut className='w-4 h-4 lg:w-5 lg:h-5' />
                 </button>
               </div>
             )}

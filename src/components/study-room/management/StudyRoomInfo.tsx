@@ -61,13 +61,13 @@ export default function StudyRoomInfo({
   ];
   return (
     <>
-      <div className='flex justify-between mb-10'>
+      <div className='flex justify-between mb-6 lg:mb-10'>
         <h3 className='tb3 leading-none'>스터디 정보</h3>
         <button onClick={infoModalOpen}>
-          <PenLine className='w-5 h-5' />
+          <PenLine className='w-4 h-4 lg:w-5 lg:h-5' />
         </button>
       </div>
-      <div className='w-[120px] h-[120px] overflow-hidden rounded-full border border-border1 mb-14 mx-auto flex item-center justify-center'>
+      <div className='w-[60px] h-[60px] lg:w-[120px] lg:h-[120px] overflow-hidden rounded-full border border-border1 mb-6 lg:mb-14 mx-auto flex item-center justify-center'>
         <Image
           src={studyInfoData.imageUrl ?? logoWibby}
           width={120}
@@ -81,7 +81,7 @@ export default function StudyRoomInfo({
           }
         />
       </div>
-      <div className='w-full grid grid-cols-2 gap-5'>
+      <div className='w-full grid grid-cols-2 gap-2 lg:gap-5'>
         {infos.map((info, i) => (
           <StudyRoomInfoCard
             key={`info${i}`}

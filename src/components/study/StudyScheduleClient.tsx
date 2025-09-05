@@ -89,7 +89,7 @@ export default function StudyScheduleClient() {
                     onMouseLeave={() => setIsShown(false)}
                   />
                 </div>
-                <div className='flex max-[538px]:flex-wrap justify-between items-center gap-4 mt-6'>
+                <div className='flex max-[538px]:flex-wrap justify-between items-center gap-4 lg:mt-6'>
                   <span className='tm3'>
                     {formatDate(
                       initialTimeVoteStats.startDate,

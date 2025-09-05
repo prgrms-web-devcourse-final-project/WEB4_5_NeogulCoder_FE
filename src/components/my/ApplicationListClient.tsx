@@ -56,7 +56,7 @@ export default function ApplicationListClient() {
     <div className='w-full'>
       <div className='tb3 max-[1024px]:hidden'>내가 신청한 스터디</div>
       {/* border-b border-b-[#e5e5e5] */}
-      <div className='mt-6'>
+      <div className='lg:mt-6'>
         {[...Array(4)].map((_, i) => (
           <SubMenuItem
             key={i}
