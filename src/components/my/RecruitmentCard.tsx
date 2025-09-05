@@ -40,6 +40,7 @@ export default function RecruitmentCard({
 
   return (
     <div
+      // className='flex flex-col justify-center w-full px-[24px] py-[24px] bg-white max-[1024px]:border-t max-[1024px]:last:border-y lg:border-2 border-border1 lg:rounded-[10px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
       className='flex flex-col justify-center w-full px-[20px] lg:px-[24px] py-3.5 lg:py-[24px] bg-white border-b-1 lg:border-2 border-border1 rounded-0 lg:rounded-[10px] cursor-pointer transition-all ease-in-out duration-300 hover:-translate-y-1 hover:shadow-md'
       onClick={() => {
         if (type === 'my')
@@ -69,7 +70,9 @@ export default function RecruitmentCard({
               <span className='tb5'>자유</span>
             </div>
           )}
-          <div className='tm3 text-text1 truncate mt-2 lg:mt-0'>
+          {/* w-[430px] */}
+          <div className='tm3 text-text1 max-w-[440px] min-[892px]:max-w-[650px] min-[1024px]:max-w-[440px] min-[1234px]:max-w-[650px] truncate max-[1024px]:hidden'>
+            {/* <div className='tm3 text-text1 truncate mt-2 lg:mt-0'> */}
             {type === 'study' ? title : subject}
           </div>
         </div>
@@ -79,9 +82,13 @@ export default function RecruitmentCard({
             : formatDate(createAt!, 'YYYY.MM.DD')}
         </div>
       </div>
+      <div className='tm3 text-text1 w-[280px] min-[484px]:w-[430px] min-[892px]:w-[650px] mt-2 truncate lg:hidden'>
+        {type === 'study' ? title : subject}
+      </div>
       {type === 'my' && (
         <>
-          <div className='line-clamp-2 t4 text-text1 opacity-50 mt-3 lg:mt-[18px]'>
+          <div className='w-[280px] min-[484px]:w-[400px] min-[688px]:w-[520px] line-clamp-2 t4 text-text1 opacity-50 mt-3 lg:mt-[18px]'>
+            {/* <div className='line-clamp-2 t4 text-text1 opacity-50 mt-3 lg:mt-[18px]'> */}
             {/* {content} */}
             {content && (
               <ToastViewer key={content} height='100%' initialValue={content} />
@@ -109,7 +116,7 @@ export default function RecruitmentCard({
       )}
       {type === 'study' && (
         <div className='flex justify-between items-end'>
-          <div className='w-[557px] line-clamp-2 t4 text-text1 opacity-50 mt-[18px]'>
+          <div className='w-[280px] min-[484px]:w-[400px] min-[688px]:w-[520px] line-clamp-3 lg:line-clamp-2 t4 text-text1 opacity-50 mt-[18px]'>
             {/* {content} */}
             {content && (
               <ToastViewer key={content} height='100%' initialValue={content} />

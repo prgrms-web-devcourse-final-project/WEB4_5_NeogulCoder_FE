@@ -61,7 +61,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
           <SideMenuSkeleton />
         ) : (
           <div className='flex pl-[18px] lg:pl-0  items-center lg:block'>
-            {width > 1024 ? (
+            {width >= 1024 ? (
               studyInfo && <SideStudyInfo studyInfo={studyInfo} />
             ) : (
               <div className='relative shrink-0'>
@@ -90,7 +90,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
 
             <div className='flex gap-[20px] lg:flex-col lg:gap-[30px] lg:mt-[35px] overflow-x-auto whitespace-nowrap ml-[18px] lg:ml-0 pr-[18px] lg:px-0 '>
               {menuItems.map((item) => {
-                if (width > 1024) {
+                if (width >= 1024) {
                   if (item.name !== '스터디의 My 정보') {
                     return (
                       <SideMenuItem

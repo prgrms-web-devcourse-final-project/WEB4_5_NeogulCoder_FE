@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className='text-text1/60 w-full px-4 bg-gray4'>
+    <footer className='text-text1/60 w-full px-4 bg-gray4 max-[1024px]:hidden'>
       <div className='max-w-[1280px] m-auto flex justify-between items-center h-30'>
         <div className='flex flex-col gap-3'>
           <Image src={logo} alt='로고' className='' />
