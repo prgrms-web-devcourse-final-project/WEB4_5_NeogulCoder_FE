@@ -73,3 +73,23 @@
 .study-swiper-pagination .swiper-pagination-bullet-active {
   background-color: #90cff1;
 }
+
+@media screen and (max-width: 1280px) {
+  .main-banner .swiper-pagination-bullet {
+    height: 8px;
+    width: 8px;
+  }
+  .main-banner .swiper-pagination-bullet-active {
+    height: 8px;
+    width: 16px;
+  }
+  .main-studies .swiper {
+    padding: 20px 0 10px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .main-studies .swiper {
+    padding: 10px 0;
+  }
+}

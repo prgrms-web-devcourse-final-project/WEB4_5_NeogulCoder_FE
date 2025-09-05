@@ -11,6 +11,8 @@ import { categoryFormatting } from '@/utils/categoryFormatting';
 import { studyTypeFormatting } from '@/utils/studyTypeFormatting';
 import Link from 'next/link';
 import { ChevronDown, Search, SearchX, X } from 'lucide-react';
+import MobileCategoryModal from './MobileCategoryModal';
+import MobileOnlineModal from './MobileOnlineModal';
 
 export type MainPostType = {
   recruitmentPostId: number;
@@ -163,16 +165,30 @@ export default function MainRecruitmentList() {
     }
   };
 
+  //
+  const [width, setWidth] = useState<number>(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    handleResize(); // 최초 세팅
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
-      <div className='flex justify-between'>
-        <div className='flex gap-4 mt-[35px] relative'>
+      <div className='flex justify-between flex-wrap mt-4 lg:mt-[35px] gap-2'>
+        <div className='flex gap-1 lg:gap-4 relative'>
           <div ref={categorySelectRef} className='relative'>
             <button
               type='button'
-              className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
+              className={`tm3 text-[12px] md:text-[14px] lg:text-base w-[100px] md:w-[120px] h-[30px] p-2 lg:w-[132px] lg:h-[34px] rounded-[50px] flex items-center justify-between lg:p-3 border ${
                 isSelectedCategory
-                  ? 'border-main text-text1 tm3'
+                  ? 'border-main text-text1'
                   : 'border-main/10 text-text1/50'
               }`}
               onClick={() => setIsCategoryOpen((prev) => !prev)}
@@ -183,20 +199,29 @@ export default function MainRecruitmentList() {
               <ChevronDown className='w-4 h-4' />
             </button>
 
-            {isCategoryOpen && (
-              <div className='absolute top-10 left-0 z-10'>
-                <MainCategoriesModal
-                  onSelect={(category: string) => handleCategory(category)}
-                />
-              </div>
+            {width > 1024 ? (
+              isCategoryOpen && (
+                <div className='absolute top-10 left-0 z-10'>
+                  <MainCategoriesModal
+                    onSelect={(category: string) => handleCategory(category)}
+                  />
+                </div>
+              )
+            ) : (
+              <MobileCategoryModal
+                onSelect={(category: string) => handleCategory(category)}
+                isCategoryOpen={isCategoryOpen}
+                selectedCategory={selectedCategory}
+                closeFn={() => setIsCategoryOpen(false)}
+              />
             )}
           </div>
 
           <div ref={studyTypeSelectRef} className='relative'>
             <button
-              className={`w-[132px] h-[34px] rounded-[50px] flex items-center justify-between p-3 border ${
+              className={`tm3 text-[12px] md:text-[14px] lg:text-base w-[100px] md:w-[120px] h-[30px] p-2 lg:w-[132px] lg:h-[34px] rounded-[50px] flex items-center justify-between lg:p-3 border ${
                 isSelectedStudyType
-                  ? 'border-main text-text1 tm3'
+                  ? 'border-main text-text1'
                   : 'border-main/10 text-text1/50'
               }`}
               onClick={() => setStudyTypeOpen((prev) => !prev)}
@@ -206,18 +231,27 @@ export default function MainRecruitmentList() {
               </p>
               <ChevronDown className='w-4 h-4' />
             </button>
-
-            {isStudyTypeOpen && (
-              <div className='absolute top-10 left-0 z-10'>
-                <MainOnlineModal
-                  onSelect={(studyType: string) => handleStudyType(studyType)}
-                />
-              </div>
+            {width > 1024 ? (
+              isStudyTypeOpen && (
+                <div className='absolute top-10 left-0 z-10'>
+                  <MainOnlineModal
+                    onSelect={(studyType: string) => handleStudyType(studyType)}
+                  />
+                </div>
+              )
+            ) : (
+              <MobileOnlineModal
+                onSelect={(studyType: string) => handleStudyType(studyType)}
+                isStudyTypeOpen={isStudyTypeOpen}
+                selectedStudyType={selectedStudyType}
+                closeFn={() => setStudyTypeOpen(false)}
+              />
             )}
+
+            {}
           </div>
         </div>
-
-        <div className='w-[260px] h-[34px] bg-gray4 rounded-[50px] flex items-center gap-4 px-4 text-text1/50 mt-[35px]'>
+        <div className='ml-auto grow sm:grow-0 w-[210px] md:w-[240px] lg:w-[260px] h-[30px] lg:h-[34px] tm3 text-[12px] md:text-[14px] md:text-base bg-gray4 rounded-[50px] flex items-center px-2.5 gap-2 lg:gap-4 lg:px-4 text-text1/50'>
           <Search className='w-4 h-4 shrink-0' />
           <input
             type='text'
@@ -236,7 +270,7 @@ export default function MainRecruitmentList() {
         </div>
       </div>
 
-      <div className='min-h-[500px] mt-[34px] flex flex-col gap-[30px] mb-9'>
+      <div className='-ml-[18px] lg:ml-0 w-[calc(100%+34px)] lg:w-full min-h-[500px]  mt-4 lg:mt-[35px] flex flex-col gap-0 lg:gap-[30px] mb-9 border-t-1 border-border1 lg:border-0'>
         {isLoading ? (
           Array.from({ length: 10 }).map((_, i) => (
             <RecruitmentCardSkeleton key={`skeleton${i}`} />

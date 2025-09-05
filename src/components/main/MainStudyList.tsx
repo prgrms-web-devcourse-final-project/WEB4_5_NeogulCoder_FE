@@ -16,10 +16,24 @@ import {
   ChevronRight,
   LockKeyhole,
 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function MainStudyList() {
   const user = userAuthStore().user;
   const { studies, loading } = useStudiesStore();
+
+  const [width, setWidth] = useState<number>(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    handleResize(); // 최초 세팅
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // 비회원
   if (user === null) return null;
@@ -27,10 +41,13 @@ export default function MainStudyList() {
   // 회원
   return (
     <>
-      <div className='pt-[105px]'>
+      <div className='pt-[35px] lg:pt-[55px] xl:pt-[105px]'>
         <div className='flex items-center justify-between mt-[6px]'>
-          <p className='text-[22px] font-bold'>내 스터디</p>
-          {studies.length > 4 && (
+          <p className='text-[18px] lg:text-[22px] font-bold'>내 스터디</p>
+          {(studies.length >= 4 ||
+            (width <= 1280 && studies.length >= 3) ||
+            (width <= 768 && studies.length >= 2) ||
+            (width <= 400 && studies.length >= 1)) && (
             <div className='flex gap-2 swiper-nav-btns'>
               <button
                 type='button'
@@ -58,12 +75,28 @@ export default function MainStudyList() {
             </div>
           ) : (
             <>
-              {studies.length >= 4 ? (
+              {studies.length >= 4 ||
+              (width <= 1280 && studies.length >= 3) ||
+              (width <= 768 && studies.length >= 2) ||
+              (width <= 400 && studies.length >= 1) ? (
                 <>
                   <Swiper
                     modules={[Navigation, Pagination, A11y]}
                     spaceBetween={0}
-                    slidesPerView={4}
+                    slidesPerView={1}
+                    breakpoints={{
+                      400: {
+                        slidesPerView: 2,
+                        spaceBetween: 6,
+                      },
+                      768: {
+                        slidesPerView: 3,
+                        spaceBetween: 12,
+                      },
+                      1280: {
+                        slidesPerView: 4,
+                      },
+                    }}
                     navigation={{
                       prevEl: '.study-swiper-prev', //스와이퍼 외부에 컨트롤러 설정하기
                       nextEl: '.study-swiper-next',
@@ -106,10 +139,10 @@ export default function MainStudyList() {
               ) : (
                 <div
                   className={`flex pt-[30px] pb-[10px] ${
-                    studies.length !== 0 && 'gap-10'
+                    studies.length !== 0 && 'gap-3 lg:gap-10'
                   } `}
                 >
-                  <div className='flex shrink-0 gap-10'>
+                  <div className='flex shrink-0 gap-3 lg:gap-10 '>
                     {studies &&
                       studies.map((study) => (
                         <Link
@@ -133,14 +166,14 @@ export default function MainStudyList() {
                         </Link>
                       ))}
                   </div>
-                  <div className='w-full h-[310px] flex items-center justify-center text-gray3 bg-gray4/40 rounded-[30px]'>
+                  <div className='w-full min-h-[246px] lg:h-[310px] flex items-center justify-center text-gray3 bg-gray4/40 rounded-[30px]'>
                     <div className='text-center'>
                       <Link href='#recruit' className='group'>
                         <LockKeyhole
-                          className='mx-auto w-12 h-12 mb-3'
+                          className='mx-auto w-9 h-9 mb-2 lg:w-12 lg:h-12 lg:mb-3'
                           strokeWidth={1}
                         />
-                        <p className='mb-2 t3'>
+                        <p className='mb-2 t3 text-[14px] md:text-base'>
                           {' '}
                           더 많은 스터디에 참여해보세요
                         </p>

@@ -71,11 +71,11 @@ export default function StudyRoomInfoWrite({
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
-        <div className='py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] min-w-[580px]'>
-          <div className='flex justify-between mb-8 px-9 '>
+        <div className='py-4 lg:py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] lg:min-w-[580px] w-[calc(100%-36px)]'>
+          <div className='flex justify-between mb-5 lg:mb-8 px-4 lg:px-9'>
             <h3 className='tm2'>스터디 초대</h3>
             <button onClick={closeFn}>
-              <X className='w-8 y-8' />
+              <X className='w-6 h-6 lg:w-8 lg:h-8' />
             </button>
           </div>
           <div>
@@ -83,29 +83,29 @@ export default function StudyRoomInfoWrite({
             {isLoading ? (
               <div className='h-[45px] mx-9 bg-gray-100 animate-pulse rounded-md mb-4'></div>
             ) : (
-              <div className='px-9 mb-4'>
-                <div className='flex items-center input-type1 gap-3 bg-gray4 !border-gray4 !text-[16px]'>
-                  <Search className='w-5 h-5 shrink-0 text-gray5' />
+              <div className='mb-2 px-4 lg:px-9 lg:mb-4'>
+                <div className='flex items-center input-type1 gap-2 lg:gap-3 bg-gray4 !border-gray4 !text-[16px]'>
+                  <Search className='w-4 h-4 lg:w-5 lg:h-5 shrink-0 text-gray5' />
                   <input
                     type='text'
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder='사용자를 검색해 보세요'
-                    className='w-full h-full focus:outline-0'
+                    className='w-full h-full focus:outline-0 text-xs lg:text-sm'
                   />
                 </div>
               </div>
             )}
 
             {/* 사용자 리스트 */}
-            <div className='flex flex-col py-2 px-9 gap-1 h-[360px] overflow-auto'>
+            <div className='flex flex-col py-2 px-2 lg:px-9 gap-1 h-[360px] overflow-auto'>
               {handleSearch(search).map((user) => (
                 <div
                   key={user.id}
                   className='flex items-center justify-between rounded-[10px] bg-white hover:drop-shadow-md p-3 transition-all duration-200'
                 >
-                  <div className='flex items-center gap-3'>
-                    <div className='w-[42px] h-[42px] rounded-full overflow-hidden bg-white border border-border1'>
+                  <div className='flex items-start gap-2 lg:gap-3 min-w-0'>
+                    <div className='w-[36px] h-[36px] lg:w-[42px] lg:h-[42px] shrink-0 rounded-full overflow-hidden bg-white border border-border1'>
                       <Image
                         src={user.profileImageUrl ?? defaultUserProfileImage}
                         width={42}
@@ -114,14 +114,14 @@ export default function StudyRoomInfoWrite({
                         loading='lazy'
                       />
                     </div>
-                    <div>
-                      <p className='t4'>{user.nickname}</p>
-                      <p className='t4'>{user.email}</p>
+                    <div className='w-full  min-w-0'>
+                      <p className='t4 break-words'>{user.nickname}</p>
+                      <p className='t4 break-words'>{user.email}</p>
                     </div>
                   </div>
                   <button
                     onClick={() => handleInvite(user.nickname)}
-                    className='button-sm-type1 !text-[12px]'
+                    className='button-sm-type1 !text-[10px] md:!text-[12px] mobile1 shrink-0'
                     disabled={isPending}
                   >
                     초대하기
