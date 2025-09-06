@@ -116,7 +116,7 @@ export default function ChatClient() {
           behavior: 'auto',
           block: 'nearest',
         });
-      }, 0);
+      }, 100);
 
       return () => clearTimeout(timeout);
     }
@@ -184,7 +184,7 @@ export default function ChatClient() {
 
   return (
     <div className='w-full lg:rounded-[10px] lg:border lg:border-border2'>
-      <div className='h-[100vh] lg:h-[690px] flex flex-col'>
+      <div className='h-[calc(100dvh-113px-54px)] lg:h-[690px] flex flex-col'>
         <div
           className='flex-1 overflow-y-auto min-w-0 px-3 lg:px-7 flex flex-col scroll-custom-4'
           ref={scrollRef}
@@ -213,11 +213,37 @@ export default function ChatClient() {
           ))}
           <div ref={textBottomRef}></div>
         </div>
-        <div className='lg:px-7 mb-7'>
-          <hr className='block lg:hidden w-full border-t border-gray-300 mb-3' />
+
+        {/* 모바일 */}
+        <div className='block lg:hidden fixed bottom-[54px] left-0 w-full bg-white px-4 py-2 border-t border-b border-gray-300 z-50'>
           <div className='relative'>
             <input
-              className='lg:border lg:border-border1 lg:text-text1 lg:h-[45px] lg:rounded-[10px]  px-5 text-xs md:text-sm w-full lg:focus:outline-1 focus:outline-none placeholder:opacity-50'
+              className='w-full h-[45px] px-4 text-sm rounded-[10px] focus:outline-none placeholder:opacity-50'
+              type='text'
+              placeholder='내용을 입력해주세요.'
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={handleKeyDown}
+              onCompositionStart={() => setIsInput(true)}
+              onCompositionEnd={() => setIsInput(false)}
+              ref={inputRef}
+            />
+            <Send
+              className={`w-[18px] h-[18px] absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer transition-colors ${
+                message.trim()
+                  ? 'text-gray5 hover:text-[#292929]'
+                  : 'text-gray5/30 cursor-default'
+              }`}
+              onClick={handleSendMessage}
+            />
+          </div>
+        </div>
+
+        <div className='hidden lg:block lg:px-7 mb-7 flex-shrink-0'>
+          <hr className='w-full border-t border-gray-300 mb-3' />
+          <div className='relative'>
+            <input
+              className='lg:border lg:border-border1 lg:text-text1 lg:h-[45px] lg:rounded-[10px] px-5 text-sm w-full focus:outline-none placeholder:opacity-50'
               type='text'
               placeholder='내용을 입력해주세요.'
               value={message}
