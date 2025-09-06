@@ -159,57 +159,57 @@ export default function RecruitmentWritePage() {
       {isLoading ? (
         <RecruitmentFormSkeleton />
       ) : (
-        <div className='w-[920px] mx-auto'>
-          <div className='flex items-center justify-between'>
-            <div className='flex justify-center items-center'>
+        <div className='w-auto max-w-[920px] mx-auto'>
+          <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-0'>
+            <div className='flex mb-2 lg:mb-0'>
               <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
                 <span className='text-white tb2'>1</span>
               </div>
-              <span className='tb2 mx-[25px] '>
+              <span className='tb2 mx-[25px]'>
                 스터디 기본 정보를 입력해주세요
               </span>
             </div>
-            <div className='flex items-center'>
-              <div className='relative inline-block w-[320px] ml-14.5 mr-5'>
-                <div className='relative'>
-                  <button
-                    type='button'
-                    style={{ borderColor: 'var(--color-border3)' }}
-                    className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border  ${
-                      studyId
-                        ? 'border-main text-text1 tm4'
-                        : 'border-main/10 text-text1/50 tm4'
-                    }`}
-                    onClick={() => setIsStudyOpen((prev) => !prev)}
-                  >
-                    <p
-                      className={`mr-1 ${
-                        !studyId ? 'text-gray-400' : 'text-black'
-                      }`}
-                    >
-                      {studyId
-                        ? studyList.find((study) => study.studyId === studyId)
-                            ?.name
-                        : '스터디를 선택해주세요'}
-                    </p>
-                    <ChevronDown className='w-6 h-6' />
-                  </button>
 
-                  {isStudyOpen && (
-                    <div className='absolute top-15 left-0 z-10'>
-                      <StudyListModal
-                        studyList={studyList}
-                        onSelect={(selectedId) => {
-                          setStudyId(selectedId);
-                          setIsStudyOpen(false);
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
+            <div className='flex  lg:flex-row items-stretch lg:items-center gap-2 lg:gap-2'>
+              <div className='relative inline-block w-full  lg:w-[320px]'>
+                <button
+                  type='button'
+                  style={{ borderColor: 'var(--color-border3)' }}
+                  className={`w-full lg:w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border ${
+                    studyId
+                      ? 'border-main text-text1 tm4'
+                      : 'border-main/10 text-text1/50 tm4'
+                  }`}
+                  onClick={() => setIsStudyOpen((prev) => !prev)}
+                >
+                  <p
+                    className={`mr-1 ${
+                      !studyId ? 'text-gray-400' : 'text-black'
+                    }`}
+                  >
+                    {studyId
+                      ? studyList.find((study) => study.studyId === studyId)
+                          ?.name
+                      : '스터디를 선택해주세요'}
+                  </p>
+                  <ChevronDown className='w-6 h-6' />
+                </button>
+
+                {isStudyOpen && (
+                  <div className='absolute top-15 left-0 z-10 w-full lg:w-auto'>
+                    <StudyListModal
+                      studyList={studyList}
+                      onSelect={(selectedId) => {
+                        setStudyId(selectedId);
+                        setIsStudyOpen(false);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
+
               <button
-                className='button-type7 hover:bg-[#292929]'
+                className='button-type7 hover:bg-[#292929] w-full lg:w-auto'
                 onClick={handleFetchData}
                 disabled={studyId === ''}
               >
@@ -221,8 +221,8 @@ export default function RecruitmentWritePage() {
             className='h-0.5 my-10'
             style={{ borderColor: 'var(--color-border2)' }}
           />
-          <div className='flex space-x-10'>
-            <div className='flex flex-col w-[440px]  '>
+          <div className='flex flex-col lg:flex-row space-x-10'>
+            <div className='flex flex-col  w-full lg:max-w-[440px]'>
               <span className='tm-0 mb-2.5'>시작 날짜</span>
               <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
                 <div>
@@ -235,7 +235,7 @@ export default function RecruitmentWritePage() {
                 </div>
               </div>
             </div>
-            <div className='flex flex-col w-[440px]  '>
+            <div className='flex flex-col w-full lg:max-w-[440px]'>
               <span className='tm-0 mb-2.5'>종료 날짜</span>
               <div className='flex h-15 rounded-[10px] p-5 mb-10 cursor-not-allowed bg-gray4 justify-between'>
                 <div>
@@ -247,10 +247,10 @@ export default function RecruitmentWritePage() {
               </div>
             </div>
           </div>
-          <div className='flex space-x-10'>
-            <div className='flex flex-col w-[440px] mb-10'>
+          <div className='flex flex-col lg:flex-row space-x-10 mb-6'>
+            <div className='flex flex-col w-full lg:max-w-[440px]'>
               <span className='tm-0 mb-2.5'>모집 인원</span>
-              <div className='relative inline-block w-[440px]'>
+              <div className='relative inline-block '>
                 <button
                   type='button'
                   style={{ borderColor: 'var(--color-border3)' }}
@@ -264,7 +264,7 @@ export default function RecruitmentWritePage() {
                 </button>
 
                 {isOpen && (
-                  <div className='absolute top-[60px] left-0 z-10'>
+                  <div className='absolute top-[60px] left-0 z-10 w-screen max-w-full lg:w-auto'>
                     <RemainSlotModal
                       onSelect={(value) => {
                         setRemainSlots(value);
@@ -275,9 +275,9 @@ export default function RecruitmentWritePage() {
                 )}
               </div>
             </div>
-            <div className='flex flex-col w-[440px] mb-10'>
+            <div className='flex flex-col w-full lg:max-w-[440px]'>
               <span className='tm-0 mb-2.5'>카테고리</span>
-              <div className='relative inline-block w-[440px] '>
+              <div className='relative inline-block  '>
                 <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
                   <span>
                     {category ? categoryDisplayNames[category] : '카테고리'}
@@ -290,12 +290,12 @@ export default function RecruitmentWritePage() {
               </div>
             </div>
           </div>
-          <div className='flex space-x-10 '>
-            <div className='flex flex-col w-[440px] mb-10'>
+          <div className='flex flex-col lg:flex-row space-x-10 '>
+            <div className='flex flex-col w-full lg:max-w-[440px] mb-10'>
               <span className='tm-0 mb-2.5'>진행 방식</span>
-              <div className='relative inline-block w-[440px] '>
+              <div className='relative inline-block'>
                 <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
-                  {studyType ? StudyTypeDisplayNames[studyType] : '카테고리'}
+                  {studyType ? StudyTypeDisplayNames[studyType] : '진행 방식'}
                 </div>
 
                 <div className='absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none'>
@@ -303,9 +303,9 @@ export default function RecruitmentWritePage() {
                 </div>
               </div>
             </div>
-            <div className='flex flex-col w-[440px] mb-10'>
+            <div className='flex flex-col w-full lg:max-w-[440px] mb-10'>
               <span className='tm-0 mb-2.5'>지역</span>
-              <div className='relative inline-block w-[440px] '>
+              <div className='relative inline-block'>
                 <div className='flex  items-center w-full h-[60px] cursor-not-allowed bg-gray4 pl-4 pr-10 appearance-none rounded-[10px] '>
                   <span>{location ? location : '지역'}</span>
                 </div>
@@ -317,7 +317,7 @@ export default function RecruitmentWritePage() {
             </div>
           </div>
 
-          <div className='flex flex-col w-[440px]'>
+          <div className='flex flex-col w-full lg:max-w-[440px]'>
             <span className='tm-0 mb-2.5'>모집 마감일</span>
             <input
               type='date'
@@ -333,7 +333,9 @@ export default function RecruitmentWritePage() {
             <div className='flex w-10 h-10 rounded-full bg-[#111111] justify-center items-center'>
               <span className='text-white tb2'>2</span>
             </div>
-            <span className='tb2 mx-[25px]'>스터디에 대해 소개해주세요</span>
+            <span className='tb2 mx-[10px] lg:mx-[25px]'>
+              스터디에 대해 소개해주세요
+            </span>
           </div>
           <hr
             className='h-0.5 my-10'
@@ -351,13 +353,13 @@ export default function RecruitmentWritePage() {
           </div>
           <div className='flex justify-end'>
             <button
-              className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'
+              className='button-type6 !w-full lg:!w-[100px] mr-[15px] hover:bg-[#f5f5f5]'
               onClick={() => router.push(`/#recruit`)}
             >
               취소
             </button>
             <button
-              className='button-type5 hover:bg-[#292929]'
+              className='button-type5 !w-full lg:!w-[100px] hover:bg-[#292929]'
               onClick={handleSubmit}
               disabled={isSubmitting}
             >

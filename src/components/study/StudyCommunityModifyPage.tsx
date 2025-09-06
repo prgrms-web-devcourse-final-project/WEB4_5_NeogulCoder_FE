@@ -92,7 +92,7 @@ export default function StudyCommunityModifyPage() {
             <button
               type='button'
               style={{ borderColor: 'var(--color-border3)' }}
-              className={`w-[320px] h-[60px] rounded-[10px] flex items-center justify-between p-5 border mb-6  ${
+              className={`w-[320px] h-10 lg:h-15 rounded-[10px] flex items-center justify-between p-5 border mb-6  ${
                 isSelectedCategory
                   ? 'border-main text-text1 tm4'
                   : 'border-main/10 text-text1/50 tm4'
@@ -110,7 +110,7 @@ export default function StudyCommunityModifyPage() {
             </button>
 
             {isCategoryOpen && (
-              <div className='absolute top-15 left-0 z-10'>
+              <div className='absolute top-10 lg:top-15 left-0 z-10'>
                 <CategoryStudyModal2
                   onSelect={(selected: string) => {
                     const engCode =
@@ -123,7 +123,7 @@ export default function StudyCommunityModifyPage() {
             )}
           </div>
           <input
-            className='border-[1px] w-full h-15 rounded-[10px] p-5 mb-10 tm4'
+            className='border-[1px] w-full h-10 lg:h-15 rounded-[10px] p-5 mb-10 tm4'
             style={{ borderColor: 'var(--color-border3)' }}
             placeholder='제목을 입력해주세요'
             value={title}
@@ -133,11 +133,11 @@ export default function StudyCommunityModifyPage() {
             <ClientEditorWrapper editorRef={editorRef} content={content} />
           </div>
           <div className='flex justify-end'>
-            <button className='button-type6 mr-[15px] hover:bg-[#f5f5f5]'>
+            <button className='button-type6 !w-full lg:!w-[100px] mr-[15px] hover:bg-[#f5f5f5]'>
               취소
             </button>
             <button
-              className='button-type5 hover:bg-[#292929]'
+              className='button-type5 !w-full lg:!w-[100px] hover:bg-[#292929]'
               onClick={handleSubmit}
               disabled={isSubmitting}
             >

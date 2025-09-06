@@ -208,7 +208,7 @@ export default function SubHeader() {
       {isOpen && (
         <Modal
           onClose={() => setIsOpen(false)}
-          className='w-[680px] h-[700px]'
+          className='w-full h-full lg:w-[680px] lg:h-[700px]'
           title='스터디 생성'
         >
           <CreateStudyModal onClose={() => setIsOpen(false)} />

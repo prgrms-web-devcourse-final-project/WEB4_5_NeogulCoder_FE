@@ -155,7 +155,7 @@ export default function Comment({
             />
             <button
               onClick={handleUpdate}
-              className='button-type5 text-white px-3 py-1 tm3'
+              className='button-type5 text-white px-3 py-1 tm3 !w-[100px]'
             >
               저장
             </button>

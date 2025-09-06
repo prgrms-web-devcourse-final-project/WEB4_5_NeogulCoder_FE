@@ -27,11 +27,13 @@ export default function Modal({
 
       <div className='absolute inset-0 flex justify-center items-center'>
         <div
-          className={`bg-white rounded-[10px] p-10 ${className} overflow-auto relative`}
+          className={`bg-white lg:rounded-[10px] p-10 ${className} overflow-auto relative`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className='flex justify-between w-full mb-4'>
-            <span className='tm2'>{title}</span>
+            <span className='tm2 flex-1 text-center lg:text-left ml-6'>
+              {title}
+            </span>
             <button onClick={onClose}>
               <X />
             </button>

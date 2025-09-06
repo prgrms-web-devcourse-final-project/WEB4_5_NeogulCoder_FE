@@ -18,7 +18,7 @@ export default function RemainSlotModal({
   ];
 
   return (
-    <div className='w-[440px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3'>
+    <div className='w-full lg:w-[440px] border border-main/10 bg-white rounded-[20px] shadow-lg overflow-hidden tm4 p-3'>
       <div className='flex flex-col gap-2'>
         {recruitmentCounts.map(({ label, value }) => (
           <button
