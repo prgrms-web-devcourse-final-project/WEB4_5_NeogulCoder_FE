@@ -93,7 +93,7 @@ export default function EditProfileClient() {
   return (
     <>
       <div className='tb3 max-lg:hidden'>프로필 수정</div>
-      <div className='-mt-[30px] lg:mt-[60px] flex flex-col items-center justify-center'>
+      <div className='mt-[60px] flex flex-col items-center justify-center'>
         <div className='relative'>
           <div className='w-[140px] h-[140px] rounded-full relative bg-white overflow-hidden  border border-border1'>
             <Image

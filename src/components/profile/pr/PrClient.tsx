@@ -63,7 +63,7 @@ export default function Prclient() {
 
           {isMyPage && (
             <>
-              <div className='block w-full lg:hidden lg:max-w-none -mt-[50px]'>
+              <div className='block w-full lg:hidden lg:max-w-none'>
                 <ProfileSideBar />
               </div>
               <div className='flex items-center justify-center gap-2 lg:justify-end lg:gap-0'>

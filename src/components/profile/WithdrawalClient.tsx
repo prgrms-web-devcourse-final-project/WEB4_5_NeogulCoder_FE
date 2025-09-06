@@ -76,7 +76,7 @@ export default function WithdrawalClient() {
   return (
     <>
       <div className='hidden lg:block tb3'>회원 탈퇴</div>
-      <div className='-mt-[30px] lg:mt-[60px] w-full max-w-[534px] mx-auto flex flex-col items-stretch justify-center gap-10'>
+      <div className='mt-[60px] w-full max-w-[534px] mx-auto flex flex-col items-stretch justify-center gap-10'>
         <div className='flex flex-col lg:flex-row lg:items-center gap-6 cursor-default'>
           <p className='t4 text-left w-full lg:w-[120px]'>이메일(로그인 ID)</p>
           <div className='w-full lg:w-[390px] h-[50px] rounded-[10px] bg-gray4 flex items-center px-4'>

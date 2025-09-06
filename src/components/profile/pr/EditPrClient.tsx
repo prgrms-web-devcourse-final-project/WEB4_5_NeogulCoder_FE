@@ -117,7 +117,7 @@ export default function EditPrClient() {
   return (
     <>
       <div className='hidden tb3 mb-[30px] lg:block'>PR 작성 및 수정</div>
-      <div className='flex items-center gap-5 mb-[35px] -mt-[50px] lg:mt-0'>
+      <div className='flex items-center gap-5 mb-[35px]'>
         <button
           onClick={() => setActiveTab('정보')}
           className={`tm4 w-[60px] h-[36px] rounded-full flex items-center justify-center ${
