@@ -374,14 +374,15 @@ export default function TimeGrid({
       ) : (
         <>
           <div className='select-none flex flex-col gap-[30px] '>
-            <div className='grid grid-cols-[6px_repeat(7,minmax(0,1fr))] place-items-center gap-x-4 gap-y-0 px-20'>
+            {/* px-20 */}
+            <div className='grid grid-cols-[6px_repeat(7,minmax(0,1fr))] place-items-center gap-x-4 gap-y-0 '>
               <div></div>
               {startDay.map((d, i) => (
                 <div
                   key={i}
                   className='w-full flex justify-center items-center'
                 >
-                  {d && <Flag className='pl-2 mb-1 w-8 h-8 text-logo1' />}
+                  {d && <Flag className='pl-2 mb-1 w-8 h-8 text-blue' />}
                 </div>
               ))}
               <div></div>
@@ -427,9 +428,15 @@ export default function TimeGrid({
                       return (
                         <div
                           key={`${dayIdx}-${hour}`}
-                          className={`w-20 h-9 border-b border-b-border1 bg-border1 cursor-default relative ${
-                            hour === 0 ? 'rounded-t-xl' : ''
-                          } ${hour === 23 ? 'rounded-b-xl border-none' : ''}`}
+                          className={`w-20 h-9 max-[720px]:w-16 max-[540px]:w-12 max-[420px]:w-10 border-b border-b-border1 bg-border1 cursor-default relative ${
+                            hour === 0
+                              ? 'rounded-t-xl max-[720px]:rounded-t-lg'
+                              : ''
+                          } ${
+                            hour === 23
+                              ? 'rounded-b-xl max-[720px]:rounded-b-lg border-none'
+                              : ''
+                          }`}
                         ></div>
                       );
                     }
@@ -440,14 +447,20 @@ export default function TimeGrid({
                         onMouseDown={() => handleMouseDown(cell)}
                         onMouseEnter={() => handleMouseEnter(cell)}
                         onMouseUp={() => handleMouseUp(cell)}
-                        className={`w-20 h-9 border-b border-b-border1 ${
+                        className={`w-20 h-9 max-[720px]:w-16 max-[540px]:w-12 max-[420px]:w-10 border-b border-b-border1 ${
                           selected
                             ? 'bg-gray1 text-white'
                             : isEditing
                             ? 'bg-[#fafafa] hover:bg-[#f1f1f1]'
                             : getBgClass(count)
-                        } ${hour === 0 ? 'rounded-t-xl' : ''} ${
-                          hour === 23 ? 'rounded-b-xl border-none' : ''
+                        } ${
+                          hour === 0
+                            ? 'rounded-t-xl max-[720px]:rounded-t-lg'
+                            : ''
+                        } ${
+                          hour === 23
+                            ? 'rounded-b-xl max-[720px]:rounded-b-lg border-none'
+                            : ''
                         } cursor-pointer relative group`}
                       >
                         {!isEditing && count > 0 && (
@@ -462,10 +475,11 @@ export default function TimeGrid({
               ))}
             </div>
 
-            <div className='flex justify-end gap-[10px] px-20'>
+            {/* px-20 */}
+            <div className='flex lg:justify-end gap-[10px] '>
               {isLeader && !isEditing && (
                 <button
-                  className='w-[235px] h-[48px] bg-white border border-main rounded-[10px] tm3 text-text1 hover:bg-gray4'
+                  className='lg:w-[235px] w-full h-[48px] bg-white border border-main lg:rounded-[10px] rounded-lg tm3 text-text1 hover:bg-gray4'
                   onClick={() => setIsOpenPeriodModal(true)}
                 >
                   가능 시간 요청
@@ -473,14 +487,14 @@ export default function TimeGrid({
               )}
               {isEditing && (
                 <button
-                  className='w-[235px] h-[48px] bg-white border border-main rounded-[10px] tm3 text-text1 hover:bg-gray4'
+                  className='lg:w-[235px] w-full h-[48px] bg-white border border-main lg:rounded-[10px] rounded-lg tm3 text-text1 hover:bg-gray4'
                   onClick={handleCancelButtonClick}
                 >
                   취소
                 </button>
               )}
               <button
-                className={`w-[235px] h-[48px] bg-main rounded-[10px] tm3 text-white hover:bg-[#292929] ${
+                className={`lg:w-[235px] w-full h-[48px] bg-main lg:rounded-[10px] rounded-lg tm3 text-white hover:bg-[#292929] ${
                   isLoading
                     ? 'cursor-not-allowed! bg-[#c9c9c9] transition-colors duration-300'
                     : ''

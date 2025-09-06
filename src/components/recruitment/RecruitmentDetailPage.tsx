@@ -267,7 +267,7 @@ export default function RecruitmentDetailPage() {
       {isLoading ? (
         <RecruitmentDetailSkeleton />
       ) : (
-        <div className='w-[852px] mx-auto'>
+        <div className='w-full lg:w-[852px] mx-auto'>
           <div className='hidden 2xl:flex flex-col fixed right-[15%] space-y-2.5'>
             <button
               onClick={() => {
@@ -278,7 +278,7 @@ export default function RecruitmentDetailPage() {
                   setAppIsOpen(true);
                 }
               }}
-              className={`w-[118px] h-[44px] tm3 rounded-[10px] text-white ${
+              className={`!w-full lg:!w-[118px] h-[44px] tm3 rounded-[10px] text-white ${
                 status === '완료' || isApplied
                   ? 'bg-gray-400 '
                   : 'bg-[#00C471] hover:bg-[#00B261]'
@@ -296,7 +296,7 @@ export default function RecruitmentDetailPage() {
             {me?.nickname === nickname && (
               <button
                 onClick={() => setIsOpen(true)}
-                className='w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
+                className='!w-full lg:!w-[118px] h-[44px] border bg-white hover:bg-gray-100 tm3 rounded-[10px]'
                 style={{ borderColor: 'var(--color-gray2)' }}
               >
                 신청 내역
@@ -419,7 +419,7 @@ export default function RecruitmentDetailPage() {
               <ToastViewer key={content} height='100%' initialValue={content} />
             )}
           </div>
-          <div className='2xl:hidden flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6 mb-10 '>
+          <div className='2xl:hidden flex flex-row space-x-4 space-y-4  mt-6 mb-10 '>
             <button
               onClick={() => {
                 if (status === '완료' || isApplied) return;
@@ -453,7 +453,7 @@ export default function RecruitmentDetailPage() {
               </button>
             )}
           </div>
-          <div className='w-[852px]'>
+          <div className='w-full'>
             <WriteComment
               key={refreshKey}
               userId={me?.id}
@@ -464,7 +464,7 @@ export default function RecruitmentDetailPage() {
               onCommentAdd={fetchData}
             />
           </div>
-          <div className='w-[852px]'>
+          <div className='w-full'>
             <CommentList
               postId={recruitmentPostId}
               comments={comments}
@@ -477,7 +477,7 @@ export default function RecruitmentDetailPage() {
           {isOpen && (
             <Modal
               title=''
-              className='w-[1020px] h-auto overflow-y-auto'
+              className='w-[1020px] h-full lg:h-auto overflow-y-auto'
               onClose={() => setIsOpen(false)}
             >
               {isAppLoading ? (
@@ -493,7 +493,7 @@ export default function RecruitmentDetailPage() {
                   {applications.map((app) => (
                     <div
                       key={app.applicationId}
-                      className='rounded-[10px] px-10 w-full'
+                      className='rounded-[10px]  w-full'
                     >
                       <div className='flex justify-between w-full'>
                         <div className='flex space-x-6 items-center mb-10'>
@@ -554,14 +554,14 @@ export default function RecruitmentDetailPage() {
 
                       <div className='flex space-x-[15px] justify-end mb-10'>
                         <button
-                          className='w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
+                          className='w-full lg:w-[100px] h-11 rounded-md text-white tm3 bg-[#B2B2B2] hover:bg-[#9A9A9A]'
                           onClick={() => handleReject(app.applicationId)}
                           disabled={isRejecting}
                         >
                           거절
                         </button>
                         <button
-                          className='w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
+                          className='w-full lg:w-[100px] h-11 rounded-md text-white tm3 bg-[#2d90ff] hover:bg-[#217AEC]'
                           onClick={() => handleApprove(app.applicationId)}
                           disabled={isApproving}
                         >
@@ -586,7 +586,7 @@ export default function RecruitmentDetailPage() {
           {appIsOpen && (
             <Modal
               title='모집 신청하기'
-              className='w-[1020px] h-auto'
+              className='w-[1020px] h-full lg:h-auto'
               onClose={() => setAppIsOpen(false)}
             >
               <textarea

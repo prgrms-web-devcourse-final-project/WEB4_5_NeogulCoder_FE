@@ -89,7 +89,7 @@ export default function StudyAttendance({
         <h3 className='tb3'>나의 스터디 출석정보</h3>
         {!isLoading && (
           <button
-            className='button-sm-type1 disabled:!cursor-default'
+            className='button-sm-type1  disabled:!cursor-default '
             // pending, 오늘 출석 했으면, 진행중이 아닌 스터디 경우 버튼 막기
             disabled={isPending || todayCheck || !studyIsProgress}
             onClick={handleAttendance}
@@ -98,7 +98,7 @@ export default function StudyAttendance({
           </button>
         )}
       </div>
-      <div className='border border-border1 rounded-[10px] p-6'>
+      <div className='border border-border1 rounded-[10px] lg:p-6 p-4'>
         {isLoading ? (
           <StudyAttendanceSkeleton />
         ) : (
@@ -127,8 +127,8 @@ export default function StudyAttendance({
                     weekday: 'narrow',
                   }}
                   dayMaxEventRows={1}
+                  expandRows={true}
                   height='auto'
-                  contentHeight='auto'
                 />
               </div>
             </div>

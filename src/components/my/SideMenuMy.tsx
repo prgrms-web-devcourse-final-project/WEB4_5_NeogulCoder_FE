@@ -22,13 +22,13 @@ export default function SideMenuMy() {
   ];
 
   return (
-    <div className='w-full flex justify-center text-text1'>
-      <div className='w-[1248px] flex flex-col pl-5 pr-[10px]'>
-        <div className='w-[300px]'>
+    <div className='w-full flex lg:justify-center text-text1'>
+      <div className='lg:w-[1248px] flex flex-col lg:pl-5 lg:pr-[10px] px-[18px]'>
+        <div className='lg:w-[300px]'>
           {isLoading ? (
             <SideMenuMySkeleton />
           ) : (
-            <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
+            <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center max-[1024px]:hidden'>
               <div className='flex items-center gap-[28px] pl-8'>
                 <div className='w-[70px] h-[70px] bg-white rounded-full overflow-hidden'>
                   <Image
@@ -52,7 +52,7 @@ export default function SideMenuMy() {
               </div>
             </div>
           )}
-          <div className='flex flex-col gap-[30px] font-medium mt-[35px]'>
+          <div className='flex lg:flex-col gap-[30px] font-medium lg:mt-[35px] max-[1024px]:h-[50px]'>
             {menuItems.map((item) => (
               <SideMenuItemMy key={item.to} name={item.name} to={item.to} />
             ))}

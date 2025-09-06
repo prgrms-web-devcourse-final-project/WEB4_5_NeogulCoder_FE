@@ -53,7 +53,7 @@ body {
 @layer utilities {
   /* 버튼 */
   .button-modal1 {
-    @apply bg-main inline-flex h-12 w-full items-center justify-center rounded-md text-center text-sm leading-4 text-white md:text-base;
+    @apply bg-main inline-flex h-10 lg:h-12 w-full items-center justify-center rounded-md text-center text-sm leading-4 text-white md:text-base;
   }
   .button-modal1:hover {
     @apply bg-[#292929] transition-colors duration-300;
@@ -73,7 +73,7 @@ body {
   }
 
   .button-type2 {
-    @apply bg-main inline-flex h-12 min-w-[118px] items-center justify-center rounded-[10px] px-4 text-center text-sm leading-5 text-white md:text-base;
+    @apply bg-main inline-flex h-8 lg:h-12 min-w-[100px] lg:min-w-[118px] items-center justify-center rounded-[6px] lg:rounded-[10px] px-4 text-center text-xs md:text-sm leading-5 text-white lg:text-base;
   }
   .button-type2:hover {
     @apply bg-[#292929] transition-colors duration-300;
@@ -129,7 +129,7 @@ body {
     @apply bg-[#c9c9c9] transition-colors duration-300;
   }
   .button-sm-type1 {
-    @apply bg-main inline-flex h-8 items-center justify-center rounded-[10px] px-4 py-2 text-center text-xs text-white md:text-sm;
+    @apply bg-main inline-flex h-8 items-center justify-center lg:rounded-[10px] rounded-[4px] px-4 py-1.5 lg:py-2 text-center text-xs text-white md:text-sm;
   }
   .button-sm-type1:hover {
     @apply bg-[#292929] transition-colors duration-300;
@@ -137,10 +137,13 @@ body {
   .button-sm-type1:disabled {
     @apply bg-[#c9c9c9] transition-colors duration-300;
   }
+  .button-sm-type1.mobile1 {
+    @apply h-auto px-3 lg:h-8 lg:px-4 lg:py-1.5;
+  }
 
   /* 태그 */
   .tag-type1 {
-    @apply text-blue inline-flex h-[22px] min-w-[42px] items-center justify-center rounded-3xl bg-[#efefef] px-3 py-1 text-center text-[11px] md:text-[13px];
+    @apply text-blue inline-flex h-[20px] lg:h-[22px] min-w-[42px] items-center justify-center rounded-3xl bg-[#efefef] px-3 py-1 text-center text-[10px] md:text-[13px];
   }
 
   .tag-type2 {
@@ -155,6 +158,10 @@ body {
   }
   .tag-type3.red {
     @apply bg-red;
+  }
+
+  .tag-type3.mobile1 {
+    @apply h-[18px] min-w-[40px] text-[10px] lg:h-[22px] lg:min-w-[57px] lg:text-xs;
   }
 
   .tag-type4 {
@@ -173,10 +180,10 @@ body {
 
   /* input */
   .input-type1 {
-    @apply border-border1 text-text1 h-[45px] rounded-[10px] border px-5 text-xs md:text-sm;
+    @apply border-border1 text-text1 h-[40px] lg:h-[45px] lg:rounded-[10px] rounded-[6px] border px-4 lg:px-5 text-xs md:text-sm;
   }
   .input-type2 {
-    @apply border-border1 text-text1 h-10 rounded-md border px-4 text-xs md:text-sm;
+    @apply border-border1 text-text1 h-8 lg:h-10 rounded-md border px-3 lg:px-4 text-xs md:text-sm;
   }
   .input-type3 {
     @apply w-full block box-border border border-border2 text-text1 rounded-[10px] px-5 text-xs md:text-sm;

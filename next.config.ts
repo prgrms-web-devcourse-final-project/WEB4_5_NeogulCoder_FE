@@ -49,6 +49,11 @@ module.exports = {
         hostname: 'example.com',
         pathname: '**', // 모든 경로 허용
       },
+      {
+        protocol: 'https',
+        hostname: 'wibby-s3-bucket.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/**', // 모든 경로 허용
+      },
     ],
   },
 };

@@ -101,7 +101,7 @@ export default function StudyCommunityDetailPage() {
       {isLoading ? (
         <StudyPostDetailSkeleton />
       ) : (
-        <div className='w-[898px] mx-auto'>
+        <div className='w-full mx-auto'>
           <div className='flex justify-between'>
             <div
               className={`tag-type3 tb5 ${
@@ -181,7 +181,7 @@ export default function StudyCommunityDetailPage() {
               </button>
             </div>
           )}
-          <div className='w-[898px]'>
+          <div className='w-full'>
             <WriteComment
               key={refreshKey}
               userId={me?.id}
@@ -192,7 +192,7 @@ export default function StudyCommunityDetailPage() {
               onCommentAdd={fetchData}
             />
           </div>
-          <div className='w-[898px]'>
+          <div className='w-full'>
             <CommentList
               postId={postId}
               comments={comments}
@@ -205,7 +205,7 @@ export default function StudyCommunityDetailPage() {
             <Modal
               title=''
               onClose={() => setIsOpen(false)}
-              className='w-[680px] h-auto'
+              className='w-[680px] h-auto rounded-[10px]'
             >
               <AiQuiz postId={postId} />
             </Modal>

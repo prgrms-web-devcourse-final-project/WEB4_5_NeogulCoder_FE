@@ -32,7 +32,7 @@ export default function AiQuiz({ postId }: AiQuizProps) {
   };
 
   return (
-    <div className='w-full'>
+    <div className='w-full rounded-[10px]'>
       {quizContent ? (
         <>
           <div className='p-3'>

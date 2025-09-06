@@ -8,7 +8,7 @@ export default function CalendarBigSkeleton() {
             {Array.from({ length: 7 }).map((m, i) => (
               <div
                 key={i}
-                className='w-full h-[100px] bg-neutral-100 animate-pulse rounded'
+                className='w-full h-[66px] lg:h-[100px] bg-neutral-100 animate-pulse rounded'
               ></div>
             ))}
           </div>
