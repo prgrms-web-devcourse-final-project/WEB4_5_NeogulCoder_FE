@@ -92,7 +92,7 @@ export default function CalendarBig({
 
   return (
     <>
-      <div className='big-calendar border-border1 border rounded-[10px] py-6 px-7 relative'>
+      <div className='big-calendar border-border1 border rounded-[10px] lg:py-6 lg:px-7 py-3.5 px-3 relative'>
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}
@@ -117,7 +117,6 @@ export default function CalendarBig({
           contentHeight='auto'
           dayMaxEventRows={4}
           fixedWeekCount={false}
-          dayCellClassNames={() => 'h-[120px]'}
         />
       </div>
     </>

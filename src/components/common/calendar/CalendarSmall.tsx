@@ -78,7 +78,7 @@ export default function CalendarSmall({
 
   return (
     <>
-      <div className='small-calendar px-9 '>
+      <div className='small-calendar lg:px-9 px-5 '>
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, interactionPlugin]}
@@ -104,6 +104,7 @@ export default function CalendarSmall({
           expandRows={true}
           dayMaxEventRows={0}
           fixedWeekCount={false}
+          height='auto'
           dayHeaderContent={(arg) => {
             const dayNames = ['일', '월', '화', '수', '목', '금', '토'];
             return dayNames[arg.date.getDay()];
