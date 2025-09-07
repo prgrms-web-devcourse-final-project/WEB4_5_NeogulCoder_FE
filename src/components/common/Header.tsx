@@ -1,25 +1,21 @@
 'use client';
 import Image from 'next/image';
 import logoWibby from '@/assets/images/wibby.svg';
-import { ChevronDown } from 'lucide-react';
-import { Bell } from 'lucide-react';
+import { ChevronDown, ChevronLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ProfileInfoModal from '../profile/ProfileInfoModal';
-import { useRouter } from 'next/navigation';
-import NotificationModal from './NotificationModal';
+import { usePathname, useRouter } from 'next/navigation';
 import { userAuthStore } from '@/stores/userStore';
 import Link from 'next/link';
 import { getUser } from '@/lib/api/user';
-import { getUnreadNotifications } from '@/lib/api/notification';
-import { countNotificationStore } from '@/stores/notificationStore';
+import Notification from './Notification';
 
 export default function Header() {
   const router = useRouter();
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const user = userAuthStore((state) => state.user);
   const setUser = userAuthStore((state) => state.setUser);
-  const { unReadCounts, setUnReadCounts } = countNotificationStore();
+  const pathname = usePathname();
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('login_status');
@@ -37,24 +33,21 @@ export default function Header() {
     }
   }, [user, setUser]);
 
-  // 읽지 않은 알림
-  useEffect(() => {
-    const fetchUnreadNotifications = async () => {
-      const isLoggedIn = localStorage.getItem('login_status');
-      if (!isLoggedIn) return;
-      try {
-        const data = await getUnreadNotifications();
-        setUnReadCounts(data.length);
-      } catch (error) {
-        console.error('읽지 않은 알림 조회 실패: ', error);
-      }
-    };
-    fetchUnreadNotifications();
-  }, [setUnReadCounts]);
-
   const handleGoToHome = () => {
     router.push('/');
   };
+
+  const urlTitle: Record<string, string> = {
+    '/profile/pr': 'PR 페이지',
+    '/profile/edit-profile': '프로필 수정',
+    '/profile/pr/edit-pr': 'PR 작성 및 수정',
+    '/profile/withdrawal': '회원 탈퇴',
+  };
+
+  const title =
+    Object.entries(urlTitle)
+      .sort((a, b) => b[0].length - a[0].length)
+      .find(([path]) => pathname.startsWith(path))?.[1] ?? '';
 
   return (
     <div className='w-full flex justify-center pt-2.5 text-text1'>
@@ -62,39 +55,38 @@ export default function Header() {
         <Image
           src={logoWibby}
           alt='로고'
-          className='w-[80px] h-9 cursor-pointer'
+          className={` w-[80px] h-9 cursor-pointer ${
+            title === '' ? '' : 'hidden lg:block'
+          }`}
           onClick={handleGoToHome}
           priority
         />
+        {title !== '' ? (
+          <button
+            type='button'
+            onClick={() => router.back()}
+            className='block lg:hidden'
+          >
+            <ChevronLeft className='w-5 h-5' />
+          </button>
+        ) : (
+          ''
+        )}
+
+        <p className='t3 font-medium text-gray-800 mx-auto lg:hidden'>
+          {title}
+        </p>
+
         <div className='flex items-center gap-[18px]'>
           {user === undefined ? null : user ? (
-            <div className='flex items-center justify-center gap-4'>
-              <div
-                className='relative'
-                onClick={() => setIsNotificationModalOpen((prev) => !prev)}
-              >
-                <button
-                  type='button'
-                  className='flex items-center justify-center w-[38px] h-[38px] rounded-full hover:bg-[#EEEEEE] transition-colors'
-                >
-                  <div className='relative w-[22px] h-6'>
-                    <Bell className='w-[22px] h-6' />
-                    {unReadCounts > 0 && (
-                      <span className='absolute -top-0.5 -right-0 bg-[#FF3B30] text-white text-[10px] w-[10px] h-[10px] flex items-center justify-center rounded-full'></span>
-                    )}
-                  </div>
-                </button>
-              </div>
-              {isNotificationModalOpen && (
-                <div className='fixed bottom-5 right-5 z-50'>
-                  <NotificationModal
-                    onClose={() => setIsNotificationModalOpen(false)}
-                  />
-                </div>
-              )}
-              <div className='relative'>
+            <div className={'flex items-center justify-center'}>
+              <Notification />
+
+              <div className='relative z-10'>
                 <div
-                  className='w-[90px] h-[34px] rounded-[4px] bg-gray4 flex items-center justify-center gap-2 cursor-pointer hover:bg-[#EEEEEE]'
+                  className={`ml-4 w-[90px] h-[34px] rounded-[4px] bg-gray4 items-center justify-center gap-2 cursor-pointer hover:bg-[#EEEEEE] ${
+                    title ? 'hidden lg:flex' : 'flex'
+                  }`}
                   onClick={() => setIsProfileModalOpen((prev) => !prev)}
                 >
                   <span className='tm5'>내 정보</span>

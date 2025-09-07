@@ -25,7 +25,17 @@ export default function SubHeader() {
   const { studies, fetchStudies } = useStudiesStore();
   const [studyOpen, setStudyOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  const pathname = usePathname();
+  const hiddenPath = [
+    '/profile/pr',
+    '/profile/edit-profile',
+    '/profile/withdrawal',
+  ];
+  const isHidden = hiddenPath.some((p) => pathname.startsWith(p));
+
   const [mobileOpen, setMobileOpen] = useState(false);
+
   const handleHome = () => {
     router.push('/');
   };
@@ -35,13 +45,14 @@ export default function SubHeader() {
     fetchStudies();
   }, [user, fetchStudies]);
 
-  const pathname = usePathname();
   const isStudyPage = pathname.startsWith('/study');
 
   return (
     <>
       <div
-        className='w-full flex justify-center text-text1 fixed lg:static left-0 bottom-0 shadow-[0_-1px_12px_rgba(0,0,0,0.1)] bg-white lg:shadow-none h-[60px] lg:h-auto'
+        className={`w-full flex justify-center text-text1 fixed lg:static left-0 bottom-0 shadow-[0_-1px_12px_rgba(0,0,0,0.1)] bg-white lg:shadow-none h-[60px] lg:h-auto ${
+          isHidden ? 'hidden lg:flex' : ''
+        }`}
         onMouseLeave={() => setStudyOpen(false)}
       >
         <div className='w-full min-h-[32px] max-w-[1280px] flex items-center justify-between mt-2 lg:mt-4 px-4'>

@@ -11,6 +11,8 @@ import PrSkeleton from '@/components/profile/pr/skeleton/PrSkeleton';
 import { userPrStore } from '@/stores/prStore';
 import { userAuthStore } from '@/stores/userStore';
 import { PrData } from '@/types/pr';
+import ProfileSideBar from '../ProfileSideBar';
+import Link from 'next/link';
 
 export default function Prclient() {
   const router = useRouter();
@@ -47,37 +49,77 @@ export default function Prclient() {
     router.push('/profile/pr/edit-pr');
   };
 
+  const handleEditProfile = () => {
+    router.push('/profile/edit-profile');
+  };
+
   return (
     <>
       {isLoading ? (
         <PrSkeleton />
       ) : pr ? (
         <>
-          <div className='tb3'>PR</div>
+          <div className='hidden tb3 lg:block'>PR</div>
+
           {isMyPage && (
-            <div className='flex items-center justify-end'>
-              <button
-                type='button'
-                className='button-sm-type1 mt-[26px] hover:bg-[#292929]'
-                onClick={handleEditPr}
-              >
-                PR 작성 및 수정
-              </button>
-            </div>
+            <>
+              <div className='block w-full lg:hidden lg:max-w-none'>
+                <ProfileSideBar />
+              </div>
+              <div className='flex items-center justify-center gap-2 lg:justify-end lg:gap-0'>
+                <button
+                  type='button'
+                  className='button-sm-type1 mt-[26px] hover:bg-[#292929] w-1/2 lg:!hidden'
+                  onClick={handleEditProfile}
+                >
+                  프로필 편집
+                </button>
+                <button
+                  type='button'
+                  className='button-sm-type1 mt-[26px] hover:bg-[#292929] w-1/2 lg:w-auto'
+                  onClick={handleEditPr}
+                >
+                  PR 작성 및 수정
+                </button>
+              </div>
+            </>
           )}
 
-          <div className='flex items-center justify-between gap-3 mt-[14px]'>
-            <InfoSection pr={pr} />
-            <BuddyEnergySection />
+          <div className='flex items-center justify-between gap-3 mt-[14px] max-lg:flex-col'>
+            <div className='w-1/2 max-lg:w-full'>
+              <InfoSection pr={pr} />
+            </div>
+
+            <hr className='block lg:hidden border-t-6 border-gray-100 my-4 w-screen' />
+
+            <div className='w-1/2 max-lg:w-full'>
+              <BuddyEnergySection />
+            </div>
+
+            <hr className='block lg:hidden border-t-6 border-gray-100 my-4 w-screen' />
           </div>
 
-          <div className='flex items-center justify-between gap-3 mt-[14px]'>
-            <MannerSection pr={pr} />
-            <FeedbackSection />
+          <div className='flex items-center justify-between gap-3 mt-[14px] max-lg:flex-col'>
+            <div className='w-1/2 max-lg:w-full'>
+              <MannerSection pr={pr} />
+            </div>
+
+            <hr className='block lg:hidden border-t-6 border-gray-100 my-4 w-screen' />
+
+            <div className='w-1/2 max-lg:w-full'>
+              <FeedbackSection />
+            </div>
+
+            <hr className='block lg:hidden border-t-6 border-gray-100 my-4 w-screen' />
           </div>
 
-          <div className='flex items-center justify-between mt-[14px]'>
+          <div className='flex flex-col items-center justify-between lg:mt-[14px]'>
             <IntroSection />
+            <hr className='block lg:hidden border-t-6 border-gray-100 my-4 w-screen' />
+          </div>
+
+          <div className='t3 flex items-center justify-end mt-5 text-red lg:hidden'>
+            <Link href='/profile/withdrawal'>회원탈퇴</Link>
           </div>
         </>
       ) : null}

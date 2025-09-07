@@ -116,7 +116,7 @@ export default function EditPrClient() {
   };
   return (
     <>
-      <div className='tb3 mb-[30px]'>PR 작성 및 수정</div>
+      <div className='hidden tb3 mb-[30px] lg:block'>PR 작성 및 수정</div>
       <div className='flex items-center gap-5 mb-[35px]'>
         <button
           onClick={() => setActiveTab('정보')}
@@ -146,7 +146,7 @@ export default function EditPrClient() {
             <p className='pb-2 t4'>지역</p>
             <button
               type='button'
-              className={`w-[200px] h-[45px] rounded-[10px] flex items-center justify-between p-5 border t4 ${
+              className={`w-full h-[45px] rounded-[10px] flex items-center justify-between p-5 border t4 lg:w-[200px] ${
                 isSelectedRegion
                   ? 'text-text1 tm3 border-main'
                   : 'border-main/10 text-text1/50'
@@ -158,22 +158,41 @@ export default function EditPrClient() {
             </button>
           </div>
           {isOpenModal && (
-            <div className='absolute top-20 z-10'>
-              <RegionModal
-                selectedRegion={selectedRegion}
-                onSelect={(region) => {
-                  setSelectedRegion(region);
-                  setIsOpenModal(false);
-                }}
-              />
-            </div>
+            <>
+              <div className='hidden lg:block absolute top-20 z-10'>
+                <RegionModal
+                  selectedRegion={selectedRegion}
+                  onSelect={(region) => {
+                    setSelectedRegion(region);
+                    setIsOpenModal(false);
+                  }}
+                />
+              </div>
+
+              <div
+                className={` fixed bottom-0 left-0 w-full h-[35vh] bg-white rounded-t-[20px] p-5 z-50 transform transition-transform duration-300 ${
+                  isOpenModal ? 'translate-y-0' : 'translate-y-full'
+                } lg:hidden drop-shadow-2xl`}
+              >
+                <RegionModal
+                  selectedRegion={selectedRegion}
+                  onSelect={(region) => {
+                    setSelectedRegion(region);
+                    setIsOpenModal(false);
+                  }}
+                />
+              </div>
+            </>
           )}
 
           <div>
             <p className='pb-2 t4'>URL</p>
             {[0, 1].map((i) => (
-              <div className='mt-4 flex gap-1 items-start' key={i}>
-                <div className='flex flex-col'>
+              <div
+                className='mt-4 flex flex-col gap-1 items-start lg:flex-row'
+                key={i}
+              >
+                <div className='flex flex-col w-full lg:w-[200px]'>
                   <input
                     type='text'
                     placeholder={`이름 ${i + 1}`}
@@ -183,18 +202,8 @@ export default function EditPrClient() {
                       updated[i].urlName = e.target.value;
                       setPrUrls(updated);
                     }}
-                    className='input-type1 w-[200px] focus:outline-1 focus:outline-main'
+                    className='input-type1 focus:outline-1 focus:outline-main w-full lg:w-[200px]'
                   />
-
-                  {i === 1 && (
-                    <p
-                      className={`text-red-500 t5 mt-5 h-5 ${
-                        urlErrorMsg ? '' : 'invisible'
-                      }`}
-                    >
-                      {urlErrorMsg || '\u00A0'}
-                    </p>
-                  )}
                 </div>
                 <input
                   ref={urlInputRefs[i]}
@@ -206,7 +215,7 @@ export default function EditPrClient() {
                     updated[i].prUrl = e.target.value;
                     setPrUrls(updated);
                   }}
-                  className='input-type1 w-full focus:outline-1 focus:outline-main ml-3'
+                  className='input-type1 w-full focus:outline-1 focus:outline-main lg:ml-3'
                 />
               </div>
             ))}
@@ -216,17 +225,24 @@ export default function EditPrClient() {
       {activeTab === '소개글' && (
         <IntroductionEditor value={introduction} onChange={setIntroduction} />
       )}
-      <div className='flex gap-5 mt-10 justify-end'>
+
+      <p
+        className={`text-red-500 t5 mt-5 h-5 ${urlErrorMsg ? '' : 'invisible'}`}
+      >
+        {urlErrorMsg || '\u00A0'}
+      </p>
+
+      <div className='flex gap-5 mt-10 justify-center lg:justify-end '>
         <button
           type='button'
-          className='border border-main h-[44px] w-[100px] rounded-md hover:bg-[#f5f5f5]'
+          className='hidden border border-main h-[44px] w-[100px] rounded-md hover:bg-[#f5f5f5] lg:block'
           onClick={handleGoToPr}
         >
           취소
         </button>
         <button
           type='button'
-          className='button-type5 hover:bg-[#292929]'
+          className='button-type5 hover:bg-[#292929] !w-full lg:!w-[100px]'
           onClick={handleSave}
         >
           저장

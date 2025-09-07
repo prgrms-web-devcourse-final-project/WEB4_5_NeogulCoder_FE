@@ -24,7 +24,7 @@ export default function FeedbackSection() {
 
   return (
     <>
-      <div className='w-1/2 h-[260px] border border-main/10 rounded-[10px] p-5 flex flex-col'>
+      <div className='lg:h-[260px] lg:border lg:border-main/10 lg:rounded-[10px] p-5 flex flex-col'>
         <div className='flex justify-between items-center'>
           <p className='tm3'>피드백</p>
           {pr.reviewContents.length > 0 && (
@@ -37,6 +37,7 @@ export default function FeedbackSection() {
             </button>
           )}
         </div>
+        <hr className='block lg:hidden w-full border-t border-gray-200 mt-2 mb-8' />
 
         {pr.reviewContents.length === 0 ? (
           <div className='flex flex-1 justify-center items-center text-text1/50 t4'>
@@ -44,7 +45,7 @@ export default function FeedbackSection() {
           </div>
         ) : (
           <div className='flex flex-1 items-center'>
-            <div className='flex flex-col gap-2 w-full h-[120px] border border-main/10 rounded-[10px] p-4'>
+            <div className='flex flex-col gap-2 lg:w-full lg:h-[120px] lg:border lg:border-main/10 lg:rounded-[10px] lg:p-4'>
               <div className='flex gap-3 items-center w-full'>
                 <div className='w-[50px] h-[50px] bg-white rounded-full overflow-hidden flex-shrink-0 border border-border1'>
                   <Image

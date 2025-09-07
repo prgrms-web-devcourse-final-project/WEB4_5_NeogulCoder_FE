@@ -79,10 +79,10 @@ export default function PasswordChangeModal({
   };
 
   return (
-    <div className='flex flex-col bg-white w-[440px] h-[520px] rounded-[10px] items-center justify-center shadow-sm gap-[35px] px-6 py-6'>
-      <div className='flex justify-between items-center w-full mb-1'>
+    <div className='flex flex-col bg-white w-screen h-screen lg:w-[440px] lg:h-[520px] lg:rounded-[10px] lg:items-center lg:justify-center shadow-sm gap-[35px] px-6 py-6'>
+      <div className='flex justify-between items-center w-full mb-20 lg:mb-0'>
         <h2 className='tm2'>비밀번호 변경하기</h2>
-        <X className='w-6 h-6  cursor-pointer' onClick={onClose} />
+        <X className='w-6 h-6 cursor-pointer' onClick={onClose} />
       </div>
 
       <div className='w-full'>
@@ -93,7 +93,7 @@ export default function PasswordChangeModal({
           <input
             type={visible ? 'text' : 'password'}
             placeholder='현재 비밀번호를 입력해주세요'
-            className='input-type3 w-full focus:outline-1 focus:outline-main'
+            className='input-type3 w-full focus:outline-1 focus:outline-main h-[50px]'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             ref={passwordRef}
@@ -131,7 +131,7 @@ export default function PasswordChangeModal({
           <input
             type={visible ? 'text' : 'password'}
             placeholder='새 비밀번호를 입력해주세요'
-            className='input-type3 w-full focus:outline-1 focus:outline-main'
+            className='input-type3 w-full focus:outline-1 focus:outline-main h-[50px]'
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             ref={newPasswordRef}
@@ -167,7 +167,7 @@ export default function PasswordChangeModal({
           <input
             type={visible ? 'text' : 'password'}
             placeholder='새 비밀번호를 다시 한 번 입력해주세요'
-            className='input-type3 w-full focus:outline-1 focus:outline-main'
+            className='input-type3 w-full focus:outline-1 focus:outline-main h-[50px]'
             value={newPasswordCheck}
             onChange={handleNewPasswordCheck}
             ref={newPasswordCheckRef}
