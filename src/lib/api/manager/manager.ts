@@ -10,9 +10,15 @@ export const getAdminUser = async (page: number, email: string) => {
   });
   return data;
 };
-//  시용자 강퇴
+//  시용자 비활성화
 export const deleteAdminUser = async (userId: number) => {
   const { data } = await axiosInstance.delete(`/admin/users/${userId}`);
+  return data;
+};
+
+//  시용자 활성화
+export const postAdminUser = async (userId: number) => {
+  const { data } = await axiosInstance.post(`/admin/reactive/user/${userId}`);
   return data;
 };
 
@@ -32,9 +38,15 @@ export const getAdminStudies = async (
   });
   return data;
 };
-// 스터디 삭제
+// 스터디 비활성화
 export const deleteAdminStudy = async (studyId: number) => {
   const { data } = await axiosInstance.delete(`/admin/studies/${studyId}`);
+  return data;
+};
+
+//스터디 활성화
+export const postAdminStudy = async (studyId: number) => {
+  const { data } = await axiosInstance.post(`/admin/reactive/study/${studyId}`);
   return data;
 };
 
@@ -49,10 +61,15 @@ export const getAdminPosts = async (page: number, subject: string) => {
   });
   return data;
 };
-//모집글 삭제
+//모집글 비활성화
 export const deleteAdminPost = async (postId: number) => {
   const { data } = await axiosInstance.delete(
     `/admin/recruitment-posts/${postId}`
   );
+  return data;
+};
+//모집글 활성화
+export const postAdminPost = async (postId: number) => {
+  const { data } = await axiosInstance.post(`/admin/reactive/study/${postId}`);
   return data;
 };

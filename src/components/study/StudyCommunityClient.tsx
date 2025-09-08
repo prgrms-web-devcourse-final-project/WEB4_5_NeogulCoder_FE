@@ -11,7 +11,7 @@ import { useCallback, useEffect, useState } from 'react';
 import NoticeItemSkeleton from './NoticeItemSkeleton';
 import CommunityCardSkeleton from './CommunityCardSkeleton';
 import Link from 'next/link';
-import { MessageCircleDashed } from 'lucide-react';
+import { MessageCircleDashed, PencilLine } from 'lucide-react';
 import { useStudyStore } from '@/stores/studyInfoStore';
 
 const categoryMap: Record<string, '' | 'NOTICE' | 'FREE'> = {
@@ -81,10 +81,10 @@ export default function StudyCommunityClient() {
   }, [isLoading]);
 
   return (
-    <div className='w-full'>
-      <div className='flex justify-between items-center'>
+    <div className='w-full relative'>
+      <div className='flex justify-between items-center max-[1024px]:hidden'>
         <div className='tb2 text-text1'>커뮤니티</div>
-        <div className='text-right mr-4'>
+        <div className='text-right'>
           {isProgress && (
             <Link
               href={`/study/${studyId}/study-community/write`}
@@ -95,7 +95,15 @@ export default function StudyCommunityClient() {
           )}
         </div>
       </div>
-      <div className='mt-6'>
+      {isProgress && (
+        <Link
+          href={`/study/${studyId}/study-community/write`}
+          className='w-12 h-12 bg-main flex justify-center items-center text-white rounded-full fixed bottom-20 right-5 z-10 lg:hidden'
+        >
+          <PencilLine />
+        </Link>
+      )}
+      <div className='lg:mt-6'>
         <ListMenuStudy
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -106,7 +114,7 @@ export default function StudyCommunityClient() {
           setPage={setPage}
         />
       </div>
-      <div className='flex flex-col gap-4 p-6 bg-[#fafafa] rounded-[8px] mt-[30px]'>
+      <div className='flex flex-col gap-3 lg:gap-4 p-6 bg-[#fafafa] rounded-lg mt-[30px]'>
         {isLoading ? (
           <>
             {Array.from({ length: 2 }).map((_, i) => (
@@ -132,7 +140,7 @@ export default function StudyCommunityClient() {
         )}
       </div>
       <div
-        className={`flex flex-col gap-[30px] mt-[30px] relative ${
+        className={`flex flex-col lg:gap-[30px] mt-[30px] max-[1024px]:-mx-[18px] border-t-1 border-border1 lg:border-0 relative ${
           studyCommunityList.length === 0 && 'h-[calc(100vh-105px-113px-198px)]'
         }`}
       >

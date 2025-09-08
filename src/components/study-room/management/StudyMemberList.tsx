@@ -14,13 +14,16 @@ export default function MemberList({
   const [inviteOpen, steInviteOpen] = useState(false);
   return (
     <>
-      <div className='flex justify-between mb-10 items-end'>
+      <div className='flex justify-between mb-5 lg:mb-10 items-end'>
         <h3 className='tb3'>스터디원 목록</h3>
-        <button className='button-sm-type1' onClick={() => steInviteOpen(true)}>
+        <button
+          className='button-sm-type1 mobile1'
+          onClick={() => steInviteOpen(true)}
+        >
           초대하기
         </button>
       </div>
-      <div className='grid grid-cols-2 gap-5'>
+      <div className='grid grid-cols-3 lg:grid-cols-2 gap-5'>
         {memberInfo.map((member, i) => (
           <StudyMemberCard
             key={`${member.nickname}${i}`}

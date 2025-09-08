@@ -21,15 +21,23 @@ export default function IntroductionEditor({
 
   return (
     <div className='space-y-2'>
-      <ToastEditor
-        ref={editorRef}
-        previewStyle='vertical'
-        height='450px'
-        initialValue={value}
-        useCommandShortcut={true}
-        hideModeSwitch={true}
-        onChange={handleEditorChange}
-      />
+      <div className='h-[400px] lg:h-[450px]'>
+        <ToastEditor
+          ref={editorRef}
+          previewStyle='tab'
+          height='100%' // wrapper 높이에 맞추도록 100%
+          initialValue={value}
+          useCommandShortcut
+          hideModeSwitch
+          onChange={handleEditorChange}
+          toolbarItems={[
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol', 'task'],
+            ['code', 'codeblock'],
+          ]}
+        />
+      </div>
       <div className='text-right'>
         <div className='flex flex-col min-h-[40px]'>
           <p className='tm4 text-gray1'>

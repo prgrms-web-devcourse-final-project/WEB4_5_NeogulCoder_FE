@@ -100,7 +100,7 @@ export default function NotificationModal({
   };
 
   return (
-    <div className='flex flex-col border border-gray-100 bg-white w-[360px] h-[600px] overflow-auto rounded-[10px] drop-shadow-xl p-5 gap-5'>
+    <div className='flex flex-col border border-gray-100 bg-white w-full h-full lg:w-[360px] lg:h-[600px] overflow-auto rounded-none lg:rounded-[10px] drop-shadow-xl p-5 gap-5'>
       <div className='flex justify-between items-center'>
         <h2 className='tm2'>알림</h2>
         <X className='w-5 h-5 cursor-pointer' onClick={onClose} />

@@ -120,8 +120,8 @@ export default function CalendarBigDetail({
   return (
     <>
       <div className='bg-black/50 fixed top-0 bottom-0 left-0 right-0 z-30 flex items-center justify-center'>
-        <div className='pt-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] w-full'>
-          <div className='flex justify-between mb-8 px-9 '>
+        <div className='py-4 lg:py-7 rounded-[10px] bg-white drop-shadow-md max-w-[650px] lg:min-w-[580px] min-w-[calc(100%-36px)]'>
+          <div className='flex justify-between mb-5 lg:mb-8 px-4 lg:px-9 '>
             {/* 모달헤더 */}
             <h3 className='tm2'>일정 상세</h3>
             <button onClick={closeDetailHandler}>
@@ -130,8 +130,10 @@ export default function CalendarBigDetail({
           </div>
           <div>
             {/* 내용 */}
-            <p className='t3 mb-6 px-9 '>{`${dateFormat(date)}요일`}</p>
-            <div className='overflow-auto max-h-[calc(90vh-160px)] flex flex-col gap-5 px-9 pb-7'>
+            <p className='t3 mb-3 lg:mb-6 px-4 lg:px-9 '>{`${dateFormat(
+              date
+            )}요일`}</p>
+            <div className='overflow-auto max-h-[calc(90vh-160px)] flex flex-col gap-3 lg:gap-5 px-4 lg:px-9 pb-7'>
               {isLoading ? (
                 <CalendarBigDetailItemSkeleton />
               ) : events && events.length > 0 ? (

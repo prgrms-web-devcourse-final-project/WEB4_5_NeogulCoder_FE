@@ -44,8 +44,9 @@ export default function InfoSection({ pr }: { pr: PrData }) {
   const locationLinksMessage = !hasLocation && !hasLinks;
 
   return (
-    <div className='w-1/2 h-[180px] border border-main/10 rounded-[10px] p-5 flex flex-col'>
-      <p className={`tm3 ${locationLinksMessage ? '' : 'mb-6'}`}>정보</p>
+    <div className='lg:h-[180px] lg:border lg:border-main/10 lg:rounded-[10px] p-5 flex flex-col'>
+      <p className={`tm3 ${locationLinksMessage ? '' : 'lg:mb-6'}`}>정보</p>
+      <hr className='block lg:hidden w-full border-t border-gray-200 mt-2 mb-8' />
 
       {locationLinksMessage ? (
         <div className='flex flex-1 items-center justify-center'>

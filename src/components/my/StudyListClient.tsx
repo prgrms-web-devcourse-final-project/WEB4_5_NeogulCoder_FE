@@ -54,9 +54,9 @@ export default function StudyListClient() {
 
   return (
     <div className='w-full'>
-      <div className='tb3'>전체 스터디</div>
+      <div className='tb3 max-[1024px]:hidden'>전체 스터디</div>
       {/* border-b border-b-[#e5e5e5] */}
-      <div className='mt-6'>
+      <div className='lg:mt-6'>
         {[...Array(3)].map((_, i) => (
           <SubMenuItem
             key={i}
@@ -69,7 +69,7 @@ export default function StudyListClient() {
       </div>
       {isLoading ? (
         <>
-          <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+          <div className='grid min-[724px]:grid-cols-3 min-[1024px]:max-[1130px]:grid-cols-2 min-[470px]:grid-cols-2 grid-cols-1 place-items-center gap-[26px] mt-[30px]'>
             {Array.from({ length: 3 }).map((_, i) => (
               <StudyCardSkeleton key={i} />
             ))}
@@ -95,7 +95,7 @@ export default function StudyListClient() {
             </div>
           )}
           {myStudyList.length !== 0 && (
-            <div className='grid grid-cols-3 gap-[26px] mt-[30px]'>
+            <div className='grid min-[724px]:grid-cols-3 min-[1024px]:max-[1130px]:grid-cols-2 min-[470px]:grid-cols-2 grid-cols-1 place-items-center gap-[26px] mt-[30px]'>
               {myStudyList.map((study) => (
                 <StudyCard key={study.studyId} {...study} />
               ))}

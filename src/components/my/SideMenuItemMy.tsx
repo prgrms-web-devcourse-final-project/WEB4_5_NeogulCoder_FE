@@ -18,12 +18,14 @@ export default function SideMenuItemMy({
     <>
       <Link
         href={to}
-        className={`flex justify-between items-center ${
-          isActive ? 'opacity-100' : 'opacity-30'
+        className={`flex justify-between items-center box-border whitespace-nowrap ${
+          isActive
+            ? 'opacity-100 border-b-[3px] border-main lg:border-none'
+            : 'opacity-30 hover:opacity-100'
         }`}
       >
-        <span className='tm4'>{name}</span>
-        <ChevronRight className='w-[22px] h-[22px]' />
+        <span className={`${isActive ? 'tb5' : 'tm4'}`}>{name}</span>
+        <ChevronRight className='w-[22px] h-[22px] max-[1024px]:hidden' />
       </Link>
     </>
   );

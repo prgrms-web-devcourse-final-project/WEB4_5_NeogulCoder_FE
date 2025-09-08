@@ -10,11 +10,16 @@ export default function NotFound() {
   };
   return (
     <div className='flex flex-col justify-center items-center gap-12 min-h-screen'>
-      <Image src={notFound} alt='404' width={600} />
+      <Image
+        src={notFound}
+        alt='404'
+        width={600}
+        className='w-[30vw] lg:w-[40vw] min-w-[300px] h-auto'
+      />
       <p>페이지를 찾을 수 없습니다.</p>
       <button
         type='button'
-        className='button-type1 cursor-pointer'
+        className='button-type1 cursor-pointer max-w-[360px] h-[50px]'
         onClick={handleGoToHome}
       >
         홈으로 돌아가기

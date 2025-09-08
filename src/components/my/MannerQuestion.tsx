@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { postReviews } from '@/lib/api/manners';
 import { toast } from 'react-toastify';
 import { User } from '@/types/manners';
+import { BadgeQuestionMark } from 'lucide-react';
 
 type MannerOptionType = 'BAD' | 'GOOD' | 'EXCELLENT';
 
@@ -74,12 +75,14 @@ export default function MannerQuestion({
   currentUserName,
   getStudyList,
   getUserList,
+  setIsShown,
 }: {
   currentStudyId: number;
   currentUserId: number;
   currentUserName: string;
   getStudyList: () => Promise<void>;
   getUserList: (studyId: number) => Promise<User[]>;
+  setIsShown: (v: boolean) => void;
 }) {
   const [reviewType, setReviewType] = useState<MannerOptionType>('GOOD');
   const [reviewTag, setReviewTag] = useState<string[]>([]);
@@ -138,11 +141,18 @@ export default function MannerQuestion({
     <>
       <div className='flex flex-col gap-[50px] mt-[30px]'>
         <div>
-          <div className='flex gap-2 items-center'>
-            <span className='tm3 text-text1'>
-              {currentUserName}님과의 스터디는 어떠셨나요?
-            </span>
-            <span className='tm5 text-red'>(필수)</span>
+          <div className='flex justify-between items-center'>
+            <div className='flex gap-2 items-center'>
+              <span className='tm3 text-text1'>
+                {currentUserName}님과의 스터디는 어떠셨나요?
+              </span>
+              <span className='tm5 text-red'>(필수)</span>
+            </div>
+            <BadgeQuestionMark
+              className='w-5 h-5 text-main opacity-70 lg:hidden hover:opacity-100'
+              onMouseEnter={() => setIsShown(true)}
+              onMouseLeave={() => setIsShown(false)}
+            />
           </div>
           <div className='flex justify-around mt-[26px]'>
             {STAMP_ICONS.map(({ type, label, active, inactive }) => (
@@ -215,7 +225,7 @@ export default function MannerQuestion({
 
       <div className='flex justify-end mt-[30px]'>
         <button
-          className={`button-type2 ${
+          className={`button-type2 max-[1024px]:w-full max-[1024px]:h-11! max-[1024px]:text-sm! ${
             reviewTag.length === 0 || isSubmitting ? 'cursor-not-allowed!' : ''
           }`}
           disabled={reviewTag.length === 0 || isSubmitting}

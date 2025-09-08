@@ -3,13 +3,18 @@ import ManagerCategoriesModal from '@/components/manager/ManagerCategoriesModal'
 import ManagerListSkeleton from '@/components/manager/ManagerListSkeleton';
 import ManagerPagination from '@/components/manager/ManagerPagination';
 import ManagerStudyList from '@/components/manager/ManagerStudyList';
-import { deleteAdminStudy, getAdminStudies } from '@/lib/api/manager/manager';
+import {
+  deleteAdminStudy,
+  getAdminStudies,
+  postAdminStudy,
+} from '@/lib/api/manager/manager';
 import { userAuthStore } from '@/stores/userStore';
 import { categoryFormatting } from '@/utils/categoryFormatting';
 import { ChevronDown, Search, SearchX, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-toastify';
+import ManagerMobileCategoryModal from './ManagerMobileCategoryModal';
 
 export type AdminStudyType = {
   id: number;
@@ -44,7 +49,7 @@ export default function ManagerStudiesPage() {
     searchCategory || '전체'
   );
 
-  // 스터디 삭제
+  // 스터디 비활성화
   const handleDelete = async (id: number) => {
     try {
       await deleteAdminStudy(id);
@@ -56,6 +61,21 @@ export default function ManagerStudiesPage() {
       toast.success(`해당 스터디를 비활성화 하였습니다.`);
     } catch (error) {
       toast.error(`스터디 비활성화 실패 ${error}`);
+    }
+  };
+
+  // 스터디 활성화
+  const handleActive = async (id: number) => {
+    try {
+      await postAdminStudy(id);
+      setStudies((prev) =>
+        prev.map((item) =>
+          item.id === id ? { ...item, activated: true } : item
+        )
+      );
+      toast.success(`해당 스터디를 활성화 하였습니다.`);
+    } catch (error) {
+      toast.error(`스터디 활성화 실패 ${error}`);
     }
   };
 
@@ -128,11 +148,24 @@ export default function ManagerStudiesPage() {
     );
   };
 
+  const [width, setWidth] = useState<number>(0);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    handleResize(); // 최초 세팅
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <>
-      <div className='flex justify-between items-start mb-4'>
-        <h1 className='tb2'>스터디 목록</h1>
-        <div className='flex items-center bg-gray4 rounded-2xl pr-4'>
+      <div className='flex flex-wrap justify-between items-start mb-3 lg:mb-4 gap-2'>
+        <h1 className='tb2 whitespace-nowrap'>스터디 목록</h1>
+        <div className='w-full max-w-[419px] lg:w-auto flex items-center ml-auto bg-gray4 rounded-2xl pr-4'>
           <div className='w-[150px] h-9 relative z-1 pl-4 pr-6'>
             <button
               className={`w-full h-full t4 text-left ${
@@ -146,22 +179,31 @@ export default function ManagerStudiesPage() {
               {categoryFormatting(selectedCategory)}
             </button>
             <ChevronDown className='absolute w-5 h-5 text-main/60 right-0 top-1/2 -translate-y-1/2 -z-1' />
-            {isOpenCategoryModal && (
-              <div className='absolute top-full w-full left-0 z-1'>
-                <ManagerCategoriesModal
-                  onSelect={handleCategory}
-                  customCss='!w-full !h-[200px] !overflow-auto t4'
-                />
-              </div>
+            {width > 1025 ? (
+              isOpenCategoryModal && (
+                <div className='absolute top-full w-full left-0 z-1'>
+                  <ManagerCategoriesModal
+                    onSelect={handleCategory}
+                    customCss='!w-full !h-[200px] !overflow-auto t4'
+                  />
+                </div>
+              )
+            ) : (
+              <ManagerMobileCategoryModal
+                selectedCategory={selectedCategory}
+                isOpenCategoryModal={isOpenCategoryModal}
+                closeFn={() => setIsOpenCategoryModal(false)}
+                onSelect={handleCategory}
+              />
             )}
           </div>
-          <div className='relative'>
+          <div className='w-full lg:w-auto relative'>
             <form onSubmit={handleSubmit}>
               <input
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 // onKeyDown={searchName}
-                className='h-9 t4 px-3 placeholder:text-gray3'
+                className='h-9 t4 px-3 placeholder:text-gray3 w-full lg:w-auto'
                 placeholder='스터디 이름 검색'
               ></input>
             </form>
@@ -179,7 +221,7 @@ export default function ManagerStudiesPage() {
           </div>
         </div>
       </div>
-      <div className='h-[580px] mb-10'>
+      <div className='min-h-[580px] mb-10'>
         <div className='w-full border rounded-[10px] border-border1 overflow-hidden'>
           <table className='w-full'>
             <colgroup>
@@ -191,11 +233,17 @@ export default function ManagerStudiesPage() {
             </colgroup>
             <thead className='bg-gray4 h-15'>
               <tr className='border-b border-border1'>
-                <th className='px-5'>이름</th>
-                <th className='px-5'>카테고리</th>
-                <th className='px-5'>종료여부</th>
-                <th className='px-5'>상태</th>
-                <th className='w-[200px] px-5'>삭제</th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>이름</th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
+                  카테고리
+                </th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>
+                  종료여부
+                </th>
+                <th className='px-1 lg:px-5 text-[12px] lg:text-base'>상태</th>
+                <th className='w-[200px] px-1 lg:px-5 text-[12px] lg:text-base'>
+                  상태변경
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -209,6 +257,7 @@ export default function ManagerStudiesPage() {
                     key={`${study.id}`}
                     study={study}
                     handleDelete={handleDelete}
+                    handleActive={handleActive}
                   />
                 ))
               ) : (

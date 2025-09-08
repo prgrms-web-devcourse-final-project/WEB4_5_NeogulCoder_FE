@@ -1,5 +1,4 @@
 'use client';
-// import sunBunny from '@/assets/images/sun-bunny.svg';
 import basicBunny from '@/assets/images/basic-bunny.svg';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -10,7 +9,7 @@ import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import OtherProfileSideBarSkeleton from './OtherProfileSideBarSkeleton';
 
-export default function SideBar() {
+export default function ProfileSideBar() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   // 사이드 메뉴
@@ -102,7 +101,7 @@ export default function SideBar() {
       ) : (
         <div className='w-full flex justify-center text-text1'>
           <div className='w-full max-w-[1248px] flex flex-col'>
-            <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center'>
+            <div className='w-[300px] h-[100px] bg-gray4 rounded-[10px] flex items-center max-lg:w-full'>
               <div className='flex items-center gap-[28px] pl-8'>
                 <div className='w-[70px] h-[70px] bg-white rounded-full overflow-hidden'>
                   <Image
@@ -112,7 +111,7 @@ export default function SideBar() {
                     height={70}
                   />
                 </div>
-                <div className='flex flex-col justify-center items-start'>
+                <div className='flex flex-col justify-center items-center lg:items-start'>
                   <span className='tm2 cursor-default'>
                     {userData?.nickname}
                   </span>
@@ -122,13 +121,13 @@ export default function SideBar() {
                       className='t5 opacity-50 mt-[5px]'
                       onClick={handleEditProfile}
                     >
-                      프로필 수정
+                      <span className='hidden lg:inline'>프로필 수정</span>
                     </button>
                   )}
                 </div>
               </div>
             </div>
-            <div className='flex gap-5 mt-4'>
+            <div className='flex gap-5 mt-4 max-lg:hidden'>
               {isMyPage && (
                 <button
                   type='button'
@@ -140,7 +139,7 @@ export default function SideBar() {
               )}
             </div>
             {isMyPage && (
-              <div className='flex flex-col gap-[30px] tm4 mt-[35px]'>
+              <div className='flex flex-col gap-[30px] tm4 mt-[35px] max-lg:hidden'>
                 <div
                   className={`flex justify-between items-center cursor-pointer ${
                     selectedMenu === 'pr' ? 'opacity-100' : 'opacity-30'

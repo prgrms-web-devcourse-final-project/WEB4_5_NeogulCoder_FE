@@ -1,14 +1,16 @@
-import SideBar from '@/components/profile/ProfileSideBar';
+import ProfileSideBar from '@/components/profile/ProfileSideBar';
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className='flex w-full'>
-        <div className='w-[300px]'>
-          <SideBar />
-        </div>
+      <div className='w-full mx-auto lg:grid lg:grid-cols-[300px_1fr] lg:gap-10'>
+        <aside className='hidden lg:block'>
+          <div className='w-[300px]'>
+            <ProfileSideBar />
+          </div>
+        </aside>
 
-        <div className='w-[948px] pl-[40px]'>{children}</div>
+        <main className='w-full lg:pl-10 min-w-0 '>{children}</main>
       </div>
     </>
   );
