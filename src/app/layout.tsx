@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: 'Wibby',
   icons: {
     icon: '/favicon.svg',
+    apple: '/apple-touch-icon.png',
   },
 };
 
