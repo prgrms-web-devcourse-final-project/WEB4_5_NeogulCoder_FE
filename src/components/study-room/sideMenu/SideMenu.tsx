@@ -60,18 +60,18 @@ export default function SideMenu({ studyId }: { studyId: number }) {
         {isLoading ? (
           <SideMenuSkeleton />
         ) : (
-          <div className='flex pl-[18px] lg:pl-0  items-center lg:block'>
+          <div className='flex pl-[18px] lg:pl-0  items-center lg:block border-b border-border1 lg:border-0'>
             {width >= 1024 ? (
               studyInfo && <SideStudyInfo studyInfo={studyInfo} />
             ) : (
-              <div className='relative shrink-0'>
+              <div className='relative shrink-0 z-10'>
                 <Image
                   onClick={() => setMobileOpen((prev) => !prev)}
                   src={studyInfo?.imageUrl ?? logoWibby}
                   width={32}
                   height={32}
                   alt='스터디로고'
-                  className='rounded-[6px]'
+                  className='rounded-[6px] shadow-md lg:shadow-none lg:cursor-default cursor-pointer'
                 />
                 {studyInfo && (
                   <div className={`${!mobileOpen && 'hidden'}`}>
