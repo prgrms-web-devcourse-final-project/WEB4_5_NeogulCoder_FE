@@ -60,7 +60,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
         {isLoading ? (
           <SideMenuSkeleton />
         ) : (
-          <div className='flex pl-[18px] lg:pl-0  items-center lg:block border-b border-border1 lg:border-0'>
+          <div className='flex pl-[18px] lg:pl-0  items-center lg:block border-b border-border1 lg:border-b-0'>
             {width >= 1024 ? (
               studyInfo && <SideStudyInfo studyInfo={studyInfo} />
             ) : (
@@ -71,7 +71,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
                   width={32}
                   height={32}
                   alt='스터디로고'
-                  className='rounded-[6px] shadow-md lg:shadow-none lg:cursor-default cursor-pointer'
+                  className='rounded-[6px] shadow-md cursor-pointer lg:shadow-none lg:cursor-default'
                 />
                 {studyInfo && (
                   <div className={`${!mobileOpen && 'hidden'}`}>
