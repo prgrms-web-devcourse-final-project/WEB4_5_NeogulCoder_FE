@@ -41,8 +41,6 @@ export default function SubHeader() {
     fetchStudies();
   }, [user, fetchStudies]);
 
-  const isStudyPage = pathname.startsWith('/study');
-
   return (
     <>
       <div
