@@ -41,8 +41,6 @@ export default function SubHeader() {
     fetchStudies();
   }, [user, fetchStudies]);
 
-  const isStudyPage = pathname.startsWith('/study');
-
   return (
     <>
       <div
@@ -221,9 +219,8 @@ export default function SubHeader() {
           <CreateStudyModal onClose={() => setIsOpen(false)} />
         </Modal>
       )}
-      {!isStudyPage && (
-        <hr className='lg:mt-[10px] border-main/10 relative -z-1' />
-      )}
+
+      <hr className='lg:mt-[10px] border-main/10 relative -z-1 lg:block hidden' />
     </>
   );
 }

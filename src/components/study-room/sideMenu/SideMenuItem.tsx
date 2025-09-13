@@ -17,8 +17,8 @@ export default function SideMenuItem({
     <>
       <Link
         href={to}
-        className={`flex pt-4 pb-3 lg:py-0 h-full relative justify-between ${
-          isActive ? 'opacity-100' : 'opacity-30'
+        className={`flex pt-4 pb-3 lg:py-0 h-full relative justify-between hover:opacity-70 transition-opacity ${
+          isActive ? 'opacity-100 hover:opacity-100' : 'opacity-30'
         }`}
       >
         <span className='tm4 text-[14px]'>{name}</span>
