@@ -42,7 +42,7 @@ export default function MobileStudyListMenu({
                   key={study.studyId}
                   href={`/study/${study.studyId}/dashboard`}
                   type='button'
-                  className=' flex items-center px-[18px] py-3.5 border-border1 border-b-1'
+                  className=' flex items-center px-[18px] py-3.5 border-border1 border-b-1 group'
                 >
                   <Image
                     src={study.imageUrl ?? logoWibby}
@@ -50,11 +50,13 @@ export default function MobileStudyListMenu({
                     // className='w-8 h-8 rounded-[12px] group-hover:drop-shadow'
                     width={32}
                     height={32}
-                    className={`rounded-[12px] group-hover:drop-shadow ${
+                    className={`rounded-[12px] lg:group-hover:drop-shadow ${
                       study.imageUrl ? 'w-8 h-8' : 'object-contain scale-[0.6]'
                     }`}
                   />
-                  <span className='p-1 px-2 t3'>{study.name}</span>
+                  <span className='p-1 px-2 t3 opacity-70 group-hover:opacity-100'>
+                    {study.name}
+                  </span>
                 </Link>
               ))
             )}

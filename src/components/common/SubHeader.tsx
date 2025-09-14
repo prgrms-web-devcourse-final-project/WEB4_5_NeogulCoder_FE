@@ -27,11 +27,7 @@ export default function SubHeader() {
   const [isOpen, setIsOpen] = useState(false);
 
   const pathname = usePathname();
-  const hiddenPath = [
-    '/profile/pr',
-    '/profile/edit-profile',
-    '/profile/withdrawal',
-  ];
+  const hiddenPath = ['/profile/edit-profile'];
   const isHidden = hiddenPath.some((p) => pathname.startsWith(p));
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -44,8 +40,6 @@ export default function SubHeader() {
     if (!user) return;
     fetchStudies();
   }, [user, fetchStudies]);
-
-  const isStudyPage = pathname.startsWith('/study');
 
   return (
     <>
@@ -81,7 +75,7 @@ export default function SubHeader() {
               <>
                 <Link
                   href={`/recruitment/write`}
-                  className='flex flex-col justify-center items-center order-2  lg:order-3  gap-1'
+                  className='flex flex-col justify-center items-center order-2 lg:order-3 gap-1'
                 >
                   <div>
                     <SquarePen
@@ -94,7 +88,7 @@ export default function SubHeader() {
                 <button
                   type='button'
                   onClick={() => setIsOpen(true)}
-                  className='flex flex-col justify-center items-center order-4  gap-1'
+                  className='flex flex-col justify-center items-center order-4 gap-1'
                 >
                   <div>
                     <CopyPlus className='w-4 h-4 lg:hidden' strokeWidth={1.7} />
@@ -225,9 +219,8 @@ export default function SubHeader() {
           <CreateStudyModal onClose={() => setIsOpen(false)} />
         </Modal>
       )}
-      {!isStudyPage && (
-        <hr className='lg:mt-[10px] border-main/10 relative -z-1' />
-      )}
+
+      <hr className='lg:mt-[10px] border-main/10 relative -z-1 lg:block hidden' />
     </>
   );
 }

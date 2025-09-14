@@ -60,18 +60,18 @@ export default function SideMenu({ studyId }: { studyId: number }) {
         {isLoading ? (
           <SideMenuSkeleton />
         ) : (
-          <div className='flex pl-[18px] lg:pl-0  items-center lg:block'>
+          <div className='flex pl-[18px] lg:pl-0  items-center lg:block border-b border-border1 lg:border-b-0'>
             {width >= 1024 ? (
               studyInfo && <SideStudyInfo studyInfo={studyInfo} />
             ) : (
-              <div className='relative shrink-0'>
+              <div className='relative shrink-0 z-10'>
                 <Image
                   onClick={() => setMobileOpen((prev) => !prev)}
                   src={studyInfo?.imageUrl ?? logoWibby}
                   width={32}
                   height={32}
                   alt='스터디로고'
-                  className='rounded-[6px]'
+                  className='rounded-[6px] shadow-md cursor-pointer lg:shadow-none lg:cursor-default'
                 />
                 {studyInfo && (
                   <div className={`${!mobileOpen && 'hidden'}`}>
@@ -88,7 +88,7 @@ export default function SideMenu({ studyId }: { studyId: number }) {
               스터디의 My 정보
             </button>
 
-            <div className='flex gap-[20px] lg:flex-col lg:gap-[30px] lg:mt-[35px] overflow-x-auto whitespace-nowrap ml-[18px] lg:ml-0 pr-[18px] lg:px-0 '>
+            <div className='scroll-custom flex gap-[20px] lg:flex-col lg:gap-[30px] lg:mt-[35px] overflow-x-auto whitespace-nowrap ml-[18px] lg:ml-0 pr-[18px] lg:px-0'>
               {menuItems.map((item) => {
                 if (width >= 1024) {
                   if (item.name !== '스터디의 My 정보') {
