@@ -138,7 +138,7 @@ export default function StudyAttendance({
                 <div className='text-right tm4 mb-1.5'>{attendanceRate}%</div>
                 <div className='w-full h-[16px] rounded-2xl bg-gray3/50 overflow-hidden'>
                   <div
-                    className='h-full bg-orange'
+                    className='h-full bg-[#FBAE8F]'
                     style={{
                       width: `${attendanceRate}%`,
                     }}
