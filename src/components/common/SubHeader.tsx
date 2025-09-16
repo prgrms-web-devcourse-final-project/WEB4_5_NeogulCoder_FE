@@ -102,7 +102,9 @@ export default function SubHeader() {
                 href={`/manager`}
                 className='flex flex-col justify-center items-center order-5 gap-1'
               >
-                <Settings className='w-4 h-4 lg:hidden' strokeWidth={1.7} />
+                <div>
+                  <Settings className='w-4 h-4 lg:hidden' strokeWidth={1.7} />
+                </div>
                 관리자
               </Link>
             )}
