@@ -231,7 +231,7 @@ Wibby는 단순한 스터디 매칭을 넘어
 
 ## 🔍 시스템 아키텍처
 
-<img width="2000" height="1414" alt="시스템 아키텍처_위비" src="https://github.com/user-attachments/assets/bd69f3f6-9256-48e5-8f2e-515466a3f40c" />
+<img width="2000" height="1414" alt="시스템 아키텍처_위비" src="https://github.com/user-attachments/assets/f02bc713-35bd-4df0-bdec-bb24d7dd3092" />
 
 <br>
 
